@@ -3,7 +3,7 @@ import joi from '@hapi/joi';
 import { Observable, from } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 import { laminarApi$ } from '../laminarApi';
-import Task from '../Task';
+import Task from '../../Task';
 
 type Result = {
   account: string;

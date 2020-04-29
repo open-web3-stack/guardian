@@ -1,5 +1,5 @@
 import LaminarGuardian from '../LaminarGuardian';
-import { LaminarGuardianConfig } from '../../types';
+import { LaminarGuardianConfig } from '../types';
 
 describe('LaminarGuardian', () => {
   it('works', () => {

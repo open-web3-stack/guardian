@@ -1,9 +1,9 @@
 import joi from '@hapi/joi';
 import { Subscription } from 'rxjs';
-import { LaminarGuardianConfig } from '../types';
-import { createLaminarApi } from './tasks/laminarApi';
-import Monitor from '../Monitor';
-import Guardian from '../Guardian';
+import { LaminarGuardianConfig } from './types';
+import { createLaminarApi } from './tasks/laminarChain/laminarApi';
+import Monitor from './Monitor';
+import Guardian from './Guardian';
 
 export default class LaminarGuardian extends Guardian {
   validationSchema = joi.any();
@@ -22,11 +22,13 @@ export default class LaminarGuardian extends Guardian {
   }
 
   start() {
-    this.stop(); // unsubscribe any current subscription
+    console.log('Running laminarChain guardian...');
+    this.subscriptions.map((i) => i.unsubscribe()); // unsubscribe any current subscription
     this.subscriptions = this.monitors.map((monitor) => monitor.listen());
   }
 
   stop() {
+    console.log('Stopping laminarChain guardian...');
     this.subscriptions.map((i) => i.unsubscribe());
     this.subscriptions = [];
   }

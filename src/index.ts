@@ -1,22 +1,22 @@
-import LaminarGuardian from "./laminar-chain/LaminarGuardian";
-import EthereumGuardian from "./ethereum/EthereumGuardian";
+import LaminarGuardian from './LaminarGuardian';
+import EthereumGuardian from './EthereumGuardian';
 
 const guardian = (config: any) => {
-  Object.values(config["guardians"] as any[])
+  Object.values(config['guardians'] as any[])
     .map((g) => {
-      const networkType = g["network-type"];
+      const networkType = g['network-type'];
       switch (networkType) {
-        case "laminarChain":
+        case 'laminarChain':
           return new LaminarGuardian(g);
-        case "ethereum":
+        case 'ethereum':
           return new EthereumGuardian(g);
         default:
-          throw Error("network type is invalid");
+          throw Error('network type is invalid');
       }
     })
     .forEach((guardian) => guardian.start());
 
-  process.on("SIGINT", () => {
+  process.on('SIGINT', () => {
     process.exit();
   });
 

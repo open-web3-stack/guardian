@@ -1,6 +1,6 @@
 import joi from '@hapi/joi';
 import { Observable, never } from 'rxjs';
-import { TaskInterface } from '../../types';
+import { TaskInterface } from '../types';
 
 export default class Task implements TaskInterface {
   validationSchema = joi.any();

@@ -7,7 +7,7 @@ import { LaminarApi } from '@laminar/api';
 
 import Monitor from '../Monitor';
 import { MonitorConfig } from '../types';
-import { createLaminarApi } from '../laminar-chain/tasks/laminarApi';
+import { createLaminarApi } from '../tasks/laminarChain/laminarApi';
 
 describe('Laminar monitors', () => {
   beforeAll(() => {

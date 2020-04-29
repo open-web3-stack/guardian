@@ -1,4 +1,6 @@
 #!/bin/sh
 
-echo "script called: $1"
+data=$(</dev/stdin)
+
+echo "script called: $data"
  

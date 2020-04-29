@@ -3,7 +3,7 @@ import { Observable, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import * as shell from 'shelljs';
 import { NetworkType, MonitorInterface, MonitorConfig, TaskInterface, ActionPOST, ActionScript } from './types';
-import getTask from './getTask';
+import { getTask } from './tasks';
 import conditionBuilder from './conditions/condition-builder';
 
 export default class Monitor implements MonitorInterface {
@@ -46,9 +46,9 @@ export default class Monitor implements MonitorInterface {
 
   /// action script
   script(action: ActionScript, data: any) {
-    const dataStr = JSON.stringify(data);
-    const command = `sh ${action.path} '${dataStr}'`;
-    shell.exec(command, { async: true });
+    const child = shell.exec(action.path, { async: true });
+    child.stdin.write(JSON.stringify(data));
+    child.stdin.end();
   }
 
   /// listen to output$ and trigger the actions

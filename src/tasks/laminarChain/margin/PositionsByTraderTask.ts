@@ -1,9 +1,9 @@
-import _ from "lodash";
-import joi from "@hapi/joi";
-import { Observable, from } from "rxjs";
-import { flatMap, map } from "rxjs/operators";
-import { laminarApi$ } from "../laminarApi";
-import Task from "../Task";
+import _ from 'lodash';
+import joi from '@hapi/joi';
+import { Observable, from } from 'rxjs';
+import { flatMap, map } from 'rxjs/operators';
+import { laminarApi$ } from '../laminarApi';
+import Task from '../../Task';
 
 export type Position = {
   account: string;
@@ -30,9 +30,7 @@ export default class PositionsByTraderTask extends Task {
             flatMap((account: string) =>
               laminarApi.margin
                 .positionsByTrader(account)
-                .pipe(
-                  map((positions) => positions.map((i) => ({ ...i, account })))
-                )
+                .pipe(map((positions) => positions.map((i) => ({ ...i, account }))))
             )
           );
         }

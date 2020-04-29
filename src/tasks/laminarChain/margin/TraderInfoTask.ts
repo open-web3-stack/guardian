@@ -1,9 +1,9 @@
-import _ from "lodash";
-import joi from "@hapi/joi";
-import { Observable, from } from "rxjs";
-import { flatMap } from "rxjs/operators";
-import { laminarApi$ } from "../laminarApi";
-import Task from "../Task";
+import _ from 'lodash';
+import joi from '@hapi/joi';
+import { Observable, from } from 'rxjs';
+import { flatMap } from 'rxjs/operators';
+import { laminarApi$ } from '../laminarApi';
+import Task from '../../Task';
 
 type MarginTraderInfo = {
   equity: string;
@@ -26,9 +26,7 @@ export default class TraderInfo extends Task {
     return laminarApi$.pipe(
       flatMap((laminarApi) => {
         if (_.isArray(account)) {
-          return from(account).pipe(
-            flatMap((account) => laminarApi.margin.traderInfo(account))
-          );
+          return from(account).pipe(flatMap((account) => laminarApi.margin.traderInfo(account)));
         }
         return laminarApi.margin.traderInfo(account);
       })

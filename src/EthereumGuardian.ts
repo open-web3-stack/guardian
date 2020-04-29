@@ -1,6 +1,6 @@
 import joi from '@hapi/joi';
-import { MonitorInterface } from '../types';
-import Guardian from '../Guardian';
+import { MonitorInterface } from './types';
+import Guardian from './Guardian';
 
 export default class EthereumGuardian extends Guardian {
   validationSchema = joi.any();
@@ -17,6 +17,6 @@ export default class EthereumGuardian extends Guardian {
   }
 
   stop() {
-    console.log('Stopping...');
+    console.log('Stopping ethereum guardian...');
   }
 }
