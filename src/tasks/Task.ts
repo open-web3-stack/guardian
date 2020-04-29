@@ -13,7 +13,7 @@ export default class Task implements TaskInterface {
     return value;
   }
 
-  // @eslint-ignore no-unused-vars
+  // eslint-disable-next-line
   call(params?: any): Observable<any> {
     return never();
   }

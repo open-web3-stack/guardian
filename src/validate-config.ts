@@ -1,37 +1,35 @@
-import joi from "@hapi/joi";
+import joi from '@hapi/joi';
 
-// TODO:
+// TODO: update me
 const schema = joi.object({
-  version: "0.1",
+  version: '0.1',
   guardians: joi.object().pattern(
     joi.string(),
     joi
       .object({
-        "network-type": joi.valid("laminarChain", "ethereum").required(),
-        "node-url": joi.string(),
+        networkType: joi.valid('laminarChain', 'ethereum').required(),
+        nodeEndpoint: joi.string(),
         monitors: joi
           .object()
           .pattern(
             joi.string(),
             joi.object({
-              protocol: joi.valid("synthetic", "margin").required(),
-              webhook: joi.string(),
-              script: joi.string(),
+              task: joi.string().required(),
+              arguments: joi.any(),
+              conditions: joi.any(),
+              actions: joi.any(),
             })
           )
           .required(),
       })
-      .when(joi.object({ "network-type": "laminarChain" }).unknown(), {
+      .when(joi.object({ networkType: 'laminarChain' }).unknown(), {
         then: joi.object({
-          network: joi
-            .string()
-            .valid("dev", "turbulence", "reynolds", "mainnet")
-            .required(),
+          network: joi.string().valid('dev', 'turbulence', 'reynolds', 'mainnet').required(),
         }),
       })
-      .when(joi.object({ "network-type": "ethereum" }).unknown(), {
+      .when(joi.object({ networkType: 'ethereum' }).unknown(), {
         then: joi.object({
-          network: joi.string().valid("dev", "kovan", "mainnet").required(),
+          network: joi.string().valid('dev', 'kovan', 'mainnet').required(),
         }),
       })
   ),
@@ -45,7 +43,7 @@ export default (config: any): any => {
   }
 
   if (warning) {
-    console.warn("Config warning: ", warning);
+    console.warn('Config warning: ', warning);
   }
 
   return value;

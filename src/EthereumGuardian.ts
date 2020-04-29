@@ -6,6 +6,7 @@ export default class EthereumGuardian extends Guardian {
   validationSchema = joi.any();
   readonly monitors: MonitorInterface[];
 
+  // eslint-disable-next-line
   constructor(config: any) {
     super();
 
