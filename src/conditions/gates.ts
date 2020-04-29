@@ -28,7 +28,8 @@ export const parse = (prop: string, condition: string) => (input: any): boolean 
     return get(input, prop) == condition;
   }
 
-  let { op, val } = result.groups;
+  const op = result.groups.op;
+  let val = result.groups.val;
   if (!op || !val) return false;
 
   const isPercentage = /\d+(?:\\.\\d+)?%/;
