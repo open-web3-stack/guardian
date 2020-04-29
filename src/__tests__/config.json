@@ -4,12 +4,24 @@
     "lamianr-chain": {
       "network-type": "laminarChain",
       "network": "dev",
-      "node-url": "wss://dev-node.laminar-chain.laminar.one/ws",
+      "nodeEndpoint": "ws://localhost:9944",
       "monitors": {
         "margin": {
           "task": "margin.poolInfo",
           "arguments": {
             "poolId": 1
+          },
+          "actions": [
+            {
+              "method": "script",
+              "path": "./src/__tests__/test.sh"
+            }
+          ]
+        },
+        "events": {
+          "task": "system.events",
+          "arguments": {
+            "name": "system.Extrinti"
           },
           "actions": [
             {

@@ -1,5 +1,5 @@
-import BalancesTask from "./EventsTask";
+import EventsTask from './EventsTask';
 
 export default {
-  balanes: new BalancesTask(),
+  events: new EventsTask(),
 };

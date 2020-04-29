@@ -1,15 +1,15 @@
-jest.mock("@laminar/api");
-jest.mock("axios");
+jest.mock('@laminar/api');
+jest.mock('axios');
 
-import axios from "axios";
-import { from } from "rxjs";
-import { LaminarApi } from "@laminar/api";
+import axios from 'axios';
+import { from } from 'rxjs';
+import { LaminarApi } from '@laminar/api';
 
-import Monitor from "../Monitor";
-import { MonitorConfig } from "../types";
-import { createLaminarApi } from "../laminar-chain/tasks/laminarApi";
+import Monitor from '../Monitor';
+import { MonitorConfig } from '../types';
+import { createLaminarApi } from '../laminar-chain/tasks/laminarApi';
 
-describe("Laminar monitors", () => {
+describe('Laminar monitors', () => {
   beforeAll(() => {
     jest.setTimeout(30_000);
 
@@ -26,10 +26,10 @@ describe("Laminar monitors", () => {
             return from([
               {
                 poolId,
-                owners: "asf",
-                balance: "100",
-                ell: "80",
-                enp: "50",
+                owners: 'asf',
+                balance: '100',
+                ell: '80',
+                enp: '50',
               },
             ]);
           }),
@@ -40,15 +40,29 @@ describe("Laminar monitors", () => {
             return from([
               {
                 poolId,
-                owners: "who",
-                balance: "1000",
+                owners: 'who',
+                balance: '1000',
                 options: [
                   {
                     additionalCollateralRatio: 1,
                     askSpread: 1,
                     bidSpread: 1,
                     syntheticEnabled: true,
-                    tokenId: "FEUR",
+                    tokenId: 'FEUR',
+                  },
+                ],
+              },
+              {
+                poolId,
+                owners: 'who',
+                balance: '1200',
+                options: [
+                  {
+                    additionalCollateralRatio: 1,
+                    askSpread: 1,
+                    bidSpread: 1,
+                    syntheticEnabled: true,
+                    tokenId: 'FEUR',
                   },
                 ],
               },
@@ -58,27 +72,27 @@ describe("Laminar monitors", () => {
       };
     });
 
-    createLaminarApi("ws://localhost:9944");
+    createLaminarApi('ws://localhost:9944');
   });
 
-  it("margin poolInfo should work", async (done) => {
+  it('margin poolInfo should work', async (done) => {
     const config: MonitorConfig = {
-      task: "margin.poolInfo",
+      task: 'margin.poolInfo',
       arguments: {
         poolId: 1,
       },
       actions: [
         {
-          method: "script",
-          path: "./src/__tests__/test.sh",
+          method: 'script',
+          path: './src/__tests__/test.sh',
         },
       ],
     };
 
-    const monitor = new Monitor("margin", "laminarChain", config);
+    const monitor = new Monitor('margin', 'laminarChain', config);
 
-    const scriptSpy = jest.spyOn(monitor, "script");
-    const postSpy = jest.spyOn(monitor, "post");
+    const scriptSpy = jest.spyOn(monitor, 'script');
+    const postSpy = jest.spyOn(monitor, 'post');
 
     const subscription = monitor.listen();
 
@@ -91,29 +105,30 @@ describe("Laminar monitors", () => {
     done();
   });
 
-  it("synthetic liquidityPool should work", async (done) => {
+  it('synthetic liquidityPool should work', async (done) => {
     const config: MonitorConfig = {
-      task: "synthetic.liquidityPool",
+      task: 'synthetic.liquidityPool',
       arguments: {
-        poolId: "all",
-        currencyId: ["FEUR", "FJPY", "FBTC"],
+        poolId: 'all',
+        currencyId: ['FEUR', 'FJPY', 'FBTC'],
       },
+      conditions: [{ balance: '> 1000' }],
       actions: [
         {
-          method: "POST",
-          url: "http://localhost:8080",
+          method: 'POST',
+          url: 'http://localhost:8080',
         },
         {
-          method: "script",
-          path: "./src/__tests__/test.sh",
+          method: 'script',
+          path: './src/__tests__/test.sh',
         },
       ],
     };
 
-    const monitor = new Monitor("liquidityPool", "laminarChain", config);
+    const monitor = new Monitor('liquidityPool', 'laminarChain', config);
 
-    const scriptSpy = jest.spyOn(monitor, "script");
-    const postSpy = jest.spyOn(monitor, "post");
+    const scriptSpy = jest.spyOn(monitor, 'script');
+    const postSpy = jest.spyOn(monitor, 'post');
 
     const subscription = monitor.listen();
 

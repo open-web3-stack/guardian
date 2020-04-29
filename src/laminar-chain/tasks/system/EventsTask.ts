@@ -1,9 +1,9 @@
-import _ from "lodash";
-import joi from "@hapi/joi";
-import { Observable } from "rxjs";
-import { flatMap, filter } from "rxjs/operators";
-import { laminarApi$ } from "../laminarApi";
-import Task from "../Task";
+import _ from 'lodash';
+import joi from '@hapi/joi';
+import { Observable } from 'rxjs';
+import { flatMap, filter } from 'rxjs/operators';
+import { laminarApi$ } from '../laminarApi';
+import Task from '../Task';
 
 type Result = { name: string; args: any[] };
 

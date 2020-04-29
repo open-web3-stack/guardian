@@ -4,6 +4,7 @@ import { filter } from 'rxjs/operators';
 import * as shell from 'shelljs';
 import { NetworkType, MonitorInterface, MonitorConfig, TaskInterface, ActionPOST, ActionScript } from './types';
 import getTask from './getTask';
+import conditionBuilder from './conditions/condition-builder';
 
 export default class Monitor implements MonitorInterface {
   public readonly name: string;
@@ -21,15 +22,16 @@ export default class Monitor implements MonitorInterface {
       throw Error(`${name}:${config.task} not found`);
     }
 
+    const condition = config.conditions && conditionBuilder(config.conditions);
+
     // create raw output$
     this.rawOutput$ = this.task.call(config.arguments);
 
     // create filtered output$
     this.output$ = this.rawOutput$.pipe(
-      filter(() => {
-        if (this.config.conditions) {
-          // TODO: check conditions
-          return true;
+      filter((result) => {
+        if (condition) {
+          return condition(result);
         }
         return true;
       })

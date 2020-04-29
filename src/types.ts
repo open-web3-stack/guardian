@@ -1,7 +1,7 @@
-import { Observable, Subscription } from "rxjs";
-import Joi from "@hapi/joi";
+import { Observable, Subscription } from 'rxjs';
+import Joi from '@hapi/joi';
 
-export type NetworkType = "laminarChain" | "ethereum";
+export type NetworkType = 'laminarChain' | 'ethereum';
 
 export interface GuardianInterface {
   validationSchema: Joi.Schema;
@@ -30,8 +30,8 @@ export interface TaskInterface {
 
 export interface LaminarGuardianConfig {
   nodeEndpoint: string;
-  network: "dev" | "turbulence" | "reynolds" | "mainnet";
-  confirmation: "finalize" | number;
+  network: 'dev' | 'turbulence' | 'reynolds' | 'mainnet';
+  confirmation: 'finalize' | number;
   monitors: {
     [key: string]: MonitorConfig;
   };
@@ -39,19 +39,19 @@ export interface LaminarGuardianConfig {
 
 export interface EthereumGuardianConfig {
   nodeEndpoint: string;
-  network: "dev" | "kovan" | "mainnet";
+  network: 'dev' | 'kovan' | 'mainnet';
   monitors: {
     [key: string]: MonitorConfig;
   };
 }
 
 export type ActionScript = {
-  method: "script";
+  method: 'script';
   path: string;
 };
 
 export type ActionPOST = {
-  method: "POST";
+  method: 'POST';
   url: string;
   headers?: any;
 };
@@ -59,6 +59,6 @@ export type ActionPOST = {
 export interface MonitorConfig {
   task: string;
   arguments?: any;
-  conditions?: object;
+  conditions?: any[];
   actions: (ActionScript | ActionPOST)[];
 }
