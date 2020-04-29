@@ -1,5 +1,5 @@
-import { LaminarApi, WsProvider } from "@laminar/api";
-import { AsyncSubject } from "rxjs";
+import { LaminarApi, WsProvider } from '@laminar/api';
+import { AsyncSubject } from 'rxjs';
 
 export const laminarApi$ = new AsyncSubject<LaminarApi>();
 

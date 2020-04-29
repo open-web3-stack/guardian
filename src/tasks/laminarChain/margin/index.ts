@@ -1,6 +1,6 @@
-import PoolInfoTask from "./PoolInfoTask";
-import TraderInfoTask from "./TraderInfoTask";
-import PositionsByTraderTask from "./PositionsByTraderTask";
+import PoolInfoTask from './PoolInfoTask';
+import TraderInfoTask from './TraderInfoTask';
+import PositionsByTraderTask from './PositionsByTraderTask';
 
 export default {
   poolInfo: new PoolInfoTask(),

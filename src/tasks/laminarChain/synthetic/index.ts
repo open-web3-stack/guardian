@@ -1,4 +1,4 @@
-import LiquidityPoolTask from "./LiquidityPoolTask";
+import LiquidityPoolTask from './LiquidityPoolTask';
 
 export default {
   liquidityPool: new LiquidityPoolTask(),

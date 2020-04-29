@@ -1,12 +1,12 @@
-import { Observable } from "rxjs";
-import PositionsByTraderTask from "../PositionsByTraderTask";
+import { Observable } from 'rxjs';
+import PositionsByTraderTask from '../PositionsByTraderTask';
 
-describe("PositionsByTraderTask", () => {
+describe('PositionsByTraderTask', () => {
   const task = new PositionsByTraderTask();
 
-  it("works with valid arguments", () => {
-    expect(task.call({ account: "alice" })).toBeInstanceOf(Observable);
-    expect(task.call({ account: ["alice"] })).toBeInstanceOf(Observable);
+  it('works with valid arguments', () => {
+    expect(task.call({ account: 'alice' })).toBeInstanceOf(Observable);
+    expect(task.call({ account: ['alice'] })).toBeInstanceOf(Observable);
   });
 
   it("doesn't work with valid arguments", () => {
