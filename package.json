@@ -26,6 +26,7 @@
     "@laminar/api": "^0.2.0-beta.49",
     "@polkadot/types": "^1.11.2",
     "axios": "^0.19.2",
+    "big.js": "^5.2.2",
     "fs": "^0.0.1-security",
     "js-yaml": "^3.13.1",
     "lodash": "^4.17.15",
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
+    "@types/big.js": "^4.0.5",
     "@types/hapi__joi": "^16.0.12",
     "@types/jest": "^25.2.1",
     "@types/js-yaml": "^3.12.3",

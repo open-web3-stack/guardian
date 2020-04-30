@@ -1,3 +1,4 @@
+import bn from 'big.js';
 import { get, isFunction } from 'lodash';
 
 export const and = (...args: (boolean | Function)[]) => (input: any): boolean => {
@@ -32,10 +33,10 @@ export const parse = (prop: string, condition: string) => (input: any): boolean 
   let val = result.groups.val;
   if (!op || !val) return false;
 
-  const isPercentage = /\d+(?:\\.\\d+)?%/;
-  if (isPercentage.exec(val)) {
+  const isPercentage = /\d+(\.\d+)?%/;
+  if (isPercentage.test(val)) {
     const numberStr = val.replace('%', '');
-    val = Number(Number.parseFloat(numberStr) / 100.0).toString();
+    val = bn(numberStr).div(100).toString();
   }
 
   const expr = `${get(input, prop)} ${op} ${val}`;

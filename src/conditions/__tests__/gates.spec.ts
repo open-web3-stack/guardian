@@ -20,27 +20,30 @@ describe('gates', () => {
   });
 
   it('parse works', () => {
-    expect(parse('a', '< 1.1')({ a: '1.0' })).toBe(true);
-    expect(parse('a', '< 1.1')({ a: '1.2' })).toBe(false);
+    expect(parse('a', '< 1.1')({ a: 1.0 })).toBe(true);
+    expect(parse('a', '< 1.1')({ a: 1.2 })).toBe(false);
 
-    expect(parse('a', '> 1.1')({ a: '1.2' })).toBe(true);
-    expect(parse('a', '> 1.1')({ a: '1.0' })).toBe(false);
+    expect(parse('a', '> 1.1')({ a: 1.2 })).toBe(true);
+    expect(parse('a', '> 1.1')({ a: 1.0 })).toBe(false);
 
-    expect(parse('a', '<= 1.1')({ a: '1.1' })).toBe(true);
-    expect(parse('a', '<= 1.1')({ a: '1.2' })).toBe(false);
+    expect(parse('a', '<= 1.1')({ a: 1.1 })).toBe(true);
+    expect(parse('a', '<= 1.1')({ a: 1.2 })).toBe(false);
 
-    expect(parse('a', '>= 1.1')({ a: '1.1' })).toBe(true);
-    expect(parse('a', '>= 1.1')({ a: '1.0' })).toBe(false);
+    expect(parse('a', '>= 1.1')({ a: 1.1 })).toBe(true);
+    expect(parse('a', '>= 1.1')({ a: 1.0 })).toBe(false);
 
-    expect(parse('a', '== 1.1')({ a: '1.1' })).toBe(true);
-    expect(parse('a', '== 1.1')({ a: '1.2' })).toBe(false);
+    expect(parse('a', '== 1.1')({ a: 1.1 })).toBe(true);
+    expect(parse('a', '== 1.1')({ a: 1.2 })).toBe(false);
 
-    expect(parse('a', '!= 1.1')({ a: '1.2' })).toBe(true);
-    expect(parse('a', '!= 1.1')({ a: '1.1' })).toBe(false);
+    expect(parse('a', '!= 1.1')({ a: 1.2 })).toBe(true);
+    expect(parse('a', '!= 1.1')({ a: 1.1 })).toBe(false);
+
+    expect(parse('a', '< 10.4%')({ a: 0.103 })).toBe(true);
+    expect(parse('a', '< 10.4%')({ a: 0.105 })).toBe(false);
   });
 
   it('condition works', () => {
-    const expr = and(parse('a', '> 1.0'), or(or(parse('b', '< 0.5'), parse('b', '> 1.0')), parse('c.d', '> 20')));
+    const expr = and(parse('a', '> 1.0'), or(or(parse('b', '< 50%'), parse('b', '> 100.0%')), parse('c.d', '> 20')));
 
     expect(expr({ a: 1.2, b: 0.4, c: { d: 10 } })).toBe(true);
     expect(expr({ a: 1.2, b: 1.1, c: { d: 10 } })).toBe(true);
