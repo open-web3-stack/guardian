@@ -26,7 +26,6 @@
     "@laminar/api": "^0.2.0-beta.49",
     "@polkadot/types": "^1.11.2",
     "axios": "^0.19.2",
-    "esm": "^3.2.25",
     "fs": "^0.0.1-security",
     "js-yaml": "^3.13.1",
     "lodash": "^4.17.15",
