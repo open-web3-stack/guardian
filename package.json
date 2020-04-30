@@ -6,7 +6,7 @@
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
   "bin": {
-    "guardian": "node -r esm -r ts-node/register bin/cli"
+    "guardian": "bin/cli"
   },
   "scripts": {
     "lint": "eslint --ext .js,.ts src && tsc --noEmit --pretty",
