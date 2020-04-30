@@ -1,16 +1,10 @@
 import _ from 'lodash';
 import joi from '@hapi/joi';
 import { Observable, from } from 'rxjs';
-import { flatMap, map } from 'rxjs/operators';
+import { flatMap } from 'rxjs/operators';
+import { AnyJson } from '@polkadot/types/types';
 import { laminarApi$ } from '../laminarApi';
 import Task from '../../Task';
-
-export type Position = {
-  account: string;
-  poolId: any;
-  positionId: any;
-  isOpen: any;
-};
 
 export default class PositionsByTraderTask extends Task {
   validatationSchema = joi
@@ -19,7 +13,7 @@ export default class PositionsByTraderTask extends Task {
     })
     .required();
 
-  call(params: { account: string | string[] }): Observable<Position[]> {
+  call(params: { account: string | string[] }): Observable<AnyJson> {
     const { account } = this.validateParameters(params);
 
     return laminarApi$.pipe(
@@ -27,17 +21,16 @@ export default class PositionsByTraderTask extends Task {
         // map multiple accounts
         if (_.isArray(account)) {
           return from(account).pipe(
-            flatMap((account: string) =>
-              laminarApi.margin
-                .positionsByTrader(account)
-                .pipe(map((positions) => positions.map((i) => ({ ...i, account }))))
-            )
+            flatMap((account: string) => laminarApi.margin.positionsByTrader(account)),
+            flatMap((positions) => positions),
+            flatMap(({ positionId }) => laminarApi.margin.positions(positionId))
           );
         }
         // map single account
-        return laminarApi.margin
-          .positionsByTrader(account)
-          .pipe(map((positions) => positions.map((i) => ({ ...i, account }))));
+        return laminarApi.margin.positionsByTrader(account).pipe(
+          flatMap((positions) => positions),
+          flatMap(({ positionId }) => laminarApi.margin.positions(positionId))
+        );
       })
     );
   }

@@ -14,6 +14,7 @@ export default class LiquidityPoolTask extends Task {
     })
     .required();
 
+  // TODO: implement desired output
   call(params: { poolId: number | number[] | 'all'; currencyId: any }): Observable<SyntheticPoolInfo> {
     const { poolId } = this.validateParameters(params);
 

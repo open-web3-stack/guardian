@@ -2,24 +2,31 @@ import _ from 'lodash';
 import joi from '@hapi/joi';
 import { Observable } from 'rxjs';
 import { flatMap, filter } from 'rxjs/operators';
-import { laminarApi$ } from '../../laminarApi';
-import Task from '../../../Task';
+import Task from '../Task';
+import { LaminarApi } from '@laminar/api';
 
 type Result = { name: string; args: any[] };
 
 export default class EventsTask extends Task {
+  chainApi$: Observable<LaminarApi /* | AcalaApi*/>;
+
   validationSchema = joi
     .object({
       name: joi.alt(joi.string(), joi.array().items(joi.string())),
     })
     .required();
 
+  constructor(chainApi$: Observable<LaminarApi /* | AcalaApi*/>) {
+    super();
+    this.chainApi$ = chainApi$;
+  }
+
   call(params: { name: string | string[] }): Observable<Result> {
     const { name } = this.validateParameters(params);
 
-    return laminarApi$.pipe(
-      flatMap((laminarApi) => {
-        return laminarApi.api.query.system.events().pipe(
+    return this.chainApi$.pipe(
+      flatMap((chainApi) => {
+        return chainApi.api.query.system.events().pipe(
           flatMap((records) => {
             return records.map(({ event }) => {
               const { section, method, data } = event;

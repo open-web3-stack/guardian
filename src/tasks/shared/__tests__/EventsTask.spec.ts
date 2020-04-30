@@ -1,8 +1,9 @@
 import { Observable } from 'rxjs';
 import EventsTask from '../EventsTask';
+import { laminarApi$ } from '../../laminarChain/laminarApi';
 
 describe('EventsTask', () => {
-  const task = new EventsTask();
+  const task = new EventsTask(laminarApi$);
 
   it('works with valid arguments', () => {
     expect(task.call({ name: 'margin.TraderMarginCalled' })).toBeInstanceOf(Observable);
