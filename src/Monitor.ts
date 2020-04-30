@@ -18,9 +18,6 @@ export default class Monitor implements MonitorInterface {
     this.config = config;
 
     this.task = getTask(network, config.task);
-    if (!this.task) {
-      throw Error(`${name}:${config.task} not found`);
-    }
 
     const condition = config.conditions && conditionBuilder(config.conditions);
 

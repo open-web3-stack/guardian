@@ -8,7 +8,7 @@ export default class Task implements TaskInterface {
   validateParameters<T>(params?: T): T {
     const { error, value } = this.validationSchema.validate(params);
     if (error) {
-      throw Error(`margin.poolInfo: ${error.message}`);
+      throw error;
     }
     return value;
   }

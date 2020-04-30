@@ -9,9 +9,13 @@ const tasks = {
   laminarChain,
 };
 
-export const getTask = (network: NetworkType, name: string): TaskInterface | null => {
+export const getTask = (network: NetworkType, name: string): TaskInterface => {
   const key = `${network}.${name}`;
-  return _.get(tasks, key, null);
+  const task = _.get(tasks, key, null);
+  if (!task) {
+    throw Error(`${network}:${name} not found`);
+  }
+  return task;
 };
 
 export default tasks;
