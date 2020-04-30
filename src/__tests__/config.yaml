@@ -1,0 +1,46 @@
+version: '0.1' # for compatibility check, for now, error exit on any other value
+guardians: # mapping of guardians
+  lamianr-chain: # user defined name
+    networkType: laminarChain # laminarChain | ethereum
+    network: dev # dev | turbulence | reynolds | mainnet
+    nodeEndpoint: ws://localhost:9944 # Endpoint URL. Optional. If not specified, use our hosted node.
+    monitors: # mapping of monitors to run
+      # synthetic-pool: # user defined name
+      #   task: synthetic.liquidityPool
+      #   arguments:
+      #     poolId: all
+      #     currencyId:
+      #       - FEUR
+      #       - FJPY
+      #       - FBTC
+      #   conditions: # trigger action if any of the conditions are true. this is optional, if omitted, action always get triggered when value changed
+      #     - collateralRatio: < 1.1 # custom number parser, see below
+      #     - $and: # and gate
+      #         - $or: # or gate
+      #             - currencyId: FEUR # access input variable
+      #             - currencyId: FJPY
+      #         - collateralRatio: < 120% # equivalent to 1.2
+      #   actions:
+      #     - method: POST # POST | script
+      #       url: http://localhost:8080 # arguments are passed via body using json format
+      #       headers: # optional additional headers
+      #         X-API-KEY: ${API_KEY}
+      #     - method: script # arguments are piped to stdin as a json string
+      #       path: ./notify.sh
+
+      events:
+        task: system.events
+        arguments:
+          name: system.ExtrinsicSuccess
+        conditions:
+          - args[0].paysFee: false
+        actions:
+          - method: script
+            path: ./src/__tests__/test.sh
+  # flow-ethereum: # another user defined name
+  #   networkType: ethereum
+  #   network: dev # dev | kovan | mainnet
+  #   nodeEndpoint: wss://kovan.infura.io/ws/v3/${INFRA_API_KEY} # Endpoint URL. Required except for dev, which default to http://localhost:8545
+  #  monitors: # mapping of monitors to run
+  #     synthetic: # user defined name
+  #       protocol: synthetic # synthetic | margin

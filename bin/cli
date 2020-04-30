@@ -1,0 +1,23 @@
+#!/usr/bin/env node -r esm -r ts-node/register
+
+const fs = require('fs');
+const yaml = require('js-yaml');
+
+require = require('esm')(module /*, options*/);
+const guardian = require('../src').default;
+
+const { config: configPath } = require('yargs')
+  .scriptName('guardian')
+  .usage('$0 [args]')
+  .option('config', {
+    type: 'string',
+    describe: 'YAML config file',
+  })
+  .help()
+  .demandOption('config').argv;
+
+// parse config
+const config = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
+
+// run guardian
+guardian(config);
