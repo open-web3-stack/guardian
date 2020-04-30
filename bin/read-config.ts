@@ -2,6 +2,7 @@ import fs from 'fs';
 import yaml from 'js-yaml';
 import { template } from 'lodash';
 
+//eslint-disable-next-line
 const regex = /\#[^*]*?$/gm;
 
 export default (path: string) => {
