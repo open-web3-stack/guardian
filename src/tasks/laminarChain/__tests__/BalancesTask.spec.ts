@@ -1,8 +1,10 @@
 import { Observable } from 'rxjs';
 import BalancesTask from '../BalancesTask';
+import createLaminarApi from '../createLaminarApi';
 
 describe('BalancesTask', () => {
-  const task = new BalancesTask();
+  const api$ = createLaminarApi('ws://localhost:9944');
+  const task = new BalancesTask(api$);
 
   it('works with valid arguments', () => {
     expect(task.call({ account: 'alice' })).toBeInstanceOf(Observable);

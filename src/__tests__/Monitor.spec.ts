@@ -1,79 +1,22 @@
-jest.mock('@laminar/api');
 jest.mock('axios');
 
 import axios from 'axios';
-import { from } from 'rxjs';
-import { LaminarApi } from '@laminar/api';
-
+import mockLaminarApi from './__mocks__/mockLaminarApi';
 import Monitor from '../Monitor';
 import { MonitorConfig } from '../types';
-import { createLaminarApi } from '../tasks/laminarChain/laminarApi';
+import { createLaminarApi } from '../tasks/laminarChain';
+import { createLaminarTasks } from '../tasks';
 
 describe('Laminar monitors', () => {
-  beforeAll(() => {
-    jest.setTimeout(30_000);
+  mockLaminarApi();
 
-    // @ts-ignore
-    axios.request = jest.fn((config) => console.log(JSON.stringify(config)));
+  const api$ = createLaminarApi('ws://localhost:9944');
+  const tasks = createLaminarTasks(api$);
 
-    // @ts-ignore
-    LaminarApi.mockImplementation(() => {
-      return {
-        constructor: jest.fn(),
-        isReady: jest.fn(() => Promise.resolve()),
-        margin: {
-          poolInfo: jest.fn((poolId) => {
-            return from([
-              {
-                poolId,
-                owners: 'asf',
-                balance: '100',
-                ell: '80',
-                enp: '50',
-              },
-            ]);
-          }),
-        },
-        synthetic: {
-          allPoolIds: jest.fn(() => from([[1]])),
-          poolInfo: jest.fn((poolId) => {
-            return from([
-              {
-                poolId,
-                owners: 'who',
-                balance: '1000',
-                options: [
-                  {
-                    additionalCollateralRatio: 1,
-                    askSpread: 1,
-                    bidSpread: 1,
-                    syntheticEnabled: true,
-                    tokenId: 'FEUR',
-                  },
-                ],
-              },
-              {
-                poolId,
-                owners: 'who',
-                balance: '1200',
-                options: [
-                  {
-                    additionalCollateralRatio: 1,
-                    askSpread: 1,
-                    bidSpread: 1,
-                    syntheticEnabled: true,
-                    tokenId: 'FEUR',
-                  },
-                ],
-              },
-            ]);
-          }),
-        },
-      };
-    });
+  jest.setTimeout(30_000);
 
-    createLaminarApi('ws://localhost:9944');
-  });
+  // @ts-ignore
+  axios.request = jest.fn((config) => console.log(JSON.stringify(config)));
 
   it('margin poolInfo should work', async (done) => {
     const config: MonitorConfig = {
@@ -89,7 +32,7 @@ describe('Laminar monitors', () => {
       ],
     };
 
-    const monitor = new Monitor('margin', 'laminarChain', config);
+    const monitor = new Monitor('margin', 'laminarChain', tasks.margin.poolInfo, config);
 
     const scriptSpy = jest.spyOn(monitor, 'script');
     const postSpy = jest.spyOn(monitor, 'post');
@@ -125,7 +68,7 @@ describe('Laminar monitors', () => {
       ],
     };
 
-    const monitor = new Monitor('liquidityPool', 'laminarChain', config);
+    const monitor = new Monitor('liquidityPool', 'laminarChain', tasks.synthetic.liquidityPool, config);
 
     const scriptSpy = jest.spyOn(monitor, 'script');
     const postSpy = jest.spyOn(monitor, 'post');
