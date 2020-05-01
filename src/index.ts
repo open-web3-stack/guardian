@@ -1,17 +1,17 @@
+import { Config } from './types';
 import validateConfig from './validate-config';
 import LaminarGuardian from './LaminarGuardian';
 import EthereumGuardian from './EthereumGuardian';
 
-const guardian = (config: any) => {
+const guardian = (config: Config) => {
   config = validateConfig(config);
 
-  const guardians = Object.values(config['guardians'] as any[]).map((guardianConfig) => {
-    const networkType = guardianConfig['networkType'];
-    switch (networkType) {
+  const guardians = Object.entries(config.guardians).map(([name, guardianConfig]) => {
+    switch (guardianConfig.networkType) {
       case 'laminarChain':
-        return new LaminarGuardian(guardianConfig);
+        return new LaminarGuardian(name, guardianConfig);
       case 'ethereum':
-        return new EthereumGuardian(guardianConfig);
+        return new EthereumGuardian(name, guardianConfig);
       default:
         throw Error('network type is invalid');
     }
