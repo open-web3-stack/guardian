@@ -29,6 +29,7 @@ export interface TaskInterface {
 }
 
 export interface LaminarGuardianConfig {
+  networkType: 'laminarChain';
   nodeEndpoint: string;
   network: 'dev' | 'turbulence' | 'reynolds' | 'mainnet';
   confirmation: 'finalize' | number;
@@ -38,6 +39,7 @@ export interface LaminarGuardianConfig {
 }
 
 export interface EthereumGuardianConfig {
+  networkType: 'ethereum';
   nodeEndpoint: string;
   network: 'dev' | 'kovan' | 'mainnet';
   monitors: {
@@ -61,4 +63,9 @@ export interface MonitorConfig {
   arguments?: any;
   conditions?: any[];
   actions: (ActionScript | ActionPOST)[];
+}
+
+export interface Config {
+  version: string;
+  guardians: { [name: string]: LaminarGuardianConfig | EthereumGuardianConfig };
 }

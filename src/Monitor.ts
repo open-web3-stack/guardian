@@ -3,21 +3,21 @@ import { Observable, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import * as shell from 'shelljs';
 import { NetworkType, MonitorInterface, MonitorConfig, TaskInterface, ActionPOST, ActionScript } from './types';
-import { getTask } from './tasks';
 import conditionBuilder from './conditions/condition-builder';
 
 export default class Monitor implements MonitorInterface {
   public readonly name: string;
-  public readonly config: MonitorConfig;
+  public readonly network: NetworkType;
   public readonly task: TaskInterface;
+  public readonly config: MonitorConfig;
   public readonly rawOutput$: Observable<any>;
   public readonly output$: Observable<any>;
 
-  constructor(name: string, network: NetworkType, config: MonitorConfig) {
+  constructor(name: string, network: NetworkType, task: TaskInterface, config: MonitorConfig) {
     this.name = name;
+    this.network = network;
+    this.task = task;
     this.config = config;
-
-    this.task = getTask(network, config.task);
 
     const condition = config.conditions && conditionBuilder(config.conditions);
 

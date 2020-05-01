@@ -3,10 +3,9 @@ import joi from '@hapi/joi';
 import { Observable, from } from 'rxjs';
 import { flatMap } from 'rxjs/operators';
 import { SyntheticPoolInfo } from '@laminar/api';
-import { laminarApi$ } from '../laminarApi';
-import Task from '../../Task';
+import LaminarTask from './LaminarTask';
 
-export default class LiquidityPoolTask extends Task {
+export default class LiquidityPoolTask extends LaminarTask {
   validationSchema = joi
     .object({
       poolId: joi.alt(joi.number(), joi.array().items(joi.number()), joi.valid('all')),
@@ -18,7 +17,7 @@ export default class LiquidityPoolTask extends Task {
   call(params: { poolId: number | number[] | 'all'; currencyId: any }): Observable<SyntheticPoolInfo> {
     const { poolId } = this.validateParameters(params);
 
-    return laminarApi$.pipe(
+    return this.chainApi$.pipe(
       flatMap((laminarApi) => {
         if (poolId === 'all') {
           return laminarApi.synthetic.allPoolIds().pipe(

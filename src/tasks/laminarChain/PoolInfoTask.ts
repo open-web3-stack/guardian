@@ -3,10 +3,9 @@ import joi from '@hapi/joi';
 import { Observable, from } from 'rxjs';
 import { flatMap, map } from 'rxjs/operators';
 import { MarginPoolInfo } from '@laminar/api';
-import { laminarApi$ } from '../laminarApi';
-import Task from '../../Task';
+import LaminarTask from './LaminarTask';
 
-export default class PoolInfoTask extends Task {
+export default class PoolInfoTask extends LaminarTask {
   validationSchema = joi
     .object({
       poolId: joi.alt(joi.number(), joi.array().items(joi.number()), joi.valid('all')),
@@ -16,7 +15,7 @@ export default class PoolInfoTask extends Task {
   call(params: { poolId: number | number[] | 'all' }): Observable<MarginPoolInfo> {
     const { poolId } = this.validateParameters(params);
 
-    return laminarApi$.pipe(
+    return this.chainApi$.pipe(
       flatMap((laminarApi) => {
         if (poolId === 'all') {
           // get all pool ids then map into pool info

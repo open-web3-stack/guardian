@@ -4,8 +4,9 @@ import { LaminarGuardianConfig } from '../types';
 describe('LaminarGuardian', () => {
   it('works', () => {
     const config: LaminarGuardianConfig = {
-      nodeEndpoint: 'ws://localhost:9944',
+      networkType: 'laminarChain',
       network: 'dev',
+      nodeEndpoint: 'ws://localhost:9944',
       confirmation: 'finalize',
       monitors: {
         'margin-monitor': {
@@ -18,13 +19,14 @@ describe('LaminarGuardian', () => {
         },
       },
     };
-    expect(new LaminarGuardian(config)).toBeTruthy();
+    expect(new LaminarGuardian('laminar-chain', config)).toBeTruthy();
   });
 
   it('throws', () => {
     const config: LaminarGuardianConfig = {
-      nodeEndpoint: 'ws://localhost:9944',
+      networkType: 'laminarChain',
       network: 'dev',
+      nodeEndpoint: 'ws://localhost:9944',
       confirmation: 'finalize',
       monitors: {
         'margin-monitor': {
@@ -37,6 +39,6 @@ describe('LaminarGuardian', () => {
         },
       },
     };
-    expect(() => new LaminarGuardian(config)).toThrow(Error);
+    expect(() => new LaminarGuardian('laminar-chain', config)).toThrow(Error);
   });
 });

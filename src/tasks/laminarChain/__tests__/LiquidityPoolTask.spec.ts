@@ -1,8 +1,10 @@
 import { Observable } from 'rxjs';
 import LiquidityPoolTask from '../LiquidityPoolTask';
+import createLaminarApi from '../createLaminarApi';
 
 describe('LiquidityPool', () => {
-  const task = new LiquidityPoolTask();
+  const api$ = createLaminarApi('ws://localhost:9944');
+  const task = new LiquidityPoolTask(api$);
 
   it('works with valid arguments', () => {
     expect(task.call({ poolId: 1, currencyId: null })).toBeInstanceOf(Observable);

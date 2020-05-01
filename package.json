@@ -10,7 +10,8 @@
   },
   "scripts": {
     "lint": "eslint --ext .js,.ts src bin && tsc --noEmit --pretty",
-    "test": "jest --testPathIgnorePatterns e2e"
+    "test": "jest --testPathIgnorePatterns e2e",
+    "coverage": "jest --collect-coverage"
   },
   "publishConfig": {
     "access": "public",
