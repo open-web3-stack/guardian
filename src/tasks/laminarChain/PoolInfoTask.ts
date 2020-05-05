@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import joi from '@hapi/joi';
 import { Observable, from } from 'rxjs';
-import { flatMap, map } from 'rxjs/operators';
+import { switchMap, flatMap, map } from 'rxjs/operators';
 import { MarginPoolInfo } from '@laminar/api';
 import LaminarTask from './LaminarTask';
 
@@ -16,7 +16,7 @@ export default class PoolInfoTask extends LaminarTask {
     const { poolId } = this.validateParameters(params);
 
     return this.chainApi$.pipe(
-      flatMap((laminarApi) => {
+      switchMap((laminarApi) => {
         if (poolId === 'all') {
           // get all pool ids then map into pool info
           return laminarApi.margin.allPoolIds().pipe(

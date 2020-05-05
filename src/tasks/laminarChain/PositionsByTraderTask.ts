@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import joi from '@hapi/joi';
 import { Observable, from } from 'rxjs';
-import { flatMap } from 'rxjs/operators';
+import { switchMap, flatMap } from 'rxjs/operators';
 import { AnyJson } from '@polkadot/types/types';
 import LaminarTask from './LaminarTask';
 
@@ -16,7 +16,7 @@ export default class PositionsByTraderTask extends LaminarTask {
     const { account } = this.validateParameters(params);
 
     return this.chainApi$.pipe(
-      flatMap((laminarApi) => {
+      switchMap((laminarApi) => {
         // map multiple accounts
         if (_.isArray(account)) {
           return from(account).pipe(

@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import joi from '@hapi/joi';
 import { Observable, from } from 'rxjs';
-import { flatMap } from 'rxjs/operators';
+import { switchMap, flatMap } from 'rxjs/operators';
 import { SyntheticPoolInfo } from '@laminar/api';
 import LaminarTask from './LaminarTask';
 
@@ -18,7 +18,7 @@ export default class LiquidityPoolTask extends LaminarTask {
     const { poolId } = this.validateParameters(params);
 
     return this.chainApi$.pipe(
-      flatMap((laminarApi) => {
+      switchMap((laminarApi) => {
         if (poolId === 'all') {
           return laminarApi.synthetic.allPoolIds().pipe(
             flatMap((ids: string[]) => ids.map((id) => laminarApi.synthetic.poolInfo(id))),
