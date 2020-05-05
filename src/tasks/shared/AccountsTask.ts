@@ -6,6 +6,18 @@ import Task from '../Task';
 import { LaminarApi } from '@laminar/api';
 import { AccountInfo } from '@polkadot/types/interfaces';
 
+const mapResult = (account: string) => (info: AccountInfo): Output => {
+  const output: Output = {
+    account: account,
+    nonce: info.nonce.toNumber(),
+    free: info.data.free.toNumber(),
+    reserved: info.data.reserved.toNumber(),
+    mis_frozen: info.data.miscFrozen.toNumber(),
+    fee_froze: info.data.feeFrozen.toNumber(),
+  };
+  return output;
+};
+
 type Output = {
   account: string;
   nonce: number;
@@ -44,15 +56,3 @@ export default class AccountsTask extends Task {
     );
   }
 }
-
-const mapResult = (account: string) => (info: AccountInfo): Output => {
-  const output: Output = {
-    account: account,
-    nonce: info.nonce.toNumber(),
-    free: info.data.free.toNumber(),
-    reserved: info.data.reserved.toNumber(),
-    mis_frozen: info.data.miscFrozen.toNumber(),
-    fee_froze: info.data.feeFrozen.toNumber(),
-  };
-  return output;
-};

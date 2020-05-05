@@ -5,6 +5,13 @@ import { get, isArray, isNil } from 'lodash';
 import { LaminarApi } from '@laminar/api';
 import Task from '../Task';
 
+const createCall = (api: LaminarApi['api'], name: string, args: any[] = []): Observable<Output> => {
+  const method = get(api.query, name);
+  if (isNil(method)) throw Error(`cannot find storage ${name}`);
+
+  return method.call(null, ...args).pipe(map((value) => ({ name, value })));
+};
+
 type Output = { name: string; value: any };
 
 export default class StorageTask extends Task {
@@ -38,14 +45,3 @@ export default class StorageTask extends Task {
     );
   }
 }
-
-const createCall = (api: LaminarApi['api'], name: string, args: any[] = []): Observable<Output> => {
-  const method = get(api.query, name);
-  if (isNil(method)) throw Error(`cannot find storage ${name}`);
-
-  return method.call(null, ...args).pipe(map(mapResult(name)));
-};
-
-const mapResult = (name: string) => (input: any): Output => {
-  return { name, value: input };
-};
