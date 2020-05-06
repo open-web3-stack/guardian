@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import joi from '@hapi/joi';
 import { Observable, from } from 'rxjs';
-import { flatMap } from 'rxjs/operators';
+import { switchMap, flatMap } from 'rxjs/operators';
 import LaminarTask from './LaminarTask';
 
 type Result = {
@@ -25,7 +25,7 @@ export default class BalancesTask extends LaminarTask {
     const { account } = this.validateParameters(params);
 
     return this.chainApi$.pipe(
-      flatMap((laminarApi) => {
+      switchMap((laminarApi) => {
         if (_.isArray(account)) {
           return from(account).pipe(flatMap((id) => laminarApi.balances(id)));
         }

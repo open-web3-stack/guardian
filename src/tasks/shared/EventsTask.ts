@@ -1,14 +1,14 @@
 import _ from 'lodash';
 import joi from '@hapi/joi';
 import { Observable } from 'rxjs';
-import { flatMap, filter } from 'rxjs/operators';
-import Task from '../Task';
+import { switchMap, flatMap, filter } from 'rxjs/operators';
 import { LaminarApi } from '@laminar/api';
+import Task from '../Task';
 
-type Result = { name: string; args: any[] };
+type Output = { name: string; args: any[] };
 
 export default class EventsTask extends Task {
-  chainApi$: Observable<LaminarApi /* | AcalaApi*/>;
+  api$: Observable<LaminarApi['api']>;
 
   validationSchema = joi
     .object({
@@ -16,17 +16,17 @@ export default class EventsTask extends Task {
     })
     .required();
 
-  constructor(chainApi$: Observable<LaminarApi /* | AcalaApi*/>) {
+  constructor(api$: Observable<LaminarApi['api']>) {
     super();
-    this.chainApi$ = chainApi$;
+    this.api$ = api$;
   }
 
-  call(params: { name: string | string[] }): Observable<Result> {
+  call(params: { name: string | string[] }): Observable<Output> {
     const { name } = this.validateParameters(params);
 
-    return this.chainApi$.pipe(
-      flatMap((chainApi) => {
-        return chainApi.api.query.system.events().pipe(
+    return this.api$.pipe(
+      switchMap((api) => {
+        return api.query.system.events().pipe(
           flatMap((records) => {
             return records.map(({ event }) => {
               const { section, method, data } = event;

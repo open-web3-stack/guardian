@@ -1,24 +1,26 @@
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import EventsTask from '../EventsTask';
+import StorageTask from '../StorageTask';
 import createLaminarApi from '../../laminarChain/createLaminarApi';
 
-describe('EventsTask', () => {
+describe('StorageTask', () => {
   const api$ = createLaminarApi('ws://localhost:9944').pipe(map((api) => api.api));
-  const task = new EventsTask(api$);
+  const task = new StorageTask(api$);
+
+  jest.setTimeout(30_000);
 
   it('works with valid arguments', () => {
-    expect(task.call({ name: 'margin.TraderMarginCalled' })).toBeInstanceOf(Observable);
+    expect(task.call({ name: 'system.events' })).toBeInstanceOf(Observable);
     expect(
       task.call({
-        name: ['margin.TraderMarginCalled', 'margin.PoolMarginCalled'],
+        name: ['sytems.events', 'system.account'],
       })
     ).toBeInstanceOf(Observable);
   });
 
   it("doesn't work with invalid arguments", () => {
     // @ts-ignore
-    expect(() => task.call({ name: '' })).toThrow(Error);
+    expect(() => task.call({ name: [], args: true })).toThrow(Error);
     // @ts-ignore
     expect(() => task.call()).toThrow(Error);
   });
