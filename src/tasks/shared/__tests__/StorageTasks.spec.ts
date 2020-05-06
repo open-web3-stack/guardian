@@ -20,7 +20,7 @@ describe('StorageTask', () => {
 
   it("doesn't work with invalid arguments", () => {
     // @ts-ignore
-    expect(() => task.call({ name: '' })).toThrow(Error);
+    expect(() => task.call({ name: [], args: true })).toThrow(Error);
     // @ts-ignore
     expect(() => task.call()).toThrow(Error);
   });

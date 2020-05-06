@@ -24,7 +24,7 @@ export default class StorageTask extends Task {
         otherwise: joi.alt(joi.string(), joi.array().items(joi.string())),
       })
     ),
-    args: joi.array(),
+    args: joi.any(),
   });
 
   constructor(api$: Observable<LaminarApi['api']>) {
@@ -32,7 +32,7 @@ export default class StorageTask extends Task {
     this.api$ = api$;
   }
 
-  call(params: { name: string | string[]; args?: any[] }): Observable<Output> {
+  call(params: { name: string | string[]; args?: any | any[] }): Observable<Output> {
     const { name, args } = this.validateParameters(params);
 
     return this.api$.pipe(
@@ -40,7 +40,7 @@ export default class StorageTask extends Task {
         if (isArray(name)) {
           return from(name).pipe(flatMap((name) => createCall(api, name)));
         }
-        return createCall(api, name, args);
+        return createCall(api, name, isArray(args) ? args : [args]);
       })
     );
   }
