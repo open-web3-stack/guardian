@@ -2,10 +2,10 @@ import joi from '@hapi/joi';
 import { Observable, from } from 'rxjs';
 import { switchMap, map, flatMap } from 'rxjs/operators';
 import { get, isArray, isNil } from 'lodash';
-import { LaminarApi } from '@laminar/api';
+import { ApiRx } from '@polkadot/api';
 import Task from '../Task';
 
-const createCall = (api: LaminarApi['api'], name: string, args: any[] = []): Observable<Output> => {
+const createCall = (api: ApiRx, name: string, args: any[] = []): Observable<Output> => {
   const method = get(api.query, name);
   if (isNil(method)) throw Error(`cannot find storage ${name}`);
 
@@ -15,7 +15,7 @@ const createCall = (api: LaminarApi['api'], name: string, args: any[] = []): Obs
 type Output = { name: string; value: any };
 
 export default class StorageTask extends Task {
-  api$: Observable<LaminarApi['api']>;
+  api$: Observable<ApiRx>;
 
   validationSchema = joi.object({
     name: joi.alt(
@@ -27,7 +27,7 @@ export default class StorageTask extends Task {
     args: joi.any(),
   });
 
-  constructor(api$: Observable<LaminarApi['api']>) {
+  constructor(api$: Observable<ApiRx>) {
     super();
     this.api$ = api$;
   }

@@ -2,13 +2,13 @@ import _ from 'lodash';
 import joi from '@hapi/joi';
 import { Observable } from 'rxjs';
 import { switchMap, flatMap, filter } from 'rxjs/operators';
-import { LaminarApi } from '@laminar/api';
+import { ApiRx } from '@polkadot/api';
 import Task from '../Task';
 
 type Output = { name: string; args: any[] };
 
 export default class EventsTask extends Task {
-  api$: Observable<LaminarApi['api']>;
+  api$: Observable<ApiRx>;
 
   validationSchema = joi
     .object({
@@ -16,7 +16,7 @@ export default class EventsTask extends Task {
     })
     .required();
 
-  constructor(api$: Observable<LaminarApi['api']>) {
+  constructor(api$: Observable<ApiRx>) {
     super();
     this.api$ = api$;
   }
