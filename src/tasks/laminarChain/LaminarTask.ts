@@ -1,5 +1,5 @@
 import { LaminarApi } from '@laminar/api';
-import { Observable } from '@polkadot/types/types';
+import { Observable } from 'rxjs';
 import Task from '../Task';
 
 export default class LaminarTask extends Task {

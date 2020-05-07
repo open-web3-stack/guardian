@@ -2,9 +2,9 @@ import _ from 'lodash';
 import joi from '@hapi/joi';
 import { Observable, from } from 'rxjs';
 import { switchMap, flatMap, map } from 'rxjs/operators';
-import Task from '../Task';
-import { LaminarApi } from '@laminar/api';
+import { ApiRx } from '@polkadot/api';
 import { AccountInfo } from '@polkadot/types/interfaces';
+import Task from '../Task';
 
 const mapResult = (account: string) => (info: AccountInfo): Output => {
   const output: Output = {
@@ -28,7 +28,7 @@ type Output = {
 };
 
 export default class AccountsTask extends Task {
-  api$: Observable<LaminarApi['api']>;
+  api$: Observable<ApiRx>;
 
   validationSchema = joi
     .object({
@@ -36,7 +36,7 @@ export default class AccountsTask extends Task {
     })
     .required();
 
-  constructor(api$: Observable<LaminarApi['api']>) {
+  constructor(api$: Observable<ApiRx>) {
     super();
     this.api$ = api$;
   }

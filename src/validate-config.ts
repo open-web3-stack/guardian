@@ -7,7 +7,7 @@ const schema = joi.object({
     joi.string(),
     joi
       .object({
-        networkType: joi.valid('laminarChain', 'ethereum').required(),
+        networkType: joi.valid('laminarChain', 'acalaChain', 'ethereum').required(),
         nodeEndpoint: joi.string(),
         monitors: joi
           .object()
@@ -25,6 +25,11 @@ const schema = joi.object({
       .when(joi.object({ networkType: 'laminarChain' }).unknown(), {
         then: joi.object({
           network: joi.string().valid('dev', 'turbulence', 'reynolds', 'mainnet').required(),
+        }),
+      })
+      .when(joi.object({ networkType: 'acalaChain' }).unknown(), {
+        then: joi.object({
+          network: joi.string().valid('dev', 'karura', 'mainnet').required(),
         }),
       })
       .when(joi.object({ networkType: 'ethereum' }).unknown(), {

@@ -27,9 +27,9 @@ export default class BalancesTask extends LaminarTask {
     return this.chainApi$.pipe(
       switchMap((laminarApi) => {
         if (_.isArray(account)) {
-          return from(account).pipe(flatMap((id) => laminarApi.balances(id)));
+          return from(account).pipe(flatMap((id) => laminarApi.currencies.balances(id)));
         }
-        return laminarApi.balances(account);
+        return laminarApi.currencies.balances(account);
       })
     );
   }
