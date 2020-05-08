@@ -1,6 +1,7 @@
 jest.mock('axios');
 
 import axios from 'axios';
+import { from } from 'rxjs';
 import mockLaminarApi from './__mocks__/mockLaminarApi';
 import Monitor from '../Monitor';
 import { MonitorConfig } from '../types';
@@ -8,7 +9,56 @@ import { createLaminarApi } from '../tasks/laminarChain';
 import { createLaminarTasks } from '../tasks';
 
 describe('Laminar monitors', () => {
-  mockLaminarApi();
+  mockLaminarApi({
+    margin: {
+      poolInfo: jest.fn((poolId) => {
+        return from([
+          {
+            poolId,
+            owners: 'asf',
+            balance: '100',
+            ell: '80',
+            enp: '50',
+          },
+        ]);
+      }),
+    },
+    synthetic: {
+      allPoolIds: jest.fn(() => from([[1]])),
+      poolInfo: jest.fn((poolId) => {
+        return from([
+          {
+            poolId,
+            owners: 'who',
+            balance: '1000',
+            options: [
+              {
+                additionalCollateralRatio: 1,
+                askSpread: 1,
+                bidSpread: 1,
+                syntheticEnabled: true,
+                tokenId: 'FEUR',
+              },
+            ],
+          },
+          {
+            poolId,
+            owners: 'who',
+            balance: '1200',
+            options: [
+              {
+                additionalCollateralRatio: 1,
+                askSpread: 1,
+                bidSpread: 1,
+                syntheticEnabled: true,
+                tokenId: 'FEUR',
+              },
+            ],
+          },
+        ]);
+      }),
+    },
+  });
 
   const api$ = createLaminarApi('ws://localhost:9944');
   const tasks = createLaminarTasks(api$);
