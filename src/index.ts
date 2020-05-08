@@ -3,6 +3,7 @@ import validateConfig from './validate-config';
 import LaminarGuardian from './LaminarGuardian';
 import EthereumGuardian from './EthereumGuardian';
 import AcalaGuardian from './AcalaGuardian';
+import SubstrateGuardian from './SubstrateGuardian';
 
 const guardian = (config: Config) => {
   config = validateConfig(config);
@@ -13,6 +14,8 @@ const guardian = (config: Config) => {
         return new LaminarGuardian(name, guardianConfig);
       case 'acalaChain':
         return new AcalaGuardian(name, guardianConfig);
+      case 'substrateChain':
+        return new SubstrateGuardian(name, guardianConfig);
       case 'ethereum':
         return new EthereumGuardian(name, guardianConfig);
       default:
@@ -21,13 +24,6 @@ const guardian = (config: Config) => {
   });
 
   guardians.forEach((guardian) => guardian.start());
-
-  process.on('SIGINT', () => {
-    process.exit();
-  });
-
-  // Start reading from stdin so we don't exit.
-  process.stdin.resume();
 };
 
 export default guardian;

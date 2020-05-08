@@ -7,7 +7,7 @@ const schema = joi.object({
     joi.string(),
     joi
       .object({
-        networkType: joi.valid('laminarChain', 'acalaChain', 'ethereum').required(),
+        networkType: joi.valid('laminarChain', 'acalaChain', 'substrateChain', 'ethereum').required(),
         nodeEndpoint: joi.string(),
         monitors: joi
           .object()
