@@ -1,8 +1,7 @@
-#!/usr/bin/env node -r ts-node/register
+#!/usr/bin/env node
 
-const fs = require('fs');
-const readConfig = require('./read-config').default;
-const guardian = require('../src').default;
+const guardian = require('../dist').default;
+const readConfig = require('../dist/read-config').default;
 
 const { config: configPath } = require('yargs')
   .scriptName('guardian')
