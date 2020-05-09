@@ -105,3 +105,5 @@ dist
 
 # example output
 examples/events.csv
+
+.npmrc
