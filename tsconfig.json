@@ -1,9 +1,15 @@
 {
   "compilerOptions": {
+    "rootDir": "src",
     "module": "commonjs",
     "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+    "allowJs": true,
+    "outDir": "dist",
+    "declaration": true
+  },
+  "include": ["src/**/*.ts", "src/**/*.js"],
+  "exclude": ["node_modules", "**/__tests__/**/*"]
 }
