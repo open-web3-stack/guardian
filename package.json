@@ -13,7 +13,7 @@
     "lint": "eslint --ext .js,.ts src && tsc --noEmit --pretty",
     "test": "jest --testPathIgnorePatterns e2e",
     "coverage": "jest --collect-coverage",
-    "publish": "scripts/publish",
+    "polkadot-dev-ghact-build": "scripts/polkadot-dev-ghact-build",
     "run.example": "yarn build && bin/cli --config=./examples/config.yaml"
   },
   "publishConfig": {
