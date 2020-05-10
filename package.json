@@ -2,7 +2,7 @@
   "name": "@open-web3/guardian",
   "version": "0.1.1",
   "description": "Web3 Guardian - a blockchain monitoring and alerting tool",
-  "main": "dist/index.js",
+  "main": "lib/index.js",
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
   "bin": {
@@ -13,7 +13,7 @@
     "lint": "eslint --ext .js,.ts src && tsc --noEmit --pretty",
     "test": "jest --testPathIgnorePatterns e2e",
     "coverage": "jest --collect-coverage",
-    "polkadot-dev-ghact-build": "scripts/polkadot-dev-ghact-build",
+    "publish": "scripts/publish",
     "run.example": "yarn build && bin/cli --config=./examples/config.yaml"
   },
   "publishConfig": {

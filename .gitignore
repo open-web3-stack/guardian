@@ -107,3 +107,5 @@ dist
 examples/events.csv
 
 .npmrc
+
+lib

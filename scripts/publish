@@ -90,9 +90,10 @@ function npm_setup () {
 
 function npm_publish () {
   echo ""
-  echo "*** Copying package files to dist"
+  echo "*** Copying package files to build"
 
-  cp LICENSE README.md package.json dist/
+  mkdir build
+  cp bin lib LICENSE README.md package.json build/
 
   echo ""
   echo "*** Publishing to npm"
@@ -104,7 +105,7 @@ function npm_publish () {
     TAG="--tag beta"
   fi
 
-  cd dist
+  cd build
 
   local n=1
 
