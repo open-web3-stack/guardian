@@ -109,3 +109,4 @@ examples/events.csv
 .npmrc
 
 lib
+build

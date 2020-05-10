@@ -93,7 +93,8 @@ function npm_publish () {
   echo "*** Copying package files to build"
 
   mkdir build
-  cp bin lib LICENSE README.md package.json build/
+  cp -r bin lib build/
+  cp LICENSE README.md package.json build/
 
   echo ""
   echo "*** Publishing to npm"
