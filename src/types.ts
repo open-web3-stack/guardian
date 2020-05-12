@@ -30,7 +30,7 @@ export interface TaskInterface {
 
 export interface LaminarGuardianConfig {
   networkType: 'laminarChain';
-  nodeEndpoint: string;
+  nodeEndpoint: string | string[];
   network: 'dev' | 'turbulence' | 'reynolds' | 'mainnet';
   confirmation: 'finalize' | number;
   monitors: {
@@ -40,7 +40,7 @@ export interface LaminarGuardianConfig {
 
 export interface AcalaGuardianConfig {
   networkType: 'acalaChain';
-  nodeEndpoint: string;
+  nodeEndpoint: string | string[];
   network: 'dev' | 'karura' | 'mainnet';
   confirmation: 'finalize' | number;
   monitors: {
@@ -50,7 +50,7 @@ export interface AcalaGuardianConfig {
 
 export interface SubstrateGuardianConfig {
   networkType: 'substrateChain';
-  nodeEndpoint: string;
+  nodeEndpoint: string | string[];
   confirmation: 'finalize' | number;
   monitors: {
     [key: string]: MonitorConfig;
