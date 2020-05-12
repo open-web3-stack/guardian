@@ -1,7 +1,8 @@
-import { LaminarApi, WsProvider } from '@laminar/api';
+import { LaminarApi } from '@laminar/api';
+import { WsProvider } from '@polkadot/rpc-provider';
 import { AsyncSubject, Observable } from 'rxjs';
 
-const createLaminarApi = (nodeURL: string): Observable<LaminarApi> => {
+const createLaminarApi = (nodeURL: string | string[]): Observable<LaminarApi> => {
   const chainApi$ = new AsyncSubject<LaminarApi>();
   const laminarApi = new LaminarApi({ provider: new WsProvider(nodeURL) });
   laminarApi.isReady().then(() => {

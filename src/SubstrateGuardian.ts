@@ -1,13 +1,14 @@
 import joi from '@hapi/joi';
 import { get } from 'lodash';
 import { Subscription, AsyncSubject } from 'rxjs';
-import { ApiRx, WsProvider } from '@polkadot/api';
+import { ApiRx } from '@polkadot/api';
+import { WsProvider } from '@polkadot/rpc-provider';
 import { SubstrateGuardianConfig } from './types';
 import { createSubstrateTasks } from './tasks';
 import Monitor from './Monitor';
 import Guardian from './Guardian';
 
-const createApi = (nodeEndpoint: string) => {
+const createApi = (nodeEndpoint: string | string[]) => {
   const api$ = new AsyncSubject<ApiRx>();
   const api = new ApiRx({ provider: new WsProvider(nodeEndpoint) });
   api.once('ready', () => {

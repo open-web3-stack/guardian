@@ -1,9 +1,9 @@
-import { map } from 'rxjs/operators';
+import { ApiRx } from '@polkadot/api';
+import { WsProvider } from '@polkadot/rpc-provider';
 import StorageTask from '../../StorageTask';
-import createLaminarApi from '../../../laminarChain/createLaminarApi';
 
 describe('StorageTask', () => {
-  const api$ = createLaminarApi('ws://localhost:9944').pipe(map((api) => api.api));
+  const api$ = ApiRx.create({ provider: new WsProvider('ws://localhost:9944') });
   const task = new StorageTask(api$);
 
   jest.setTimeout(30_000);
