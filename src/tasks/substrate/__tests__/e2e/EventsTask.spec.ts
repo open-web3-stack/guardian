@@ -3,10 +3,12 @@ import { WsProvider } from '@polkadot/rpc-provider';
 import EventsTask from '../../EventsTask';
 
 describe('EventsTask', () => {
-  const api$ = ApiRx.create({ provider: new WsProvider('ws://localhost:9944') });
+  const api$ = ApiRx.create({
+    provider: new WsProvider('wss://kusama-rpc.polkadot.io/'),
+  });
   const task = new EventsTask(api$);
 
-  jest.setTimeout(30_000);
+  jest.setTimeout(60_000);
 
   it('works with single name', (done) => {
     task.call({ name: 'system.ExtrinsicSuccess' }).subscribe((output) => {

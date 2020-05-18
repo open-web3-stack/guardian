@@ -601,15 +601,15 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
-"@laminar/api@^0.2.0-beta.71":
-  version "0.2.0-beta.71"
-  resolved "https://registry.yarnpkg.com/@laminar/api/-/api-0.2.0-beta.71.tgz#9299abb851a7b2f08a81e5bff4c7c0e8f8e77b9d"
-  integrity sha512-d6iC1kHKCedenHKfjxQFEdM8djfC99T6T9awLYdSwBXB1jKT9WcsWDI48JBGPANi5JjsPzaJ6ZUHCT+iI2qyxQ==
+"@laminar/api@^0.2.0-beta.78":
+  version "0.2.0-beta.78"
+  resolved "https://registry.yarnpkg.com/@laminar/api/-/api-0.2.0-beta.78.tgz#1aadfc422e8e3d2bfdc6823a28537af805b53007"
+  integrity sha512-Id8qcolE47/0btauoL0LFaLvrEtaPQiYf2YfFEdf2ZJbov8XT/JB5MhPS5oSerLnnHt2TUI++GDGWbHAKWMycw==
   dependencies:
     "@babel/runtime" "^7.8.0"
     "@laminar/flow-protocol-ethereum" "0.0.7"
-    "@laminar/types" "^0.2.0-beta.71"
-    "@open-web3/orml-api-derive" "^0.3.0-beta.4"
+    "@laminar/types" "^0.2.0-beta.78"
+    "@open-web3/orml-api-derive" "^0.3.0-beta.9"
     "@polkadot/api" "^1.13.1"
     rxjs "^6.5.5"
     web3 "1.2.6"
@@ -622,27 +622,39 @@
   resolved "https://registry.yarnpkg.com/@laminar/flow-protocol-ethereum/-/flow-protocol-ethereum-0.0.7.tgz#aac0c3045b3d2c77e7240a0ead0981c714d91e79"
   integrity sha512-L80SOVjYUlCYzSqiGIwa0N3hqkSMf7gba2XQjDgPv/I7F9coUe+O9+J1RJ7q9jFAdA/GiTgyfZZqS6MHG5nk/A==
 
-"@laminar/types@^0.2.0-beta.71":
-  version "0.2.0-beta.71"
-  resolved "https://registry.yarnpkg.com/@laminar/types/-/types-0.2.0-beta.71.tgz#0368587930b6979fe223b4c65923b04f4843b971"
-  integrity sha512-TA81haUmshQ4Xbl1xnRVXYTgMW/2wLT7n/o28G0uP3/I243enFejU5HqSRXJlvpItmlPbcZdu9FkBzJKYC1RnA==
+"@laminar/types@^0.2.0-beta.78":
+  version "0.2.0-beta.78"
+  resolved "https://registry.yarnpkg.com/@laminar/types/-/types-0.2.0-beta.78.tgz#d8e70a5c87f1e4be00da3038438436084d4278f8"
+  integrity sha512-xFQqQMVFsa2iwrkp2AEGcFMiK38GOrhJne+bZx+Tb+g+rwjpuCbcA2n9n7rb+RYBfJmLrVc7QH19Lx9wGJHH/g==
   dependencies:
     "@babel/runtime" "^7.8.0"
-    "@open-web3/orml-types" "^0.3.0-beta.6"
+    "@open-web3/orml-types" "^0.3.0-beta.9"
     "@polkadot/typegen" "^1.13.1"
     "@polkadot/types" "^1.13.1"
 
-"@open-web3/orml-api-derive@^0.3.0-beta.4", "@open-web3/orml-api-derive@^0.3.0-beta.5":
+"@open-web3/orml-api-derive@^0.3.0-beta.5":
   version "0.3.0-beta.6"
   resolved "https://registry.yarnpkg.com/@open-web3/orml-api-derive/-/orml-api-derive-0.3.0-beta.6.tgz#81fc03ac77025663c2a6d2a184134d1ddfd2c22f"
   integrity sha512-ljMJKg1u3K9KX6l8aAnnUSA/z8Lfx+ZkyQ7DA8/P16i33n3/eF5bvINQ4mqIqz4Z8HybWmGTK5c9LhHvxA6HFg==
   dependencies:
     memoizee "^0.4.14"
 
-"@open-web3/orml-types@^0.3.0-beta.5", "@open-web3/orml-types@^0.3.0-beta.6":
+"@open-web3/orml-api-derive@^0.3.0-beta.9":
+  version "0.3.0-beta.9"
+  resolved "https://registry.yarnpkg.com/@open-web3/orml-api-derive/-/orml-api-derive-0.3.0-beta.9.tgz#b8ec01ace338bd13b789ae3c826e9c77c73d2a15"
+  integrity sha512-TTsMu+PcDcnaCEHsalEI90RfxIdWC7+h0c1UJoQuTVqFtWW3U+hk2C8t2wRRw58MDiouXU9sZym1nWbE5oAzzA==
+  dependencies:
+    memoizee "^0.4.14"
+
+"@open-web3/orml-types@^0.3.0-beta.5":
   version "0.3.0-beta.6"
   resolved "https://registry.yarnpkg.com/@open-web3/orml-types/-/orml-types-0.3.0-beta.6.tgz#8f7727ce4a650869c149831d3bf60863ca6b597a"
   integrity sha512-FCmbnBgbG5bvnqACnBFGhoNTXeCkumXiKDNoPYg7w35NB368bpWHkDNzfY4Xxtnpp6OTZm8+HCVZfyWoqvxH8Q==
+
+"@open-web3/orml-types@^0.3.0-beta.9":
+  version "0.3.0-beta.9"
+  resolved "https://registry.yarnpkg.com/@open-web3/orml-types/-/orml-types-0.3.0-beta.9.tgz#00a9b012fbe3dc14bb2098747afe49cff5d1a3c9"
+  integrity sha512-cvkBc7DtncWkqwHfXZ8dZgtvKykssLadZ77sxCK+xG4TgQMmBnKYZNT55qo4dU2TOmge/+Ja6llCO1yyxhDXMA==
 
 "@polkadot/api-derive@1.13.1":
   version "1.13.1"

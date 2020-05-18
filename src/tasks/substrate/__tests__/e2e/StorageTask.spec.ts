@@ -3,10 +3,10 @@ import { WsProvider } from '@polkadot/rpc-provider';
 import StorageTask from '../../StorageTask';
 
 describe('StorageTask', () => {
-  const api$ = ApiRx.create({ provider: new WsProvider('ws://localhost:9944') });
+  const api$ = ApiRx.create({ provider: new WsProvider('wss://kusama-rpc.polkadot.io/') });
   const task = new StorageTask(api$);
 
-  jest.setTimeout(30_000);
+  jest.setTimeout(60_000);
 
   it('works with single args', (done) => {
     task
