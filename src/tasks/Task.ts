@@ -1,20 +1,21 @@
-import joi from '@hapi/joi';
-import { Observable, never } from 'rxjs';
+import Joi from '@hapi/joi';
+import { Observable } from 'rxjs';
 import { TaskInterface } from '../types';
 
-export default class Task implements TaskInterface {
-  validationSchema = joi.any();
+export default abstract class Task<Output> implements TaskInterface<Output> {
+  abstract validationSchema: Joi.Schema;
 
-  validateParameters<T>(params?: T): T {
-    const { error, value } = this.validationSchema.validate(params);
+  abstract init(params: any): Observable<Output>;
+
+  readonly validateCallArguments = <T>(args?: T): T => {
+    const { error, value } = this.validationSchema.validate(args);
     if (error) {
       throw error;
     }
     return value;
-  }
+  };
 
-  // eslint-disable-next-line
-  call(params?: any): Observable<any> {
-    return never();
-  }
+  readonly run = (params: any): Observable<Output> => {
+    return this.init(this.validateCallArguments(params));
+  };
 }

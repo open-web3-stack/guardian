@@ -1,11 +1,12 @@
-import _ from 'lodash';
-import joi from '@hapi/joi';
+import BN from 'bn.js';
+import Joi from '@hapi/joi';
 import { Observable, from } from 'rxjs';
 import { switchMap, flatMap, map } from 'rxjs/operators';
 import { ApiRx } from '@polkadot/api';
-import Task from '../Task';
+import SubstrateTask from '../substrate/SubstrateTask';
+import { createAccountCurrencyIdPairs } from '../helpers';
 
-type Result = {
+export type Output = {
   account: string;
   currencyId: string;
   free: string;
@@ -13,35 +14,26 @@ type Result = {
   frozen: string;
 };
 
-export default class BalancesTask extends Task {
-  api$: Observable<ApiRx>;
+export default class BalancesTask extends SubstrateTask<Output> {
+  validationSchema = Joi.object({
+    account: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
+    currencyId: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
+  }).required();
 
-  validationSchema = joi
-    .object({
-      account: joi.alt(joi.string(), joi.array().items(joi.string())),
-      currencyId: joi.alt(joi.string(), joi.array().items(joi.string())),
-    })
-    .required();
-
-  constructor(api$: Observable<ApiRx>) {
-    super();
-    this.api$ = api$;
-  }
-
-  call(params: { account: string | string[]; currencyId: string | string[] }): Observable<Result> {
-    const { account, currencyId } = this.validateParameters(params);
+  init(params: { account: string | string[]; currencyId: string | string[] }) {
+    const { account, currencyId } = params;
 
     return this.api$.pipe(
       switchMap(
-        (api): Observable<Result> => {
-          const pairs = this.createPairs(account, currencyId);
+        (api): Observable<Output> => {
+          const pairs = createAccountCurrencyIdPairs(account, currencyId);
           return from(pairs).pipe(flatMap(({ account, currencyId }) => this.getBalance(api, account, currencyId)));
         }
       )
     );
   }
 
-  getBalance(api: ApiRx, account: string, currencyId: string): Observable<Result> {
+  getBalance(api: ApiRx, account: string, currencyId: string): Observable<Output> {
     return api.query.tokens.accounts(currencyId, account).pipe(
       map((result: any) => {
         return {
@@ -49,20 +41,9 @@ export default class BalancesTask extends Task {
           currencyId,
           free: result.free.toString(),
           reserved: result.reserved.toString(),
-          frozen: '0', // FIXME:
+          frozen: BN.max(result.feeFrozen, result.miscFrozen).toString(),
         };
       })
     );
-  }
-
-  createPairs(account: string | string[], currencyId: string | string[]): { account: string; currencyId: string }[] {
-    if (typeof account === 'string') {
-      account = [account];
-    }
-    if (typeof currencyId === 'string') {
-      currencyId = [currencyId];
-    }
-
-    return _.flatMap(account, (account) => _.map(currencyId, (currencyId) => ({ account, currencyId })));
   }
 }

@@ -11,7 +11,7 @@ describe('EventsTask', () => {
   jest.setTimeout(60_000);
 
   it('works with single name', (done) => {
-    task.call({ name: 'system.ExtrinsicSuccess' }).subscribe((output) => {
+    task.run({ name: 'system.ExtrinsicSuccess' }).subscribe((output) => {
       console.log(output.args.toString());
       expect(output.args).toBeTruthy();
       done();
@@ -19,7 +19,7 @@ describe('EventsTask', () => {
   });
 
   it('works with multiple names', (done) => {
-    task.call({ name: ['system.ExtrinsicSuccess'] }).subscribe((output) => {
+    task.run({ name: ['system.ExtrinsicSuccess'] }).subscribe((output) => {
       console.log(output.args.toString());
       expect(output.args).toBeTruthy();
       done();

@@ -1,18 +1,17 @@
 import _ from 'lodash';
-import joi from '@hapi/joi';
+import Joi from '@hapi/joi';
 import { from } from 'rxjs';
 import { switchMap, flatMap } from 'rxjs/operators';
+import { TraderInfo } from '@laminar/api';
 import LaminarTask from './LaminarTask';
 
-export default class TraderInfoTask extends LaminarTask {
-  validationSchema = joi
-    .object({
-      account: joi.alt(joi.string(), joi.array().items(joi.string())),
-    })
-    .required();
+export default class TraderInfoTask extends LaminarTask<TraderInfo> {
+  validationSchema = Joi.object({
+    account: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
+  }).required();
 
-  call(params: { account: string | string[] }) {
-    const { account } = this.validateParameters(params);
+  init(params: { account: string | string[] }) {
+    const { account } = params;
 
     return this.chainApi$.pipe(
       switchMap((laminarApi) => {

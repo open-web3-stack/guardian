@@ -1,43 +1,32 @@
-import _ from 'lodash';
-import joi from '@hapi/joi';
+import Joi from '@hapi/joi';
 import { Observable, from, timer } from 'rxjs';
 import { switchMap, flatMap, map } from 'rxjs/operators';
-import { ApiRx } from '@polkadot/api';
-import Task from '../Task';
+import SubstrateTask from '../substrate/SubstrateTask';
 
-type Result = {
+export type Output = {
   key: string;
   value: string;
 };
 
-export default class PricesTask extends Task {
-  api$: Observable<ApiRx>;
+export default class PricesTask extends SubstrateTask<Output> {
+  validationSchema = Joi.object({
+    key: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
+    period: Joi.number().default(30_000),
+  }).required();
 
-  validationSchema = joi
-    .object({
-      key: joi.alt(joi.string(), joi.array().items(joi.string())).required(),
-      period: joi.number().default(30_000),
-    })
-    .required();
-
-  constructor(api$: Observable<ApiRx>) {
-    super();
-    this.api$ = api$;
-  }
-
-  call(params: { key: string | string[]; period?: number }) {
-    const { key, period } = this.validateParameters(params);
+  init(params: { key: string | string[]; period?: number }) {
+    const { key, period } = params;
 
     return this.api$.pipe(
       switchMap((api) => {
         const oracle = api.rpc['oracle'];
         return timer(0, period).pipe(
           switchMap(
-            (): Observable<Result> => {
+            (): Observable<Output> => {
               if (key === 'all') {
                 return oracle.getAllValues().pipe(
                   flatMap(
-                    (result: any): Observable<Result> => {
+                    (result: any): Observable<Output> => {
                       return from(result).pipe(map(([key, item]) => ({ key, value: item.value.toString() })));
                     }
                   )
@@ -45,7 +34,7 @@ export default class PricesTask extends Task {
               } else if (Array.isArray(key)) {
                 return from(key).pipe(
                   flatMap(
-                    (key): Observable<Result> =>
+                    (key): Observable<Output> =>
                       oracle.getValue(key).pipe(map((output: any) => ({ key, value: output.value.toString() })))
                   )
                 );

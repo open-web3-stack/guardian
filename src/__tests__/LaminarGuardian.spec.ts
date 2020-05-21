@@ -1,4 +1,4 @@
-import LaminarGuardian from '../LaminarGuardian';
+import { LaminarGuardian } from '../guardians';
 import { LaminarGuardianConfig } from '../types';
 
 describe('LaminarGuardian', () => {

@@ -1,14 +1,14 @@
-import joi from '@hapi/joi';
+import Joi from '@hapi/joi';
 import { get } from 'lodash';
 import { Subscription } from 'rxjs';
-import { AcalaGuardianConfig } from './types';
-import { createAcalaTasks } from './tasks';
-import Monitor from './Monitor';
+import { AcalaGuardianConfig } from '../types';
+import { createAcalaTasks } from '../tasks';
+import Monitor from '../Monitor';
 import Guardian from './Guardian';
-import { createAcalaApi } from './tasks/acalaChain';
+import { createAcalaApi } from '../tasks/acalaChain';
 
 export default class AcalaGuardian extends Guardian {
-  validationSchema = joi.any();
+  validationSchema = Joi.any();
   private subscriptions: Subscription[] = [];
   public readonly name: string;
 
@@ -31,13 +31,13 @@ export default class AcalaGuardian extends Guardian {
   }
 
   start() {
-    console.log(`Starting ${this.name}`);
+    console.log(`Starting guardian ${this.name} ...`);
     this.subscriptions.map((i) => i.unsubscribe()); // unsubscribe any current subscription
     this.subscriptions = this.monitors.map((monitor) => monitor.listen());
   }
 
   stop() {
-    console.log(`Stopping ${this.name}`);
+    console.log(`Stopping guardian ${this.name} ...`);
     this.subscriptions.map((i) => i.unsubscribe());
     this.subscriptions = [];
   }

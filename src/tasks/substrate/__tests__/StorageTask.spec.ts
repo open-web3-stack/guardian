@@ -1,27 +1,23 @@
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { never } from 'rxjs';
+
 import StorageTask from '../StorageTask';
-import createLaminarApi from '../../laminarChain/createLaminarApi';
 
 describe('StorageTask', () => {
-  const api$ = createLaminarApi('ws://localhost:9944').pipe(map((api) => api.api));
-  const task = new StorageTask(api$);
-
-  jest.setTimeout(30_000);
+  const task = new StorageTask(never());
 
   it('works with valid arguments', () => {
-    expect(task.call({ name: 'system.events' })).toBeInstanceOf(Observable);
+    expect(task.validateCallArguments({ name: 'system.events' })).toStrictEqual({ name: 'system.events' });
     expect(
-      task.call({
+      task.validateCallArguments({
         name: ['sytems.events', 'system.account'],
       })
-    ).toBeInstanceOf(Observable);
+    ).toStrictEqual({
+      name: ['sytems.events', 'system.account'],
+    });
   });
 
   it("doesn't work with invalid arguments", () => {
-    // @ts-ignore
-    expect(() => task.call({ name: [], args: true })).toThrow(Error);
-    // @ts-ignore
-    expect(() => task.call()).toThrow(Error);
+    expect(() => task.validateCallArguments({ name: [], args: true })).toThrow(Error);
+    expect(() => task.validateCallArguments()).toThrow(Error);
   });
 });

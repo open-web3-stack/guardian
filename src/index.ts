@@ -1,9 +1,6 @@
 import { Config } from './types';
 import validateConfig from './validate-config';
-import LaminarGuardian from './LaminarGuardian';
-import EthereumGuardian from './EthereumGuardian';
-import AcalaGuardian from './AcalaGuardian';
-import SubstrateGuardian from './SubstrateGuardian';
+import { EthereumGuardian, LaminarGuardian, AcalaGuardian, SubstrateGuardian } from './guardians';
 
 const guardian = (config: Config) => {
   config = validateConfig(config);
@@ -24,6 +21,10 @@ const guardian = (config: Config) => {
   });
 
   guardians.forEach((guardian) => guardian.start());
+
+  return () => {
+    guardians.forEach((guardian) => guardian.stop());
+  };
 };
 
 export default guardian;

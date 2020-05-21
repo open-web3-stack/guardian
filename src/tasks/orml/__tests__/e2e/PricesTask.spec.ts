@@ -9,7 +9,7 @@ describe('PricesTask', () => {
   jest.setTimeout(30_000);
 
   it('get oracle value', (done) => {
-    task.call({ key: 'FEUR' }).subscribe((output) => {
+    task.run({ key: 'FEUR' }).subscribe((output) => {
       console.log(JSON.stringify(output, null, 2));
       expect(output).toBeTruthy();
       done();
@@ -17,7 +17,7 @@ describe('PricesTask', () => {
   });
 
   it('get oracle values [FEUR, FJPY]', (done) => {
-    task.call({ key: ['FEUR', 'FJPY'] }).subscribe((output) => {
+    task.run({ key: ['FEUR', 'FJPY'] }).subscribe((output) => {
       console.log(JSON.stringify(output, null, 2));
       expect(output).toBeTruthy();
       done();
@@ -25,7 +25,7 @@ describe('PricesTask', () => {
   });
 
   it('get all oracle values', (done) => {
-    task.call({ key: 'all' }).subscribe((output) => {
+    task.run({ key: 'all' }).subscribe((output) => {
       console.log(JSON.stringify(output, null, 2));
       expect(output).toBeTruthy();
       done();

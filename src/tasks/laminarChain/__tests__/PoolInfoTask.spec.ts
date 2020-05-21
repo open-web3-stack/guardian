@@ -1,21 +1,17 @@
-import { Observable } from 'rxjs';
+import { never } from 'rxjs';
 import PoolInfoTask from '../PoolInfoTask';
-import createLaminarApi from '../createLaminarApi';
 
 describe('PoolInfoTask', () => {
-  const api$ = createLaminarApi('ws://localhost:9944');
-  const task = new PoolInfoTask(api$);
+  const task = new PoolInfoTask(never());
 
   it('works with valid arguments', () => {
-    expect(task.call({ poolId: 1 })).toBeInstanceOf(Observable);
-    expect(task.call({ poolId: [1] })).toBeInstanceOf(Observable);
-    expect(task.call({ poolId: 'all' })).toBeInstanceOf(Observable);
+    expect(task.validateCallArguments({ poolId: 1 })).toStrictEqual({ poolId: 1 });
+    expect(task.validateCallArguments({ poolId: [1] })).toStrictEqual({ poolId: [1] });
+    expect(task.validateCallArguments({ poolId: 'all' })).toStrictEqual({ poolId: 'all' });
   });
 
   it("doesn't work with invalid arguments", () => {
-    // @ts-ignore
-    expect(() => task.call({ poolId: '' })).toThrow(Error);
-    // @ts-ignore
-    expect(() => task.call()).toThrow(Error);
+    expect(() => task.validateCallArguments({ poolId: '' })).toThrow(Error);
+    expect(() => task.validateCallArguments()).toThrow(Error);
   });
 });

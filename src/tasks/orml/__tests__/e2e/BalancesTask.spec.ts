@@ -11,7 +11,7 @@ describe('BalancesTask with laminarChain', () => {
 
   it('get laminar balance', (done) => {
     task
-      .call({ account: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY', currencyId: ['FEUR'] })
+      .run({ account: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY', currencyId: ['FEUR'] })
       .subscribe((output) => {
         console.log(JSON.stringify(output, null, 2));
         expect(output).toBeTruthy();
@@ -28,7 +28,7 @@ describe('BalancesTask with acalaChain', () => {
 
   it('get acala balance', (done) => {
     task
-      .call({ account: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY', currencyId: 'AUSD' })
+      .run({ account: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY', currencyId: 'AUSD' })
       .subscribe((output) => {
         console.log(JSON.stringify(output, null, 2));
         expect(output).toBeTruthy();

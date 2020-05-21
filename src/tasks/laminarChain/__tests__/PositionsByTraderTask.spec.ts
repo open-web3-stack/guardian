@@ -1,19 +1,18 @@
-import { Observable } from 'rxjs';
+import { never } from 'rxjs';
 import PositionsByTraderTask from '../PositionsByTraderTask';
-import createLaminarApi from '../createLaminarApi';
 
 describe('PositionsByTraderTask', () => {
-  const api$ = createLaminarApi('ws://localhost:9944');
-  const task = new PositionsByTraderTask(api$);
+  const task = new PositionsByTraderTask(never());
 
   it('works with valid arguments', () => {
-    expect(task.call({ account: 'alice' })).toBeInstanceOf(Observable);
-    expect(task.call({ account: ['alice'] })).toBeInstanceOf(Observable);
+    expect(task.validateCallArguments({ account: 'alice' })).toStrictEqual({ account: 'alice' });
+    expect(task.validateCallArguments({ account: ['alice'] })).toStrictEqual({ account: ['alice'] });
   });
 
-  it("doesn't work with valid arguments", () => {
-    // @ts-ignore
-    expect(() => task.call()).toThrow(Error);
-    // expect(() => task.call({})).toThrow(Error);
+  it("doesn't work with invalid arguments", () => {
+    expect(() => task.validateCallArguments()).toThrow(Error);
+    expect(() => task.validateCallArguments({})).toThrow(Error);
+    expect(() => task.validateCallArguments({ account: null })).toThrow(Error);
+    expect(() => task.validateCallArguments({ account: [] })).toThrow(Error);
   });
 });

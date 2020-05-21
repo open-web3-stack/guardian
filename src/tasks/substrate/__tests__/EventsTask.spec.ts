@@ -1,25 +1,24 @@
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { never } from 'rxjs';
 import EventsTask from '../EventsTask';
-import createLaminarApi from '../../laminarChain/createLaminarApi';
 
 describe('EventsTask', () => {
-  const api$ = createLaminarApi('ws://localhost:9944').pipe(map((api) => api.api));
-  const task = new EventsTask(api$);
+  const task = new EventsTask(never());
 
   it('works with valid arguments', () => {
-    expect(task.call({ name: 'margin.TraderMarginCalled' })).toBeInstanceOf(Observable);
+    expect(task.validateCallArguments({ name: 'margin.TraderMarginCalled' })).toStrictEqual({
+      name: 'margin.TraderMarginCalled',
+    });
     expect(
-      task.call({
+      task.validateCallArguments({
         name: ['margin.TraderMarginCalled', 'margin.PoolMarginCalled'],
       })
-    ).toBeInstanceOf(Observable);
+    ).toStrictEqual({
+      name: ['margin.TraderMarginCalled', 'margin.PoolMarginCalled'],
+    });
   });
 
   it("doesn't work with invalid arguments", () => {
-    // @ts-ignore
-    expect(() => task.call({ name: '' })).toThrow(Error);
-    // @ts-ignore
-    expect(() => task.call()).toThrow(Error);
+    expect(() => task.validateCallArguments({ name: '' })).toThrow(Error);
+    expect(() => task.validateCallArguments()).toThrow(Error);
   });
 });
