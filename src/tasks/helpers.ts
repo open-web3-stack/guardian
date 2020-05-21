@@ -3,16 +3,16 @@ import { flatMap, map } from 'lodash';
 export /**
  * Create pair combination of account and currencyId
  * e.g.
- *  account:['alice', 'bob'] & currencyId:'AUSD' will return
+ *  account: ['alice', 'bob'] & currencyId: 'AUSD' will return
  *  [
- *    { account:'alice', currencyId: 'UASD'},
- *    { account:'bob', currencyId: 'UASD'}
+ *    { account:'alice', currencyId: 'AUSD'},
+ *    { account:'bob', currencyId: 'AUSD'}
  *  ]
  *
- *  account:['alice', 'bob'] & currencyId:['AUSD', 'FEUR'] will return
+ *  account: ['alice', 'bob'] & currencyId: ['AUSD', 'FEUR'] will return
  *  [
- *    { account:'alice', currencyId: 'UASD'},
- *    { account:'bob', currencyId: 'UASD'}
+ *    { account:'alice', currencyId: 'AUSD'},
+ *    { account:'bob', currencyId: 'AUSD'}
  *    { account:'alice', currencyId: 'FEUR'},
  *    { account:'bob', currencyId: 'FEUR'}
  *  ]
