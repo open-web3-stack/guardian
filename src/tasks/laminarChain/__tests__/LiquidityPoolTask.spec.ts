@@ -1,21 +1,23 @@
-import { Observable } from 'rxjs';
+import { never } from 'rxjs';
 import LiquidityPoolTask from '../LiquidityPoolTask';
-import createLaminarApi from '../createLaminarApi';
 
 describe('LiquidityPool', () => {
-  const api$ = createLaminarApi('ws://localhost:9944');
-  const task = new LiquidityPoolTask(api$);
+  const task = new LiquidityPoolTask(never());
 
   it('works with valid arguments', () => {
-    expect(task.call({ poolId: 1, currencyId: null })).toBeInstanceOf(Observable);
-    expect(task.call({ poolId: [1], currencyId: null })).toBeInstanceOf(Observable);
-    expect(task.call({ poolId: 'all', currencyId: null })).toBeInstanceOf(Observable);
+    expect(task.validateCallArguments({ poolId: 1, currencyId: null })).toStrictEqual({ poolId: 1, currencyId: null });
+    expect(task.validateCallArguments({ poolId: [1], currencyId: null })).toStrictEqual({
+      poolId: [1],
+      currencyId: null,
+    });
+    expect(task.validateCallArguments({ poolId: 'all', currencyId: null })).toStrictEqual({
+      poolId: 'all',
+      currencyId: null,
+    });
   });
 
   it("doesn't work with invalid arguments", () => {
-    // @ts-ignore
-    expect(() => task.call({ poolId: '' })).toThrow(Error);
-    // @ts-ignore
-    expect(() => task.call()).toThrow(Error);
+    expect(() => task.validateCallArguments({ poolId: '' })).toThrow(Error);
+    expect(() => task.validateCallArguments()).toThrow(Error);
   });
 });

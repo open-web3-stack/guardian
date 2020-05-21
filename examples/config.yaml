@@ -5,7 +5,7 @@ guardians:
     nodeEndpoint:
       - wss://kusama-rpc.polkadot.io/
     monitors:
-      events-monitor:
+      balances-events-monitor:
         task: system.events
         arguments:
           name:

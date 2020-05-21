@@ -1,14 +1,14 @@
-import joi from '@hapi/joi';
+import Joi from '@hapi/joi';
 import { get } from 'lodash';
 import { Subscription } from 'rxjs';
-import { LaminarGuardianConfig } from './types';
-import { createLaminarTasks } from './tasks';
-import Monitor from './Monitor';
+import { LaminarGuardianConfig } from '../types';
+import { createLaminarTasks } from '../tasks';
+import Monitor from '../Monitor';
 import Guardian from './Guardian';
-import createLaminarApi from './tasks/laminarChain/createLaminarApi';
+import createLaminarApi from '../tasks/laminarChain/createLaminarApi';
 
 export default class LaminarGuardian extends Guardian {
-  validationSchema = joi.any();
+  validationSchema = Joi.any();
   private subscriptions: Subscription[] = [];
   public readonly name: string;
 
@@ -31,13 +31,13 @@ export default class LaminarGuardian extends Guardian {
   }
 
   start() {
-    console.log(`Starting ${this.name}`);
+    console.log(`Starting guardian ${this.name} ...`);
     this.subscriptions.map((i) => i.unsubscribe()); // unsubscribe any current subscription
     this.subscriptions = this.monitors.map((monitor) => monitor.listen());
   }
 
   stop() {
-    console.log(`Stopping ${this.name}`);
+    console.log(`Stopping guardian ${this.name} ...`);
     this.subscriptions.map((i) => i.unsubscribe());
     this.subscriptions = [];
   }

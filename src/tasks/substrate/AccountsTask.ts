@@ -1,10 +1,9 @@
 import _ from 'lodash';
-import joi from '@hapi/joi';
-import { Observable, from } from 'rxjs';
+import Joi from '@hapi/joi';
+import { from } from 'rxjs';
 import { switchMap, flatMap, map } from 'rxjs/operators';
-import { ApiRx } from '@polkadot/api';
 import { AccountInfo } from '@polkadot/types/interfaces';
-import Task from '../Task';
+import SubstrateTask from './SubstrateTask';
 
 const mapResult = (account: string) => (info: AccountInfo): Output => {
   const output: Output = {
@@ -27,22 +26,13 @@ type Output = {
   fee_froze: number;
 };
 
-export default class AccountsTask extends Task {
-  api$: Observable<ApiRx>;
+export default class AccountsTask extends SubstrateTask<Output> {
+  validationSchema = Joi.object({
+    account: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())),
+  }).required();
 
-  validationSchema = joi
-    .object({
-      account: joi.alt(joi.string(), joi.array().items(joi.string())),
-    })
-    .required();
-
-  constructor(api$: Observable<ApiRx>) {
-    super();
-    this.api$ = api$;
-  }
-
-  call(params: { account: string | string[] }): Observable<Output> {
-    const { account } = this.validateParameters(params);
+  init(params: { account: string | string[] }) {
+    const { account } = params;
 
     return this.api$.pipe(
       switchMap((api) => {

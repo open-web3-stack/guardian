@@ -14,7 +14,7 @@ export interface GuardianInterface {
 export interface MonitorInterface {
   name: string;
   config: MonitorConfig;
-  task: TaskInterface;
+  task: TaskInterface<any>;
   rawOutput$: Observable<any>;
   output$: Observable<any>;
   post(action: ActionPOST, result: any): void;
@@ -22,10 +22,12 @@ export interface MonitorInterface {
   listen(): Subscription;
 }
 
-export interface TaskInterface {
+export interface TaskInterface<Output> {
+  run(params: any): Observable<any>;
+  validateCallArguments<T>(args?: T): T;
+
   validationSchema: Joi.Schema;
-  validateParameters<T>(params?: T): T;
-  call(params?: any): Observable<any>;
+  init(params: any): Observable<Output>;
 }
 
 export interface LaminarGuardianConfig {

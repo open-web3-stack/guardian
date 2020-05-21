@@ -1,27 +1,23 @@
 import { get, isArray, isNil } from 'lodash';
-import joi from '@hapi/joi';
+import Joi from '@hapi/joi';
 import { from, Observable } from 'rxjs';
 import { switchMap, flatMap } from 'rxjs/operators';
 import { LaminarApi } from '@laminar/api';
 import LaminarTask from './LaminarTask';
 
-type Output = {};
-
-const getPosition = (laminarApi: LaminarApi, positionId: any): Observable<Output> => {
+const getPosition = (laminarApi: LaminarApi, positionId: any): Observable<any> => {
   const method = get(laminarApi.api.query, 'margin.positioins');
   if (isNil(method)) throw Error('api.query.margin.positions not found');
   return method.call(null, positionId);
 };
 
-export default class PositionsByTraderTask extends LaminarTask {
-  validatationSchema = joi
-    .object({
-      account: joi.alt(joi.string(), joi.array().items(joi.string())),
-    })
-    .required();
+export default class PositionsByTraderTask extends LaminarTask<any> {
+  validationSchema = Joi.object({
+    account: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
+  }).required();
 
-  call(params: { account: string | string[] }) {
-    const { account } = this.validateParameters(params);
+  init(params: { account: string | string[] }) {
+    const { account } = params;
 
     return this.chainApi$.pipe(
       switchMap((laminarApi) => {

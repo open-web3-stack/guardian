@@ -1,9 +1,9 @@
-import joi from '@hapi/joi';
-import { MonitorInterface, EthereumGuardianConfig } from './types';
+import Joi from '@hapi/joi';
+import { MonitorInterface, EthereumGuardianConfig } from '../types';
 import Guardian from './Guardian';
 
 export default class EthereumGuardian extends Guardian {
-  validationSchema = joi.any();
+  validationSchema = Joi.any();
   readonly monitors: MonitorInterface[];
   public readonly name: string;
 
@@ -16,10 +16,10 @@ export default class EthereumGuardian extends Guardian {
   }
 
   start() {
-    console.log(`Starting ${this.name}`);
+    console.log(`Starting guardian ${this.name} ...`);
   }
 
   stop() {
-    console.log(`Stopping ${this.name}`);
+    console.log(`Stopping guardian ${this.name} ...`);
   }
 }

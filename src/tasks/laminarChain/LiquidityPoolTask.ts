@@ -1,21 +1,19 @@
 import _ from 'lodash';
-import joi from '@hapi/joi';
-import { Observable, from } from 'rxjs';
+import Joi from '@hapi/joi';
+import { from } from 'rxjs';
 import { switchMap, flatMap } from 'rxjs/operators';
 import { SyntheticPoolInfo } from '@laminar/api';
 import LaminarTask from './LaminarTask';
 
-export default class LiquidityPoolTask extends LaminarTask {
-  validationSchema = joi
-    .object({
-      poolId: joi.alt(joi.number(), joi.array().items(joi.number()), joi.valid('all')),
-      currencyId: joi.any(),
-    })
-    .required();
+export default class LiquidityPoolTask extends LaminarTask<SyntheticPoolInfo> {
+  validationSchema = Joi.object({
+    poolId: Joi.alt(Joi.number(), Joi.array().min(1).items(Joi.number()), Joi.valid('all')),
+    currencyId: Joi.any(),
+  }).required();
 
   // TODO: implement desired output
-  call(params: { poolId: number | number[] | 'all'; currencyId: any }): Observable<SyntheticPoolInfo> {
-    const { poolId } = this.validateParameters(params);
+  init(params: { poolId: number | number[] | 'all'; currencyId: any }) {
+    const { poolId } = params;
 
     return this.chainApi$.pipe(
       switchMap((laminarApi) => {

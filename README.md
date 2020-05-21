@@ -46,10 +46,10 @@ Start guardian using command.
 guardian --config=./config.yaml
 ```
 
-`guardian` will start monitoring and will execute script `do_something.sh` when there's a balance change. The script can read the data from `stdin`.
+`guardian` will start monitoring and will execute script `do_something` when there's a balance change. The script can read the data from `stdin`.
 
 **Running current example**
 
 ```
-git clone git@github.com:open-web3-stack/guardian.git && cd guardian && yarn && yarn run.example
+git clone git@github.com:open-web3-stack/guardian.git && cd guardian && yarn && yarn run example
 ```

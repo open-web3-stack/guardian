@@ -1,11 +1,11 @@
-import joi from '@hapi/joi';
+import Joi from '@hapi/joi';
 import { get } from 'lodash';
 import { Subscription, AsyncSubject } from 'rxjs';
 import { ApiRx } from '@polkadot/api';
 import { WsProvider } from '@polkadot/rpc-provider';
-import { SubstrateGuardianConfig } from './types';
-import { createSubstrateTasks } from './tasks';
-import Monitor from './Monitor';
+import { SubstrateGuardianConfig } from '../types';
+import { createSubstrateTasks } from '../tasks';
+import Monitor from '../Monitor';
 import Guardian from './Guardian';
 
 const createApi = (nodeEndpoint: string | string[]) => {
@@ -19,7 +19,7 @@ const createApi = (nodeEndpoint: string | string[]) => {
 };
 
 export default class SubstrateGuardian extends Guardian {
-  validationSchema = joi.any();
+  validationSchema = Joi.any();
   private subscriptions: Subscription[] = [];
   public readonly name: string;
 
@@ -42,13 +42,13 @@ export default class SubstrateGuardian extends Guardian {
   }
 
   start() {
-    console.log(`Starting ${this.name}`);
+    console.log(`Starting guardian ${this.name} ...`);
     this.subscriptions.map((i) => i.unsubscribe()); // unsubscribe any current subscription
     this.subscriptions = this.monitors.map((monitor) => monitor.listen());
   }
 
   stop() {
-    console.log(`Stopping ${this.name}`);
+    console.log(`Stopping guardian ${this.name} ...`);
     this.subscriptions.map((i) => i.unsubscribe());
     this.subscriptions = [];
   }

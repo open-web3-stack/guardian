@@ -1,28 +1,17 @@
 import _ from 'lodash';
-import joi from '@hapi/joi';
-import { Observable } from 'rxjs';
+import Joi from '@hapi/joi';
 import { switchMap, flatMap, filter } from 'rxjs/operators';
-import { ApiRx } from '@polkadot/api';
-import Task from '../Task';
+import SubstrateTask from './SubstrateTask';
 
 type Output = { name: string; args: any[] };
 
-export default class EventsTask extends Task {
-  api$: Observable<ApiRx>;
+export default class EventsTask extends SubstrateTask<Output> {
+  validationSchema = Joi.object({
+    name: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())),
+  }).required();
 
-  validationSchema = joi
-    .object({
-      name: joi.alt(joi.string(), joi.array().items(joi.string())),
-    })
-    .required();
-
-  constructor(api$: Observable<ApiRx>) {
-    super();
-    this.api$ = api$;
-  }
-
-  call(params: { name: string | string[] }): Observable<Output> {
-    const { name } = this.validateParameters(params);
+  init(params: { name: string | string[] }) {
+    const { name } = params;
 
     return this.api$.pipe(
       switchMap((api) => {

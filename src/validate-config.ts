@@ -1,40 +1,38 @@
-import joi from '@hapi/joi';
+import Joi from '@hapi/joi';
 
 // TODO: update me
-const schema = joi.object({
+const schema = Joi.object({
   version: '0.1',
-  guardians: joi.object().pattern(
-    joi.string(),
-    joi
-      .object({
-        networkType: joi.valid('laminarChain', 'acalaChain', 'substrateChain', 'ethereum').required(),
-        nodeEndpoint: joi.alt(joi.string(), joi.array().items(joi.string())),
-        monitors: joi
-          .object()
-          .pattern(
-            joi.string(),
-            joi.object({
-              task: joi.string().required(),
-              arguments: joi.any(),
-              conditions: joi.any(),
-              actions: joi.any(),
-            })
-          )
-          .required(),
-      })
-      .when(joi.object({ networkType: 'laminarChain' }).unknown(), {
-        then: joi.object({
-          network: joi.string().valid('dev', 'turbulence', 'reynolds', 'mainnet').required(),
+  guardians: Joi.object().pattern(
+    Joi.string(),
+    Joi.object({
+      networkType: Joi.valid('laminarChain', 'acalaChain', 'substrateChain', 'ethereum').required(),
+      nodeEndpoint: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())),
+      monitors: Joi.object()
+        .pattern(
+          Joi.string(),
+          Joi.object({
+            task: Joi.string().required(),
+            arguments: Joi.any(),
+            conditions: Joi.any(),
+            actions: Joi.any(),
+          })
+        )
+        .required(),
+    })
+      .when(Joi.object({ networkType: 'laminarChain' }).unknown(), {
+        then: Joi.object({
+          network: Joi.string().valid('dev', 'turbulence', 'reynolds', 'mainnet').required(),
         }),
       })
-      .when(joi.object({ networkType: 'acalaChain' }).unknown(), {
-        then: joi.object({
-          network: joi.string().valid('dev', 'karura', 'mainnet').required(),
+      .when(Joi.object({ networkType: 'acalaChain' }).unknown(), {
+        then: Joi.object({
+          network: Joi.string().valid('dev', 'karura', 'mainnet').required(),
         }),
       })
-      .when(joi.object({ networkType: 'ethereum' }).unknown(), {
-        then: joi.object({
-          network: joi.string().valid('dev', 'kovan', 'mainnet').required(),
+      .when(Joi.object({ networkType: 'ethereum' }).unknown(), {
+        then: Joi.object({
+          network: Joi.string().valid('dev', 'kovan', 'mainnet').required(),
         }),
       })
   ),
