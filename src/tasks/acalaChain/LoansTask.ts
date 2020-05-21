@@ -1,5 +1,4 @@
 import Joi from '@hapi/joi';
-import _ from 'lodash';
 import { from, combineLatest } from 'rxjs';
 import { switchMap, map, flatMap } from 'rxjs/operators';
 import { DerivedUserLoan, DerivedLoanType } from '@acala-network/api-derive';

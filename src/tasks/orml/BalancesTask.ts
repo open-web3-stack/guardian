@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import BN from 'bn.js';
 import Joi from '@hapi/joi';
 import { Observable, from } from 'rxjs';
