@@ -1,23 +1,20 @@
-import axios from 'axios';
 import { Observable, Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import * as shell from 'shelljs';
-import { NetworkType, MonitorInterface, MonitorConfig, TaskInterface, ActionPOST, ActionScript } from './types';
+import { IMonitor, MonitorConfig, ITask, ActionConfig } from './types';
 import conditionBuilder from './conditions/condition-builder';
+import { ActionRegistry } from './actions/ActionRegistry';
 
-export default class Monitor implements MonitorInterface {
+export default class Monitor implements IMonitor {
   public readonly name: string;
-  public readonly network: NetworkType;
-  public readonly task: TaskInterface<any>;
-  public readonly config: MonitorConfig;
+  public readonly task: ITask<any>;
+  public readonly actions: ActionConfig[];
   public readonly rawOutput$: Observable<any>;
   public readonly output$: Observable<any>;
 
-  constructor(name: string, network: NetworkType, task: TaskInterface<any>, config: MonitorConfig) {
+  constructor(name: string, task: ITask<any>, config: MonitorConfig) {
     this.name = name;
-    this.network = network;
     this.task = task;
-    this.config = config;
+    this.actions = config.actions;
 
     const condition = config.conditions && conditionBuilder(config.conditions);
 
@@ -26,43 +23,21 @@ export default class Monitor implements MonitorInterface {
 
     // create filtered output$
     this.output$ = this.rawOutput$.pipe(
-      filter((result) => {
-        if (condition) {
-          return condition(result);
-        }
-        return true;
-      })
+      // apply condition if any
+      filter((result) => (condition ? condition(result) : true))
     );
-  }
-
-  /// action post
-  post(action: ActionPOST, data: any) {
-    const { method, url, headers } = action;
-    axios.request({ url, method, headers, data });
-    console.log(`Task [${this.name}] called POST [${url}]`);
-  }
-
-  /// action script
-  script(action: ActionScript, data: any) {
-    const child = shell.exec(action.path, { async: true });
-    child.stdin.write(JSON.stringify(data));
-    child.stdin.end();
-    console.log(`Task [${this.name}] called script [${action.path}]`);
   }
 
   /// listen to output$ and trigger the actions
   listen(): Subscription {
-    console.log(`Task [${this.name}] is running...`);
-    return this.output$.subscribe((result: any) => {
-      this.config.actions.forEach((action) => {
-        switch (action.method) {
-          case 'script':
-            this.script(action, result);
-            break;
-          case 'POST':
-            this.post(action, result);
-            break;
-        }
+    console.log(`Task [${this.name}] is running ...`);
+
+    return this.output$.subscribe((data: any) => {
+      this.actions.forEach((action) => {
+        // run action
+        ActionRegistry.run(action, data);
+
+        console.log(`Task [${this.name}] called [${action.method}]`);
       });
     });
   }

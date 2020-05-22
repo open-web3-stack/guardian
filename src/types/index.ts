@@ -3,26 +3,23 @@ import Joi from '@hapi/joi';
 
 export type NetworkType = 'laminarChain' | 'acalaChain' | 'substrateChain' | 'ethereum';
 
-export interface GuardianInterface {
-  validationSchema: Joi.Schema;
-  validateConfig<T>(config: T): T;
-  monitors: MonitorInterface[];
+export interface IGuardian {
+  validationSchema(): Joi.Schema;
+  monitors: IMonitor[];
   start(): void;
   stop(): void;
 }
 
-export interface MonitorInterface {
+export interface IMonitor {
   name: string;
-  config: MonitorConfig;
-  task: TaskInterface<any>;
+  actions: ActionConfig[];
+  task: ITask<any>;
   rawOutput$: Observable<any>;
   output$: Observable<any>;
-  post(action: ActionPOST, result: any): void;
-  script(action: ActionScript, result: any): void;
   listen(): Subscription;
 }
 
-export interface TaskInterface<Output> {
+export interface ITask<Output> {
   run(params: any): Observable<any>;
   validateCallArguments<T>(args?: T): T;
 
@@ -30,65 +27,64 @@ export interface TaskInterface<Output> {
   init(params: any): Observable<Output>;
 }
 
-export interface LaminarGuardianConfig {
+export interface GuardianConfig {
+  networkType: NetworkType;
+  monitors: {
+    [key: string]: MonitorConfig;
+  };
+  [key: string]: any;
+}
+
+export interface LaminarGuardianConfig extends GuardianConfig {
   networkType: 'laminarChain';
   nodeEndpoint: string | string[];
   network: 'dev' | 'turbulence' | 'reynolds' | 'mainnet';
   confirmation: 'finalize' | number;
-  monitors: {
-    [key: string]: MonitorConfig;
-  };
 }
 
-export interface AcalaGuardianConfig {
+export interface AcalaGuardianConfig extends GuardianConfig {
   networkType: 'acalaChain';
   nodeEndpoint: string | string[];
   network: 'dev' | 'karura' | 'mainnet';
   confirmation: 'finalize' | number;
-  monitors: {
-    [key: string]: MonitorConfig;
-  };
 }
 
-export interface SubstrateGuardianConfig {
+export interface SubstrateGuardianConfig extends GuardianConfig {
   networkType: 'substrateChain';
   nodeEndpoint: string | string[];
   confirmation: 'finalize' | number;
-  monitors: {
-    [key: string]: MonitorConfig;
-  };
 }
 
-export interface EthereumGuardianConfig {
+export interface EthereumGuardianConfig extends GuardianConfig {
   networkType: 'ethereum';
   nodeEndpoint: string;
   network: 'dev' | 'kovan' | 'mainnet';
-  monitors: {
-    [key: string]: MonitorConfig;
-  };
 }
 
-export type ActionScript = {
-  method: 'script';
-  path: string;
-};
+export interface IAction<Args> {
+  method: string;
+  run(args: Args, data: any): void;
+}
 
-export type ActionPOST = {
-  method: 'POST';
-  url: string;
-  headers?: any;
-};
-
+export interface ActionConfig {
+  method: string;
+  [key: string]: any;
+}
 export interface MonitorConfig {
   task: string;
   arguments?: any;
   conditions?: any[];
-  actions: (ActionScript | ActionPOST)[];
+  actions: ActionConfig[];
 }
 
 export interface Config {
   version: string;
   guardians: {
-    [name: string]: LaminarGuardianConfig | AcalaGuardianConfig | SubstrateGuardianConfig | EthereumGuardianConfig;
+    [name: string]:
+      | LaminarGuardianConfig
+      | AcalaGuardianConfig
+      | SubstrateGuardianConfig
+      | EthereumGuardianConfig
+      | GuardianConfig;
   };
 }

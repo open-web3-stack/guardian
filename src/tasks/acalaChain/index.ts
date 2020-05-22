@@ -5,6 +5,10 @@ import createAcalaApi from './createAcalaApi';
 import substrate from '../substrate';
 import BalancesTask from '../orml/BalancesTask';
 import PricesTask from '../orml/PricesTask';
+import LoansTask from './LoansTask';
+import CollateralAuctionsTask from './CollateralAuctionsTask';
+import DebitAuctionsTask from './DebitAuctionsTask';
+import SurplusAuctionsTask from './SurplusAuctionsTask';
 
 export { createAcalaApi };
 
@@ -13,7 +17,13 @@ export default (api$: Observable<ApiRx>) => ({
   account: {
     balances: new BalancesTask(api$),
   },
-  orml: {
+  oracle: {
     prices: new PricesTask(api$),
+  },
+  honzon: {
+    loans: new LoansTask(api$),
+    collateralAuctions: new CollateralAuctionsTask(api$),
+    debitAuctions: new DebitAuctionsTask(api$),
+    surplusAuctions: new SurplusAuctionsTask(api$),
   },
 });
