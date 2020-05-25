@@ -1,9 +1,9 @@
 jest.mock('shelljs');
 
 import shell from 'shelljs';
-import ActionScript from '../ScriptRunner';
+import ScriptRunner from '../ScriptRunner';
 
-describe('ActionScript', () => {
+describe('ScriptRunner', () => {
   // @ts-ignore
   shell.exec = jest.fn(() => ({
     stdin: {
@@ -13,7 +13,7 @@ describe('ActionScript', () => {
   }));
 
   it('run action', () => {
-    const action = new ActionScript();
+    const action = new ScriptRunner();
 
     const actionRun = jest.spyOn(action, 'run');
 

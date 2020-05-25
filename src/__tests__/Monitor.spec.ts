@@ -8,7 +8,7 @@ import Monitor from '../Monitor';
 import { MonitorConfig } from '../types';
 import { createLaminarApi } from '../tasks/laminarChain';
 import { createLaminarTasks } from '../tasks';
-import { registerActions } from '../actions';
+import { registerActionRunners } from '../actions';
 
 describe('Laminar monitors', () => {
   mockLaminarApi();
@@ -18,7 +18,7 @@ describe('Laminar monitors', () => {
 
   jest.setTimeout(30_000);
 
-  registerActions();
+  registerActionRunners();
 
   // @ts-ignore
   axios.request = jest.fn();

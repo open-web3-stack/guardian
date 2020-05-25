@@ -1,14 +1,14 @@
-import { registerActions } from '../';
+import { registerActionRunners } from '../';
 import { ActionRegistry } from '../ActionRegistry';
-import ActionPOST from '../ActionPOST';
-import ActionScript from '../ActionScript';
+import POSTRunner from '../POSTRunner';
+import ScriptRunner from '../ScriptRunner';
 
 describe('ActionRegistry', () => {
   it('register default actions', () => {
     expect(() => ActionRegistry.getOrThrow('POST')).toThrow('Action POST not found!');
     expect(() => ActionRegistry.getOrThrow('script')).toThrow('Action script not found!');
-    registerActions();
-    expect(ActionRegistry.getOrThrow('POST')).toBeInstanceOf(ActionPOST);
-    expect(ActionRegistry.getOrThrow('script')).toBeInstanceOf(ActionScript);
+    registerActionRunners();
+    expect(ActionRegistry.getOrThrow('POST')).toBeInstanceOf(POSTRunner);
+    expect(ActionRegistry.getOrThrow('script')).toBeInstanceOf(ScriptRunner);
   });
 });

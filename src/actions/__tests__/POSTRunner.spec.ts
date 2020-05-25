@@ -1,13 +1,13 @@
 jest.mock('axios');
 import axios from 'axios';
-import ActionPOST from '../ActionPOST';
+import POSTRunner from '../POSTRunner';
 
-describe('ActionPOST', () => {
+describe('POSTRunner', () => {
   // @ts-ignore
   axios.request = jest.fn();
 
   it('run action', () => {
-    const action = new ActionPOST();
+    const action = new POSTRunner();
 
     const actionRun = jest.spyOn(action, 'run');
 

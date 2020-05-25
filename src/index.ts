@@ -1,9 +1,9 @@
 import { Config } from './types';
 import validateConfig from './validate-config';
-import { registerGuardians, GuardianRegistry } from './guardians';
+import { registerGuardians, GuardianRegistry, Guardian } from './guardians';
 import { registerActionRunners, ActionRegistry } from './actions';
 
-export { ActionRegistry, GuardianRegistry };
+export { ActionRegistry, GuardianRegistry, Guardian };
 
 registerGuardians();
 registerActionRunners();

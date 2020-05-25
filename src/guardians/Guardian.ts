@@ -3,6 +3,7 @@ import { get } from 'lodash';
 import { Subscription } from 'rxjs';
 import { IGuardian, IMonitor, GuardianConfig } from '../types';
 import Monitor from '../Monitor';
+import Task from '../tasks/Task';
 
 export default abstract class Guardian implements IGuardian {
   // user defined name
@@ -16,6 +17,12 @@ export default abstract class Guardian implements IGuardian {
   // monitor subscriptions
   private subscriptions: Subscription[] = [];
 
+  /**
+   * Creates an instance of Guardian.
+   * @param {string} name
+   * @param {GuardianConfig} config
+   * @memberof Guardian
+   */
   constructor(name: string, config: GuardianConfig) {
     this.name = name;
     config = this.validateConfig(config);
@@ -31,8 +38,25 @@ export default abstract class Guardian implements IGuardian {
     });
   }
 
-  public abstract getTasks(config: GuardianConfig): { [key: string]: any };
+  /**
+   * Tasks that the guardian can run
+   *
+   * @abstract
+   * @param {GuardianConfig} config
+   * @returns {{ [key: string]: any }}
+   * @memberof Guardian
+   */
+  public abstract getTasks(config: GuardianConfig): { [key: string]: { [key: string]: Task<any> } };
 
+  /**
+   * Validate guardian config
+   *
+   * @private
+   * @template T
+   * @param {T} config
+   * @returns {T}
+   * @memberof Guardian
+   */
   private validateConfig<T>(config: T): T {
     const { error, value } = this.validationSchema().validate(config);
     if (error) {
@@ -41,12 +65,22 @@ export default abstract class Guardian implements IGuardian {
     return value;
   }
 
+  /**
+   * Start monitoring
+   *
+   * @memberof Guardian
+   */
   public readonly start = () => {
     console.log(`Starting guardian ${this.name} ...`);
     this.subscriptions.map((i) => i.unsubscribe()); // unsubscribe any current subscription
     this.subscriptions = this.monitors.map((monitor) => monitor.listen());
   };
 
+  /**
+   * Stop monitoring
+   *
+   * @memberof Guardian
+   */
   public readonly stop = () => {
     console.log(`Stopping guardian ${this.name} ...`);
     this.subscriptions.map((i) => i.unsubscribe());
