@@ -18,7 +18,10 @@ const createApi = (nodeEndpoint: string | string[]) => {
 
 export default class SubstrateGuardian extends Guardian {
   validationSchema() {
-    return Joi.object().required();
+    return Joi.object({
+      networkType: Joi.valid('substrateChain').required(),
+      nodeEndpoint: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
+    }).required();
   }
 
   getTasks(config: SubstrateGuardianConfig) {

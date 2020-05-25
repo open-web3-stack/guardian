@@ -58,7 +58,7 @@ export default abstract class Guardian implements IGuardian {
    * @memberof Guardian
    */
   private validateConfig<T>(config: T): T {
-    const { error, value } = this.validationSchema().validate(config);
+    const { error, value } = this.validationSchema().validate(config, { allowUnknown: true });
     if (error) {
       throw error;
     }

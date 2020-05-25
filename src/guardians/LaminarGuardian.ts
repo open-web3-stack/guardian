@@ -6,7 +6,10 @@ import createLaminarApi from '../tasks/laminarChain/createLaminarApi';
 
 export default class LaminarGuardian extends Guardian {
   validationSchema() {
-    return Joi.object().required();
+    return Joi.object({
+      networkType: Joi.valid('laminarChain').required(),
+      nodeEndpoint: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
+    }).required();
   }
 
   getTasks(config: LaminarGuardianConfig) {

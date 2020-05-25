@@ -1,14 +1,11 @@
 import Joi from '@hapi/joi';
-import { networkTypes } from './constants';
 
-// TODO: update me
 const schema = Joi.object({
   version: '0.1',
   guardians: Joi.object().pattern(
     Joi.string(),
     Joi.object({
-      networkType: Joi.valid(...networkTypes).required(),
-      nodeEndpoint: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())),
+      networkType: Joi.string().required(),
       monitors: Joi.object()
         .pattern(
           Joi.string(),
@@ -20,22 +17,7 @@ const schema = Joi.object({
           })
         )
         .required(),
-    })
-      .when(Joi.object({ networkType: 'laminarChain' }).unknown(), {
-        then: Joi.object({
-          network: Joi.string().valid('dev', 'turbulence', 'reynolds', 'mainnet').required(),
-        }),
-      })
-      .when(Joi.object({ networkType: 'acalaChain' }).unknown(), {
-        then: Joi.object({
-          network: Joi.string().valid('dev', 'karura', 'mainnet').required(),
-        }),
-      })
-      .when(Joi.object({ networkType: 'ethereum' }).unknown(), {
-        then: Joi.object({
-          network: Joi.string().valid('dev', 'kovan', 'mainnet').required(),
-        }),
-      })
+    }).unknown()
   ),
 });
 
