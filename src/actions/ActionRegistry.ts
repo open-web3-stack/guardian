@@ -1,14 +1,14 @@
-import { IAction } from '../types';
+import { IActionRunner } from '../types';
 
 export class ActionRegistry {
-  private static actions: { [key: string]: IAction<any> } = {};
+  private static actions: { [key: string]: IActionRunner<any> } = {};
 
-  public static register<T extends IAction<any>>(action: new () => T) {
+  public static register<T extends IActionRunner<any>>(action: new () => T) {
     const instance = new action();
     const { method } = instance;
 
     if (typeof method !== 'string' || method.length === 0) {
-      throw Error('IAction.method is not defined!');
+      throw Error('IActionRunner.method is not defined!');
     }
 
     if (ActionRegistry.actions[method]) {
@@ -18,11 +18,11 @@ export class ActionRegistry {
     ActionRegistry.actions[method] = instance;
   }
 
-  public static get(method: string): IAction<any> {
+  public static get(method: string): IActionRunner<any> {
     return ActionRegistry.actions[method];
   }
 
-  public static getOrThrow(method: string): IAction<any> {
+  public static getOrThrow(method: string): IActionRunner<any> {
     const instance = ActionRegistry.get(method);
     if (!instance) {
       throw Error(`Action ${method} not found!`);

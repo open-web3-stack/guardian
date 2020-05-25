@@ -1,10 +1,10 @@
 import { ActionRegistry } from './ActionRegistry';
-import ActionScript from './ActionScript';
-import ActionPOST from './ActionPOST';
+import ScriptRunner from './ScriptRunner';
+import POSTRunner from './POSTRunner';
 
-export const registerActions = () => {
-  ActionRegistry.register(ActionScript);
-  ActionRegistry.register(ActionPOST);
+export const registerActionRunners = () => {
+  ActionRegistry.register(ScriptRunner);
+  ActionRegistry.register(POSTRunner);
 };
 
 export { ActionRegistry };

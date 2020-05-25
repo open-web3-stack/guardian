@@ -1,7 +1,8 @@
-import { Observable, Subscription } from 'rxjs';
 import Joi from '@hapi/joi';
+import { Observable, Subscription } from 'rxjs';
+import { networkTypes } from '../constants';
 
-export type NetworkType = 'laminarChain' | 'acalaChain' | 'substrateChain' | 'ethereum';
+export type NetworkType = typeof networkTypes[number];
 
 export interface IGuardian {
   validationSchema(): Joi.Schema;
@@ -61,7 +62,7 @@ export interface EthereumGuardianConfig extends GuardianConfig {
   network: 'dev' | 'kovan' | 'mainnet';
 }
 
-export interface IAction<Args> {
+export interface IActionRunner<Args> {
   method: string;
   run(args: Args, data: any): void;
 }

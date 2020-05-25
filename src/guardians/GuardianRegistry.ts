@@ -8,26 +8,26 @@ interface GuardianConstructor {
 export default class GuardianRegistry {
   private static guardians: { [key: string]: GuardianConstructor } = {};
 
-  public static register(name: NetworkType | string, guardian: GuardianConstructor) {
-    if (name.length === 0) {
-      throw Error('name is not defined!');
+  public static register(identifier: NetworkType | string, guardian: GuardianConstructor) {
+    if (identifier.length === 0) {
+      throw Error('identifier is not defined!');
     }
 
-    if (GuardianRegistry.get(name)) {
-      throw Error(`Guardian [${name}] is already registered!`);
+    if (GuardianRegistry.get(identifier)) {
+      throw Error(`Guardian [${identifier}] is already registered!`);
     }
 
-    GuardianRegistry.guardians[name] = guardian;
+    GuardianRegistry.guardians[identifier] = guardian;
   }
 
-  public static get(name: string): GuardianConstructor {
-    return GuardianRegistry.guardians[name];
+  public static get(identifier: string): GuardianConstructor {
+    return GuardianRegistry.guardians[identifier];
   }
 
-  public static create(name: NetworkType | string, guardianName: string, config: GuardianConfig): Guardian {
-    const GuardianClass = GuardianRegistry.get(name);
+  public static create(identifier: NetworkType | string, guardianName: string, config: GuardianConfig): Guardian {
+    const GuardianClass = GuardianRegistry.get(identifier);
     if (!GuardianClass) {
-      throw Error(`Guardian [${name}] not found!`);
+      throw Error(`Guardian [${identifier}] not found!`);
     }
 
     return new GuardianClass(guardianName, config);

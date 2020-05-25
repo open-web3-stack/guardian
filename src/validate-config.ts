@@ -1,4 +1,5 @@
 import Joi from '@hapi/joi';
+import { networkTypes } from './constants';
 
 // TODO: update me
 const schema = Joi.object({
@@ -6,7 +7,7 @@ const schema = Joi.object({
   guardians: Joi.object().pattern(
     Joi.string(),
     Joi.object({
-      networkType: Joi.valid('laminarChain', 'acalaChain', 'substrateChain', 'ethereum').required(),
+      networkType: Joi.valid(...networkTypes).required(),
       nodeEndpoint: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())),
       monitors: Joi.object()
         .pattern(

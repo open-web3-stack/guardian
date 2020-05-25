@@ -1,9 +1,9 @@
 import shell from 'shelljs';
-import { IAction } from '../types';
+import { IActionRunner } from '../types';
 
 type Args = { path: string };
 
-export default class ActionScript implements IAction<Args> {
+export default class ScriptRunner implements IActionRunner<Args> {
   method = 'script';
 
   run(args: Args, data: any) {

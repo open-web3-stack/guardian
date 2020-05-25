@@ -1,9 +1,9 @@
 import axios from 'axios';
-import { IAction } from '../types';
+import { IActionRunner } from '../types';
 
 type Args = { url: string; headers?: any };
 
-export default class ActionPOST implements IAction<Args> {
+export default class POSTRunner implements IActionRunner<Args> {
   method = 'POST';
 
   run(args: Args, data: any) {

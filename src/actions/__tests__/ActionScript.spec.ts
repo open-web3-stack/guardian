@@ -1,7 +1,7 @@
 jest.mock('shelljs');
 
 import shell from 'shelljs';
-import ActionScript from '../ActionScript';
+import ActionScript from '../ScriptRunner';
 
 describe('ActionScript', () => {
   // @ts-ignore
