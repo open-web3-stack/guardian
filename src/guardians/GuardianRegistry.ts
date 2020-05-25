@@ -1,5 +1,5 @@
 import Guardian from './Guardian';
-import { GuardianConfig, NetworkType } from '../types';
+import { GuardianConfig } from '../types';
 
 interface GuardianConstructor {
   new (name: string, config: GuardianConfig): Guardian;
@@ -8,26 +8,26 @@ interface GuardianConstructor {
 export default class GuardianRegistry {
   private static guardians: { [key: string]: GuardianConstructor } = {};
 
-  public static register(identifier: NetworkType | string, guardian: GuardianConstructor) {
-    if (identifier.length === 0) {
+  public static register(networkType: string, guardian: GuardianConstructor) {
+    if (networkType.length === 0) {
       throw Error('identifier is not defined!');
     }
 
-    if (GuardianRegistry.get(identifier)) {
-      throw Error(`Guardian [${identifier}] is already registered!`);
+    if (GuardianRegistry.get(networkType)) {
+      throw Error(`Guardian [${networkType}] is already registered!`);
     }
 
-    GuardianRegistry.guardians[identifier] = guardian;
+    GuardianRegistry.guardians[networkType] = guardian;
   }
 
-  public static get(identifier: string): GuardianConstructor {
-    return GuardianRegistry.guardians[identifier];
+  public static get(networkType: string): GuardianConstructor {
+    return GuardianRegistry.guardians[networkType];
   }
 
-  public static create(identifier: NetworkType | string, guardianName: string, config: GuardianConfig): Guardian {
-    const GuardianClass = GuardianRegistry.get(identifier);
+  public static create(networkType: string, guardianName: string, config: GuardianConfig): Guardian {
+    const GuardianClass = GuardianRegistry.get(networkType);
     if (!GuardianClass) {
-      throw Error(`Guardian [${identifier}] not found!`);
+      throw Error(`Guardian [${networkType}] not found!`);
     }
 
     return new GuardianClass(guardianName, config);

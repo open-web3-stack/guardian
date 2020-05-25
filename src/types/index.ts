@@ -1,8 +1,5 @@
 import Joi from '@hapi/joi';
 import { Observable, Subscription } from 'rxjs';
-import { networkTypes } from '../constants';
-
-export type NetworkType = typeof networkTypes[number];
 
 export interface IGuardian {
   validationSchema(): Joi.Schema;
@@ -29,7 +26,7 @@ export interface ITask<Output> {
 }
 
 export interface GuardianConfig {
-  networkType: NetworkType;
+  networkType: string;
   monitors: {
     [key: string]: MonitorConfig;
   };

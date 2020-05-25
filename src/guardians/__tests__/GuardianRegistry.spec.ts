@@ -59,9 +59,9 @@ class CustomGuardian extends Guardian {
 
 describe('GuardianRegistry', () => {
   it('works with custom Guardian', () => {
-    GuardianRegistry.register('custom', CustomGuardian);
+    GuardianRegistry.register('customChain', CustomGuardian);
 
-    const customGuardian = GuardianRegistry.create('custom', 'customGuardian', customConfig);
+    const customGuardian = GuardianRegistry.create('customChain', 'customGuardian', customConfig);
 
     expect(customGuardian).toBeInstanceOf(CustomGuardian);
     expect(() => customGuardian.start()).not.toThrowError();
