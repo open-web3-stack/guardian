@@ -10,7 +10,7 @@ export default class GuardianRegistry {
 
   public static register(networkType: string, guardian: GuardianConstructor) {
     if (networkType.length === 0) {
-      throw Error('identifier is not defined!');
+      throw Error('networkType is not defined!');
     }
 
     if (GuardianRegistry.get(networkType)) {
