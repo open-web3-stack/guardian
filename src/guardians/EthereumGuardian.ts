@@ -1,25 +1,16 @@
 import Joi from '@hapi/joi';
-import { MonitorInterface, EthereumGuardianConfig } from '../types';
+import { EthereumGuardianConfig } from '../types';
 import Guardian from './Guardian';
 
 export default class EthereumGuardian extends Guardian {
-  validationSchema = Joi.any();
-  readonly monitors: MonitorInterface[];
-  public readonly name: string;
-
-  // eslint-disable-next-line
-  constructor(name: string, config: EthereumGuardianConfig) {
-    super();
-    this.name = name;
-
-    config = this.validateConfig(config);
+  validationSchema() {
+    return Joi.object({
+      networkType: Joi.valid('ethereum').required(),
+      nodeEndpoint: Joi.string().required(),
+    }).required();
   }
 
-  start() {
-    console.log(`Starting guardian ${this.name} ...`);
-  }
-
-  stop() {
-    console.log(`Stopping guardian ${this.name} ...`);
+  getTasks(config: EthereumGuardianConfig) {
+    return {};
   }
 }

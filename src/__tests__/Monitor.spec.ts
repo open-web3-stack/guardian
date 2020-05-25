@@ -1,11 +1,14 @@
 jest.mock('axios');
+jest.mock('shelljs');
 
 import axios from 'axios';
+import shell from 'shelljs';
 import mockLaminarApi from './__mocks__/mockLaminarApi';
 import Monitor from '../Monitor';
 import { MonitorConfig } from '../types';
 import { createLaminarApi } from '../tasks/laminarChain';
 import { createLaminarTasks } from '../tasks';
+import { registerActionRunners } from '../actions';
 
 describe('Laminar monitors', () => {
   mockLaminarApi();
@@ -15,8 +18,26 @@ describe('Laminar monitors', () => {
 
   jest.setTimeout(30_000);
 
+  registerActionRunners();
+
   // @ts-ignore
-  axios.request = jest.fn((config) => console.log(JSON.stringify(config)));
+  axios.request = jest.fn();
+
+  // @ts-ignore
+  shell.exec = jest.fn(() => ({
+    stdin: {
+      write: jest.fn(),
+      end: jest.fn(),
+    },
+  }));
+
+  const axiosSpy = jest.spyOn(axios, 'request');
+  const shellSpy = jest.spyOn(shell, 'exec');
+
+  beforeEach(() => {
+    axiosSpy.mockClear();
+    shellSpy.mockClear();
+  });
 
   it('margin poolInfo should work', async (done) => {
     const config: MonitorConfig = {
@@ -32,19 +53,17 @@ describe('Laminar monitors', () => {
       ],
     };
 
-    const monitor = new Monitor('margin', 'laminarChain', tasks.margin.poolInfo, config);
-
-    const scriptSpy = jest.spyOn(monitor, 'script');
-    const postSpy = jest.spyOn(monitor, 'post');
+    const monitor = new Monitor('margin.poolInfo', tasks.margin.poolInfo, config);
 
     const subscription = monitor.listen();
 
     await monitor.output$.toPromise();
 
-    expect(scriptSpy).toBeCalledTimes(1);
-    expect(postSpy).toBeCalledTimes(0);
+    expect(axiosSpy).toBeCalledTimes(0);
+    expect(shellSpy).toBeCalledTimes(1);
 
     subscription.unsubscribe();
+
     done();
   });
 
@@ -68,17 +87,14 @@ describe('Laminar monitors', () => {
       ],
     };
 
-    const monitor = new Monitor('liquidityPool', 'laminarChain', tasks.synthetic.liquidityPool, config);
-
-    const scriptSpy = jest.spyOn(monitor, 'script');
-    const postSpy = jest.spyOn(monitor, 'post');
+    const monitor = new Monitor('synthetic.liquidityPool', tasks.synthetic.liquidityPool, config);
 
     const subscription = monitor.listen();
 
     await monitor.output$.toPromise();
 
-    expect(scriptSpy).toBeCalledTimes(1);
-    expect(postSpy).toBeCalledTimes(1);
+    expect(axiosSpy).toBeCalledTimes(1);
+    expect(shellSpy).toBeCalledTimes(1);
 
     subscription.unsubscribe();
     done();

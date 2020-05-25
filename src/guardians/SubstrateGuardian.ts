@@ -1,11 +1,9 @@
 import Joi from '@hapi/joi';
-import { get } from 'lodash';
-import { Subscription, AsyncSubject } from 'rxjs';
+import { AsyncSubject } from 'rxjs';
 import { ApiRx } from '@polkadot/api';
 import { WsProvider } from '@polkadot/rpc-provider';
 import { SubstrateGuardianConfig } from '../types';
 import { createSubstrateTasks } from '../tasks';
-import Monitor from '../Monitor';
 import Guardian from './Guardian';
 
 const createApi = (nodeEndpoint: string | string[]) => {
@@ -19,37 +17,15 @@ const createApi = (nodeEndpoint: string | string[]) => {
 };
 
 export default class SubstrateGuardian extends Guardian {
-  validationSchema = Joi.any();
-  private subscriptions: Subscription[] = [];
-  public readonly name: string;
+  validationSchema() {
+    return Joi.object({
+      networkType: Joi.valid('substrateChain').required(),
+      nodeEndpoint: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
+    }).required();
+  }
 
-  constructor(name: string, config: SubstrateGuardianConfig) {
-    super();
-    this.name = name;
-
-    config = this.validateConfig(config);
-
+  getTasks(config: SubstrateGuardianConfig) {
     const api$ = createApi(config.nodeEndpoint);
-    const tasks = createSubstrateTasks(api$);
-
-    this.monitors = Object.entries(config.monitors).map(([name, monitor]) => {
-      const task = get(tasks, monitor.task, null);
-      if (!task) {
-        throw Error(`${name}.${monitor.task} not found`);
-      }
-      return new Monitor(name, 'acalaChain', task, monitor);
-    });
-  }
-
-  start() {
-    console.log(`Starting guardian ${this.name} ...`);
-    this.subscriptions.map((i) => i.unsubscribe()); // unsubscribe any current subscription
-    this.subscriptions = this.monitors.map((monitor) => monitor.listen());
-  }
-
-  stop() {
-    console.log(`Stopping guardian ${this.name} ...`);
-    this.subscriptions.map((i) => i.unsubscribe());
-    this.subscriptions = [];
+    return createSubstrateTasks(api$);
   }
 }

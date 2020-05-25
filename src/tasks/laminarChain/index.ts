@@ -28,7 +28,7 @@ export default (api$: Observable<LaminarApi>) => {
     account: {
       balances: new BalancesTask(apiRx$),
     },
-    orml: {
+    oracle: {
       prices: new PricesTask(apiRx$),
     },
   };

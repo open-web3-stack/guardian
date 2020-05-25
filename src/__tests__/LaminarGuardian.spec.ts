@@ -19,7 +19,7 @@ describe('LaminarGuardian', () => {
         },
       },
     };
-    expect(new LaminarGuardian('laminar-chain', config)).toBeTruthy();
+    expect(new LaminarGuardian('laminar-chain-guardian', config)).toBeInstanceOf(LaminarGuardian);
   });
 
   it('throws', () => {
@@ -30,7 +30,7 @@ describe('LaminarGuardian', () => {
       confirmation: 'finalize',
       monitors: {
         'margin-monitor': {
-          task: '',
+          task: '', // will throw
           arguments: { poolId: 1 },
           actions: [
             { method: 'script', path: './src/__tests__/test.sh' },
@@ -39,6 +39,6 @@ describe('LaminarGuardian', () => {
         },
       },
     };
-    expect(() => new LaminarGuardian('laminar-chain', config)).toThrow(Error);
+    expect(() => new LaminarGuardian('laminar-chain-guardian', config)).toThrow(Error);
   });
 });

@@ -1,8 +1,8 @@
 import Joi from '@hapi/joi';
 import { Observable } from 'rxjs';
-import { TaskInterface } from '../types';
+import { ITask } from '../types';
 
-export default abstract class Task<Output> implements TaskInterface<Output> {
+export default abstract class Task<Output> implements ITask<Output> {
   abstract validationSchema: Joi.Schema;
 
   abstract init(params: any): Observable<Output>;
