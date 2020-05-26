@@ -6,9 +6,11 @@ import SubstrateTask from './SubstrateTask';
 type Output = { name: string; args: any[] };
 
 export default class EventsTask extends SubstrateTask<Output> {
-  validationSchema = Joi.object({
-    name: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())),
-  }).required();
+  validationSchema() {
+    return Joi.object({
+      name: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
+    }).required();
+  }
 
   init(params: { name: string | string[] }) {
     const { name } = params;

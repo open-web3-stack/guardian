@@ -6,9 +6,11 @@ import { MarginPoolInfo } from '@laminar/api';
 import LaminarTask from './LaminarTask';
 
 export default class PoolInfoTask extends LaminarTask<MarginPoolInfo> {
-  validationSchema = Joi.object({
-    poolId: Joi.alt(Joi.number(), Joi.array().min(1).items(Joi.number()), Joi.valid('all')),
-  }).required();
+  validationSchema() {
+    return Joi.object({
+      poolId: Joi.alt(Joi.number(), Joi.array().min(1).items(Joi.number()), Joi.valid('all')),
+    }).required();
+  }
 
   init(params: { poolId: number | number[] | 'all' }) {
     const { poolId } = params;

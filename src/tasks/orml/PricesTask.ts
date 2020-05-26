@@ -9,10 +9,12 @@ export type Output = {
 };
 
 export default class PricesTask extends SubstrateTask<Output> {
-  validationSchema = Joi.object({
-    key: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
-    period: Joi.number().default(30_000),
-  }).required();
+  validationSchema() {
+    return Joi.object({
+      key: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
+      period: Joi.number().default(30_000),
+    }).required();
+  }
 
   init(params: { key: string | string[]; period?: number }) {
     const { key, period } = params;

@@ -16,7 +16,9 @@ export type Output = {
 };
 
 export default class DebitAuctionsTask extends AcalaTask<Output> {
-  validationSchema = Joi.any();
+  validationSchema() {
+    return Joi.any();
+  }
 
   init() {
     return this.api$.pipe(

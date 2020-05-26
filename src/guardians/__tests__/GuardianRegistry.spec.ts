@@ -28,7 +28,7 @@ const acalaConfig: AcalaGuardianConfig = {
   monitors: {
     events: {
       task: 'system.events',
-      arguments: {},
+      arguments: { name: 'balances.Deposit' },
       actions: [{ method: 'POST', url: 'localhost' }],
     },
   },
@@ -40,7 +40,7 @@ const customConfig: GuardianConfig = {
   monitors: {
     events: {
       task: 'foo.bar',
-      arguments: {},
+      arguments: { name: 'helloworld' },
       actions: [{ method: 'POST', url: 'localhost' }],
     },
   },
@@ -69,9 +69,6 @@ describe('GuardianRegistry', () => {
   });
 
   it('works', () => {
-    GuardianRegistry.register('laminarChain', LaminarGuardian);
-    GuardianRegistry.register('acalaChain', AcalaGuardian);
-
     const laminarGuardian = GuardianRegistry.create('laminarChain', 'laminarGuardian', laminarConfig);
     const acalaGuardian = GuardianRegistry.create('acalaChain', 'acalaGuardian', acalaConfig);
 

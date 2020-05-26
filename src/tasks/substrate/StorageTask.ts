@@ -15,15 +15,17 @@ const createCall = (api: ApiRx, name: string, args: any[] = []): Observable<Outp
 export type Output = { name: string; value: any };
 
 export default class StorageTask extends SubstrateTask<Output> {
-  validationSchema = Joi.object({
-    name: Joi.alt(
-      Joi.when('args', {
-        then: Joi.string(),
-        otherwise: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())),
-      })
-    ).required(),
-    args: Joi.any(),
-  }).required();
+  validationSchema() {
+    return Joi.object({
+      name: Joi.alt(
+        Joi.when('args', {
+          then: Joi.string(),
+          otherwise: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())),
+        })
+      ).required(),
+      args: Joi.any(),
+    }).required();
+  }
 
   init(params: { name: string | string[]; args?: any | any[] }) {
     const { name, args } = params;
