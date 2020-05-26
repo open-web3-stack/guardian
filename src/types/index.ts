@@ -1,5 +1,6 @@
 import Joi from '@hapi/joi';
 import { Observable, Subscription } from 'rxjs';
+import { laminarNetwork, acalaNetwork, ethereumNetwork } from '../constants';
 
 export interface IGuardian {
   validationSchema(): Joi.Schema;
@@ -36,14 +37,14 @@ export interface GuardianConfig {
 export interface LaminarGuardianConfig extends GuardianConfig {
   networkType: 'laminarChain';
   nodeEndpoint: string | string[];
-  network: 'dev' | 'turbulence' | 'reynolds' | 'mainnet';
+  network: typeof laminarNetwork[number];
   confirmation: 'finalize' | number;
 }
 
 export interface AcalaGuardianConfig extends GuardianConfig {
   networkType: 'acalaChain';
   nodeEndpoint: string | string[];
-  network: 'dev' | 'karura' | 'mainnet';
+  network: typeof acalaNetwork[number];
   confirmation: 'finalize' | number;
 }
 
@@ -56,7 +57,7 @@ export interface SubstrateGuardianConfig extends GuardianConfig {
 export interface EthereumGuardianConfig extends GuardianConfig {
   networkType: 'ethereum';
   nodeEndpoint: string;
-  network: 'dev' | 'kovan' | 'mainnet';
+  network: typeof ethereumNetwork[number];
 }
 
 export interface IActionRunner<Args> {
