@@ -22,9 +22,11 @@ export interface ITask<Output> {
   run(params: any): Observable<any>;
   validateCallArguments<T>(args?: T): T;
 
-  validationSchema: Joi.Schema;
+  validationSchema(): Joi.Schema;
   init(params: any): Observable<Output>;
 }
+
+export type Action<Args> = (args: Args, data: any) => void;
 
 export interface GuardianConfig {
   networkType: string;
@@ -58,11 +60,6 @@ export interface EthereumGuardianConfig extends GuardianConfig {
   networkType: 'ethereum';
   nodeEndpoint: string;
   network: typeof ethereumNetwork[number];
-}
-
-export interface IActionRunner<Args> {
-  method: string;
-  run(args: Args, data: any): void;
 }
 
 export interface ActionConfig {

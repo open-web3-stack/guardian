@@ -15,7 +15,9 @@ export type Output = {
 };
 
 export default class SurplusAuctionsTask extends AcalaTask<Output> {
-  validationSchema = Joi.any();
+  validationSchema() {
+    return Joi.any();
+  }
 
   init() {
     return this.api$.pipe(

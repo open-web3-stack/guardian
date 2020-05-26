@@ -34,10 +34,9 @@ export default class Monitor implements IMonitor {
 
     return this.output$.subscribe((data: any) => {
       this.actions.forEach((action) => {
+        console.log(`Task [${this.name}] called [${action.method}]`);
         // run action
         ActionRegistry.run(action, data);
-
-        console.log(`Task [${this.name}] called [${action.method}]`);
       });
     });
   }

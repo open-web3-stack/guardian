@@ -6,10 +6,12 @@ import { SyntheticPoolInfo } from '@laminar/api';
 import LaminarTask from './LaminarTask';
 
 export default class LiquidityPoolTask extends LaminarTask<SyntheticPoolInfo> {
-  validationSchema = Joi.object({
-    poolId: Joi.alt(Joi.number(), Joi.array().min(1).items(Joi.number()), Joi.valid('all')),
-    currencyId: Joi.any(),
-  }).required();
+  validationSchema() {
+    return Joi.object({
+      poolId: Joi.alt(Joi.number(), Joi.array().min(1).items(Joi.number()), Joi.valid('all')),
+      currencyId: Joi.any(),
+    }).required();
+  }
 
   // TODO: implement desired output
   init(params: { poolId: number | number[] | 'all'; currencyId: any }) {

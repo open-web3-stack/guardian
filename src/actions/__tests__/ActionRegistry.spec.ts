@@ -1,14 +1,29 @@
-import { registerActionRunners } from '../';
+jest.mock('axios');
+import axios from 'axios';
+
 import { ActionRegistry } from '../ActionRegistry';
-import POSTRunner from '../POSTRunner';
-import ScriptRunner from '../ScriptRunner';
+import POST from '../POST';
+import script from '../script';
 
 describe('ActionRegistry', () => {
-  it('register default actions', () => {
-    expect(() => ActionRegistry.getOrThrow('POST')).toThrow('Action POST not found!');
-    expect(() => ActionRegistry.getOrThrow('script')).toThrow('Action script not found!');
-    registerActionRunners();
-    expect(ActionRegistry.getOrThrow('POST')).toBeInstanceOf(POSTRunner);
-    expect(ActionRegistry.getOrThrow('script')).toBeInstanceOf(ScriptRunner);
+  axios.request = jest.fn();
+
+  it('should have pre-register actions', () => {
+    expect(ActionRegistry.getOrThrow('POST')).toBe(POST);
+    expect(ActionRegistry.getOrThrow('script')).toBe(script);
+    expect(() => ActionRegistry.getOrThrow('foo')).toThrow('Action foo not found!');
+  });
+
+  it('should register new action', () => {
+    const foo = () => {};
+    expect(ActionRegistry.register('foo', foo));
+    expect(ActionRegistry.getOrThrow('foo')).toBe(foo);
+  });
+
+  it('should run action', () => {
+    const requestSpy = jest.spyOn(axios, 'request');
+    expect(requestSpy).not.toBeCalled();
+    ActionRegistry.run({ method: 'POST' }, null);
+    expect(requestSpy).toBeCalledTimes(1);
   });
 });
