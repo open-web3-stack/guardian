@@ -35,7 +35,7 @@ const acalaConfig: AcalaGuardianConfig = {
 };
 
 const customConfig: GuardianConfig = {
-  networkType: 'substrateChain',
+  networkType: 'customChain',
   nodeEndpoint: 'ws://localhost:9944',
   monitors: {
     events: {
