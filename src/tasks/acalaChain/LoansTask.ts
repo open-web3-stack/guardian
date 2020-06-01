@@ -5,18 +5,8 @@ import { DerivedUserLoan, DerivedLoanType } from '@acala-network/api-derive';
 import { collateralToUSD, calcCollateralRatio, convertToFixed18, debitToUSD } from '@acala-network/app-util';
 import { TimestampedValue } from '@open-web3/orml-types/interfaces';
 import { CurrencyId } from '@acala-network/types/interfaces';
-import { Codec } from '@polkadot/types/types';
 import AcalaTask from './AcalaTask';
-import { createAccountCurrencyIdPairs } from '../helpers';
-
-// FIXME: a trick to get value from TimestampedValue, need to fix
-const getValueFromTimestampValue = (origin: TimestampedValue): Codec => {
-  if (origin && Reflect.has(origin.value, 'value')) {
-    return (origin.value as any).value;
-  }
-
-  return origin.value;
-};
+import { createAccountCurrencyIdPairs, getValueFromTimestampValue } from '../helpers';
 
 export type Output = {
   account: string;
