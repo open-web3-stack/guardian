@@ -3,6 +3,7 @@ import Joi from '@hapi/joi';
 import { Observable, from } from 'rxjs';
 import { switchMap, flatMap, map } from 'rxjs/operators';
 import { ApiRx } from '@polkadot/api';
+import { AccountData } from '@polkadot/types/interfaces';
 import SubstrateTask from '../substrate/SubstrateTask';
 import { createAccountCurrencyIdPairs } from '../helpers';
 
@@ -43,7 +44,7 @@ export default class BalancesTask extends SubstrateTask<Output> {
           currencyId,
           free: result.free.toString(),
           reserved: result.reserved.toString(),
-          frozen: BN.max(result.feeFrozen, result.miscFrozen).toString(),
+          frozen: result.frozen ? result.frozen.toString() : BN.max(result.feeFrozen, result.miscFrozen).toString(),
         };
       })
     );

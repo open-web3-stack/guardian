@@ -3,9 +3,9 @@ import Joi from '@hapi/joi';
 import { switchMap, flatMap, filter } from 'rxjs/operators';
 import SubstrateTask from './SubstrateTask';
 
-type Output = { name: string; args: any[] };
+export type Event = { name: string; args: any[] };
 
-export default class EventsTask extends SubstrateTask<Output> {
+export default class EventsTask extends SubstrateTask<Event> {
   validationSchema() {
     return Joi.object({
       name: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),

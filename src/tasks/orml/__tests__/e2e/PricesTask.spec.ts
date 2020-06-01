@@ -10,7 +10,7 @@ describe('PricesTask', () => {
 
   it('get oracle value', (done) => {
     task.run({ key: 'FEUR' }).subscribe((output) => {
-      console.log(JSON.stringify(output, null, 2));
+      console.log(output);
       expect(output).toBeTruthy();
       done();
     });
@@ -18,7 +18,7 @@ describe('PricesTask', () => {
 
   it('get oracle values [FEUR, FJPY]', (done) => {
     task.run({ key: ['FEUR', 'FJPY'] }).subscribe((output) => {
-      console.log(JSON.stringify(output, null, 2));
+      console.log(output);
       expect(output).toBeTruthy();
       done();
     });
@@ -26,7 +26,7 @@ describe('PricesTask', () => {
 
   it('get all oracle values', (done) => {
     task.run({ key: 'all' }).subscribe((output) => {
-      console.log(JSON.stringify(output, null, 2));
+      console.log(output);
       expect(output).toBeTruthy();
       done();
     });

@@ -63,8 +63,8 @@ export default class CollateralAuctionsTask extends AcalaTask<Output> {
                   target: collateralAuction.target.toString(),
                   startTime: Number.parseInt(collateralAuction.startTime.toString()),
                   endTime: auction.end.isSome ? Number.parseInt(auction.end.toString()) : null,
-                  lastBidder: lastBidder.toString(),
-                  lastBid: lastBid.toString(),
+                  lastBidder: lastBidder ? lastBidder.toString() : null,
+                  lastBid: lastBid ? lastBid.toString() : null,
                 };
               })
             )

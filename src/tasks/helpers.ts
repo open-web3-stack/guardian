@@ -1,4 +1,6 @@
 import { flatMap, map } from 'lodash';
+import { Codec } from '@polkadot/types/types';
+import { TimestampedValue } from '@open-web3/orml-types/interfaces';
 
 export /**
  * Create pair combination of account and currencyId
@@ -33,4 +35,13 @@ const createAccountCurrencyIdPairs = (
   }
 
   return flatMap(account, (account) => map(currencyId, (currencyId) => ({ account, currencyId })));
+};
+
+// FIXME: a trick to get value from TimestampedValue, need to fix
+export const getValueFromTimestampValue = (origin: TimestampedValue): Codec => {
+  if (origin && Reflect.has(origin.value, 'value')) {
+    return (origin.value as any).value;
+  }
+
+  return origin.value;
 };
