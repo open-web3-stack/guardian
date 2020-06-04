@@ -14,7 +14,9 @@
     "test": "jest --testPathIgnorePatterns e2e",
     "coverage": "jest --collect-coverage",
     "polkadot-dev-ghact-build": "scripts/polkadot-dev-ghact-build",
-    "example": "yarn build && bin/cli --config=./examples/config.yaml"
+    "example:save-to-csv": "yarn build && bin/cli --config=./examples/save_to_csv/config.yaml",
+    "example:collateral-auction": "node -r ts-node/register ./examples/collateral_auction/index.ts",
+    "simulate-liquidate-cdp": "node -r ts-node/register ./examples/collateral_auction/simulate_liquidate_cdp.ts"
   },
   "publishConfig": {
     "access": "public",
@@ -26,8 +28,8 @@
   },
   "homepage": "https://github.com/open-web3-stack/guardian",
   "dependencies": {
-    "@acala-network/api": "^0.2.0-beta.35",
-    "@acala-network/app-util": "^0.2.0-beta.35",
+    "@acala-network/api": "^0.2.0-beta.45",
+    "@acala-network/app-util": "^0.2.0-beta.45",
     "@hapi/joi": "^17.1.1",
     "@laminar/api": "^0.2.0-beta.78",
     "axios": "^0.19.2",
@@ -38,6 +40,8 @@
     "shelljs": "^0.8.3"
   },
   "devDependencies": {
+    "@open-web3/api": "^0.3.0-beta.1",
+    "@open-web3/util": "^0.3.0-beta.1",
     "@types/axios": "^0.14.0",
     "@types/big.js": "^4.0.5",
     "@types/hapi__joi": "^16.0.12",
@@ -47,6 +51,7 @@
     "@types/shelljs": "^0.8.7",
     "@typescript-eslint/eslint-plugin": "^2.29.0",
     "@typescript-eslint/parser": "^2.29.0",
+    "dotenv": "^8.2.0",
     "eslint": "^6.8.0",
     "husky": "^4.2.5",
     "jest": "^25.4.0",

@@ -13,4 +13,4 @@ guardians:
             - balances.Withdraw
         actions:
           - method: script
-            path: ./examples/save_to_csv.py
+            path: ./examples/save_to_csv/save_to_csv.py
