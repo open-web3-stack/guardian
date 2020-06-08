@@ -18,11 +18,11 @@ const main = async () => {
   await ctx.sudo(
     ctx.tx.cdpEngine.setCollateralParams(
       'XBTC',
-      0, // stability_fee
-      dollar(2), // liquidation_ratio
-      dollar('0.2'), // liquidation_penalty
-      dollar(2), // required_collateral_ratio
-      dollar(1000000) // maximum_total_debit_value
+      { NewValue: 0 }, // stability_fee
+      { NewValue: dollar(2) }, // liquidation_ratio
+      { NewValue: dollar('0.2') }, // liquidation_penalty
+      { NewValue: dollar(2) }, // required_collateral_ratio
+      { NewValue: dollar(1000000) } // maximum_total_debit_value
     )
   ).send;
   await ctx.send(ctx.tx.honzon.adjustLoan('XBTC', dollar(10), dollar(500_000)), alice).send;

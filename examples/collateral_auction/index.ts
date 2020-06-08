@@ -6,10 +6,10 @@ import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { options } from '@acala-network/api';
 import { DerivedDexPool } from '@acala-network/api-derive/types';
 import { calcSwapTargetAmount, Fixed18 } from '@acala-network/app-util';
-import { Observable, never, zip } from 'rxjs';
+import { Observable, never, forkJoin } from 'rxjs';
 import { catchError, concatMap, map, filter, take } from 'rxjs/operators';
 import setupMonitoring from './setupMonitoring';
-import { nodeEndpoint, address, margin, uri } from './const';
+import { nodeEndpoint, bidder_address, margin, bidder_suri } from './const';
 import guardian from '../../src';
 import config from './config';
 
@@ -21,7 +21,7 @@ const run = async () => {
 
   // setup keyring
   const keyring = new Keyring({ type: 'sr25519' });
-  keyring.addFromUri(uri);
+  keyring.addFromUri(bidder_suri);
 
   const exchangeFee = Fixed18.fromParts(api$.consts.dex.getExchangeFee.toString());
   const slippage = Fixed18.fromRational(5, 1000); // 0.5% price slippage
@@ -35,7 +35,7 @@ const run = async () => {
   collateralAuctions$
     .pipe(
       concatMap((auction) =>
-        zip(balance$.pipe(take(1)), price$.pipe(take(1))).pipe(
+        forkJoin(balance$.pipe(take(1)), price$.pipe(take(1))).pipe(
           concatMap(([balance, price]) => {
             console.log(auction);
             if (auction.lastBidder && auction.lastBidder === balance.account) {
@@ -88,7 +88,7 @@ const run = async () => {
         };
       }),
       // make sure we're the winner
-      filter((event) => event.winner === address),
+      filter((event) => event.winner === bidder_address),
       concatMap((event) =>
         pool$.pipe(
           take(1),
@@ -106,7 +106,7 @@ const run = async () => {
             console.log(`Swap ${amount} ${currencyId} for ${target} AUSD`);
 
             return api$.tx.dex
-              .swapCurrency(currencyId, new BN(amount), 'AUSD', new BN(target))
+              .swapCurrency(currencyId as any, new BN(amount), 'AUSD', new BN(target))
               .signAndSend(keyring.getPair(winner))
               .pipe(
                 filter((i) => i.isFinalized),

@@ -1,4 +1,4 @@
-import { nodeEndpoint, address } from './const';
+import { nodeEndpoint, bidder_address } from './const';
 
 export default {
   version: '0.1',
@@ -27,7 +27,7 @@ export default {
         AUSDBalance: {
           task: 'account.balances',
           arguments: {
-            account: address,
+            account: bidder_address,
             currencyId: 'AUSD',
           },
           actions: [{ method: 'balance' }],
