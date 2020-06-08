@@ -8,10 +8,11 @@ import { calcSwapTargetAmount, Fixed18 } from '@acala-network/app-util';
 import { Observable, forkJoin } from 'rxjs';
 import { concatMap, map, filter, take } from 'rxjs/operators';
 import { ApiManager } from '@open-web3/api';
+
 import setupMonitoring from './setupMonitoring';
 import { nodeEndpoint, bidder_address, margin, bidder_suri } from './const';
+import readConfig from '../../src/read-config';
 import guardian from '../../src';
-import config from './config';
 
 const run = async () => {
   await cryptoWaitReady();
@@ -115,6 +116,8 @@ const run = async () => {
     .subscribe((hash) => {
       console.log(hash.toString());
     });
+
+  const config = readConfig('examples/collateral_auction/config.yml');
 
   // start guardian
   guardian(config);
