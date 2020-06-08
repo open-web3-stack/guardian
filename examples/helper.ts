@@ -7,7 +7,7 @@ import { ApiManager } from '@open-web3/api';
 import { KeyringPair } from '@polkadot/keyring/types';
 import { toBaseUnit } from '@open-web3/util';
 import { SubmittableExtrinsic } from '@polkadot/api/types';
-import { xxhashAsU8a } from '@polkadot/util-crypto';
+import { xxhashAsHex } from '@polkadot/util-crypto';
 
 dotenv();
 
@@ -30,8 +30,8 @@ export const dollar = (x: BalanceType) => toBaseUnit(x).toFixed();
 
 export type BalanceType = Big | number | string;
 
-function getModulePrefix(module: string): Uint8Array {
-  return xxhashAsU8a(module, 128);
+function getModulePrefix(module: string): string {
+  return xxhashAsHex(module, 128);
 }
 
 export const setup = async () => {
@@ -73,13 +73,9 @@ export const setup = async () => {
         )
       );
     },
-    async feedPrice(currency: string, price: BalanceType) {
-      const index = 0; // TODO: lookup via available session key
+    feedPrice(currency: string, price: BalanceType) {
       const values = [[currency, new Big(price).toFixed()]];
-      const nonce = await this.api.query.oracle.nonces(this.account.address);
-      const payload = this.api.registry.createType('(u32, Vec<(CurrencyId, Price)>)' as any, [nonce, values]);
-      const sig = this.account.sign(payload.toU8a());
-      await this.api.tx.oracle.feedValues(values, index, sig).send();
+      return this.sudo(this.api.tx.oracle.feedValues(values, 0, new Uint8Array()));
     },
     send(call: SubmittableExtrinsic<'promise'>, account?: KeyringPair) {
       return this.apiManager.signAndSend(call, { account });
@@ -89,6 +85,15 @@ export const setup = async () => {
     },
     killModuleStorage(module: string) {
       return this.sudo(this.tx.system.killPrefix(getModulePrefix(module), 0));
+    },
+    async killAll() {
+      await this.killModuleStorage('Tokens').send;
+      await this.killModuleStorage('CDPEngine').send;
+      await this.killModuleStorage('Loans').send;
+      await this.killModuleStorage('AuctionManager').send;
+      await this.killModuleStorage('Auction').send;
+      await this.killModuleStorage('CDPTreasury').send;
+      await this.killModuleStorage('Dex').inBlock;
     },
   };
 };
