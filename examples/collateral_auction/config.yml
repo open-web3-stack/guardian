@@ -1,0 +1,38 @@
+version: '0.1'
+guardians:
+  acala-guardian:
+    networkType: acalaChain
+    network: mandala
+    nodeEndpoint: ${NODE_ENDPOINT}
+    confirmation: finalize
+
+    monitors:
+      AuctionDealed:
+        task: system.events
+        arguments:
+          name: auctionManager.CollateralAuctionDealed
+        actions:
+          - method: events
+
+      CollateralAuction:
+        task: honzon.collateralAuctions
+        arguments:
+          account: all
+          currencyId: XBTC
+        actions:
+          - method: collateralAuctions
+
+      AUSDBalance:
+        task: account.balances
+        arguments:
+          account: ${BIDDER_ADDRESS}
+          currencyId: AUSD
+        actions:
+          - method: balance
+
+      XBTCPrice:
+        task: oracle.prices
+        arguments:
+          key: XBTC
+        actions:
+          - method: price
