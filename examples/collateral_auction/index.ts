@@ -5,7 +5,7 @@ import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { options } from '@acala-network/api';
 import { DerivedDexPool } from '@acala-network/api-derive/types';
 import { calcSwapTargetAmount, Fixed18 } from '@acala-network/app-util';
-import { Observable, forkJoin } from 'rxjs';
+import { ReplaySubject, forkJoin } from 'rxjs';
 import { concatMap, map, filter, take } from 'rxjs/operators';
 import { ApiManager } from '@open-web3/api';
 
@@ -27,18 +27,19 @@ const run = async () => {
   const exchangeFee = Fixed18.fromParts(apiManager.api.consts.dex.getExchangeFee.toString());
   const slippage = Fixed18.fromRational(5, 1000); // 0.5% price slippage
 
-  const pool$: Observable<DerivedDexPool> = apiManager.api.derive['dex'].pool('XBTC');
+  const pool$ = new ReplaySubject<DerivedDexPool>();
+  apiManager.api.derive['dex'].pool('XBTC', (pool: DerivedDexPool) => {
+    pool$.next(pool);
+  });
 
   const { events$, collateralAuctions$, balance$, price$ } = setupMonitoring();
-
-  balance$.subscribe(console.log);
 
   collateralAuctions$
     .pipe(
       concatMap((auction) =>
         forkJoin(balance$.pipe(take(1)), price$.pipe(take(1))).pipe(
           concatMap(async ([balance, price]) => {
-            console.log(auction);
+            console.log(auction, balance, price);
             if (auction.lastBidder && auction.lastBidder === balance.account) {
               // we're the last bidder
               return null;
@@ -68,7 +69,7 @@ const run = async () => {
     )
     .subscribe((hash) => {
       if (hash) {
-        console.log(hash.toString());
+        console.log('Bid successful', `Hash: ${hash.toString()}`);
       }
     });
 
@@ -91,6 +92,7 @@ const run = async () => {
         pool$.pipe(
           take(1),
           concatMap(async (pool) => {
+            console.log(event, pool);
             const { winner, collateralAmount: amount, collateralType: currencyId } = event;
 
             const target = calcSwapTargetAmount(
@@ -114,7 +116,7 @@ const run = async () => {
       )
     )
     .subscribe((hash) => {
-      console.log(hash.toString());
+      console.log('Swap successful', `Hash: ${hash.toString()}`);
     });
 
   const config = readConfig('examples/collateral_auction/config.yml');
