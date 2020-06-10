@@ -1,12 +1,12 @@
-import BN from 'bn.js';
+import BN from 'big.js';
 import { WsProvider } from '@polkadot/rpc-provider';
 import { Keyring } from '@polkadot/keyring';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { options } from '@acala-network/api';
 import { DerivedDexPool } from '@acala-network/api-derive/types';
 import { calcSwapTargetAmount, Fixed18 } from '@acala-network/app-util';
-import { ReplaySubject, forkJoin } from 'rxjs';
-import { concatMap, map, filter, take } from 'rxjs/operators';
+import { ReplaySubject, combineLatest } from 'rxjs';
+import { map, filter, concatMap, take, withLatestFrom } from 'rxjs/operators';
 import { ApiManager } from '@open-web3/api';
 
 import setupMonitoring from './setupMonitoring';
@@ -37,7 +37,8 @@ const run = async () => {
   collateralAuctions$
     .pipe(
       concatMap((auction) =>
-        forkJoin(balance$.pipe(take(1)), price$.pipe(take(1))).pipe(
+        combineLatest(balance$, price$).pipe(
+          take(1),
           concatMap(async ([balance, price]) => {
             console.log(auction, balance, price);
             if (auction.lastBidder && auction.lastBidder === balance.account) {
@@ -47,29 +48,31 @@ const run = async () => {
 
             const ONE = new BN('1000000000000000000');
 
-            const m = ONE.sub(ONE.muln(Number.parseFloat(margin)));
+            const m = ONE.sub(ONE.mul(new BN(margin)));
             const maxBid = m.mul(new BN(price.value)).div(ONE);
 
-            if (new BN(auction.lastBid).gte(maxBid)) {
+            if (auction.lastBid && new BN(auction.lastBid).gte(maxBid)) {
               console.log('last bid is bigger than our max bid');
               return null;
             }
 
-            console.log(`Bid auctionId: ${auction.auctionId} -> price: ${maxBid.toString()}`);
+            console.log(`Bid auctionId: ${auction.auctionId} -> price: ${maxBid.toFixed()}`);
 
-            const hash = await apiManager.signAndSend(
-              apiManager.api.tx.auction.bid(auction.auctionId, maxBid.toString()),
-              { account: keyring.getPair(balance.account) }
+            const result = await apiManager.signAndSend(
+              apiManager.api.tx.auction.bid(auction.auctionId, maxBid.toFixed()),
+              {
+                account: keyring.getPair(balance.account),
+              }
             ).finalized;
 
-            return hash;
+            return result.blockHash;
           })
         )
       )
     )
     .subscribe((hash) => {
       if (hash) {
-        console.log('Bid successful', `Hash: ${hash.toString()}`);
+        console.log('Bid successful', `BlockHash: ${hash.toString()}`);
       }
     });
 
@@ -88,35 +91,33 @@ const run = async () => {
       }),
       // make sure we're the winner
       filter((event) => event.winner === bidder_address),
-      concatMap((event) =>
-        pool$.pipe(
-          take(1),
-          concatMap(async (pool) => {
-            console.log(event, pool);
-            const { winner, collateralAmount: amount, collateralType: currencyId } = event;
+      withLatestFrom(pool$),
+      concatMap(async ([event, pool]) => {
+        console.log(event, pool);
+        const { winner, collateralAmount: amount, collateralType: currencyId } = event;
 
-            const target = calcSwapTargetAmount(
-              Number.parseInt(amount),
-              Number.parseInt(pool.other.toString()),
-              Number.parseInt(pool.base.toString()),
-              exchangeFee,
-              slippage
-            ).toString();
+        const target = BN(
+          calcSwapTargetAmount(
+            Number.parseInt(amount),
+            Number.parseInt(pool.other.toString()),
+            Number.parseInt(pool.base.toString()),
+            exchangeFee,
+            slippage
+          )
+        ).toFixed();
 
-            console.log(`Swap ${amount} ${currencyId} for ${target} AUSD`);
+        console.log(`Swap ${amount} ${currencyId} for ${target} AUSD`);
 
-            const hash = await apiManager.signAndSend(
-              apiManager.api.tx.dex.swapCurrency(currencyId as any, new BN(amount), 'AUSD', new BN(target)),
-              { account: keyring.getPair(winner) }
-            ).finalized;
+        const result = await apiManager.signAndSend(
+          apiManager.api.tx.dex.swapCurrency(currencyId as any, amount, 'AUSD', target),
+          { account: keyring.getPair(winner) }
+        ).finalized;
 
-            return hash;
-          })
-        )
-      )
+        return result.blockHash;
+      })
     )
     .subscribe((hash) => {
-      console.log('Swap successful', `Hash: ${hash.toString()}`);
+      console.log('Swap successful', `BlockHash: ${hash.toString()}`);
     });
 
   const config = readConfig('examples/collateral_auction/config.yml');

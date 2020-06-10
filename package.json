@@ -41,8 +41,8 @@
   },
   "devDependencies": {
     "@acala-network/e2e": "^0.1.13",
-    "@open-web3/api": "^0.3.0-beta.18",
-    "@open-web3/util": "^0.3.0-beta.18",
+    "@open-web3/api": "^0.3.0-beta.19",
+    "@open-web3/util": "^0.3.0-beta.19",
     "@types/axios": "^0.14.0",
     "@types/big.js": "^4.0.5",
     "@types/hapi__joi": "^16.0.12",
