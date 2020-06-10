@@ -1,7 +1,10 @@
 import Joi from '@hapi/joi';
 import { EthereumGuardianConfig } from '../types';
+import { createEthereumTasks } from '../tasks';
+
 import Guardian from './Guardian';
 import { ethereumNetwork } from '../constants';
+import createEthereumApi from '../tasks/ethereum/createEthereumApi';
 
 const defaultNodeEndpoint = ({ network }: { network: EthereumGuardianConfig['network'] }) => {
   if (network === 'dev') {
@@ -20,6 +23,7 @@ export default class EthereumGuardian extends Guardian {
   }
 
   getTasks(config: EthereumGuardianConfig) {
-    return {};
+    const api$ = createEthereumApi(config.nodeEndpoint);
+    return createEthereumTasks(api$);
   }
 }
