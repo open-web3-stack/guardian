@@ -6,15 +6,16 @@ const main = async () => {
   const ctx: Context = await setup();
   const accounts = await ctx.makeAccounts(2);
   const [alice, bob] = accounts;
-  await ctx.updateBalance(alice, 'XBTC', dollar(10)).send;
+  await ctx.updateBalance(alice, 'XBTC', dollar(10_000_000)).send;
   await ctx.updateBalance(bob, 'XBTC', dollar(101)).send;
   await ctx.updateBalance(bob, 'AUSD', dollar(1_000_000)).send;
 
   await ctx.updateBalance(bidder, 'ACA', dollar(1_000_000)).send;
   await ctx.updateBalance(bidder, 'AUSD', dollar(10_000_000)).send;
+  await ctx.updateBalance(alice, 'AUSD', dollar(10_000_000)).send;
 
-  await ctx.feedPrice('XBTC', dollar(10000));
-  await ctx.send(ctx.tx.dex.addLiquidity('XBTC', dollar(100), dollar(1_000_000))).send;
+  await ctx.feedPrice('XBTC', dollar(10000)).send;
+  await ctx.send(ctx.tx.dex.addLiquidity('XBTC', dollar(100), dollar(1_000_000)), alice).send;
   await ctx.sudo(
     ctx.tx.cdpEngine.setCollateralParams(
       'XBTC',
