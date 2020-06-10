@@ -37,7 +37,9 @@ export default class BalancesTask extends SubstrateTask<Output> {
   }
 
   getBalance(api: ApiRx, account: string, currencyId: string): Observable<Output> {
-    return api.query.tokens.accounts(account, currencyId).pipe(
+    const key1 = api.query.tokens.accounts.creator.meta.type.asDoubleMap.key1.toString();
+    const arg = key1 === 'CurrencyId' ? [currencyId, account] : [account, currencyId];
+    return api.query.tokens.accounts(...arg).pipe(
       map((result: any) => {
         return {
           account,
