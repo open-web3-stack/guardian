@@ -47,7 +47,7 @@ export default class MarginAccountTask extends EthereumTask<Output> {
               marginLevel: Number(fromPrecision(marginLevel)),
               isSafe,
               isMarginCalled,
-              isLiquidated: false,
+              isLiquidated: !isSafe,
             };
           })
         );

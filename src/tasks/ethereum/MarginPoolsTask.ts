@@ -49,7 +49,7 @@ export default class MarginPoolsTask extends EthereumTask<Output> {
               equity,
               isSafe,
               isMarginCalled,
-              isLiquidated: false,
+              isLiquidated: !isSafe,
             };
           })
         );
