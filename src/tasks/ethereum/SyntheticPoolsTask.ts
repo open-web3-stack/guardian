@@ -41,7 +41,8 @@ export default class SyntheticPoolsTask extends EthereumTask<Output> {
               owner,
               { collaterals, minted },
               liquidationCollateralRatio,
-              additionalCollateralRatio,
+              _additionalCollateralRatio,
+              defaultCollateralRatio,
             ] = await Promise.all([
               poolInterface.methods.owner().call() as Promise<string>,
               tokenContract.methods.liquidityPoolPositions(poolId).call() as Promise<{
@@ -50,10 +51,14 @@ export default class SyntheticPoolsTask extends EthereumTask<Output> {
               }>,
               tokenContract.methods.liquidationCollateralRatio().call() as Promise<string>,
               poolInterface.methods.getAdditionalCollateralRatio(tokenId).call() as Promise<string>,
+              tokenContract.methods.defaultCollateralRatio().call() as Promise<string>,
             ]);
 
-            const collateralRatio = 1 + Number(fromPrecision(additionalCollateralRatio));
-            const isSafe = collateralRatio > Number(fromPrecision(liquidationCollateralRatio));
+            const additionalCollateralRatio = Number(fromPrecision(_additionalCollateralRatio));
+            const minCollateralRatio = Number(fromPrecision(defaultCollateralRatio));
+            const collateralRatio =
+              1 + (additionalCollateralRatio >= minCollateralRatio ? additionalCollateralRatio : minCollateralRatio);
+            const isSafe = 1 + Number(fromPrecision(liquidationCollateralRatio)) > collateralRatio;
 
             return {
               owner,
