@@ -10,11 +10,13 @@ import { map, filter, concatMap, take, withLatestFrom } from 'rxjs/operators';
 import { ApiManager } from '@open-web3/api';
 
 import setupMonitoring from './setupMonitoring';
-import { nodeEndpoint, bidder_address, margin, bidder_suri } from './const';
+import readConst from './const';
 import readConfig from '../../src/read-config';
 import guardian from '../../src';
 
 const run = async () => {
+  const { nodeEndpoint, bidder_address, margin, bidder_suri } = readConst();
+
   await cryptoWaitReady();
 
   const ws = new WsProvider(nodeEndpoint);

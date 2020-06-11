@@ -1,8 +1,11 @@
 import fs from 'fs';
 import yaml from 'js-yaml';
 import template from 'lodash/template';
+import dotenv from 'dotenv';
 
 const regex = /#[^*]*?$/gm;
+
+dotenv.config();
 
 export default (path: string) => {
   const data = fs.readFileSync(path, 'utf8');
