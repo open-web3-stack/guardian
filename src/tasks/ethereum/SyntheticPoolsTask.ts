@@ -1,9 +1,10 @@
 import Joi from '@hapi/joi';
 import { TokenInfo } from '@laminar/api';
 import { fromPrecision } from '@laminar/types/utils/precision';
-import { switchMap } from 'rxjs/operators';
+import { switchMap, take } from 'rxjs/operators';
 import EthereumTask from './EthereumTask';
 import { convertToNewHeader } from './helpers';
+import BN from 'big.js';
 
 export type Output = {
   owner: string;
@@ -36,28 +37,25 @@ export default class SyntheticPoolsTask extends EthereumTask<Output> {
           switchMap(async () => {
             const poolInterface = api.getSyntheticPoolInterfaceContract(poolId);
             const tokenContract = api.getSyntheticFlowTokenContract(tokenId);
+            const oracleValues = await api.currencies.oracleValues().pipe(take(1)).toPromise();
 
-            const [
-              owner,
-              { collaterals, minted },
-              liquidationCollateralRatio,
-              _additionalCollateralRatio,
-              defaultCollateralRatio,
-            ] = await Promise.all([
+            const oracleValue = oracleValues.find((o) => o.tokenId.toLowerCase() === tokenId.toLowerCase());
+
+            const price = Number(fromPrecision(oracleValue.value));
+
+            if (!oracleValue) throw Error(`Missing the oracleValue of ${tokenName}`);
+
+            const [owner, { collaterals, minted }, liquidationCollateralRatio] = await Promise.all([
               poolInterface.methods.owner().call() as Promise<string>,
               tokenContract.methods.liquidityPoolPositions(poolId).call() as Promise<{
                 collaterals: string;
                 minted: string;
               }>,
               tokenContract.methods.liquidationCollateralRatio().call() as Promise<string>,
-              poolInterface.methods.getAdditionalCollateralRatio(tokenId).call() as Promise<string>,
-              tokenContract.methods.defaultCollateralRatio().call() as Promise<string>,
             ]);
 
-            const additionalCollateralRatio = Number(fromPrecision(_additionalCollateralRatio));
-            const minCollateralRatio = Number(fromPrecision(defaultCollateralRatio));
-            const collateralRatio =
-              1 + (additionalCollateralRatio >= minCollateralRatio ? additionalCollateralRatio : minCollateralRatio);
+            const collateralRatio = +new BN(collaterals).div(new BN(minted).mul(new BN(price)));
+
             const isSafe = 1 + Number(fromPrecision(liquidationCollateralRatio)) > collateralRatio;
 
             return {

@@ -35,6 +35,7 @@
     "axios": "^0.19.2",
     "big.js": "^5.2.2",
     "fs": "^0.0.1-security",
+    "handlebars": "^4.7.6",
     "js-yaml": "^3.13.1",
     "lodash": "^4.17.15",
     "shelljs": "^0.8.3"

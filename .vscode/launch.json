@@ -5,12 +5,12 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Current TS Tests File",
       "type": "node",
       "request": "launch",
-      "args": ["-r", "ts-node/register", "${relativeFile}"],
+      "name": "Launch Program",
       "cwd": "${workspaceRoot}",
-      "protocol": "inspector"
+      "runtimeArgs": ["-r", "ts-node/register"],
+      "args": ["${workspaceRoot}/examples/liquidation_bot/index.ts"]
     }
   ]
 }

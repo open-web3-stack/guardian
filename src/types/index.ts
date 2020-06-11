@@ -26,7 +26,7 @@ export interface ITask<Output> {
   init(params: any): Observable<Output>;
 }
 
-export type Action<Args> = (args: Args, data: any) => void;
+export type Action<Args> = (args: Args, data: any, task: ITask<any>) => void;
 
 export interface GuardianConfig {
   networkType: string;
