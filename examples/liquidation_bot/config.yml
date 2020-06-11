@@ -12,4 +12,156 @@ guardians:
           tokenName: 'FEUR'
         actions:
           - method: ethereumLiquidate
-            maxCollateralRatio: 1.02
+            maxCollateralRatio: 1.04
+      syntheticPoolGeneral-FJPY:
+        task: synthetic.pools
+        arguments:
+          poolId: '0x61A7645ef693Ea7740b121232Ddc7b874Be7Fa09'
+          tokenName: 'FJPY'
+        actions:
+          - method: ethereumLiquidate
+            maxCollateralRatio: 1.04
+      syntheticPoolGeneral-FCAD:
+        task: synthetic.pools
+        arguments:
+          poolId: '0x61A7645ef693Ea7740b121232Ddc7b874Be7Fa09'
+          tokenName: 'FCAD'
+        actions:
+          - method: ethereumLiquidate
+            maxCollateralRatio: 1.04
+      syntheticPoolGeneral-FCHF:
+        task: synthetic.pools
+        arguments:
+          poolId: '0x61A7645ef693Ea7740b121232Ddc7b874Be7Fa09'
+          tokenName: 'FCHF'
+        actions:
+          - method: ethereumLiquidate
+            maxCollateralRatio: 1.04
+      syntheticPoolGeneral-FGBP:
+        task: synthetic.pools
+        arguments:
+          poolId: '0x61A7645ef693Ea7740b121232Ddc7b874Be7Fa09'
+          tokenName: 'FGBP'
+        actions:
+          - method: ethereumLiquidate
+            maxCollateralRatio: 1.04
+      syntheticPoolGeneral-FAUD:
+        task: synthetic.pools
+        arguments:
+          poolId: '0x61A7645ef693Ea7740b121232Ddc7b874Be7Fa09'
+          tokenName: 'FAUD'
+        actions:
+          - method: ethereumLiquidate
+            maxCollateralRatio: 1.04
+      syntheticPoolGeneral-FOIL:
+        task: synthetic.pools
+        arguments:
+          poolId: '0x61A7645ef693Ea7740b121232Ddc7b874Be7Fa09'
+          tokenName: 'FOIL'
+        actions:
+          - method: ethereumLiquidate
+            maxCollateralRatio: 1.04
+      syntheticPoolGeneral-FXAU:
+        task: synthetic.pools
+        arguments:
+          poolId: '0x61A7645ef693Ea7740b121232Ddc7b874Be7Fa09'
+          tokenName: 'FXAU'
+        actions:
+          - method: ethereumLiquidate
+            maxCollateralRatio: 1.04
+      syntheticPoolGeneral-FBTC:
+        task: synthetic.pools
+        arguments:
+          poolId: '0x61A7645ef693Ea7740b121232Ddc7b874Be7Fa09'
+          tokenName: 'FBTC'
+        actions:
+          - method: ethereumLiquidate
+            maxCollateralRatio: 1.04
+      syntheticPoolGeneral-FETH:
+        task: synthetic.pools
+        arguments:
+          poolId: '0x61A7645ef693Ea7740b121232Ddc7b874Be7Fa09'
+          tokenName: 'FETH'
+        actions:
+          - method: ethereumLiquidate
+            maxCollateralRatio: 1.04
+      syntheticPoolXYZ-FEUR:
+        task: synthetic.pools
+        arguments:
+          poolId: '0x2b1627CFF4Eb38C774Ec1008045CEd2C4776eEf6'
+          tokenName: 'FEUR'
+        actions:
+          - method: ethereumLiquidate
+            maxCollateralRatio: 1.04
+      syntheticPoolXYZ-FJPY:
+        task: synthetic.pools
+        arguments:
+          poolId: '0x2b1627CFF4Eb38C774Ec1008045CEd2C4776eEf6'
+          tokenName: 'FJPY'
+        actions:
+          - method: ethereumLiquidate
+            maxCollateralRatio: 1.04
+      syntheticPoolXYZ-FCAD:
+        task: synthetic.pools
+        arguments:
+          poolId: '0x2b1627CFF4Eb38C774Ec1008045CEd2C4776eEf6'
+          tokenName: 'FCAD'
+        actions:
+          - method: ethereumLiquidate
+            maxCollateralRatio: 1.04
+      syntheticPoolXYZ-FCHF:
+        task: synthetic.pools
+        arguments:
+          poolId: '0x2b1627CFF4Eb38C774Ec1008045CEd2C4776eEf6'
+          tokenName: 'FCHF'
+        actions:
+          - method: ethereumLiquidate
+            maxCollateralRatio: 1.04
+      syntheticPoolXYZ-FGBP:
+        task: synthetic.pools
+        arguments:
+          poolId: '0x2b1627CFF4Eb38C774Ec1008045CEd2C4776eEf6'
+          tokenName: 'FGBP'
+        actions:
+          - method: ethereumLiquidate
+            maxCollateralRatio: 1.04
+      syntheticPoolXYZ-FAUD:
+        task: synthetic.pools
+        arguments:
+          poolId: '0x2b1627CFF4Eb38C774Ec1008045CEd2C4776eEf6'
+          tokenName: 'FAUD'
+        actions:
+          - method: ethereumLiquidate
+            maxCollateralRatio: 1.04
+      syntheticPoolXYZ-FOIL:
+        task: synthetic.pools
+        arguments:
+          poolId: '0x2b1627CFF4Eb38C774Ec1008045CEd2C4776eEf6'
+          tokenName: 'FOIL'
+        actions:
+          - method: ethereumLiquidate
+            maxCollateralRatio: 1.04
+      syntheticPoolXYZ-FXAU:
+        task: synthetic.pools
+        arguments:
+          poolId: '0x2b1627CFF4Eb38C774Ec1008045CEd2C4776eEf6'
+          tokenName: 'FXAU'
+        actions:
+          - method: ethereumLiquidate
+            maxCollateralRatio: 1.04
+      syntheticPoolXYZ-FBTC:
+        task: synthetic.pools
+        arguments:
+          poolId: '0x2b1627CFF4Eb38C774Ec1008045CEd2C4776eEf6'
+          tokenName: 'FBTC'
+        actions:
+          - method: ethereumLiquidate
+            maxCollateralRatio: 1.04
+      syntheticPoolXYZ-FETH:
+        task: synthetic.pools
+        arguments:
+          poolId: '0x2b1627CFF4Eb38C774Ec1008045CEd2C4776eEf6'
+          tokenName: 'FETH'
+        actions:
+          - method: ethereumLiquidate
+            maxCollateralRatio: 1.04
