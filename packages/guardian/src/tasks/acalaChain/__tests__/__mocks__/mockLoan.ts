@@ -46,6 +46,4 @@ const MockLoan = {
   }),
 };
 
-export default () => {
-  jest.mock('@polkadot/api', () => MockLoan);
-};
+jest.mock('@polkadot/api', () => MockLoan);

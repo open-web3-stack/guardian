@@ -1,3 +1,4 @@
+// jest.mock('@polkadot/api');
 import { of, timer } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { TypeRegistry } from '@polkadot/types';
@@ -60,6 +61,4 @@ const MockAuctions = {
   }),
 };
 
-export default () => {
-  jest.mock('@polkadot/api', () => MockAuctions);
-};
+jest.doMock('@polkadot/api', () => MockAuctions);

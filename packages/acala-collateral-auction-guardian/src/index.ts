@@ -11,7 +11,7 @@ import { map, filter, concatMap, take, withLatestFrom, catchError } from 'rxjs/o
 import { ApiManager } from '@open-web3/api';
 import guardian, { readConfig } from '@open-web3/guardian';
 
-import { nodeEndpoint, bidder_address, margin, bidder_suri } from './const';
+import readConst from './const';
 import setupMonitoring from './setupMonitoring';
 
 const run = async () => {

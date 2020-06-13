@@ -1,5 +1,4 @@
-import mockAuctions from './__mocks__/mockAuctions';
-mockAuctions();
+import './__mocks__/mockAuctions';
 
 import SurplusAuctionsTask from '../SurplusAuctionsTask';
 import { createAcalaApi } from '../../acalaChain';

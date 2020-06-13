@@ -1,5 +1,4 @@
-import mockLoan from './__mocks__/mockLoan';
-mockLoan();
+import './__mocks__/mockLoan';
 
 import LoansTask from '../LoansTask';
 import createAcalaApi from '../createAcalaApi';
