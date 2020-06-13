@@ -1,0 +1,22 @@
+{
+  "name": "@open-web3/acala-collateral-auction-guardian",
+  "version": "0.1.17",
+  "description": "Bid on collateral auction and swap dealed auction to make profit",
+  "author": "Laminar Developers <hello@laminar.one>",
+  "license": "Apache-2.0",
+  "bin": {
+    "acala-collateral-auction-guardian": "cli.js"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "repository": "https://github.com/open-web3-stack/guardian.git",
+  "bugs": {
+    "url": "https://github.com/open-web3-stack/guardian/issues"
+  },
+  "homepage": "https://github.com/open-web3-stack/guardian",
+  "dependencies": {
+    "@open-web3/guardian": "*"
+  }
+}
