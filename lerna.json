@@ -6,6 +6,8 @@
       "allowBranch": "master"
     }
   },
-  "packages": ["packages/*"],
-  "version": "0.2.0"
+  "packages": [
+    "packages/*"
+  ],
+  "version": "0.2.1"
 }
