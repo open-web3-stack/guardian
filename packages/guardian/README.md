@@ -1,4 +1,4 @@
-# @open-web3/guardian-cli
+# @open-web3/guardian
 
 _Working In Progess_
 
