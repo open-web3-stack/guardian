@@ -15,6 +15,8 @@ import { nodeEndpoint, bidder_address, margin, bidder_suri } from './const';
 import setupMonitoring from './setupMonitoring';
 
 const run = async () => {
+  const { nodeEndpoint, bidder_address, margin, bidder_suri } = readConst();
+
   await cryptoWaitReady();
 
   const ws = new WsProvider(nodeEndpoint);
@@ -47,7 +49,6 @@ const run = async () => {
             }
 
             const ONE = new BN('1000000000000000000');
-
             const m = ONE.sub(ONE.mul(new BN(margin!)));
             const maxBid = m.mul(new BN(price.value)).div(ONE);
 
@@ -63,9 +64,9 @@ const run = async () => {
               {
                 account: keyring.getPair(balance.account),
               }
-            ).inBlock;
+            ).send;
 
-            return result.blockHash;
+            return result;
           })
         )
       ),
@@ -76,7 +77,7 @@ const run = async () => {
     .subscribe(
       (hash) => {
         if (hash) {
-          console.log('Bid successful', `BlockHash: ${hash.toString()}`);
+          console.log('Bid successful', `Hash: ${hash.toString()}`);
         }
       },
       (error) => console.error(error)
@@ -118,9 +119,9 @@ const run = async () => {
         const result = await apiManager.signAndSend(
           apiManager.api.tx.dex.swapCurrency(currencyId as any, amount, 'AUSD', target),
           { account: keyring.getPair(winner) }
-        ).inBlock;
+        ).send;
 
-        return result.blockHash;
+        return result;
       }),
       catchError((error) => {
         throw error;
@@ -128,7 +129,7 @@ const run = async () => {
     )
     .subscribe(
       (hash) => {
-        console.log('Swap successful', `BlockHash: ${hash.toString()}`);
+        console.log('Swap successful', `Hash: ${hash.toString()}`);
       },
       (error) => console.error(error)
     );
