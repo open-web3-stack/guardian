@@ -1,65 +1,37 @@
 {
-  "name": "@open-web3/guardian",
-  "version": "0.1.17",
-  "description": "Web3 Guardian - a blockchain monitoring and alerting tool",
-  "main": "lib/index.js",
-  "author": "Laminar Developers <hello@laminar.one>",
-  "license": "Apache-2.0",
-  "bin": {
-    "guardian": "bin/cli"
+  "version": "0.2.0",
+  "private": true,
+  "engines": {
+    "yarn": "^1.10.1"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "resolutions": {
+    "babel-core": "^7.0.0-bridge.0",
+    "typescript": "^3.8.3"
   },
   "scripts": {
-    "build": "tsc",
-    "lint": "eslint --ext .js,.ts src && tsc --noEmit --pretty",
-    "test": "jest --testPathIgnorePatterns e2e",
-    "coverage": "jest --collect-coverage",
-    "polkadot-dev-ghact-build": "scripts/polkadot-dev-ghact-build",
-    "example:save-to-csv": "yarn build && bin/cli --config=./examples/save_to_csv/config.yaml",
-    "example:collateral-auction": "node -r ts-node/register ./examples/collateral_auction/index.ts",
-    "simulate-liquidate-cdp": "node -r ts-node/register ./examples/collateral_auction/simulate_liquidate_cdp.ts"
-  },
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org"
-  },
-  "repository": "https://github.com/open-web3-stack/guardian.git",
-  "bugs": {
-    "url": "https://github.com/open-web3-stack/guardian/issues"
-  },
-  "homepage": "https://github.com/open-web3-stack/guardian",
-  "dependencies": {
-    "@acala-network/api": "^0.2.0-beta.51",
-    "@acala-network/app-util": "^0.2.0-beta.51",
-    "@hapi/joi": "^17.1.1",
-    "@laminar/api": "^0.2.0-beta.105",
-    "axios": "^0.19.2",
-    "big.js": "^5.2.2",
-    "dotenv": "^8.2.0",
-    "fs": "^0.0.1-security",
-    "js-yaml": "^3.13.1",
-    "lodash": "^4.17.15",
-    "shelljs": "^0.8.3"
+    "build": "polkadot-dev-build-ts && (cd packages/example-guardian && mkdir -p build && cp resources/* package.json build) && (cd packages/acala-collateral-auction-guardian && cp resources/* build)",
+    "build:release": "polkadot-ci-ghact-build",
+    "lint": "eslint --ext .js,.jsx,.ts,.tsx packages && tsc --noEmit --pretty",
+    "clean": "polkadot-dev-clean-build",
+    "postinstall": "polkadot-dev-yarn-only",
+    "test": "jest --runInBand --testPathIgnorePatterns e2e"
   },
   "devDependencies": {
-    "@acala-network/e2e": "^0.1.13",
-    "@open-web3/api": "^0.3.0-beta.19",
-    "@open-web3/util": "^0.3.0-beta.19",
-    "@types/axios": "^0.14.0",
-    "@types/big.js": "^4.0.5",
-    "@types/hapi__joi": "^16.0.12",
-    "@types/jest": "^25.2.1",
-    "@types/js-yaml": "^3.12.3",
-    "@types/lodash": "^4.14.150",
-    "@types/shelljs": "^0.8.7",
-    "@typescript-eslint/eslint-plugin": "^2.29.0",
-    "@typescript-eslint/parser": "^2.29.0",
-    "eslint": "^6.8.0",
-    "husky": "^4.2.5",
-    "jest": "^25.4.0",
-    "prettier": "^2.0.4",
+    "@babel/core": "^7.8.4",
+    "@babel/register": "^7.8.4",
+    "@babel/runtime": "^7.8.4",
+    "@polkadot/api": "^1.12.1",
+    "@polkadot/dev": "^0.32.17",
+    "@polkadot/ts": "^0.3.14",
+    "@types/jest": "^25.1.4",
+    "husky": "^4.2.3",
+    "jest": "^25.2.0",
+    "prettier": "^2.0.1",
     "pretty-quick": "^2.0.1",
-    "ts-jest": "^25.4.0",
-    "ts-node": "^8.10.2",
+    "ts-node": "^8.6.2",
     "typescript": "^3.8.3"
   },
   "husky": {

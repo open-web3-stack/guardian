@@ -1,0 +1,16 @@
+version: '0.1'
+guardians:
+  substrate-chain:
+    networkType: substrateChain
+    nodeEndpoint:
+      - wss://kusama-rpc.polkadot.io/
+    monitors:
+      balances-events-monitor:
+        task: system.events
+        arguments:
+          name:
+            - balances.Deposit
+            - balances.Withdraw
+        actions:
+          - method: script
+            path: ./save_to_csv.py

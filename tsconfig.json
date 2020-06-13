@@ -1,15 +1,23 @@
 {
+  "extends": "./node_modules/@polkadot/dev/config/tsconfig",
+  "exclude": ["build/**/*", "**/build/**/*", "**/__tests__/**/*"],
   "compilerOptions": {
-    "rootDir": "src",
-    "module": "commonjs",
-    "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
+    "target": "es2019",
+    "module": "CommonJS",
+    "baseUrl": ".",
+    "noImplicitAny": false,
+    "noUnusedLocals": false,
+    "paths": {
+      "@open-web3/guardian": ["packages/guardian/src"],
+      "@open-web3/guardian/*": ["packages/guardian/src/*"],
+      "@open-web3/guardian-cli": ["packages/guardian-cli/src"],
+      "@open-web3/guardian-cli/*": ["packages/guardian-cli/src/*"],
+      "@open-web3/acala-collateral-auction-guardian": ["packages/acala-collateral-auction-guardian/src"],
+      "@open-web3/acala-collateral-auction-guardian/*": ["packages/acala-collateral-auction-guardian/src/*"],
+      "@open-web3/example-guardian": ["packages/example-guardian/src"],
+      "@open-web3/example-guardian/*": ["packages/example-guardian/src/*"]
+    },
     "skipLibCheck": true,
-    "allowJs": true,
-    "outDir": "lib",
-    "declaration": true
-  },
-  "include": ["src/**/*.ts", "src/**/*.js"],
-  "exclude": ["node_modules", "**/__tests__/**/*"]
+    "typeRoots": ["./node_modules/@polkadot/ts", "./node_modules/@types"]
+  }
 }

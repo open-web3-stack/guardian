@@ -1,2 +1,4 @@
-node_modules/*
-**/__tests__/**
+**/build/*
+**/coverage/*
+**/node_modules/*
+**/__tests__/*
