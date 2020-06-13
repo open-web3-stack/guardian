@@ -1,6 +1,6 @@
 {
   "name": "@open-web3/example-guardian",
-  "version": "0.1.17",
+  "version": "0.2.0",
   "description": "Example guardian which monitors balance Deposit or Withdraw and store it in a CSV file",
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",

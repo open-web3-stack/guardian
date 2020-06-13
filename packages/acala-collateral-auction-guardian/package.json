@@ -1,6 +1,6 @@
 {
   "name": "@open-web3/acala-collateral-auction-guardian",
-  "version": "0.1.17",
+  "version": "0.2.0",
   "description": "Bid on collateral auction and swap dealed auction to make profit",
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
