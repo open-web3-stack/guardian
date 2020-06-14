@@ -5,7 +5,8 @@
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
   "bin": {
-    "acala-collateral-auction-guardian": "cli.js"
+    "acala-collateral-auction-guardian": "cli.js",
+    "simulate-liquidate-cdp": "simulate_liquidate_cdp_script.js"
   },
   "publishConfig": {
     "access": "public",
@@ -17,6 +18,10 @@
   },
   "homepage": "https://github.com/open-web3-stack/guardian",
   "dependencies": {
-    "@open-web3/guardian": "^0.3.0-beta.2"
+    "@open-web3/guardian": "^0.3.0-beta.2",
+    "@open-web3/api": "^0.3.0-beta.19"
+  },
+  "devDependencies": {
+    "@acala-network/e2e": "^0.1.13"
   }
 }
