@@ -35,4 +35,4 @@ guardians:
         arguments:
           key: XBTC
         actions:
-          - method:internal-price # do not change
+          - method: internal-price # do not change
