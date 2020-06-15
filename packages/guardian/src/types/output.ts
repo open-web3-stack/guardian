@@ -23,4 +23,20 @@ export type CollateralAuction = {
   lastBid: string | null;
 };
 
-export type Event = { name: string; args: any[] };
+export type Event = {
+  name: string;
+  args: any[];
+};
+
+export type Pool = {
+  currencyId: string;
+  price: string;
+  baseLiquidity: string;
+  otherLiquidity: string;
+};
+
+export type Interest = {
+  account: string;
+  currencyId: string;
+  interests: string;
+};

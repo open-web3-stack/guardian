@@ -9,6 +9,8 @@ import LoansTask from './LoansTask';
 import CollateralAuctionsTask from './CollateralAuctionsTask';
 import DebitAuctionsTask from './DebitAuctionsTask';
 import SurplusAuctionsTask from './SurplusAuctionsTask';
+import PoolsTask from './PoolsTask';
+import InterestsTask from './InterestsTask';
 
 export { createAcalaApi };
 
@@ -25,5 +27,9 @@ export default (api$: Observable<ApiRx>) => ({
     collateralAuctions: new CollateralAuctionsTask(api$),
     debitAuctions: new DebitAuctionsTask(api$),
     surplusAuctions: new SurplusAuctionsTask(api$),
+  },
+  dex: {
+    pools: new PoolsTask(api$),
+    interests: new InterestsTask(api$),
   },
 });
