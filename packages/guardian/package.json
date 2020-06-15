@@ -17,6 +17,7 @@
   "dependencies": {
     "@acala-network/api": "^0.2.0-beta.51",
     "@acala-network/app-util": "^0.2.0-beta.51",
+    "@open-web3/api": "^0.3.0-beta.19",
     "@hapi/joi": "^17.1.1",
     "@laminar/api": "^0.2.0-beta.105",
     "axios": "^0.19.2",
@@ -27,8 +28,6 @@
     "shelljs": "^0.8.3"
   },
   "devDependencies": {
-    "@open-web3/api": "^0.3.0-beta.19",
-    "@open-web3/util": "^0.3.0-beta.19",
     "@types/axios": "^0.14.0",
     "@types/big.js": "^4.0.5",
     "@types/hapi__joi": "^16.0.12",
