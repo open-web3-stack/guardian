@@ -12,7 +12,7 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "build": "polkadot-dev-build-ts && (cd packages/example-guardian && mkdir -p build && cp resources/* package.json build) && (cd packages/acala-collateral-auction-guardian && cp resources/* build)",
+    "build": "polkadot-dev-build-ts && (cd packages/example-guardian && cp resources/* build) && (cd packages/acala-collateral-auction-guardian && cp resources/* build)",
     "build:release": "polkadot-dev-ghact-build",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx packages && tsc --noEmit --pretty",
     "clean": "polkadot-dev-clean-build",

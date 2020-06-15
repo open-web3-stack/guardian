@@ -4,10 +4,6 @@
   "description": "Bid on collateral auction and swap dealed auction to make profit",
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
-  "bin": {
-    "acala-collateral-auction-guardian": "cli.js",
-    "simulate-liquidate-cdp": "simulate_liquidate_cdp_script.js"
-  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"

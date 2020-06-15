@@ -4,9 +4,6 @@
   "description": "Example guardian which monitors balance Deposit or Withdraw and store it in a CSV file",
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
-  "scripts": {
-    "example-guardian": "guardian-cli --config=config.yaml"
-  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
