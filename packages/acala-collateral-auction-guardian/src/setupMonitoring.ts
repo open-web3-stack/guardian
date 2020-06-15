@@ -10,10 +10,10 @@ const setupMonitoring = () => {
   const balance$ = new ReplaySubject<Balance>();
   const price$ = new ReplaySubject<Price>();
 
-  registerAction('events', events$);
-  registerAction('collateralAuctions', collateralAuctions$);
-  registerAction('balance', balance$);
-  registerAction('price', price$);
+  registerAction('internal-events', events$);
+  registerAction('internal-collateralAuctions', collateralAuctions$);
+  registerAction('internal-balance', balance$);
+  registerAction('internal-price', price$);
 
   return {
     events$,

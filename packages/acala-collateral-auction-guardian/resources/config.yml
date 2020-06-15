@@ -12,7 +12,7 @@ guardians:
         arguments:
           name: auctionManager.CollateralAuctionDealed
         actions:
-          - method: events
+          - method: internal-events # do not change
 
       CollateralAuction:
         task: honzon.collateralAuctions
@@ -20,7 +20,7 @@ guardians:
           account: all
           currencyId: XBTC
         actions:
-          - method: collateralAuctions
+          - method: internal-collateralAuctions # do not change
 
       AUSDBalance:
         task: account.balances
@@ -28,11 +28,11 @@ guardians:
           account: ${BIDDER_ADDRESS}
           currencyId: AUSD
         actions:
-          - method: balance
+          - method: internal-balance # do not change
 
       XBTCPrice:
         task: oracle.prices
         arguments:
           key: XBTC
         actions:
-          - method: price
+          - method:internal-price # do not change

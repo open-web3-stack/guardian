@@ -1,5 +1,5 @@
 import BN from 'big.js';
-import path from 'path';
+
 import { WsProvider } from '@polkadot/rpc-provider';
 import { Keyring } from '@polkadot/keyring';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
@@ -9,7 +9,6 @@ import { calcSwapTargetAmount, Fixed18 } from '@acala-network/app-util';
 import { ReplaySubject, combineLatest } from 'rxjs';
 import { map, filter, concatMap, take, withLatestFrom, catchError } from 'rxjs/operators';
 import { ApiManager } from '@open-web3/api';
-import guardian, { readConfig } from '@open-web3/guardian';
 
 import readConst from './const';
 import setupMonitoring from './setupMonitoring';
@@ -134,10 +133,8 @@ const run = async () => {
       (error) => console.error(error)
     );
 
-  const config = readConfig(path.resolve(__dirname, 'config.yml'));
-
   // start guardian
-  return guardian(config);
+  require('@open-web3/guardian-cli');
 };
 
 export default run;
