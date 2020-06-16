@@ -1,20 +1,22 @@
-import BN from 'big.js';
+#!/usr/bin/env node
 
+import BN from 'big.js';
 import { WsProvider } from '@polkadot/rpc-provider';
 import { Keyring } from '@polkadot/keyring';
 import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { options } from '@acala-network/api';
-import { DerivedDexPool } from '@acala-network/api-derive/types';
 import { calcSwapTargetAmount, Fixed18 } from '@acala-network/app-util';
-import { ReplaySubject, combineLatest } from 'rxjs';
-import { map, filter, concatMap, take, withLatestFrom, catchError } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
+import { concatMap, take, withLatestFrom, catchError } from 'rxjs/operators';
 import { ApiManager } from '@open-web3/api';
 
 import readConst from './const';
 import setupMonitoring from './setupMonitoring';
 
+const ONE = BN('1000000000000000000');
+
 const run = async () => {
-  const { nodeEndpoint, bidder_address, margin, bidder_suri } = readConst();
+  const { nodeEndpoint, bidderAddress, margin, bidderSURI } = readConst();
 
   await cryptoWaitReady();
 
@@ -23,49 +25,38 @@ const run = async () => {
 
   // setup keyring
   const keyring = new Keyring({ type: 'sr25519' });
-  keyring.addFromUri(bidder_suri!);
+  keyring.addFromUri(bidderSURI);
 
   const exchangeFee = Fixed18.fromParts(apiManager.api.consts.dex.getExchangeFee.toString());
   const slippage = Fixed18.fromRational(5, 1000); // 0.5% price slippage
 
-  const pool$ = new ReplaySubject<DerivedDexPool>();
-  apiManager.api.derive['dex'].pool('XBTC', (pool: DerivedDexPool) => {
-    pool$.next(pool);
-  });
-
-  const { events$, collateralAuctions$, balance$, price$ } = setupMonitoring();
+  const { events$, collateralAuctions$, balance$, pool$ } = setupMonitoring();
 
   collateralAuctions$
     .pipe(
       concatMap((auction) =>
-        combineLatest(balance$, price$).pipe(
+        combineLatest(balance$, pool$).pipe(
           take(1),
-          concatMap(async ([balance, price]) => {
-            console.log(auction, balance, price);
-            if (auction.lastBidder && auction.lastBidder === balance.account) {
-              // we're the last bidder
+          concatMap(async ([balance, pool]) => {
+            const maxBid = ONE.sub(ONE.mul(BN(margin)))
+              .mul(BN(pool.price))
+              .div(ONE);
+
+            if (auction.lastBid && BN(auction.lastBid).gte(maxBid)) {
+              console.error('last bid is bigger than our max bid');
               return null;
             }
 
-            const ONE = new BN('1000000000000000000');
-            const m = ONE.sub(ONE.mul(new BN(margin!)));
-            const maxBid = m.mul(new BN(price.value)).div(ONE);
-
-            if (auction.lastBid && new BN(auction.lastBid).gte(maxBid)) {
-              console.log('last bid is bigger than our max bid');
+            // simple check for enough free balance
+            if (BN(balance.free).lt(maxBid.mul(auction.amount))) {
+              console.error('not enough free balance');
               return null;
             }
 
-            console.log(`Bid auctionId: ${auction.auctionId} -> price: ${maxBid.toFixed()}`);
+            const tx = apiManager.api.tx.auction.bid(auction.auctionId, maxBid.toFixed());
+            const hash = await apiManager.signAndSend(tx, { account: keyring.getPair(bidderAddress) }).send;
 
-            const result = await apiManager.signAndSend(
-              apiManager.api.tx.auction.bid(auction.auctionId, maxBid.toFixed()),
-              {
-                account: keyring.getPair(balance.account),
-              }
-            ).send;
-
-            return result;
+            return hash;
           })
         )
       ),
@@ -76,7 +67,7 @@ const run = async () => {
     .subscribe(
       (hash) => {
         if (hash) {
-          console.log('Bid successful', `Hash: ${hash.toString()}`);
+          console.log('Bid sent', `Hash: ${hash.toString()}`);
         }
       },
       (error) => console.error(error)
@@ -85,42 +76,24 @@ const run = async () => {
   // CollateralAuctionDealed events
   events$
     .pipe(
-      map((event): { [key: string]: string } => {
-        console.log(event.args);
-        const [auctionId, collateralType, collateralAmount, winner, paymentAmount] = event.args;
-        return {
-          auctionId: auctionId.toString(),
-          collateralType: collateralType.toString(),
-          collateralAmount: collateralAmount.toString(),
-          winner: winner.toString(),
-          paymentAmount: paymentAmount.toString(),
-        };
-      }),
-      // make sure we're the winner
-      filter((event) => event.winner === bidder_address),
       withLatestFrom(pool$),
       concatMap(async ([event, pool]) => {
-        console.log(event, pool);
-        const { winner, collateralAmount: amount, collateralType: currencyId } = event;
+        const [, currencyId, amount] = event.args;
 
         const target = BN(
           calcSwapTargetAmount(
             Number.parseInt(amount),
-            Number.parseInt(pool.other.toString()),
-            Number.parseInt(pool.base.toString()),
+            Number.parseInt(pool.otherLiquidity),
+            Number.parseInt(pool.baseLiquidity),
             exchangeFee,
             slippage
           )
         ).toFixed();
 
-        console.log(`Swap ${amount} ${currencyId} for ${target} AUSD`);
+        const tx = apiManager.api.tx.dex.swapCurrency(currencyId, amount, 'AUSD', target);
+        const hash = await apiManager.signAndSend(tx, { account: keyring.getPair(bidderAddress) }).send;
 
-        const result = await apiManager.signAndSend(
-          apiManager.api.tx.dex.swapCurrency(currencyId as any, amount, 'AUSD', target),
-          { account: keyring.getPair(winner) }
-        ).send;
-
-        return result;
+        return hash;
       }),
       catchError((error) => {
         throw error;
@@ -128,7 +101,7 @@ const run = async () => {
     )
     .subscribe(
       (hash) => {
-        console.log('Swap successful', `Hash: ${hash.toString()}`);
+        console.log('Swap sent', `Hash: ${hash.toString()}`);
       },
       (error) => console.error(error)
     );

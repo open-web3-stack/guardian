@@ -42,6 +42,13 @@ describe('gates', () => {
     expect(parse('a', '< 10.4%')({ a: 0.105 })).toBe(false);
   });
 
+  it('works with strings', () => {
+    expect(parse('a', 'ne hello')({ a: 'world' })).toBe(true);
+    expect(parse('a', 'eq world')({ a: 'world' })).toBe(true);
+    expect(parse('a', 'ne hello')({ a: 'hello' })).toBe(false);
+    expect(parse('a', 'eq world')({ a: 'hello' })).toBe(false);
+  });
+
   it('condition works', () => {
     const expr = and(parse('a', '> 1.0'), or(or(parse('b', '< 50%'), parse('b', '> 100.0%')), parse('c.d', '> 20')));
 

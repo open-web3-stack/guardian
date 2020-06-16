@@ -19,10 +19,5 @@ module.exports = {
     'comma-dangle': 'off',
     'dot-notation': 'off',
     'no-useless-call': 'off',
-    '@typescript-eslint/parser': 'off',
-    '@typescript-eslint/camelcase': 'off',
-    '@typescript-eslint/no-var-requires': 'off',
-    '@typescript-eslint/no-non-null-assertion': 'off',
-    '@typescript-eslint/no-unnecessary-type-assertion': 'off',
   },
 };

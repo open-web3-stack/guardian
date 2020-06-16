@@ -1,8 +1,6 @@
 #!/usr/bin/env node
-'use strict';
 
-const guardian = require('@open-web3/guardian').default;
-const { readConfig } = require('@open-web3/guardian');
+import guardian, { readConfig } from '@open-web3/guardian';
 
 const { config: configPath } = require('yargs')
   .scriptName('guardian')
