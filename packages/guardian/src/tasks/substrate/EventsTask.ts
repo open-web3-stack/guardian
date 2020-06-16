@@ -21,7 +21,7 @@ export default class EventsTask extends SubstrateTask<Event> {
             return records.map(({ event }) => {
               const { section, method, data } = event;
               const name = `${section}.${method}`;
-              return { name, args: data };
+              return { name, args: data.toJSON() };
             });
           }),
           filter((event) => {

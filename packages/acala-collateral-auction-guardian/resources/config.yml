@@ -1,6 +1,6 @@
 version: '0.1'
 guardians:
-  acala-guardian:
+  acala-guardian: # do not change
     networkType: acalaChain
     network: mandala
     nodeEndpoint: ${NODE_ENDPOINT}
@@ -11,6 +11,8 @@ guardians:
         task: system.events
         arguments:
           name: auctionManager.CollateralAuctionDealed
+        conditions:
+          - args[3]: 'eq ${BIDDER_ADDRESS}' # do not change
         actions:
           - method: internal-events # do not change
 
@@ -19,6 +21,8 @@ guardians:
         arguments:
           account: all
           currencyId: XBTC
+        conditions:
+          - lastBidder: 'ne ${BIDDER_ADDRESS}' # do not change
         actions:
           - method: internal-collateralAuctions # do not change
 
@@ -30,9 +34,9 @@ guardians:
         actions:
           - method: internal-balance # do not change
 
-      XBTCPrice:
-        task: oracle.prices
+      XBTCPool:
+        task: dex.pools
         arguments:
-          key: XBTC
+          currencyId: XBTC
         actions:
-          - method: internal-price # do not change
+          - method: internal-pool # do not change

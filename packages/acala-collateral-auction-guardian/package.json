@@ -5,7 +5,7 @@
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
   "bin": {
-    "acala-collateral-auction-guardian": "cli.js"
+    "acala-collateral-auction-guardian": "index.js"
   },
   "publishConfig": {
     "access": "public",

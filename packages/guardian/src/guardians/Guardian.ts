@@ -71,7 +71,7 @@ export default abstract class Guardian implements IGuardian {
    * @memberof Guardian
    */
   public readonly start = () => {
-    console.log(`Starting guardian ${this.name} ...`);
+    console.log(`Starting guardian [${this.name}] ...`);
     this.subscriptions.map((i) => i.unsubscribe()); // unsubscribe any current subscription
     this.subscriptions = this.monitors.map((monitor) => monitor.listen());
   };
@@ -82,7 +82,7 @@ export default abstract class Guardian implements IGuardian {
    * @memberof Guardian
    */
   public readonly stop = () => {
-    console.log(`Stopping guardian ${this.name} ...`);
+    console.log(`Stopping guardian [${this.name}] ...`);
     this.subscriptions.map((i) => i.unsubscribe());
     this.subscriptions = [];
   };

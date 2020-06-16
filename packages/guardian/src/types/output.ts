@@ -25,7 +25,7 @@ export type CollateralAuction = {
 
 export type Event = {
   name: string;
-  args: any[];
+  args: any;
 };
 
 export type Pool = {
