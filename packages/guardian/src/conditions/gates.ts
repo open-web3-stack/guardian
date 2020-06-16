@@ -22,7 +22,7 @@ export const or = (...args: (boolean | Function)[]) => (input: any) => {
 };
 
 // eslint-disable-next-line
-const regex = /^\s*(?<op>$|!=|==|<|<=|>|>=)\s*(?<num>\$?\s*-?\s*\d[\d_\s]*(\.[\d\s]+)?\s*%?)\s*$|^\s*(?<cond>$|ne|eq)\s*(?<str>\$?\b\w*)\s*$/;
+const regex = /^\s*(?<op>!=|==|<|<=|>|>=)\s*(?<num>\$?\s*-?\s*\d[\d_\s]*(\.[\d\s]+)?\s*%?)\s*$|^\s*(?<cond>ne|eq)\s*(?<str>\$?\b\w*)\s*$/;
 
 export const parse = (prop: string, condition: string) => (input: any): boolean => {
   const lhs = get(input, prop);
