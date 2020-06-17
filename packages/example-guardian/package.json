@@ -1,6 +1,6 @@
 {
   "name": "@open-web3/example-guardian",
-  "version": "0.3.0-beta.9",
+  "version": "0.3.0-beta.10",
   "description": "Bid on collateral auction and swap dealed auction to make profit",
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
@@ -20,7 +20,7 @@
   "homepage": "https://github.com/open-web3-stack/guardian",
   "dependencies": {
     "@open-web3/api": "^0.3.0-beta.19",
-    "@open-web3/guardian": "^0.3.0-beta.9",
-    "@open-web3/guardian-cli": "^0.3.0-beta.9"
+    "@open-web3/guardian": "^0.3.0-beta.10",
+    "@open-web3/guardian-cli": "^0.3.0-beta.10"
   }
 }
