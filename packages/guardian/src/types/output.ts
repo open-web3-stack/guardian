@@ -2,8 +2,8 @@ export type Balance = {
   account: string;
   currencyId: string;
   free: string;
-  reserved: string;
-  frozen: string;
+  // reserved: string;
+  // frozen: string;
 };
 
 export type Price = {
@@ -17,6 +17,25 @@ export type CollateralAuction = {
   auctionId: number;
   amount: string;
   target: string;
+  startTime: number;
+  endTime: number | null;
+  lastBidder: string | null;
+  lastBid: string | null;
+};
+
+export type DebitAuction = {
+  auctionId: number;
+  amount: string;
+  fix: string;
+  startTime: number;
+  endTime: number | null;
+  lastBidder: string | null;
+  lastBid: string | null;
+};
+
+export type SurplusAuction = {
+  auctionId: number;
+  amount: string;
   startTime: number;
   endTime: number | null;
   lastBidder: string | null;

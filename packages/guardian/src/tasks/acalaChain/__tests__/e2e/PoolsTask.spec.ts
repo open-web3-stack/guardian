@@ -18,6 +18,19 @@ describe('PoolsTask e2e', () => {
       });
   });
 
+  it('works with currencyIds', (done) => {
+    const loans = new PoolsTask(api$);
+    loans
+      .run({
+        currencyId: ['ACA'],
+      })
+      .subscribe((autput) => {
+        console.log(autput);
+        expect(autput).toBeTruthy();
+        done();
+      });
+  });
+
   it('works with all', (done) => {
     const loans = new PoolsTask(api$);
     loans

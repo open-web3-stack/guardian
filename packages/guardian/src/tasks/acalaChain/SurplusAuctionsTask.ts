@@ -2,17 +2,11 @@ import Joi from '@hapi/joi';
 import { Observable, combineLatest } from 'rxjs';
 import { switchMap, map, flatMap } from 'rxjs/operators';
 import { Option } from '@polkadot/types/codec';
-import { AuctionInfo } from '@open-web3/orml-types/interfaces';
+import { AuctionInfo, AccountId, Balance } from '@open-web3/orml-types/interfaces';
 import { SurplusAuctionItem } from '@acala-network/types/interfaces';
 import AcalaTask from './AcalaTask';
 import { getAuctionsIds, unwrapOptionalCodec } from './helpers';
-
-export type SurplusAuction = {
-  auctionId: number;
-  amount: string;
-  startTime: number;
-  endTime: number | null;
-};
+import { SurplusAuction } from '../../types';
 
 export default class SurplusAuctionsTask extends AcalaTask<SurplusAuction> {
   validationSchema() {
@@ -31,11 +25,19 @@ export default class SurplusAuctionsTask extends AcalaTask<SurplusAuction> {
               ),
             ]).pipe(
               map(([auction, surplus]) => {
+                let lastBidder: AccountId | null = null;
+                let lastBid: Balance | null = null;
+                if (auction.bid.isSome) {
+                  [lastBidder, lastBid] = auction.bid.unwrap();
+                }
+
                 return {
                   auctionId,
                   amount: surplus.amount.toString(),
                   startTime: Number.parseInt(surplus.startTime.toString()),
                   endTime: auction.end.isSome ? Number.parseInt(auction.end.toString()) : null,
+                  lastBidder: lastBidder ? lastBidder.toString() : null,
+                  lastBid: lastBid ? lastBid.toString() : null,
                 };
               })
             );

@@ -10,33 +10,30 @@ guardians:
       AuctionDealed:
         task: system.events
         arguments:
-          name: auctionManager.CollateralAuctionDealed
+          name: auctionManager.SurplusAuctionDealed
         conditions:
-          - args[3]: 'eq ${BIDDER_ADDRESS}' # do not change
+          - args[2]: 'eq ${BIDDER_ADDRESS}' # do not change
         actions:
-          - method: internal-events # do not change
+          - method: internal-surplus-auction-dealed # do not change
 
-      CollateralAuction:
-        task: honzon.collateralAuctions
-        arguments:
-          account: all
-          currencyId: XBTC
+      SurplusAuction:
+        task: honzon.surplusAuctions
         conditions:
           - lastBidder: 'ne ${BIDDER_ADDRESS}' # do not change
         actions:
-          - method: internal-collateralAuctions # do not change
+          - method: internal-surplus-auctions # do not change
 
-      AUSDBalance:
+      ACABalance:
         task: account.balances
         arguments:
           account: ${BIDDER_ADDRESS}
-          currencyId: AUSD
+          currencyId: ACA
         actions:
           - method: internal-balance # do not change
 
-      XBTCPool:
+      ACAPool:
         task: dex.pools
         arguments:
-          currencyId: XBTC
+          currencyId: ACA
         actions:
           - method: internal-pool # do not change

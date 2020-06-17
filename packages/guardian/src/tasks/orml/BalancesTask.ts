@@ -1,8 +1,8 @@
-import BN from 'bn.js';
 import Joi from '@hapi/joi';
 import { Observable, from } from 'rxjs';
 import { switchMap, flatMap, map } from 'rxjs/operators';
 import { ApiRx } from '@polkadot/api';
+import { Balance as ORMLBalance } from '@open-web3/orml-types/interfaces';
 import SubstrateTask from '../substrate/SubstrateTask';
 import { createAccountCurrencyIdPairs } from '../helpers';
 import { Balance } from '../../types';
@@ -29,16 +29,12 @@ export default class BalancesTask extends SubstrateTask<Balance> {
   }
 
   getBalance(api: ApiRx, account: string, currencyId: string): Observable<Balance> {
-    const key1 = api.query.tokens.accounts.creator.meta.type.asDoubleMap.key1.toString();
-    const arg = key1 === 'CurrencyId' ? [currencyId, account] : [account, currencyId];
-    return api.query.tokens.accounts(...arg).pipe(
-      map((result: any) => {
+    return api.derive['currencies'].balance(account, currencyId).pipe(
+      map((result: ORMLBalance) => {
         return {
           account,
           currencyId,
-          free: result.free.toString(),
-          reserved: result.reserved.toString(),
-          frozen: result.frozen ? result.frozen.toString() : BN.max(result.feeFrozen, result.miscFrozen).toString(),
+          free: result.toString(),
         };
       })
     );
