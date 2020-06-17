@@ -1,4 +1,5 @@
 import { ReplaySubject } from 'rxjs';
+import { filter } from 'rxjs/operators';
 import { CollateralAuction, DebitAuction, SurplusAuction, Balance, Event, Pool } from '@open-web3/guardian/types';
 import registerAction from './registerAction';
 
@@ -37,7 +38,7 @@ const setupMonitoring = () => {
     debitAuctions$,
     surplusAuctions$,
     balance$,
-    pool$,
+    pool$: pool$.pipe(filter((i) => i.price > '0')),
   };
 };
 
