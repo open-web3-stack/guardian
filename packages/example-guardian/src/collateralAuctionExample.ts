@@ -1,36 +1,22 @@
 #!/usr/bin/env node
 
 import BN from 'big.js';
-import { WsProvider } from '@polkadot/rpc-provider';
-import { Keyring } from '@polkadot/keyring';
-import { cryptoWaitReady } from '@polkadot/util-crypto';
-import { options } from '@acala-network/api';
-import { calcSwapTargetAmount, Fixed18 } from '@acala-network/app-util';
+import { calcSwapTargetAmount } from '@acala-network/app-util';
 import { combineLatest } from 'rxjs';
 import { concatMap, take, withLatestFrom, catchError } from 'rxjs/operators';
-import { ApiManager } from '@open-web3/api';
 
 import readConst from './const';
+import setupApi from './setupApi';
 import setupMonitoring from './setupMonitoring';
 
 const ONE = BN('1000000000000000000');
 
 const run = async () => {
-  const { nodeEndpoint, bidderAddress, margin, bidderSURI } = readConst();
+  const { nodeEndpoint, bidderAddress, margin, bidderSURI } = readConst('collateral-auction-guardian.yml');
 
-  await cryptoWaitReady();
+  const { exchangeFee, slippage, bid, swap } = await setupApi(nodeEndpoint, bidderSURI, bidderAddress);
 
-  const ws = new WsProvider(nodeEndpoint);
-  const apiManager = await ApiManager.create(options({ provider: ws }));
-
-  // setup keyring
-  const keyring = new Keyring({ type: 'sr25519' });
-  keyring.addFromUri(bidderSURI);
-
-  const exchangeFee = Fixed18.fromParts(apiManager.api.consts.dex.getExchangeFee.toString());
-  const slippage = Fixed18.fromRational(5, 1000); // 0.5% price slippage
-
-  const { events$, collateralAuctions$, balance$, pool$ } = setupMonitoring();
+  const { collateralAuctionDealed$, collateralAuctions$, balance$, pool$ } = setupMonitoring();
 
   collateralAuctions$
     .pipe(
@@ -48,15 +34,12 @@ const run = async () => {
             }
 
             // simple check for enough free balance
-            if (BN(balance.free).lt(maxBid.mul(auction.amount))) {
+            if (BN(balance.free).lt(maxBid.mul(BN(auction.amount)).div(ONE))) {
               console.error('not enough free balance');
               return null;
             }
 
-            const tx = apiManager.api.tx.auction.bid(auction.auctionId, maxBid.toFixed());
-            const hash = await apiManager.signAndSend(tx, { account: keyring.getPair(bidderAddress) }).send;
-
-            return hash;
+            return await bid(auction.auctionId, maxBid.toFixed(0));
           })
         )
       ),
@@ -73,8 +56,7 @@ const run = async () => {
       (error) => console.error(error)
     );
 
-  // CollateralAuctionDealed events
-  events$
+  collateralAuctionDealed$
     .pipe(
       withLatestFrom(pool$),
       concatMap(async ([event, pool]) => {
@@ -88,12 +70,9 @@ const run = async () => {
             exchangeFee,
             slippage
           )
-        ).toFixed();
+        ).toFixed(0);
 
-        const tx = apiManager.api.tx.dex.swapCurrency(currencyId, amount, 'AUSD', target);
-        const hash = await apiManager.signAndSend(tx, { account: keyring.getPair(bidderAddress) }).send;
-
-        return hash;
+        return await swap(currencyId, amount, 'AUSD', target);
       }),
       catchError((error) => {
         throw error;

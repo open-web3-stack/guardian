@@ -1,10 +1,10 @@
 import path from 'path';
 import { readConfig } from '@open-web3/guardian';
 
-const read = () => {
+const read = (configName: string) => {
   if (!process.argv.find((i) => i.startsWith('--config'))) {
     process.argv.push('--config');
-    process.argv.push(path.resolve(__dirname, 'config.yml'));
+    process.argv.push(path.resolve(__dirname, configName));
   }
 
   const { config: configPath } = require('yargs')

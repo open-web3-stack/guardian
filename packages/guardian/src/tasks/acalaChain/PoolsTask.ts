@@ -1,10 +1,9 @@
 import Joi from '@hapi/joi';
-import { Observable, from, combineLatest } from 'rxjs';
-import { switchMap, map, flatMap, filter } from 'rxjs/operators';
+import { Observable, from } from 'rxjs';
+import { switchMap, map, flatMap } from 'rxjs/operators';
 import { DerivedDexPool } from '@acala-network/api-derive';
-import { TimestampedValue } from '@open-web3/orml-types/interfaces';
+import { Fixed18 } from '@acala-network/app-util';
 import AcalaTask from './AcalaTask';
-import { getValueFromTimestampValue } from '../helpers';
 import { Pool } from '../../types';
 
 export default class PoolsTask extends AcalaTask<Pool> {
@@ -34,17 +33,18 @@ export default class PoolsTask extends AcalaTask<Pool> {
 
         return from(currencyId).pipe(
           flatMap((currencyId) =>
-            combineLatest([
-              api.derive['dex'].pool(currencyId) as Observable<DerivedDexPool>,
-              api.derive['price'].price(currencyId) as Observable<TimestampedValue>,
-            ]).pipe(
-              filter(([, price]) => getValueFromTimestampValue(price).toString().length > 0),
-              map(([pool, price]) => {
+            (api.derive['dex'].pool(currencyId) as Observable<DerivedDexPool>).pipe(
+              map((pool) => {
+                const baseLiquidity = pool.base.toString();
+                const otherLiquidity = pool.other.toString();
+
+                const price = Fixed18.fromRational(baseLiquidity, otherLiquidity).innerToString();
+
                 return {
                   currencyId,
-                  price: getValueFromTimestampValue(price).toString(),
-                  baseLiquidity: pool.base.toString(),
-                  otherLiquidity: pool.other.toString(),
+                  price,
+                  baseLiquidity,
+                  otherLiquidity,
                 };
               })
             )

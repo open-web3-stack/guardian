@@ -1,0 +1,42 @@
+version: '0.1'
+guardians:
+  acala-guardian: # do not change
+    networkType: acalaChain
+    network: mandala
+    nodeEndpoint: ${NODE_ENDPOINT}
+    confirmation: finalize
+
+    monitors:
+      AuctionDealed:
+        task: system.events
+        arguments:
+          name: auctionManager.CollateralAuctionDealed
+        conditions:
+          - args[3]: 'eq ${BIDDER_ADDRESS}' # do not change
+        actions:
+          - method: internal-collateral-auction-dealed # do not change
+
+      CollateralAuction:
+        task: honzon.collateralAuctions
+        arguments:
+          account: all
+          currencyId: XBTC
+        conditions:
+          - lastBidder: 'ne ${BIDDER_ADDRESS}' # do not change
+        actions:
+          - method: internal-collateral-auctions # do not change
+
+      AUSDBalance:
+        task: account.balances
+        arguments:
+          account: ${BIDDER_ADDRESS}
+          currencyId: AUSD
+        actions:
+          - method: internal-balance # do not change
+
+      XBTCPool:
+        task: dex.pools
+        arguments:
+          currencyId: XBTC
+        actions:
+          - method: internal-pool # do not change
