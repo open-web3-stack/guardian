@@ -4,7 +4,7 @@ import { createAcalaApi } from '../../../acalaChain';
 import BalancesTask from '../../BalancesTask';
 
 describe('BalancesTask with laminarChain', () => {
-  const api$ = createLaminarApi('wss://dev-node.laminar-chain.laminar.one/ws').pipe(map((a) => a.api));
+  const api$ = createLaminarApi('wss://testnet-node-1.laminar-chain.laminar.one/ws').pipe(map((a) => a.api));
   const task = new BalancesTask(api$);
 
   jest.setTimeout(60_000);

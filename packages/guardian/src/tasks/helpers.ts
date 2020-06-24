@@ -45,3 +45,7 @@ export const getValueFromTimestampValue = (origin: TimestampedValue): Codec => {
 
   return origin.value;
 };
+
+export const isNonNull = <T>(value: T): value is NonNullable<T> => {
+  return value != null;
+};

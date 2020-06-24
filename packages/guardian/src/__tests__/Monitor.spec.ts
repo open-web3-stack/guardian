@@ -55,8 +55,6 @@ describe('Laminar monitors', () => {
 
     const subscription = monitor.listen();
 
-    await monitor.output$.toPromise();
-
     expect(axiosSpy).toBeCalledTimes(0);
     expect(shellSpy).toBeCalledTimes(1);
 
@@ -69,10 +67,10 @@ describe('Laminar monitors', () => {
     const config: MonitorConfig = {
       task: 'synthetic.liquidityPool',
       arguments: {
-        poolId: 'all',
-        currencyId: ['FEUR', 'FJPY', 'FBTC'],
+        poolId: '0',
+        currencyId: ['FEUR'],
       },
-      conditions: [{ balance: '> 1000' }],
+      conditions: [{ liquidity: '>= 1000' }],
       actions: [
         {
           method: 'POST',
@@ -88,8 +86,6 @@ describe('Laminar monitors', () => {
     const monitor = new Monitor('synthetic.liquidityPool', tasks.synthetic.liquidityPool, config);
 
     const subscription = monitor.listen();
-
-    await monitor.output$.toPromise();
 
     expect(axiosSpy).toBeCalledTimes(1);
     expect(shellSpy).toBeCalledTimes(1);

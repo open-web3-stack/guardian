@@ -1,7 +1,12 @@
 jest.mock('@laminar/api');
 
-import { from } from 'rxjs';
+import { from, of } from 'rxjs';
 import { LaminarApi } from '@laminar/api';
+import { TypeRegistry } from '@polkadot/types';
+import { types } from '@laminar/types';
+
+const register = new TypeRegistry();
+register.register(types);
 
 const MockLaminarApi = {
   constructor: jest.fn(),
@@ -20,40 +25,25 @@ const MockLaminarApi = {
     }),
   },
   synthetic: {
-    allPoolIds: jest.fn(() => from([[1]])),
-    poolInfo: jest.fn((poolId) => {
-      return from([
-        {
-          poolId,
-          owners: 'who',
-          balance: '1000',
-          options: [
-            {
-              additionalCollateralRatio: 1,
-              askSpread: 1,
-              bidSpread: 1,
-              syntheticEnabled: true,
-              tokenId: 'FEUR',
-            },
-          ],
-        },
-        {
-          poolId,
-          owners: 'who',
-          balance: '1200',
-          options: [
-            {
-              additionalCollateralRatio: 1,
-              askSpread: 1,
-              bidSpread: 1,
-              syntheticEnabled: true,
-              tokenId: 'FEUR',
-            },
-          ],
-        },
-      ]);
-    }),
+    allPoolIds: jest.fn(() => of([1])),
+    poolInfo: jest.fn((poolId) =>
+      of({
+        poolId,
+        owners: 'who',
+        balance: '1000',
+        options: [
+          {
+            additionalCollateralRatio: 1,
+            askSpread: 1,
+            bidSpread: 1,
+            syntheticEnabled: true,
+            tokenId: 'FEUR',
+          },
+        ],
+      })
+    ),
   },
+  api: { query: { syntheticTokens: { ratios: jest.fn(() => of(register.createType('SyntheticTokensRatio'))) } } },
 };
 
 export default () => {
