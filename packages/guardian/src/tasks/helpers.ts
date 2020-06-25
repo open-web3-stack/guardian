@@ -1,6 +1,9 @@
 import { flatMap, map } from 'lodash';
 import { Codec } from '@polkadot/types/types';
 import { TimestampedValue } from '@open-web3/orml-types/interfaces';
+import { Observable, timer } from 'rxjs';
+import { switchMap, distinctUntilChanged } from 'rxjs/operators';
+import { RpcRxResult } from '@polkadot/api/types';
 
 export /**
  * Create pair combination of account and currencyId
@@ -48,4 +51,17 @@ export const getValueFromTimestampValue = (origin: TimestampedValue): Codec => {
 
 export const isNonNull = <T>(value: T): value is NonNullable<T> => {
   return value != null;
+};
+
+export const observeRPC = <T>(
+  method: RpcRxResult<any>,
+  params: Parameters<any>,
+  period: number = 30_000
+): Observable<T> => {
+  return timer(0, period).pipe(
+    switchMap(() => {
+      return method(...params) as Observable<T>;
+    }),
+    distinctUntilChanged((a, b) => JSON.stringify(a) !== JSON.stringify(b))
+  );
 };

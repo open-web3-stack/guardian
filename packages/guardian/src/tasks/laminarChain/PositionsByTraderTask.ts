@@ -32,7 +32,7 @@ export default class PositionsByTraderTask extends LaminarTask<Position> {
                       pair,
                       leverage,
                       marginHeld,
-                      accumulatedSwap: String(openAccumulatedSwapRate),
+                      accumulatedSwap: '', // TODO:,
                       profit: '-', // TODO:
                     };
                   })

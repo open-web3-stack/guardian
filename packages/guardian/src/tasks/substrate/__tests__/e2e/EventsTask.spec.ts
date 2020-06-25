@@ -12,7 +12,7 @@ describe('EventsTask', () => {
 
   it('works with single name', (done) => {
     task.run({ name: 'system.ExtrinsicSuccess' }).subscribe((output) => {
-      console.log(output.args.toString());
+      console.log(output.args);
       expect(output.args).toBeTruthy();
       done();
     });
@@ -20,7 +20,7 @@ describe('EventsTask', () => {
 
   it('works with multiple names', (done) => {
     task.run({ name: ['system.ExtrinsicSuccess'] }).subscribe((output) => {
-      console.log(output.args.toString());
+      console.log(output.args);
       expect(output.args).toBeTruthy();
       done();
     });

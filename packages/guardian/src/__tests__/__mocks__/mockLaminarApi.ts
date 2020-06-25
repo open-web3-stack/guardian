@@ -43,7 +43,20 @@ const MockLaminarApi = {
       })
     ),
   },
-  api: { query: { syntheticTokens: { ratios: jest.fn(() => of(register.createType('SyntheticTokensRatio'))) } } },
+  api: {
+    query: {
+      syntheticTokens: {
+        positions: jest.fn(() =>
+          of(
+            register.createType('SyntheticPosition', {
+              collateral: '2054470869988219348',
+              synthetic: '1653740113770234636',
+            })
+          )
+        ),
+      },
+    },
+  },
 };
 
 export default () => {

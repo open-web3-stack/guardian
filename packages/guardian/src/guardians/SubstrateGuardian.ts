@@ -5,10 +5,11 @@ import { WsProvider } from '@polkadot/rpc-provider';
 import { SubstrateGuardianConfig } from '../types';
 import { createSubstrateTasks } from '../tasks';
 import Guardian from './Guardian';
+import { customTypes } from '../customTypes';
 
 const createApi = (nodeEndpoint: string | string[]) => {
   const api$ = new AsyncSubject<ApiRx>();
-  const api = new ApiRx({ provider: new WsProvider(nodeEndpoint) });
+  const api = new ApiRx({ provider: new WsProvider(nodeEndpoint), types: customTypes });
   api.once('ready', () => {
     api$.next(api);
     api$.complete();

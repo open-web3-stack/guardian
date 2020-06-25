@@ -69,10 +69,10 @@ export type LiquidityPool = {
   askSpread: string | null;
   additionalCollateralRatio: number | null;
   enabled: boolean;
-  syntheticIssuance: number | null;
-  collateralBalance: number | null;
-  collateralRatio: number | null;
-  isSafe: boolean | null;
+  syntheticIssuance: string;
+  collateralBalance: string;
+  collateralRatio: string;
+  isSafe: boolean;
 };
 
 export type Position = {
