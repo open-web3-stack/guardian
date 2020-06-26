@@ -4,9 +4,11 @@ import { map, take } from 'rxjs/operators';
 import { TypeRegistry } from '@polkadot/types';
 import { Option, UInt } from '@polkadot/types/codec';
 import { types } from '@acala-network/types';
+import { customTypes } from '../../../../customTypes';
 
 const register = new TypeRegistry();
 register.register(types);
+register.register(customTypes);
 
 const createIndex = (index: number) => new UInt(register, index);
 

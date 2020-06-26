@@ -4,9 +4,11 @@ import { from, of } from 'rxjs';
 import { LaminarApi } from '@laminar/api';
 import { TypeRegistry } from '@polkadot/types';
 import { types } from '@laminar/types';
+import { customTypes } from '../../customTypes';
 
 const register = new TypeRegistry();
 register.register(types);
+register.register(customTypes);
 
 const MockLaminarApi = {
   constructor: jest.fn(),
@@ -53,6 +55,14 @@ const MockLaminarApi = {
               synthetic: '1653740113770234636',
             })
           )
+        ),
+        ratios: jest.fn(() => of(register.createType('SyntheticTokensRatio'))),
+      },
+    },
+    rpc: {
+      oracle: {
+        getValue: jest.fn(() =>
+          of(register.createType('Option<TimestampedValue>', { timestamp: '12345', value: (1.1 * 1e18).toString() }))
         ),
       },
     },

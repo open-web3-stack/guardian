@@ -2,7 +2,7 @@ import { flatMap, map } from 'lodash';
 import { Codec } from '@polkadot/types/types';
 import { TimestampedValue } from '@open-web3/orml-types/interfaces';
 import { Observable, timer } from 'rxjs';
-import { switchMap, distinctUntilChanged } from 'rxjs/operators';
+import { switchMap, distinctUntilChanged, publishReplay, refCount } from 'rxjs/operators';
 import { RpcRxResult } from '@polkadot/api/types';
 
 export /**

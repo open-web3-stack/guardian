@@ -4,9 +4,11 @@ import BN from 'bn.js';
 import { TypeRegistry } from '@polkadot/types';
 import { Vec } from '@polkadot/types/codec';
 import { types } from '@acala-network/types';
+import { customTypes } from '../../../../customTypes';
 
 const register = new TypeRegistry();
 register.register(types);
+register.register(customTypes);
 
 const MockLoan = {
   ApiRx: jest.fn().mockImplementation(() => {
