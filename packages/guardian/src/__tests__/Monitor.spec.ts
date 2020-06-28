@@ -9,6 +9,7 @@ import Monitor from '../Monitor';
 import { MonitorConfig } from '../types';
 import { createLaminarApi } from '../tasks/laminarChain';
 import { createLaminarTasks } from '../tasks';
+import { take } from 'rxjs/operators';
 
 describe('Laminar monitors', () => {
   mockLaminarApi();
@@ -55,7 +56,7 @@ describe('Laminar monitors', () => {
 
     const subscription = monitor.listen();
 
-    await monitor.output$.toPromise();
+    await monitor.output$.pipe(take(1)).toPromise();
 
     expect(axiosSpy).toBeCalledTimes(0);
     expect(shellSpy).toBeCalledTimes(1);
@@ -69,10 +70,10 @@ describe('Laminar monitors', () => {
     const config: MonitorConfig = {
       task: 'synthetic.liquidityPool',
       arguments: {
-        poolId: 'all',
-        currencyId: ['FEUR', 'FJPY', 'FBTC'],
+        poolId: '0',
+        currencyId: ['FEUR'],
       },
-      conditions: [{ balance: '> 1000' }],
+      conditions: [{ liquidity: '>= 1000' }],
       actions: [
         {
           method: 'POST',
@@ -89,7 +90,7 @@ describe('Laminar monitors', () => {
 
     const subscription = monitor.listen();
 
-    await monitor.output$.toPromise();
+    await monitor.output$.pipe(take(1)).toPromise();
 
     expect(axiosSpy).toBeCalledTimes(1);
     expect(shellSpy).toBeCalledTimes(1);

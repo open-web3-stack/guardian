@@ -59,3 +59,32 @@ export type Interest = {
   currencyId: string;
   interests: string;
 };
+
+export type LiquidityPool = {
+  poolId: string;
+  currencyId: string;
+  owner: string;
+  liquidity: string;
+  bidSpread: string | null;
+  askSpread: string | null;
+  additionalCollateralRatio: number | null;
+  enabled: boolean;
+  syntheticIssuance: string;
+  collateralBalance: string;
+  collateralRatio: string;
+  isSafe: boolean;
+};
+
+export type Position = {
+  account: string;
+  liquidityPoolId: string;
+  positionId: string;
+  pair: {
+    base: string;
+    quote: string;
+  };
+  leverage: string;
+  marginHeld: string;
+  accumulatedSwap: string;
+  profit: string;
+};

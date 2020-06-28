@@ -1,17 +1,36 @@
-import { get, isArray, isNil } from 'lodash';
 import Joi from '@hapi/joi';
-import { from, Observable } from 'rxjs';
-import { switchMap, flatMap } from 'rxjs/operators';
-import { LaminarApi } from '@laminar/api';
+import { Observable, from, combineLatest } from 'rxjs';
+import { switchMap, flatMap, map, filter, concatAll } from 'rxjs/operators';
+import { MarginPosition, LaminarApi } from '@laminar/api';
 import LaminarTask from './LaminarTask';
+import { Position } from '../../types';
+import { isNonNull } from '../helpers';
+import unrealizedPL from './unrealizedPL';
+import accumulatedSwap from './accumulatedSwap';
 
-const getPosition = (laminarApi: LaminarApi, positionId: any): Observable<any> => {
-  const method = get(laminarApi.api.query, 'margin.positioins');
-  if (isNil(method)) throw Error('api.query.margin.positions not found');
-  return method.call(undefined, positionId);
+const mapPosition = (
+  api: LaminarApi,
+  account: string,
+  positionId: string,
+  position: MarginPosition
+): Observable<Position> => {
+  const { poolId: liquidityPoolId, pair, leverage, marginHeld } = position;
+
+  return combineLatest([accumulatedSwap(api)(position), unrealizedPL(api)(position)]).pipe(
+    map(([accumulatedSwap, unrealized]) => ({
+      account,
+      liquidityPoolId,
+      positionId,
+      pair,
+      leverage,
+      marginHeld,
+      accumulatedSwap: accumulatedSwap.toFixed(0),
+      profit: unrealized.toFixed(0),
+    }))
+  );
 };
 
-export default class PositionsByTraderTask extends LaminarTask<any> {
+export default class PositionsByTraderTask extends LaminarTask<Position> {
   validationSchema() {
     return Joi.object({
       account: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
@@ -21,22 +40,24 @@ export default class PositionsByTraderTask extends LaminarTask<any> {
   init(params: { account: string | string[] }) {
     const { account } = params;
 
+    const accounts$ = from(Array.isArray(account) ? account : [account]);
+
     return this.chainApi$.pipe(
-      switchMap((laminarApi) => {
-        // map multiple accounts
-        if (isArray(account)) {
-          return from(account).pipe(
-            flatMap((account: string) => laminarApi.margin.positionsByTrader(account)),
-            flatMap((positions) => positions),
-            flatMap(({ positionId }) => getPosition(laminarApi, positionId))
-          );
-        }
-        // map single account
-        return laminarApi.margin.positionsByTrader(account).pipe(
-          flatMap((positions) => positions),
-          flatMap(({ positionId }) => getPosition(laminarApi, positionId))
-        );
-      })
+      switchMap((laminarApi) =>
+        accounts$.pipe(
+          flatMap((account) =>
+            laminarApi.margin.positionsByTrader(account).pipe(
+              concatAll(),
+              flatMap(({ positionId }) =>
+                laminarApi.margin.position(positionId).pipe(
+                  filter(isNonNull),
+                  flatMap((position) => mapPosition(laminarApi, account, positionId, position))
+                )
+              )
+            )
+          )
+        )
+      )
     );
   }
 }

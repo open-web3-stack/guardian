@@ -2,7 +2,7 @@ import _ from 'lodash';
 import Joi from '@hapi/joi';
 import { switchMap, flatMap, filter } from 'rxjs/operators';
 import SubstrateTask from './SubstrateTask';
-import { Event } from '@open-web3/guardian/types';
+import { Event } from '../../types';
 
 export default class EventsTask extends SubstrateTask<Event> {
   validationSchema() {

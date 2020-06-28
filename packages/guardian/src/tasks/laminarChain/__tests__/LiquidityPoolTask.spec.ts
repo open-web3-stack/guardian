@@ -5,14 +5,20 @@ describe('LiquidityPool', () => {
   const task = new LiquidityPoolTask(never());
 
   it('works with valid arguments', () => {
-    expect(task.validateCallArguments({ poolId: 1, currencyId: null })).toStrictEqual({ poolId: 1, currencyId: null });
-    expect(task.validateCallArguments({ poolId: [1], currencyId: null })).toStrictEqual({
-      poolId: [1],
-      currencyId: null,
+    expect(task.validateCallArguments({ poolId: 1, currencyId: 'fTokens' })).toStrictEqual({
+      poolId: 1,
+      currencyId: 'fTokens',
+      period: 30000,
     });
-    expect(task.validateCallArguments({ poolId: 'all', currencyId: null })).toStrictEqual({
+    expect(task.validateCallArguments({ poolId: [1], currencyId: 'all', period: 10000 })).toStrictEqual({
+      poolId: [1],
+      currencyId: 'all',
+      period: 10000,
+    });
+    expect(task.validateCallArguments({ poolId: 'all', currencyId: ['FEUR', 'FJPY'] })).toStrictEqual({
       poolId: 'all',
-      currencyId: null,
+      currencyId: ['FEUR', 'FJPY'],
+      period: 30000,
     });
   });
 

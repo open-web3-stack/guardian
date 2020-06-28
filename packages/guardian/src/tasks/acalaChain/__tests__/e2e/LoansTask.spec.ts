@@ -3,7 +3,7 @@ import LoansTask from '../../LoansTask';
 
 describe('LoansTaks e2e', () => {
   jest.setTimeout(60_000);
-  const api$ = createAcalaApi(['ws://localhost:9944', 'wss://testnet-node-2.acala.laminar.one/ws']);
+  const api$ = createAcalaApi(['ws://localhost:9944', 'wss://testnet-node-1.acala.laminar.one/ws']);
 
   it('works with currencyId', (done) => {
     const loans = new LoansTask(api$);
