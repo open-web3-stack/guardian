@@ -4,6 +4,7 @@ class FixedI128 extends i128 {
   toHuman() {
     return this.toString(10);
   }
+
   toJSON() {
     return this.toString(10);
   }
@@ -13,6 +14,7 @@ class Balance extends u128 {
   toHuman() {
     return this.toString(10);
   }
+
   toJSON() {
     return this.toString(10);
   }
