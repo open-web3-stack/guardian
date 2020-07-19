@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import Big from 'big.js';
 import { Codec } from '@polkadot/types/types';
 import { Option } from '@polkadot/types/codec';
@@ -33,14 +32,10 @@ const createAccountCurrencyIdPairs = (
   account: string | string[],
   currencyId: string | string[]
 ): { account: string; currencyId: string }[] => {
-  if (typeof account === 'string') {
-    account = [account];
-  }
-  if (typeof currencyId === 'string') {
-    currencyId = [currencyId];
-  }
+  const accounts = Array.isArray(account) ? account : [account];
+  const currencyIds = Array.isArray(currencyId) ? currencyId : [currencyId];
 
-  return _.flatMap(account, (account) => _.map(currencyId, (currencyId) => ({ account, currencyId })));
+  return accounts.flatMap((account) => currencyIds.map((currencyId) => ({ account, currencyId })));
 };
 
 // FIXME: a trick to get value from TimestampedValue, need to fix

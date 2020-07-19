@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import Joi from '@hapi/joi';
 import { flatMap, filter } from 'rxjs/operators';
 import BaseSubstrateGuardian from '../../guardians/BaseSubstrateGuardian';
@@ -26,7 +25,7 @@ export default class EventsTask extends Task<{ name: string | string[] }, Event>
         });
       }),
       filter((event) => {
-        if (_.isArray(name)) {
+        if (Array.isArray(name)) {
           return name.includes(event.name);
         }
         return event.name === name;
