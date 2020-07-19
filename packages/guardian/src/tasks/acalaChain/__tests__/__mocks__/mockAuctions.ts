@@ -66,3 +66,5 @@ ApiRx.create.mockImplementation(() => MockAuctions);
 WsProvider.mockImplementation(() => ({
   constructor: jest.fn(),
 }));
+
+import '../../../../__tests__/__mocks__/mockApiPromise';

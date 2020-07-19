@@ -1,6 +1,5 @@
 jest.mock('@polkadot/api');
 
-import { of } from 'rxjs';
 import { TypeRegistry } from '@polkadot/types';
 import { types } from '@laminar/types';
 import { customTypes } from '../../customTypes';
