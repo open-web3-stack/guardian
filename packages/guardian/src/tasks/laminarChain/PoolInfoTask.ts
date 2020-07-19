@@ -1,27 +1,26 @@
 import Joi from '@hapi/joi';
 import { of, Observable } from 'rxjs';
-import { switchMap, flatMap, filter, concatAll } from 'rxjs/operators';
+import { flatMap, filter, concatAll } from 'rxjs/operators';
 import { MarginPoolInfo, LaminarApi } from '@laminar/api';
-import LaminarTask from './LaminarTask';
 import { isNonNull } from '../helpers';
+import Task from '../Task';
+import { LaminarGuardian } from '../../guardians';
 
-export default class PoolInfoTask extends LaminarTask<MarginPoolInfo> {
+export default class PoolInfoTask extends Task<{ poolId: number | number[] | 'all' }, MarginPoolInfo> {
   validationSchema() {
     return Joi.object({
       poolId: Joi.alt(Joi.number(), Joi.array().min(1).items(Joi.number()), Joi.valid('all')).required(),
     }).required();
   }
 
-  init(params: { poolId: number | number[] | 'all' }) {
-    const { poolId } = params;
+  async start(guardian: LaminarGuardian) {
+    const { laminarApi } = await guardian.isReady();
 
-    return this.chainApi$.pipe(
-      switchMap((laminarApi) =>
-        PoolInfoTask.getPoolIds(laminarApi, poolId).pipe(
-          flatMap((poolId) => laminarApi.margin.poolInfo(poolId)),
-          filter(isNonNull)
-        )
-      )
+    const { poolId } = this.arguments;
+
+    return PoolInfoTask.getPoolIds(laminarApi, poolId).pipe(
+      flatMap((poolId) => laminarApi.margin.poolInfo(poolId)),
+      filter(isNonNull)
     );
   }
 

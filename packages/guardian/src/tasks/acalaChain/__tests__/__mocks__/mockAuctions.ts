@@ -1,4 +1,6 @@
-// jest.mock('@polkadot/api');
+jest.mock('@polkadot/api');
+
+import { ApiRx, WsProvider } from '@polkadot/api';
 import { of, timer } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { TypeRegistry } from '@polkadot/types';
@@ -38,29 +40,29 @@ const SURPLUS_AUCTION = new Option(register, 'SurplusAuctionItem', {
   startTime: 1,
 });
 
-const MockAuctions = {
-  ApiRx: jest.fn().mockImplementation(() => {
-    return {
-      isReady: of({
-        query: {
-          auction: {
-            auctionsIndex: jest.fn(() =>
-              timer(0, 1000).pipe(
-                take(2),
-                map((i) => createIndex(i)) // |-0--1- meaning 1 actions created with ids 0 and next is 1
-              )
-            ),
-            auctions: jest.fn(() => of(AUCTION)),
-          },
-          auctionManager: {
-            collateralAuctions: jest.fn(() => of(COLLATERAL_AUCTION)),
-            surplusAuctions: jest.fn(() => of(SURPLUS_AUCTION)),
-            debitAuctions: jest.fn(() => of(DEBIT_AUCTION)),
-          },
-        },
-      }),
-    };
-  }),
-};
+const MockAuctions = of({
+  query: {
+    auction: {
+      auctionsIndex: jest.fn(() =>
+        timer(0, 1000).pipe(
+          take(2),
+          map((i) => createIndex(i)) // |-0--1- meaning 1 actions created with ids 0 and next is 1
+        )
+      ),
+      auctions: jest.fn(() => of(AUCTION)),
+    },
+    auctionManager: {
+      collateralAuctions: jest.fn(() => of(COLLATERAL_AUCTION)),
+      surplusAuctions: jest.fn(() => of(SURPLUS_AUCTION)),
+      debitAuctions: jest.fn(() => of(DEBIT_AUCTION)),
+    },
+  },
+});
 
-jest.doMock('@polkadot/api', () => MockAuctions);
+// @ts-ignore
+ApiRx.create.mockImplementation(() => MockAuctions);
+
+// @ts-ignore
+WsProvider.mockImplementation(() => ({
+  constructor: jest.fn(),
+}));

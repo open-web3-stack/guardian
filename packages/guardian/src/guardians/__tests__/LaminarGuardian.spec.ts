@@ -1,6 +1,7 @@
 import LaminarGuardian from '../LaminarGuardian';
+import { LaminarGuardianConfig } from '../../types';
 
-const config = {
+const config: LaminarGuardianConfig = {
   networkType: 'laminarChain',
   network: 'dev',
   nodeEndpoint: 'ws://localhost:9944',

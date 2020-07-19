@@ -12,7 +12,9 @@ register.register(customTypes);
 
 const MockLaminarApi = {
   constructor: jest.fn(),
-  isReady: jest.fn(() => Promise.resolve()),
+  isReady: jest.fn(() => {
+    return Promise.resolve();
+  }),
   margin: {
     poolInfo: jest.fn((poolId) => {
       return from([
@@ -69,7 +71,5 @@ const MockLaminarApi = {
   },
 };
 
-export default () => {
-  // @ts-ignore
-  LaminarApi.mockImplementation(() => MockLaminarApi);
-};
+// @ts-ignore
+LaminarApi.mockImplementation(() => MockLaminarApi);

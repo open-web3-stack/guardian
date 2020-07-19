@@ -23,7 +23,7 @@ describe('LaminarGuardian', () => {
     expect(new LaminarGuardian('laminar-chain-guardian', config)).toBeInstanceOf(LaminarGuardian);
   });
 
-  it('throws', () => {
+  it('throws', async () => {
     const config: LaminarGuardianConfig = {
       networkType: 'laminarChain',
       network: 'dev',
@@ -40,6 +40,8 @@ describe('LaminarGuardian', () => {
         },
       },
     };
-    expect(() => new LaminarGuardian('laminar-chain-guardian', config)).toThrow(Error);
+    const guardian = new LaminarGuardian('laminar-chain-guardian', config);
+    expect.assertions(1);
+    await expect(guardian.start()).rejects.toEqual(Error('Guardian [laminar-chain-guardian] cannot find task []'));
   });
 });

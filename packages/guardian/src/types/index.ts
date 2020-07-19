@@ -4,27 +4,45 @@ import { laminarNetwork, acalaNetwork, ethereumNetwork } from '../constants';
 export * from './output';
 
 export interface IGuardian {
-  validationSchema(): Joi.Schema;
+  // List of monitors
   monitors: IMonitor[];
-  start(): void;
+
+  // validation schema for the guardian config
+  validationSchema(): Joi.Schema;
+
+  // List of tasks the guardian can run
+  tasks(): { [key: string]: ITaskConstructor };
+
+  getTaskOrThrow(task: string): ITaskConstructor;
+
+  // Guardian is ready to run
+  isReady(): Promise<any>;
+
+  // Internal guardian setup. Gets called on constructor
+  setup(config: GuardianConfig): Promise<any>;
+
+  // Start guardian
+  start(): Promise<void>;
+
+  // Stop guardian
   stop(): void;
 }
 
 export interface IMonitor {
   name: string;
-  actions: ActionConfig[];
-  task: ITask<any>;
-  rawOutput$: Observable<any>;
-  output$: Observable<any>;
-  listen(): Subscription;
+  config: MonitorConfig;
+  start(guardian: IGuardian): Promise<Subscription>;
 }
 
-export interface ITask<Output> {
-  run(params: any): Observable<any>;
-  validateCallArguments<T>(args?: T): T;
+export interface ITaskConstructor {
+  new (_arguments: any): ITask<any, any>;
+}
 
+export interface ITask<P extends Record<string, any>, O> {
+  arguments: P;
+  setArguments(args: P): void;
   validationSchema(): Joi.Schema;
-  init(params: any): Observable<Output>;
+  start(guardian: IGuardian): Promise<Observable<O>>;
 }
 
 export type Action<Args> = (args: Args, data: any) => void;
@@ -37,24 +55,23 @@ export interface GuardianConfig {
   [key: string]: any;
 }
 
-export interface LaminarGuardianConfig extends GuardianConfig {
+export interface BaseSubstrateGuardianConfig extends GuardianConfig {
+  nodeEndpoint: string | string[];
+  confirmation?: 'finalize' | number;
+}
+
+export interface LaminarGuardianConfig extends BaseSubstrateGuardianConfig {
   networkType: 'laminarChain';
-  nodeEndpoint: string | string[];
   network: typeof laminarNetwork[number];
-  confirmation: 'finalize' | number;
 }
 
-export interface AcalaGuardianConfig extends GuardianConfig {
+export interface AcalaGuardianConfig extends BaseSubstrateGuardianConfig {
   networkType: 'acalaChain';
-  nodeEndpoint: string | string[];
   network: typeof acalaNetwork[number];
-  confirmation: 'finalize' | number;
 }
 
-export interface SubstrateGuardianConfig extends GuardianConfig {
+export interface SubstrateGuardianConfig extends BaseSubstrateGuardianConfig {
   networkType: 'substrateChain';
-  nodeEndpoint: string | string[];
-  confirmation: 'finalize' | number;
 }
 
 export interface EthereumGuardianConfig extends GuardianConfig {

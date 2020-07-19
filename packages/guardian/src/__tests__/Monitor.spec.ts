@@ -1,22 +1,16 @@
 jest.mock('axios');
 jest.mock('shelljs');
 
+import './__mocks__/mockLaminarApi';
+import './__mocks__/mockApiPromise';
+
 import path from 'path';
 import axios from 'axios';
 import shell from 'shelljs';
-import mockLaminarApi from './__mocks__/mockLaminarApi';
-import Monitor from '../Monitor';
-import { MonitorConfig } from '../types';
-import { createLaminarApi } from '../tasks/laminarChain';
-import { createLaminarTasks } from '../tasks';
-import { take } from 'rxjs/operators';
+import { LaminarGuardian } from '../guardians';
+import { sleep } from '../helpers';
 
-describe('Laminar monitors', () => {
-  mockLaminarApi();
-
-  const api$ = createLaminarApi('ws://localhost:9944');
-  const tasks = createLaminarTasks(api$);
-
+describe('LaminarGuardian', () => {
   jest.setTimeout(30_000);
 
   // @ts-ignore
@@ -39,63 +33,69 @@ describe('Laminar monitors', () => {
   });
 
   it('margin poolInfo should work', async (done) => {
-    const config: MonitorConfig = {
-      task: 'margin.poolInfo',
-      arguments: {
-        poolId: 1,
-      },
-      actions: [
-        {
-          method: 'script',
-          path: path.resolve(__dirname, 'test.sh'),
+    const guardian = new LaminarGuardian('laminar-guardian', {
+      networkType: 'laminarChain',
+      network: 'dev',
+      nodeEndpoint: 'ws://localhost:9944',
+      monitors: {
+        'monitor-poolInfo': {
+          task: 'margin.poolInfo',
+          arguments: {
+            poolId: 1,
+          },
+          actions: [
+            {
+              method: 'script',
+              path: path.resolve(__dirname, 'test.sh'),
+            },
+          ],
         },
-      ],
-    };
+      },
+    });
 
-    const monitor = new Monitor('margin.poolInfo', tasks.margin.poolInfo, config);
-
-    const subscription = monitor.listen();
-
-    await monitor.output$.pipe(take(1)).toPromise();
+    await guardian.start();
 
     expect(axiosSpy).toBeCalledTimes(0);
     expect(shellSpy).toBeCalledTimes(1);
-
-    subscription.unsubscribe();
 
     done();
   });
 
   it('synthetic liquidityPool should work', async (done) => {
-    const config: MonitorConfig = {
-      task: 'synthetic.liquidityPool',
-      arguments: {
-        poolId: '0',
-        currencyId: ['FEUR'],
+    const guardian = new LaminarGuardian('laminar-guardian', {
+      networkType: 'laminarChain',
+      network: 'dev',
+      nodeEndpoint: 'ws://localhost:9944',
+      confirmation: 'finalize',
+      monitors: {
+        'monitor-liquidityPool': {
+          task: 'synthetic.liquidityPool',
+          arguments: {
+            poolId: 0,
+            currencyId: ['FEUR'],
+          },
+          conditions: [{ liquidity: '>= 1000' }],
+          actions: [
+            {
+              method: 'POST',
+              url: 'http://localhost:8080',
+            },
+            {
+              method: 'script',
+              path: path.resolve(__dirname, 'test.sh'),
+            },
+          ],
+        },
       },
-      conditions: [{ liquidity: '>= 1000' }],
-      actions: [
-        {
-          method: 'POST',
-          url: 'http://localhost:8080',
-        },
-        {
-          method: 'script',
-          path: path.resolve(__dirname, 'test.sh'),
-        },
-      ],
-    };
+    });
 
-    const monitor = new Monitor('synthetic.liquidityPool', tasks.synthetic.liquidityPool, config);
+    await guardian.start();
 
-    const subscription = monitor.listen();
-
-    await monitor.output$.pipe(take(1)).toPromise();
+    await sleep(300);
 
     expect(axiosSpy).toBeCalledTimes(1);
     expect(shellSpy).toBeCalledTimes(1);
 
-    subscription.unsubscribe();
     done();
   });
 });

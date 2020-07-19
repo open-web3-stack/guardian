@@ -1,8 +1,9 @@
 import Joi from '@hapi/joi';
 import { fromPrecision } from '@laminar/types/utils/precision';
 import { switchMap } from 'rxjs/operators';
-import EthereumTask from './EthereumTask';
+import { EthereumGuardian } from '../../guardians';
 import { convertToNewHeader } from './helpers';
+import Task from '../Task';
 
 export type Output = {
   owner: string;
@@ -14,45 +15,43 @@ export type Output = {
   isLiquidated: boolean;
 };
 
-export default class MarginPoolsTask extends EthereumTask<Output> {
+export default class MarginPoolsTask extends Task<{ poolId: string }, Output> {
   validationSchema() {
     return Joi.object({
       poolId: Joi.alt(Joi.string()).required(),
     }).required();
   }
 
-  init(params: { poolId: string }) {
-    const { poolId } = params;
+  async start(guardian: EthereumGuardian) {
+    const { ethereumApi } = await guardian.isReady();
 
-    return this.api$.pipe(
-      switchMap((api) => {
-        const newHeader$ = convertToNewHeader(api);
+    const { poolId } = this.arguments;
 
-        return newHeader$.pipe(
-          switchMap(async () => {
-            const poolInterface = api.getMarginPoolInterfaceContract(poolId);
-            const marginLiquidityPoolRegistry = api.baseContracts.marginLiquidityPoolRegistry;
-            const marginFlowProtocolSafety = api.baseContracts.marginFlowProtocolSafety;
+    const newHeader$ = convertToNewHeader(ethereumApi);
 
-            const [owner, [[enp], [ell]], equity, isSafe, isMarginCalled] = await Promise.all([
-              poolInterface.methods.owner().call() as Promise<string>,
-              marginFlowProtocolSafety.methods.getEnpAndEll(poolId).call() as Promise<[[string], [string]]>,
-              marginFlowProtocolSafety.methods.getEquityOfPool(poolId).call() as Promise<string>,
-              marginFlowProtocolSafety.methods.isPoolSafe(poolId).call() as Promise<boolean>,
-              marginLiquidityPoolRegistry.methods.isMarginCalled(poolId).call() as Promise<boolean>,
-            ]);
+    return newHeader$.pipe(
+      switchMap(async () => {
+        const poolInterface = ethereumApi.getMarginPoolInterfaceContract(poolId);
+        const marginLiquidityPoolRegistry = ethereumApi.baseContracts.marginLiquidityPoolRegistry;
+        const marginFlowProtocolSafety = ethereumApi.baseContracts.marginFlowProtocolSafety;
 
-            return {
-              owner,
-              enp: Number(fromPrecision(enp)),
-              ell: Number(fromPrecision(ell)),
-              equity,
-              isSafe,
-              isMarginCalled,
-              isLiquidated: !isSafe,
-            };
-          })
-        );
+        const [owner, [[enp], [ell]], equity, isSafe, isMarginCalled] = await Promise.all([
+          poolInterface.methods.owner().call() as Promise<string>,
+          marginFlowProtocolSafety.methods.getEnpAndEll(poolId).call() as Promise<[[string], [string]]>,
+          marginFlowProtocolSafety.methods.getEquityOfPool(poolId).call() as Promise<string>,
+          marginFlowProtocolSafety.methods.isPoolSafe(poolId).call() as Promise<boolean>,
+          marginLiquidityPoolRegistry.methods.isMarginCalled(poolId).call() as Promise<boolean>,
+        ]);
+
+        return {
+          owner,
+          enp: Number(fromPrecision(enp)),
+          ell: Number(fromPrecision(ell)),
+          equity,
+          isSafe,
+          isMarginCalled,
+          isLiquidated: !isSafe,
+        };
       })
     );
   }

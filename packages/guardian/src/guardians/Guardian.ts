@@ -1,52 +1,62 @@
 import Joi from '@hapi/joi';
-import { get } from 'lodash';
-import { Subscription } from 'rxjs';
-import { IGuardian, IMonitor, GuardianConfig } from '../types';
+import { Subscription, AsyncSubject } from 'rxjs';
+import { IGuardian, IMonitor, GuardianConfig, ITaskConstructor } from '../types';
 import Monitor from '../Monitor';
-import Task from '../tasks/Task';
 
-export default abstract class Guardian implements IGuardian {
-  // user defined name
-  public readonly name: string;
+export default abstract class Guardian<Config extends GuardianConfig = GuardianConfig, Props = {}>
+  implements IGuardian {
+  public readonly monitors: IMonitor[] = [];
 
   // config validation schema
   public abstract validationSchema(): Joi.Schema;
 
-  public readonly monitors: IMonitor[] = [];
+  // list of tasks the guardian can run
+  public abstract tasks(): { [key: string]: ITaskConstructor };
+
+  public getTaskOrThrow(task: string): ITaskConstructor {
+    const TaskClass = this.tasks()[task];
+    if (!TaskClass) {
+      throw new Error(`Guardian [${this.name}] cannot find task [${task}]`);
+    }
+    return TaskClass;
+  }
 
   // monitor subscriptions
   private subscriptions: Subscription[] = [];
 
+  private props = new AsyncSubject<Props>();
+
   /**
    * Creates an instance of Guardian.
    * @param {string} name
-   * @param {GuardianConfig} config
+   * @param {GuardianConfig} _config
    * @memberof Guardian
    */
-  constructor(name: string, config: GuardianConfig) {
-    this.name = name;
+  constructor(public readonly name: string, config: Config) {
     config = this.validateConfig(config);
 
-    const tasks = this.getTasks(config);
-
     this.monitors = Object.entries(config.monitors).map(([name, monitor]) => {
-      const task = get(tasks, monitor.task, null);
-      if (!task) {
-        throw Error(`${name}.${monitor.task} not found`);
-      }
-      return new Monitor(`${name}.${monitor.task}`, task as any, monitor);
+      const identifier = `${name}.${monitor.task}`;
+      return new Monitor(identifier, monitor);
     });
+
+    this.setup(config)
+      .then((props) => {
+        this.props.next(props);
+        this.props.complete();
+      })
+      .catch((error) => {
+        this.props.error(error);
+      });
   }
 
-  /**
-   * Tasks that the guardian can run
-   *
-   * @abstract
-   * @param {GuardianConfig} config
-   * @returns {{ [key: string]: any }}
-   * @memberof Guardian
-   */
-  public abstract getTasks(config: GuardianConfig): { [key: string]: { [key: string]: Task<any> } };
+  // Guardian is ready to run tasks
+  public isReady(): Promise<Props> {
+    return this.props.toPromise();
+  }
+
+  // Perform any necessary setup. This method gets called before running task
+  public abstract setup(config: Config): Promise<Props>;
 
   /**
    * Validate guardian config
@@ -70,10 +80,16 @@ export default abstract class Guardian implements IGuardian {
    *
    * @memberof Guardian
    */
-  public readonly start = () => {
+  public readonly start = async () => {
+    // unsubscribe any current subscription
+    this.subscriptions.map(({ unsubscribe }) => unsubscribe && unsubscribe());
+
     console.log(`Starting guardian [${this.name}] ...`);
-    this.subscriptions.map((i) => i.unsubscribe()); // unsubscribe any current subscription
-    this.subscriptions = this.monitors.map((monitor) => monitor.listen());
+
+    // wait until guardian is ready
+    this.subscriptions = await Promise.all(this.monitors.map((monitor) => monitor.start(this)));
+
+    console.log(`Guardian [${this.name}] is running ...`);
   };
 
   /**
@@ -83,7 +99,7 @@ export default abstract class Guardian implements IGuardian {
    */
   public readonly stop = () => {
     console.log(`Stopping guardian [${this.name}] ...`);
-    this.subscriptions.map((i) => i.unsubscribe());
+    this.subscriptions.map(({ unsubscribe }) => unsubscribe && unsubscribe());
     this.subscriptions = [];
   };
 }

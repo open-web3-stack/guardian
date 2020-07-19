@@ -1,6 +1,7 @@
 import AcalaGuardian from '../AcalaGuardian';
+import { AcalaGuardianConfig } from '../../types';
 
-const config = {
+const config: AcalaGuardianConfig = {
   networkType: 'acalaChain',
   network: 'dev',
   nodeEndpoint: 'ws://localhost:9944',
