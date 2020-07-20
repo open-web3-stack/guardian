@@ -1,0 +1,26 @@
+{
+  "name": "@open-web3/example-guardian",
+  "version": "0.3.0-beta.13",
+  "description": "Bid on collateral auction and swap dealed auction to make profit",
+  "author": "Laminar Developers <hello@laminar.one>",
+  "license": "Apache-2.0",
+  "bin": {
+    "collateral-auction-guardian": "collateralAuctionExample.js",
+    "debit-auction-guardian": "debitAuctionExample.js",
+    "surplus-auction-guardian": "surplusAuctionExample.js"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "repository": "https://github.com/open-web3-stack/guardian.git",
+  "bugs": {
+    "url": "https://github.com/open-web3-stack/guardian/issues"
+  },
+  "homepage": "https://github.com/open-web3-stack/guardian",
+  "dependencies": {
+    "@open-web3/api": "^0.3.0-beta.19",
+    "@open-web3/guardian": "^0.3.0-beta.13",
+    "@open-web3/guardian-cli": "^0.3.0-beta.13"
+  }
+}

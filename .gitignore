@@ -104,9 +104,8 @@ dist
 .tern-port
 
 # example output
-examples/events.csv
+packages/example-guardian/events.csv
 
 .npmrc
 
-lib
 build

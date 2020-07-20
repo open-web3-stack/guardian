@@ -1,0 +1,39 @@
+version: '0.1'
+guardians:
+  acala-guardian: # do not change
+    networkType: acalaChain
+    network: mandala
+    nodeEndpoint: ${NODE_ENDPOINT}
+    confirmation: finalize
+
+    monitors:
+      AuctionDealed:
+        task: system.events
+        arguments:
+          name: auctionManager.SurplusAuctionDealed
+        conditions:
+          - args[2]: 'eq ${BIDDER_ADDRESS}' # do not change
+        actions:
+          - method: internal-surplus-auction-dealed # do not change
+
+      SurplusAuction:
+        task: honzon.surplusAuctions
+        conditions:
+          - lastBidder: 'ne ${BIDDER_ADDRESS}' # do not change
+        actions:
+          - method: internal-surplus-auctions # do not change
+
+      ACABalance:
+        task: account.balances
+        arguments:
+          account: ${BIDDER_ADDRESS}
+          currencyId: ACA
+        actions:
+          - method: internal-balance # do not change
+
+      ACAPool:
+        task: dex.pools
+        arguments:
+          currencyId: ACA
+        actions:
+          - method: internal-pool # do not change
