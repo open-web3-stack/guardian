@@ -1,14 +1,14 @@
 import { Config } from './types';
 import validateConfig from './validate-config';
-import { GuardianRegistry, Guardian } from './guardians';
-import { ActionRegistry } from './actions';
+import { GuardianRegistry } from './guardians';
 import readConfig from './read-config';
+
+export * from './guardians';
+export * from './actions';
 
 export { readConfig };
 
-export { ActionRegistry, GuardianRegistry, Guardian };
-
-export default (config: Config) => {
+export default async (config: Config) => {
   config = validateConfig(config);
 
   // create guardians
@@ -18,7 +18,7 @@ export default (config: Config) => {
   });
 
   // start monitoring
-  guardians.forEach((guardian) => guardian.start());
+  await Promise.all(guardians.map((guardian) => guardian.start()));
 
   // unsubscribe method
   return () => {

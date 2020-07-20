@@ -1,59 +1,61 @@
-import createLaminarApi from '../../createLaminarApi';
 import LiquidityPoolTask from '../../LiquidityPoolTask';
+import { LaminarGuardian } from '../../../../guardians';
+import { LaminarGuardianConfig } from '../../../../types';
 
 describe('LiquidityPoolTask', () => {
   jest.setTimeout(60_000);
-  const api$ = createLaminarApi(['wss://testnet-node-1.laminar-chain.laminar.one/ws']);
 
-  it('works with poolId', (done) => {
-    new LiquidityPoolTask(api$)
-      .run({
-        poolId: '0',
-        currencyId: 'all',
-      })
-      .subscribe((autput) => {
-        console.log(autput);
-        expect(autput).toBeTruthy();
-        done();
-      });
+  const config: LaminarGuardianConfig = {
+    network: 'dev',
+    networkType: 'laminarChain',
+    nodeEndpoint: 'wss://testnet-node-1.laminar-chain.laminar.one/ws',
+    monitors: {},
+  };
+
+  const guardian = new LaminarGuardian('laminar-guardian', config);
+
+  it('works with poolId and currencyId', async (done) => {
+    const task = new LiquidityPoolTask({
+      poolId: 0,
+      currencyId: 'FEUR',
+    });
+
+    const output$ = await task.start(guardian);
+
+    output$.subscribe((autput) => {
+      console.log(autput);
+      expect(autput).toBeTruthy();
+      done();
+    });
   });
 
-  it('works with poolId and currencyId', (done) => {
-    new LiquidityPoolTask(api$)
-      .run({
-        poolId: '0',
-        currencyId: 'FEUR',
-      })
-      .subscribe((autput) => {
-        console.log(autput);
-        expect(autput).toBeTruthy();
-        done();
-      });
+  it('works with poolId and currencyIds', async (done) => {
+    const task = new LiquidityPoolTask({
+      poolId: 0,
+      currencyId: ['FEUR', 'FJPY'],
+    });
+
+    const output$ = await task.start(guardian);
+
+    output$.subscribe((autput) => {
+      console.log(autput);
+      expect(autput).toBeTruthy();
+      done();
+    });
   });
 
-  it('works with poolId and currencyIds', (done) => {
-    new LiquidityPoolTask(api$)
-      .run({
-        poolId: '0',
-        currencyId: ['FEUR', 'FJPY'],
-      })
-      .subscribe((autput) => {
-        console.log(autput);
-        expect(autput).toBeTruthy();
-        done();
-      });
-  });
+  it('works with poolId and fTokens', async (done) => {
+    const task = new LiquidityPoolTask({
+      poolId: 0,
+      currencyId: ['FEUR', 'FJPY'],
+    });
 
-  it('works with poolId and fTokens', (done) => {
-    new LiquidityPoolTask(api$)
-      .run({
-        poolId: '0',
-        currencyId: 'fTokens',
-      })
-      .subscribe((autput) => {
-        console.log(autput);
-        expect(autput).toBeTruthy();
-        done();
-      });
+    const output$ = await task.start(guardian);
+
+    output$.subscribe((autput) => {
+      console.log(autput);
+      expect(autput).toBeTruthy();
+      done();
+    });
   });
 });

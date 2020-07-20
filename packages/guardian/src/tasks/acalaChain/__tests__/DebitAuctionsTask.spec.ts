@@ -1,13 +1,21 @@
 import './__mocks__/mockAuctions';
 
 import DebitAuctionsTask from '../DebitAuctionsTask';
-import { createAcalaApi } from '../../acalaChain';
+import { AcalaGuardian } from '../../../guardians';
 
 describe('DebitAuctionsTask', () => {
-  const api$ = createAcalaApi(['ws://localhost:9944']);
+  const guardian = new AcalaGuardian('acala-guardian', {
+    networkType: 'acalaChain',
+    network: 'dev',
+    nodeEndpoint: 'ws://localhost:9944',
+    monitors: {},
+  });
 
-  it('works with mock', (done) => {
-    new DebitAuctionsTask(api$).run(null).subscribe((result) => {
+  const task = new DebitAuctionsTask();
+
+  it('works with mock', async (done) => {
+    const output$ = await task.start(guardian);
+    output$.subscribe((result) => {
       expect(result).toStrictEqual({
         auctionId: 0,
         amount: '100',

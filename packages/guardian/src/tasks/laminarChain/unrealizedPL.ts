@@ -1,77 +1,79 @@
 import Big from 'big.js';
-import { Observable, of, combineLatest } from 'rxjs';
-import { map, filter, distinctUntilChanged } from 'rxjs/operators';
-import { MarginPosition, LaminarApi } from '@laminar/api';
-import { MarginPoolTradingPairOption } from '@laminar/types/interfaces';
-import { isNonNull } from '../helpers';
-
-type Pair = { base: string; quote: string };
+import { LaminarApi } from '@laminar/api';
+import { MarginPosition, LiquidityPoolId, TradingPair } from '@laminar/types/interfaces';
+import { StorageType } from '@laminar/types';
+import { computedFn } from 'mobx-utils';
+import getOraclePrice from './getOraclePrice';
 
 const ONE = Big(1e18);
 
-export default (api: LaminarApi) => (position: MarginPosition): Observable<Big> => {
-  const getPairOptions = (poolId: string, pair: Pair) => {
-    return api.api.query.marginLiquidityPools.poolTradingPairOptions(poolId, pair) as Observable<
-      MarginPoolTradingPairOption
-    >;
-  };
+export default (laminarApi: LaminarApi, storage: StorageType) => {
+  const oraclePrice = getOraclePrice(storage);
 
-  const getAskSpread = (poolId: string, pair: Pair) => {
-    return getPairOptions(poolId, pair).pipe(
-      map(({ askSpread }) => (askSpread.isEmpty ? Big(0) : Big(askSpread.toString())))
-    );
-  };
+  return computedFn(
+    (position: MarginPosition) => {
+      const getAskSpread = (poolId: LiquidityPoolId, pair: TradingPair) => {
+        const options = storage.marginLiquidityPools.poolTradingPairOptions(poolId, pair.toHex());
+        if (!options) return null;
+        const { askSpread } = options;
+        return askSpread.isEmpty ? Big(0) : Big(askSpread.toString());
+      };
 
-  const getBidSpread = (poolId: string, pair: Pair) => {
-    return getPairOptions(poolId, pair).pipe(
-      map(({ bidSpread }) => (bidSpread.isEmpty ? Big(0) : Big(bidSpread.toString())))
-    );
-  };
+      const getBidSpread = (poolId: LiquidityPoolId, pair: TradingPair) => {
+        const options = storage.marginLiquidityPools.poolTradingPairOptions(poolId, pair.toHex());
+        if (!options) return null;
+        const { bidSpread } = options;
+        return bidSpread.isEmpty ? Big(0) : Big(bidSpread.toString());
+      };
 
-  const price = (tokenId: string) => {
-    if (tokenId === 'AUSD') return of(ONE);
+      const getPrice = (pair: TradingPair) => {
+        const base = oraclePrice(pair.base.toString());
+        const quote = oraclePrice(pair.quote.toString());
+        if (base && quote) {
+          return Big(base).div(quote);
+        }
+        return null;
+      };
 
-    return api.currencies.oracleValues().pipe(
-      map((prices) => prices.find((i) => i.tokenId === tokenId)),
-      filter(isNonNull),
-      map((i) => Big(i.value)),
-      distinctUntilChanged()
-    );
-  };
+      const getBidPrice = (poolId: LiquidityPoolId, pair: TradingPair) => {
+        const price = getPrice(pair);
+        const spread = getBidSpread(poolId, pair);
+        if (price && spread) {
+          return price.sub(spread.div(ONE));
+        }
+        return null;
+      };
 
-  const getPrice = (pair: Pair) => {
-    return combineLatest([price(pair.base), price(pair.quote)]).pipe(map(([base, quote]) => base.div(quote)));
-  };
+      const getAskPrice = (poolId: LiquidityPoolId, pair: TradingPair) => {
+        const price = getPrice(pair);
+        const spread = getAskSpread(poolId, pair);
+        if (price && spread) {
+          return price.add(spread.div(ONE));
+        }
+        return null;
+      };
 
-  const getBidPrice = (poolId: string, pair: Pair) => {
-    return combineLatest([getPrice(pair), getBidSpread(poolId, pair)]).pipe(
-      map(([price, spread]) => price.sub(spread.div(ONE)))
-    );
-  };
+      const { poolId, pair, leveragedDebits, leveragedHeld, leverage } = position;
 
-  const getAskPrice = (poolId: string, pair: Pair) => {
-    return combineLatest([getPrice(pair), getAskSpread(poolId, pair)]).pipe(
-      map(([price, spread]) => price.add(spread.div(ONE)))
-    );
-  };
+      const openPrice = Big(leveragedDebits.toString()).div(Big(leveragedHeld.toString())).abs();
 
-  const { poolId, pair, leveragedDebits, leveragedHeld, leverage } = position;
+      let currentPrice: Big | null = null;
+      if (leverage.toString().startsWith('Long')) {
+        currentPrice = getAskPrice(poolId, pair);
+      } else {
+        currentPrice = getBidPrice(poolId, pair);
+      }
 
-  const openPrice = Big(leveragedDebits).div(Big(leveragedHeld)).abs();
+      const AUSDPrice = getPrice(laminarApi.api.createType('TradingPair', { base: pair.quote, quote: 'AUSD' }));
 
-  let currentPrice: Observable<Big>;
-  if (leverage.startsWith('Long')) {
-    currentPrice = getAskPrice(poolId, pair);
-  } else {
-    currentPrice = getBidPrice(poolId, pair);
-  }
+      if (!AUSDPrice || !currentPrice) return null;
 
-  return combineLatest([currentPrice, getPrice({ base: pair.quote, quote: 'AUSD' })]).pipe(
-    map(([currentPrice, AUSDPrice]) => {
       const priceDelta = currentPrice.sub(openPrice);
-      const profit = Big(leveragedHeld).mul(priceDelta);
+      const profit = Big(leveragedHeld.toString()).mul(priceDelta);
+
       // profit in AUSD
       return profit.mul(AUSDPrice);
-    })
+    },
+    { keepAlive: true }
   );
 };

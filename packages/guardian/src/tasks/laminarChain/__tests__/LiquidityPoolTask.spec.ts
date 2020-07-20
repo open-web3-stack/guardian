@@ -1,29 +1,21 @@
-import { never } from 'rxjs';
 import LiquidityPoolTask from '../LiquidityPoolTask';
 
 describe('LiquidityPool', () => {
-  const task = new LiquidityPoolTask(never());
-
   it('works with valid arguments', () => {
-    expect(task.validateCallArguments({ poolId: 1, currencyId: 'fTokens' })).toStrictEqual({
+    expect(new LiquidityPoolTask({ poolId: 1, currencyId: 'fTokens' }).arguments).toStrictEqual({
       poolId: 1,
       currencyId: 'fTokens',
       period: 30000,
     });
-    expect(task.validateCallArguments({ poolId: [1], currencyId: 'all', period: 10000 })).toStrictEqual({
+    expect(new LiquidityPoolTask({ poolId: [1], currencyId: 'all', period: 10000 }).arguments).toStrictEqual({
       poolId: [1],
       currencyId: 'all',
       period: 10000,
     });
-    expect(task.validateCallArguments({ poolId: 'all', currencyId: ['FEUR', 'FJPY'] })).toStrictEqual({
+    expect(new LiquidityPoolTask({ poolId: 'all', currencyId: ['FEUR', 'FJPY'] }).arguments).toStrictEqual({
       poolId: 'all',
       currencyId: ['FEUR', 'FJPY'],
       period: 30000,
     });
-  });
-
-  it("doesn't work with invalid arguments", () => {
-    expect(() => task.validateCallArguments({ poolId: '' })).toThrow(Error);
-    expect(() => task.validateCallArguments()).toThrow(Error);
   });
 });

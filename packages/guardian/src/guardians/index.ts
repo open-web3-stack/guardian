@@ -1,8 +1,17 @@
 import Guardian from './Guardian';
+import GuardianRegistry from './GuardianRegistry';
+import BaseSubstrateGuardian from './BaseSubstrateGuardian';
+import SubstrateGuardian from './SubstrateGuardian';
 import LaminarGuardian from './LaminarGuardian';
 import EthereumGuardian from './EthereumGuardian';
 import AcalaGuardian from './AcalaGuardian';
-import SubstrateGuardian from './SubstrateGuardian';
-import GuardianRegistry from './GuardianRegistry';
 
-export { GuardianRegistry, Guardian, EthereumGuardian, LaminarGuardian, AcalaGuardian, SubstrateGuardian };
+export {
+  Guardian,
+  GuardianRegistry,
+  BaseSubstrateGuardian,
+  SubstrateGuardian,
+  LaminarGuardian,
+  EthereumGuardian,
+  AcalaGuardian,
+};

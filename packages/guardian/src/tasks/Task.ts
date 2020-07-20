@@ -1,21 +1,25 @@
 import Joi from '@hapi/joi';
 import { Observable } from 'rxjs';
-import { ITask } from '../types';
+import { ITask, IGuardian } from '../types';
 
-export default abstract class Task<Output> implements ITask<Output> {
-  abstract validationSchema(): Joi.Schema;
+export default abstract class Task<P extends Record<string, any>, O> implements ITask<P, O> {
+  constructor(private _arguments: P = Object.create({})) {
+    this.setArguments(_arguments);
+  }
 
-  abstract init(params: any): Observable<Output>;
+  public get arguments(): P {
+    return this._arguments;
+  }
 
-  readonly validateCallArguments = <T>(args?: T): T => {
-    const { error, value } = this.validationSchema().validate(args);
+  public setArguments(_arguments: P) {
+    const { error, value } = this.validationSchema().validate(_arguments);
     if (error) {
       throw error;
     }
-    return value;
-  };
+    this._arguments = value;
+  }
 
-  readonly run = (params: any): Observable<Output> => {
-    return this.init(this.validateCallArguments(params));
-  };
+  abstract validationSchema(): Joi.Schema;
+
+  abstract start(guardian: IGuardian): Promise<Observable<O>>;
 }

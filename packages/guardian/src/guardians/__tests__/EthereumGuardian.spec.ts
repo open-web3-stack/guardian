@@ -1,6 +1,7 @@
 import EthereumGuardian from '../EthereumGuardian';
+import { EthereumGuardianConfig } from '../../types';
 
-const config = {
+const config: EthereumGuardianConfig = {
   networkType: 'ethereum',
   network: 'dev',
   nodeEndpoint: 'http://localhost:8545',

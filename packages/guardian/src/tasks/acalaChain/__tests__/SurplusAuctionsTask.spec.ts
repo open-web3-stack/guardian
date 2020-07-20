@@ -1,13 +1,21 @@
 import './__mocks__/mockAuctions';
 
 import SurplusAuctionsTask from '../SurplusAuctionsTask';
-import { createAcalaApi } from '../../acalaChain';
+import { AcalaGuardian } from '../../../guardians';
 
 describe('SurplusAuctionsTask', () => {
-  const api$ = createAcalaApi(['ws://localhost:9944']);
+  const guardian = new AcalaGuardian('acala-guardian', {
+    networkType: 'acalaChain',
+    network: 'dev',
+    nodeEndpoint: 'ws://localhost:9944',
+    monitors: {},
+  });
 
-  it('works with mock', (done) => {
-    new SurplusAuctionsTask(api$).run(null).subscribe((result) => {
+  const task = new SurplusAuctionsTask();
+
+  it('works with mock', async (done) => {
+    const output$ = await task.start(guardian);
+    output$.subscribe((result) => {
       expect(result).toStrictEqual({
         auctionId: 0,
         amount: '100',

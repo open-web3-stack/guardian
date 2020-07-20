@@ -31,7 +31,12 @@ export default async (nodeEndpoint: string, bidderSURI: string, bidderAddress: s
     targetCurrencyId: string,
     targetAmount: string
   ) => {
-    const tx = apiManager.api.tx.dex.swapCurrency(supplyCurrencyId, supplyAmount, targetCurrencyId, targetAmount);
+    const tx = apiManager.api.tx.dex.swapCurrency(
+      supplyCurrencyId as any,
+      supplyAmount,
+      targetCurrencyId as any,
+      targetAmount
+    );
     return apiManager.signAndSend(tx, { account: keyringPair }).send;
   };
 

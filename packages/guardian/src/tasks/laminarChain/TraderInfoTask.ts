@@ -1,10 +1,14 @@
 import Joi from '@hapi/joi';
 import { of, Observable, from } from 'rxjs';
-import { switchMap, flatMap, concatAll } from 'rxjs/operators';
+import { flatMap, concatAll } from 'rxjs/operators';
 import { TraderInfo, LaminarApi } from '@laminar/api';
-import LaminarTask from './LaminarTask';
+import Task from '../Task';
+import { LaminarGuardian } from '@open-web3/guardian/guardians';
 
-export default class TraderInfoTask extends LaminarTask<TraderInfo> {
+export default class TraderInfoTask extends Task<
+  { account: string | string[]; poolId: number | number[] | 'all' },
+  TraderInfo
+> {
   validationSchema() {
     return Joi.object({
       account: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
@@ -12,17 +16,15 @@ export default class TraderInfoTask extends LaminarTask<TraderInfo> {
     }).required();
   }
 
-  init(params: { account: string | string[]; poolId: number | number[] | 'all' }) {
-    const { account, poolId } = params;
+  async start(guardian: LaminarGuardian) {
+    const { laminarApi } = await guardian.isReady();
 
-    return this.chainApi$.pipe(
-      switchMap((laminarApi) =>
-        TraderInfoTask.getPoolIds(laminarApi, poolId).pipe(
-          flatMap((poolId) =>
-            from(Array.isArray(account) ? account : [account]).pipe(
-              flatMap((account) => laminarApi.margin.traderInfo(account, poolId))
-            )
-          )
+    const { account, poolId } = this.arguments;
+
+    return TraderInfoTask.getPoolIds(laminarApi, poolId).pipe(
+      flatMap((poolId) =>
+        from(Array.isArray(account) ? account : [account]).pipe(
+          flatMap((account) => laminarApi.margin.traderInfo(account, poolId))
         )
       )
     );

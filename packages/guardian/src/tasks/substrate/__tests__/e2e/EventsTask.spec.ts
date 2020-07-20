@@ -1,25 +1,32 @@
-import { ApiRx } from '@polkadot/api';
-import { WsProvider } from '@polkadot/rpc-provider';
 import EventsTask from '../../EventsTask';
+import { SubstrateGuardian } from '../../../../guardians';
+import { SubstrateGuardianConfig } from '../../../../types';
 
 describe('EventsTask', () => {
-  const api$ = ApiRx.create({
-    provider: new WsProvider('wss://kusama-rpc.polkadot.io/'),
-  });
-  const task = new EventsTask(api$);
-
   jest.setTimeout(60_000);
 
-  it('works with single name', (done) => {
-    task.run({ name: 'system.ExtrinsicSuccess' }).subscribe((output) => {
+  const config: SubstrateGuardianConfig = {
+    networkType: 'substrateChain',
+    nodeEndpoint: 'wss://kusama-rpc.polkadot.io/',
+    monitors: {},
+  };
+
+  const guardian = new SubstrateGuardian('substrate-guardian', config);
+
+  it('works with single name', async (done) => {
+    const task = new EventsTask({ name: 'system.ExtrinsicSuccess' });
+    const output$ = await task.start(guardian);
+    output$.subscribe((output) => {
       console.log(output.args);
       expect(output.args).toBeTruthy();
       done();
     });
   });
 
-  it('works with multiple names', (done) => {
-    task.run({ name: ['system.ExtrinsicSuccess'] }).subscribe((output) => {
+  it('works with multiple names', async (done) => {
+    const task = new EventsTask({ name: ['system.ExtrinsicSuccess'] });
+    const output$ = await task.start(guardian);
+    output$.subscribe((output) => {
       console.log(output.args);
       expect(output.args).toBeTruthy();
       done();

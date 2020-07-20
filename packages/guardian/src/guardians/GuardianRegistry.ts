@@ -1,11 +1,11 @@
-import Guardian from './Guardian';
 import LaminarGuardian from './LaminarGuardian';
 import EthereumGuardian from './EthereumGuardian';
 import AcalaGuardian from './AcalaGuardian';
 import SubstrateGuardian from './SubstrateGuardian';
 import { GuardianConfig } from '../types';
+import Guardian from './Guardian';
 
-interface GuardianConstructor {
+export interface GuardianConstructor {
   new (name: string, config: GuardianConfig): Guardian;
 }
 
@@ -16,7 +16,7 @@ interface GuardianConstructor {
  * @class GuardianRegistry
  */
 export default class GuardianRegistry {
-  private static guardians: { [key: string]: GuardianConstructor } = {
+  private static guardians = {
     ethereum: EthereumGuardian,
     laminarChain: LaminarGuardian,
     acalaChain: AcalaGuardian,

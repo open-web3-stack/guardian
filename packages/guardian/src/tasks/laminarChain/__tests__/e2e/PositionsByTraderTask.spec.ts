@@ -1,32 +1,41 @@
-import createLaminarApi from '../../createLaminarApi';
+import LaminarGuardian from '../../../../guardians/LaminarGuardian';
 import PositionsByTraderTask from '../../PositionsByTraderTask';
 
-describe('PositionsByTraderTask', () => {
-  jest.setTimeout(60_000);
-  const api$ = createLaminarApi(['wss://testnet-node-1.laminar-chain.laminar.one/ws']);
-  const task = new PositionsByTraderTask(api$);
-
-  it('works with account', (done) => {
-    task
-      .run({
-        account: '5EkTxjD5K75Z7T7tb6oREeoLt82MygJJP2oJ6DFF4weLt28D',
-      })
-      .subscribe((autput) => {
-        console.log(autput);
-        expect(autput).toBeTruthy();
-        done();
-      });
+describe('PositionsByTraderTask', async () => {
+  const guardian = new LaminarGuardian('laminar-guardian', {
+    network: 'dev',
+    networkType: 'laminarChain',
+    nodeEndpoint: ['wss://testnet-node-1.laminar-chain.laminar.one/ws'],
+    monitors: {},
   });
 
-  it('works with accounts', (done) => {
-    task
-      .run({
-        account: ['5EkTxjD5K75Z7T7tb6oREeoLt82MygJJP2oJ6DFF4weLt28D'],
-      })
-      .subscribe((autput) => {
-        console.log(autput);
-        expect(autput).toBeTruthy();
+  it('works with account', async (done) => {
+    const task = new PositionsByTraderTask({
+      account: '5GHYezbSCbiJcU1iCwN2YMnSMohDSZdudfZyEAYGneyx4xp3',
+    });
+
+    const output$ = await task.start(guardian);
+
+    output$.subscribe((output) => {
+      console.log(output);
+      expect(output).toBeTruthy();
+      done();
+    });
+  }, 30_000);
+
+  it('works with multiple accounts', async (done) => {
+    const task = new PositionsByTraderTask({
+      account: ['5GHYezbSCbiJcU1iCwN2YMnSMohDSZdudfZyEAYGneyx4xp3'],
+    });
+
+    const output$ = await task.start(guardian);
+
+    output$.subscribe((output) => {
+      console.log(output);
+      expect(output).toBeTruthy();
+      if (output.profit) {
         done();
-      });
-  });
+      }
+    });
+  }, 30_000);
 });

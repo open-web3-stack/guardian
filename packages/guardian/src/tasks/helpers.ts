@@ -1,9 +1,11 @@
-import { flatMap, map } from 'lodash';
+import Big from 'big.js';
 import { Codec } from '@polkadot/types/types';
+import { Option } from '@polkadot/types/codec';
 import { TimestampedValue } from '@open-web3/orml-types/interfaces';
-import { Observable, timer } from 'rxjs';
-import { switchMap, distinctUntilChanged, publishReplay, refCount } from 'rxjs/operators';
+import { Observable, timer, of } from 'rxjs';
+import { switchMap, distinctUntilChanged, filter, map } from 'rxjs/operators';
 import { RpcRxResult } from '@polkadot/api/types';
+import { ApiRx } from '@polkadot/api';
 
 export /**
  * Create pair combination of account and currencyId
@@ -30,14 +32,10 @@ const createAccountCurrencyIdPairs = (
   account: string | string[],
   currencyId: string | string[]
 ): { account: string; currencyId: string }[] => {
-  if (typeof account === 'string') {
-    account = [account];
-  }
-  if (typeof currencyId === 'string') {
-    currencyId = [currencyId];
-  }
+  const accounts = Array.isArray(account) ? account : [account];
+  const currencyIds = Array.isArray(currencyId) ? currencyId : [currencyId];
 
-  return flatMap(account, (account) => map(currencyId, (currencyId) => ({ account, currencyId })));
+  return accounts.flatMap((account) => currencyIds.map((currencyId) => ({ account, currencyId })));
 };
 
 // FIXME: a trick to get value from TimestampedValue, need to fix
@@ -57,7 +55,19 @@ export const observeRPC = <T>(method: RpcRxResult<any>, params: Parameters<any>,
   return timer(0, period).pipe(
     switchMap(() => {
       return method(...params) as Observable<T>;
-    }),
-    distinctUntilChanged((a, b) => JSON.stringify(a) !== JSON.stringify(b))
+    })
+  );
+};
+
+export const getOraclePrice = (api: ApiRx, period = 30_000) => (tokenId: string) => {
+  if (tokenId === 'AUSD') return of(Big(1e18));
+
+  const price$ = observeRPC<Option<TimestampedValue>>(api.rpc['oracle'].getValue, [tokenId], period);
+
+  return price$.pipe(
+    filter((i) => i.isSome),
+    map((i) => i.unwrap()),
+    map((i) => Big(getValueFromTimestampValue(i).toString())),
+    distinctUntilChanged((a, b) => a.eq(b))
   );
 };

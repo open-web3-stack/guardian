@@ -1,9 +1,10 @@
 import Joi from '@hapi/joi';
 import { Observable, from } from 'rxjs';
-import { switchMap, map, flatMap } from 'rxjs/operators';
+import { map, flatMap } from 'rxjs/operators';
 import { get, isArray, isNil } from 'lodash';
 import { ApiRx } from '@polkadot/api';
-import SubstrateTask from './SubstrateTask';
+import Task from '../Task';
+import BaseSubstrateGuardian from '../../guardians/BaseSubstrateGuardian';
 
 const createCall = (api: ApiRx, name: string, args: any[] = []): Observable<Output> => {
   const method = get(api.query, name);
@@ -14,7 +15,7 @@ const createCall = (api: ApiRx, name: string, args: any[] = []): Observable<Outp
 
 export type Output = { name: string; value: any };
 
-export default class StorageTask extends SubstrateTask<Output> {
+export default class StorageTask extends Task<{ name: string | string[]; args?: any | any[] }, Output> {
   validationSchema() {
     return Joi.object({
       name: Joi.alt(
@@ -27,16 +28,14 @@ export default class StorageTask extends SubstrateTask<Output> {
     }).required();
   }
 
-  init(params: { name: string | string[]; args?: any | any[] }) {
-    const { name, args } = params;
+  async start(guardian: BaseSubstrateGuardian) {
+    const { apiRx } = await guardian.isReady();
 
-    return this.api$.pipe(
-      switchMap((api) => {
-        if (isArray(name)) {
-          return from(name).pipe(flatMap((name) => createCall(api, name)));
-        }
-        return createCall(api, name, isArray(args) ? args : [args]);
-      })
-    );
+    const { name, args } = this.arguments;
+
+    if (isArray(name)) {
+      return from(name).pipe(flatMap((name) => createCall(apiRx, name)));
+    }
+    return createCall(apiRx, name, isArray(args) ? args : [args]);
   }
 }

@@ -1,10 +1,9 @@
 import Joi from '@hapi/joi';
+import { ApiRx, WsProvider } from '@polkadot/api';
 import GuardianRegistry from '../GuardianRegistry';
-import { LaminarGuardian, AcalaGuardian } from '../';
-import { LaminarGuardianConfig, AcalaGuardianConfig, SubstrateGuardianConfig, GuardianConfig } from '../../types';
-import Guardian from '../Guardian';
+import { LaminarGuardian, AcalaGuardian, Guardian } from '../';
+import { LaminarGuardianConfig, AcalaGuardianConfig, GuardianConfig, BaseSubstrateGuardianConfig } from '../../types';
 import EventsTask from '../../tasks/substrate/EventsTask';
-import { createAcalaApi } from '../../tasks/acalaChain';
 
 const laminarConfig: LaminarGuardianConfig = {
   networkType: 'laminarChain',
@@ -46,14 +45,21 @@ const customConfig: GuardianConfig = {
   },
 };
 
-class CustomGuardian extends Guardian {
-  validationSchema() {
-    return Joi.any();
+class CustomGuardian extends Guardian<BaseSubstrateGuardianConfig> {
+  tasks() {
+    return {
+      'system.event': EventsTask,
+    };
   }
 
-  getTasks(config: SubstrateGuardianConfig) {
-    const api$ = createAcalaApi(config.nodeEndpoint);
-    return { foo: { bar: new EventsTask(api$) } };
+  async setup(config: BaseSubstrateGuardianConfig) {
+    const ws = new WsProvider(config.nodeEndpoint);
+    const apiRx = await ApiRx.create({ provider: ws }).toPromise();
+    return { apiRx };
+  }
+
+  validationSchema() {
+    return Joi.any();
   }
 }
 
@@ -61,22 +67,22 @@ describe('GuardianRegistry', () => {
   it('works with custom Guardian', () => {
     GuardianRegistry.register('customChain', CustomGuardian);
 
-    const customGuardian = GuardianRegistry.create('customChain', 'customGuardian', customConfig);
+    const customGuardian = GuardianRegistry.create('customChain', 'custom-guardian', customConfig);
 
     expect(customGuardian).toBeInstanceOf(CustomGuardian);
-    expect(() => customGuardian.start()).not.toThrowError();
+    expect(async () => await customGuardian.start()).not.toThrowError();
     customGuardian.stop();
   });
 
   it('works', () => {
-    const laminarGuardian = GuardianRegistry.create('laminarChain', 'laminarGuardian', laminarConfig);
-    const acalaGuardian = GuardianRegistry.create('acalaChain', 'acalaGuardian', acalaConfig);
+    const laminarGuardian = GuardianRegistry.create('laminarChain', 'laminar-guardian', laminarConfig);
+    const acalaGuardian = GuardianRegistry.create('acalaChain', 'acala-guardian', acalaConfig);
 
     expect(laminarGuardian).toBeInstanceOf(LaminarGuardian);
     expect(acalaGuardian).toBeInstanceOf(AcalaGuardian);
 
-    expect(() => laminarGuardian.start()).not.toThrowError();
-    expect(() => acalaGuardian.start()).not.toThrowError();
+    expect(async () => await laminarGuardian.start()).not.toThrowError();
+    expect(async () => await acalaGuardian.start()).not.toThrowError();
 
     laminarGuardian.stop();
     acalaGuardian.stop();

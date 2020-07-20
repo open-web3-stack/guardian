@@ -1,43 +1,41 @@
-import { Observable, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
-import { IMonitor, MonitorConfig, ITask, ActionConfig } from './types';
+import { IMonitor, MonitorConfig, IGuardian } from './types';
 import conditionBuilder from './conditions/condition-builder';
 import { ActionRegistry } from './actions/ActionRegistry';
 
 export default class Monitor implements IMonitor {
-  public readonly name: string;
-  public readonly task: ITask<any>;
-  public readonly actions: ActionConfig[];
-  public readonly rawOutput$: Observable<any>;
-  public readonly output$: Observable<any>;
+  constructor(public readonly name: string, public readonly config: MonitorConfig) {}
 
-  constructor(name: string, task: ITask<any>, config: MonitorConfig) {
-    this.name = name;
-    this.task = task;
-    this.actions = config.actions;
+  /// listen to output$ and trigger actions
+  async start(guardian: IGuardian): Promise<Subscription> {
+    console.log(`Starting task [${this.name}] ...`);
 
-    const condition = config.conditions && conditionBuilder(config.conditions);
+    const TaskClass = guardian.getTaskOrThrow(this.config.task);
+
+    const task = new TaskClass(this.config.arguments);
 
     // create raw output$
-    this.rawOutput$ = this.task.run(config.arguments);
+    const rawOutput$ = await task.start(guardian);
+
+    const condition = this.config.conditions && conditionBuilder(this.config.conditions);
 
     // create filtered output$
-    this.output$ = this.rawOutput$.pipe(
+    const output$ = rawOutput$.pipe(
       // apply condition if any
       filter((result) => (condition ? condition(result) : true))
     );
-  }
 
-  /// listen to output$ and trigger the actions
-  listen(): Subscription {
-    console.log(`Task [${this.name}] is running ...`);
-
-    return this.output$.subscribe((data: any) => {
-      this.actions.forEach((action) => {
+    const subscription = output$.subscribe((data: any) => {
+      this.config.actions.forEach((action) => {
         console.log(`Task [${this.name}] called [${action.method}]`);
         // run action
         ActionRegistry.run(action, data);
       });
     });
+
+    console.log(`Task [${this.name}] is running ...`);
+
+    return subscription;
   }
 }
