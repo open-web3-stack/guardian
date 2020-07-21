@@ -1,7 +1,6 @@
 import { Action } from '../types';
 import POST from './POST';
 import script from './script';
-import { ITask } from '../types';
 
 /**
  * Action registry used for registring and running actions.
@@ -71,8 +70,8 @@ export class ActionRegistry {
    * @param {*} data
    * @memberof ActionRegistry
    */
-  public static run(action: { method: string; [key: string]: any }, data: any, task?: ITask<any>) {
+  public static run(action: { method: string; [key: string]: any }, data: any) {
     const { method, ...args } = action;
-    ActionRegistry.getOrThrow(method)(args, data, task);
+    ActionRegistry.getOrThrow(method)(args, data);
   }
 }

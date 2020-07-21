@@ -12,8 +12,6 @@
       "@open-web3/guardian/*": ["packages/guardian/src/*"],
       "@open-web3/guardian-cli": ["packages/guardian-cli/src"],
       "@open-web3/guardian-cli/*": ["packages/guardian-cli/src/*"],
-      "@open-web3/acala-collateral-auction-guardian": ["packages/acala-collateral-auction-guardian/src"],
-      "@open-web3/acala-collateral-auction-guardian/*": ["packages/acala-collateral-auction-guardian/src/*"],
       "@open-web3/example-guardian": ["packages/example-guardian/src"],
       "@open-web3/example-guardian/*": ["packages/example-guardian/src/*"]
     },

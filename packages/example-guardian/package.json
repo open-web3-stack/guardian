@@ -7,7 +7,8 @@
   "bin": {
     "collateral-auction-guardian": "collateralAuctionExample.js",
     "debit-auction-guardian": "debitAuctionExample.js",
-    "surplus-auction-guardian": "surplusAuctionExample.js"
+    "surplus-auction-guardian": "surplusAuctionExample.js",
+    "liquidation-guardian": "liquidation/index.js"
   },
   "publishConfig": {
     "access": "public",

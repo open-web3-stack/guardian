@@ -88,3 +88,11 @@ export type Position = {
   accumulatedSwap: string;
   profit: string;
 };
+
+export type EthereumSyntheticPool = {
+  owner: string;
+  collaterals: string;
+  minted: string;
+  collateralRatio: number;
+  isSafe: boolean;
+};

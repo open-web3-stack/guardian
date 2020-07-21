@@ -1,16 +1,10 @@
 import { ReplaySubject } from 'rxjs';
-import SyntheticPoolsTask, { Output as EthereumSyntheticPool } from '../../src/tasks/ethereum/SyntheticPoolsTask';
-import registerAction from './registerAction';
+import { EthereumSyntheticPool } from '@open-web3/guardian/types';
+import registerAction from '../registerAction';
 
 const setupMonitoring = () => {
   const laminarLiquidate$ = new ReplaySubject<any>();
-  const ethereumLiquidate$ = new ReplaySubject<{
-    data: EthereumSyntheticPool;
-    task: SyntheticPoolsTask;
-    args: {
-      maxCollateralRatio: number;
-    };
-  }>();
+  const ethereumLiquidate$ = new ReplaySubject<EthereumSyntheticPool>();
 
   registerAction('laminarLiquidate', laminarLiquidate$);
   registerAction('ethereumLiquidate', ethereumLiquidate$);

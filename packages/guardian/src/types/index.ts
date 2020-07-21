@@ -45,7 +45,7 @@ export interface ITask<P extends Record<string, any>, O> {
   start(guardian: IGuardian): Promise<Observable<O>>;
 }
 
-export type Action<Args> = (args: Args, data: any, task: ITask<any>) => void;
+export type Action<Args> = (args: Args, data: any) => void;
 
 export interface GuardianConfig {
   networkType: string;
