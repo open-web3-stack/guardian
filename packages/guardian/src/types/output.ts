@@ -90,6 +90,8 @@ export type Position = {
 };
 
 export type EthereumSyntheticPool = {
+  poolId: string;
+  tokenId: string;
   owner: string;
   collaterals: string;
   minted: string;

@@ -72,6 +72,8 @@ export default class SyntheticPoolsTask extends Task<
             const isSafe = 1 + Number(fromPrecision(liquidationCollateralRatio)) > collateralRatio;
 
             return {
+              poolId,
+              tokenId,
               owner,
               collaterals,
               minted,

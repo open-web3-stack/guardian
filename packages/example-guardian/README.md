@@ -18,6 +18,8 @@ You can extend [YAML config file](resources/surplus-auction-guardian.yml) and ru
 
 ## Liquidation Bot
 
+### _work in progress..._
+
 1. Create `config.yml` like:
 
 ```yaml

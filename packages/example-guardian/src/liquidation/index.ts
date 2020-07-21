@@ -3,7 +3,7 @@ import { EthereumApi } from '@laminar/api';
 import readConst from './const';
 import setupMonitoring from './setupMonitoring';
 
-const run = async () => {
+const run = () => {
   const { nodeEndpoint } = readConst();
   const ethereumApi = new EthereumApi({ provider: new Web3.providers.WebsocketProvider(nodeEndpoint) });
 
@@ -13,8 +13,9 @@ const run = async () => {
     console.log(data);
   });
 
-  ethereumLiquidate$.subscribe(async (result) => {
-    ethereumApi.baseContracts.syntheticFlowProtocol.methods.liquidate().signAndSend();
+  ethereumLiquidate$.subscribe((data) => {
+    console.log(data);
+    // ethereumApi.baseContracts.syntheticFlowProtocol.methods.liquidate(data.tokenId, data.poolId, data.minted).signAndSend();
   });
 
   // start guardian
@@ -25,8 +26,5 @@ export default run;
 
 // if called directly
 if (require.main === module) {
-  run().catch((error) => {
-    console.error(error);
-    process.exit(-1);
-  });
+  run();
 }
