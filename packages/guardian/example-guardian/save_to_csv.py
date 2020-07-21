@@ -8,7 +8,7 @@ data = sys.stdin.readline()
 json = json.loads(data)
 
 header=['Name', 'Account', 'Amount']
-with open('./examples/save_to_csv/events.csv', 'a') as file:
+with open('events.csv', 'a') as file:
     writer = csv.DictWriter(file, fieldnames=header)
     if file.tell() == 0:
         writer.writeheader()

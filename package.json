@@ -11,6 +11,7 @@
     "babel-core": "^7.0.0-bridge.0",
     "typescript": "^3.8.3"
   },
+  "homepage": "https://github.com/open-web3-stack/guardian",
   "scripts": {
     "build": "polkadot-dev-build-ts && (cd packages/example-guardian && cp resources/* build)",
     "build:release": "polkadot-dev-ghact-build",

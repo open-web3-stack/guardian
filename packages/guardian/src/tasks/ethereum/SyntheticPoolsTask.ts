@@ -1,24 +1,28 @@
 import Joi from '@hapi/joi';
-import { TokenInfo } from '@laminar/api';
+import { EthereumApi } from '@laminar/api';
 import { fromPrecision } from '@laminar/types/utils/precision';
-import { switchMap } from 'rxjs/operators';
+import { from } from 'rxjs';
+import { switchMap, flatMap, concatAll } from 'rxjs/operators';
 import { convertToNewHeader } from './helpers';
 import Task from '../Task';
 import { EthereumGuardian } from '../../guardians';
+import { EthereumSyntheticPool } from '../../types';
 
-export type Output = {
-  owner: string;
-  collaterals: string;
-  minted: string;
-  collateralRatio: number;
-  isSafe: boolean;
-};
+const validTokens = ['FEUR', 'FJPY', 'FCAD', 'FCHF', 'FGBP', 'FAUD', 'FOIL', 'FXAU', 'FBTC', 'FETH'];
 
-export default class SyntheticPoolsTask extends Task<{ poolId: string; tokenName: TokenInfo['name'] }, Output> {
+export default class SyntheticPoolsTask extends Task<
+  { poolId: string | string[]; tokenName: string | string[] },
+  EthereumSyntheticPool
+> {
   validationSchema() {
     return Joi.object({
-      poolId: Joi.alt(Joi.string()).required(),
-      tokenName: Joi.alt(Joi.string()).required(),
+      poolId: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
+      tokenName: Joi.alt(
+        Joi.string().valid(...validTokens, 'all'),
+        Joi.array()
+          .min(1)
+          .items(Joi.string().valid(...validTokens))
+      ).required(),
     }).required();
   }
 
@@ -27,48 +31,71 @@ export default class SyntheticPoolsTask extends Task<{ poolId: string; tokenName
 
     const { poolId, tokenName } = this.arguments;
 
-    const tokenId = ethereumApi.tokenIds[tokenName.toUpperCase()];
-
-    if (!tokenId) throw Error('unexpected tokenName');
+    let tokenIds: string[];
+    if (tokenName === 'all') {
+      tokenIds = validTokens.map((i) => ethereumApi.tokenIds[i]);
+    } else if (Array.isArray(tokenName)) {
+      tokenIds = tokenName.map((i) => ethereumApi.tokenIds[i]);
+    } else {
+      tokenIds = [ethereumApi.tokenIds[tokenName]];
+    }
 
     const newHeader$ = convertToNewHeader(ethereumApi);
 
-    return newHeader$.pipe(
-      switchMap(async () => {
-        const poolInterface = ethereumApi.getSyntheticPoolInterfaceContract(poolId);
-        const tokenContract = ethereumApi.getSyntheticFlowTokenContract(tokenId);
+    return this.getPoolIds(ethereumApi, poolId).pipe(
+      flatMap((poolId) =>
+        from(tokenIds).pipe(
+          flatMap((tokenId) =>
+            newHeader$.pipe(
+              switchMap(async () => {
+                const poolInterface = ethereumApi.getSyntheticPoolInterfaceContract(poolId);
+                const tokenContract = ethereumApi.getSyntheticFlowTokenContract(tokenId);
 
-        const [
-          owner,
-          { collaterals, minted },
-          liquidationCollateralRatio,
-          _additionalCollateralRatio,
-          defaultCollateralRatio,
-        ] = await Promise.all([
-          poolInterface.methods.owner().call() as Promise<string>,
-          tokenContract.methods.liquidityPoolPositions(poolId).call() as Promise<{
-            collaterals: string;
-            minted: string;
-          }>,
-          tokenContract.methods.liquidationCollateralRatio().call() as Promise<string>,
-          poolInterface.methods.getAdditionalCollateralRatio(tokenId).call() as Promise<string>,
-          tokenContract.methods.defaultCollateralRatio().call() as Promise<string>,
-        ]);
+                const [
+                  owner,
+                  { collaterals, minted },
+                  liquidationCollateralRatio,
+                  _additionalCollateralRatio,
+                  defaultCollateralRatio,
+                ] = await Promise.all([
+                  poolInterface.methods.owner().call() as Promise<string>,
+                  tokenContract.methods.liquidityPoolPositions(poolId).call() as Promise<{
+                    collaterals: string;
+                    minted: string;
+                  }>,
+                  tokenContract.methods.liquidationCollateralRatio().call() as Promise<string>,
+                  poolInterface.methods.getAdditionalCollateralRatio(tokenId).call() as Promise<string>,
+                  tokenContract.methods.defaultCollateralRatio().call() as Promise<string>,
+                ]);
 
-        const additionalCollateralRatio = Number(fromPrecision(_additionalCollateralRatio));
-        const minCollateralRatio = Number(fromPrecision(defaultCollateralRatio));
-        const collateralRatio =
-          1 + (additionalCollateralRatio >= minCollateralRatio ? additionalCollateralRatio : minCollateralRatio);
-        const isSafe = 1 + Number(fromPrecision(liquidationCollateralRatio)) > collateralRatio;
+                const additionalCollateralRatio = Number(fromPrecision(_additionalCollateralRatio));
+                const minCollateralRatio = Number(fromPrecision(defaultCollateralRatio));
+                const collateralRatio =
+                  1 +
+                  (additionalCollateralRatio >= minCollateralRatio ? additionalCollateralRatio : minCollateralRatio);
+                const isSafe = 1 + Number(fromPrecision(liquidationCollateralRatio)) > collateralRatio;
 
-        return {
-          owner,
-          collaterals,
-          minted,
-          collateralRatio,
-          isSafe,
-        };
-      })
+                return {
+                  poolId,
+                  tokenId,
+                  owner,
+                  collaterals,
+                  minted,
+                  collateralRatio,
+                  isSafe,
+                };
+              })
+            )
+          )
+        )
+      )
     );
+  }
+
+  private getPoolIds(ethereumApi: EthereumApi, poolId: string | string[]) {
+    if (poolId === 'all') {
+      return ethereumApi.synthetic.allPoolIds().pipe(concatAll());
+    }
+    return from(Array.isArray(poolId) ? poolId : [poolId]);
   }
 }

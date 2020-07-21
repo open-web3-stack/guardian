@@ -27,6 +27,7 @@
     "big.js": "^5.2.2",
     "dotenv": "^8.2.0",
     "fs": "^0.0.1-security",
+    "lodash": "^4.17.19",
     "mobx": "^5.15.4",
     "mobx-utils": "^5.6.1",
     "shelljs": "^0.8.3"

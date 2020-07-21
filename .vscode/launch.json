@@ -5,12 +5,73 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Current TS Tests File",
       "type": "node",
       "request": "launch",
-      "args": ["-r", "ts-node/register", "${relativeFile}"],
+      "name": "Collateral Auction Guardian",
       "cwd": "${workspaceRoot}",
-      "protocol": "inspector"
+      "runtimeArgs": ["-r", "ts-node/register"],
+      "env": {
+        "NODE_ENDPOINT": "ws://localhost:9944",
+        "BIDDER_SURI": "//Charlie",
+        "BIDDER_ADDRESS": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
+        "MARGIN": "0.1"
+      },
+      "args": [
+        "${workspaceRoot}/packages/example-guardian/src/collateralAuctionExample.ts",
+        "--config",
+        "${workspaceRoot}/packages/example-guardian/resources/collateral-auction-guardian.yml"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debit Auction Guardian",
+      "cwd": "${workspaceRoot}",
+      "runtimeArgs": ["-r", "ts-node/register"],
+      "env": {
+        "NODE_ENDPOINT": "ws://localhost:9944",
+        "BIDDER_SURI": "//Charlie",
+        "BIDDER_ADDRESS": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
+        "MARGIN": "0.1"
+      },
+      "args": [
+        "${workspaceRoot}/packages/example-guardian/src/debitAuctionExample.ts",
+        "--config",
+        "${workspaceRoot}/packages/example-guardian/resources/debit-auction-guardian.yml"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Surplus Auction Guardian",
+      "cwd": "${workspaceRoot}",
+      "runtimeArgs": ["-r", "ts-node/register"],
+      "env": {
+        "NODE_ENDPOINT": "ws://localhost:9944",
+        "BIDDER_SURI": "//Charlie",
+        "BIDDER_ADDRESS": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
+        "MARGIN": "0.1"
+      },
+      "args": [
+        "${workspaceRoot}/packages/example-guardian/src/surplusAuctionExample.ts",
+        "--config",
+        "${workspaceRoot}/packages/example-guardian/resources/surplus-auction-guardian.yml"
+      ]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Liquidation Guardian",
+      "cwd": "${workspaceRoot}",
+      "runtimeArgs": ["-r", "ts-node/register"],
+      "env": {
+        "NODE_ENDPOINT": "wss://kovan.infura.io/ws/v3/16a5aa3a08c24d56b1586cd06b4055d5"
+      },
+      "args": [
+        "${workspaceRoot}/packages/example-guardian/src/liquidation/index.ts",
+        "--config",
+        "${workspaceRoot}/packages/example-guardian/src/liquidation/example-config.yml"
+      ]
     }
   ]
 }
