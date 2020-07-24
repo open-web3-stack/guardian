@@ -9,8 +9,7 @@ guardians:
         task: system.events
         arguments:
           name:
-            - balances.Deposit
-            - balances.Withdraw
+            - balances.Transfer
         actions:
           - method: script
             path: ./save_to_csv.py

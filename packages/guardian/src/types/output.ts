@@ -44,7 +44,7 @@ export type SurplusAuction = {
 
 export type Event = {
   name: string;
-  args: any;
+  args: Record<string, any>;
 };
 
 export type Pool = {

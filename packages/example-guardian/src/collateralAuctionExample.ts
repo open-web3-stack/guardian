@@ -60,7 +60,8 @@ const run = async () => {
     .pipe(
       withLatestFrom(pool$),
       concatMap(async ([event, pool]) => {
-        const [, currencyId, amount] = event.args;
+        const currencyId = event.args['collateral_type'] || event.args['arg2'];
+        const amount = event.args['collateral_amount'] || event.args['arg3'];
 
         const target = BN(
           calcSwapTargetAmount(

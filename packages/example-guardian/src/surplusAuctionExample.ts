@@ -60,7 +60,7 @@ const run = async () => {
       withLatestFrom(pool$),
       concatMap(async ([event, pool]) => {
         console.log(event);
-        const [, amountHex] = event.args;
+        const amountHex = event.args['surplus_amount'] || event.args['arg2'];
 
         const amount = Fixed18.fromParts(Number(amountHex));
 
