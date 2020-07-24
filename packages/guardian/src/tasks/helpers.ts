@@ -1,6 +1,7 @@
 import Big from 'big.js';
 import { Codec } from '@polkadot/types/types';
 import { Option } from '@polkadot/types/codec';
+import { Event } from '@polkadot/types/interfaces';
 import { TimestampedValue } from '@open-web3/orml-types/interfaces';
 import { Observable, timer, of } from 'rxjs';
 import { switchMap, distinctUntilChanged, filter, map } from 'rxjs/operators';
@@ -70,4 +71,27 @@ export const getOraclePrice = (api: ApiRx, period = 30_000) => (tokenId: string)
     map((i) => Big(getValueFromTimestampValue(i).toString())),
     distinctUntilChanged((a, b) => a.eq(b))
   );
+};
+
+const regex = new RegExp(/\[(\w?,?\s?)+\]/gm);
+
+export const getEventParams = (event: Event): string[] => {
+  const argsStr = event.meta.documentation
+    .reverse()
+    .map((i) => i.toString())
+    .map((doc) => {
+      const results = regex.exec(doc);
+      return results && results[0];
+    })
+    .filter((i): i is string => !!i);
+
+  if (argsStr.length > 0) {
+    return argsStr[0]
+      .slice(1)
+      .slice(0, -1)
+      .split(',')
+      .map((i) => i.trim())
+      .filter((i) => i !== '');
+  }
+  return [];
 };

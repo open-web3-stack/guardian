@@ -3,6 +3,7 @@ import { flatMap, filter } from 'rxjs/operators';
 import BaseSubstrateGuardian from '../../guardians/BaseSubstrateGuardian';
 import Task from '../Task';
 import { Event } from '../../types';
+import { getEventParams } from '../helpers';
 
 export default class EventsTask extends Task<{ name: string | string[] }, Event> {
   validationSchema() {
@@ -19,9 +20,15 @@ export default class EventsTask extends Task<{ name: string | string[] }, Event>
     return apiRx.query.system.events().pipe(
       flatMap((records) => {
         return records.map(({ event }) => {
+          const params = getEventParams(event);
           const { section, method, data } = event;
           const name = `${section}.${method}`;
-          return { name, args: data.toJSON() };
+          const args = {};
+          data.forEach((value, index) => {
+            const key = params[index] || `arg${index + 1}`;
+            args[key] = value.toJSON();
+          });
+          return { name, args };
         });
       }),
       filter((event) => {
