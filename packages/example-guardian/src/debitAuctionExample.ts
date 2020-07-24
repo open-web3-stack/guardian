@@ -60,7 +60,7 @@ const run = async () => {
     .pipe(
       withLatestFrom(pool$),
       concatMap(async ([event, pool]) => {
-        const [, amountHex] = event.args;
+        const amountHex = event.args['debit_currency_amount'] || event.args['arg2'];
 
         const amount = Fixed18.fromParts(Number(amountHex));
 
