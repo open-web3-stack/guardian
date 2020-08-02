@@ -16,6 +16,8 @@ export default class SurplusAuctionsTask extends Task<{}, SurplusAuction> {
 
   async start(guardian: AcalaGuardian) {
     const { apiRx } = await guardian.isReady();
+
+    // TODO: apiRx.query.auctionManager.surplusAuctions.entries()
     return getAuctionsIds(apiRx).pipe(
       flatMap((auctionId) => {
         return combineLatest([

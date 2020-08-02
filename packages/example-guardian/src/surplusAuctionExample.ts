@@ -34,7 +34,7 @@ const run = async () => {
 
             // simple check for enough free balance
             if (BN(balance.free).lt(maxBid.mul(BN(auction.amount)).div(ONE))) {
-              console.error('not enough free balance');
+              console.error('not enough free balance'); // TODO: show how much is needed
               return null;
             }
 

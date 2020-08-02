@@ -9,6 +9,16 @@ import { CollateralAuction } from '../../types';
 import { AcalaGuardian } from '../../guardians';
 import Task from '../Task';
 
+const fulfillArguments = (source: string | string[]) => (input: string): boolean => {
+  if (source === 'all') {
+    return true;
+  } else if (typeof source === 'string') {
+    return source === input;
+  } else {
+    return source.includes(input);
+  }
+};
+
 export default class CollateralAuctionsTask extends Task<
   { account: string | string[]; currencyId: string | string[] },
   CollateralAuction
@@ -25,9 +35,10 @@ export default class CollateralAuctionsTask extends Task<
 
     const { account, currencyId } = this.arguments;
 
-    const fulfillAccount = CollateralAuctionsTask.fulfillArguments(account);
-    const fulfillCurrencyId = CollateralAuctionsTask.fulfillArguments(currencyId);
+    const fulfillAccount = fulfillArguments(account);
+    const fulfillCurrencyId = fulfillArguments(currencyId);
 
+    // TODO: should be: apiRx.query.auctionManager.collateralAuctions.entries()
     return getAuctionsIds(apiRx).pipe(
       flatMap((auctionId) =>
         combineLatest([
@@ -37,7 +48,7 @@ export default class CollateralAuctionsTask extends Task<
           filter(([, collateralAuction]) => {
             const account = collateralAuction.owner.toString();
             const currencyId = collateralAuction.currencyId.toString();
-            return fulfillAccount(account) && fulfillCurrencyId(currencyId);
+            return fulfillAccount(account) && fulfillCurrencyId(currencyId); // TODO: print debug log on why this is filtered
           }),
           map(([auction, collateralAuction]) => {
             let lastBidder: AccountId | null = null;
@@ -62,14 +73,4 @@ export default class CollateralAuctionsTask extends Task<
       )
     );
   }
-
-  static fulfillArguments = (source: string | string[]) => (input: string): boolean => {
-    if (source === 'all') {
-      return true;
-    } else if (typeof source === 'string') {
-      return source === input;
-    } else {
-      return source.includes(input);
-    }
-  };
 }

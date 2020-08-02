@@ -1,9 +1,10 @@
 import { ApiRx } from '@polkadot/api';
 import { Observable, range } from 'rxjs';
-import { map, filter, distinctUntilChanged, switchMap, pairwise, startWith } from 'rxjs/operators';
+import { map, filter, distinctUntilChanged, switchMap, pairwise, startWith, tap } from 'rxjs/operators';
 import { Option } from '@polkadot/types/codec';
 import { Codec } from '@polkadot/types/types';
 
+// TODO: this should be removed
 export /**
  * Stream of auction ids
  *

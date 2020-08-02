@@ -18,7 +18,10 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx packages && tsc --noEmit --pretty",
     "clean": "polkadot-dev-clean-build",
     "postinstall": "polkadot-dev-yarn-only",
-    "test": "jest --runInBand --testPathIgnorePatterns e2e"
+    "test": "jest --runInBand --testPathIgnorePatterns e2e",
+    "dev:collateral-auction": "ts-node-dev --respawn ./packages/example-guardian/src/collateralAuctionExample.ts --config ./packages/example-guardian/resources/collateral-auction-guardian.yml",
+    "dev:debit-auction": "ts-node-dev --respawn ./packages/example-guardian/src/debitAuctionExample.ts --config ./packages/example-guardian/resources/debit-auction-guardian.yml",
+    "dev:surplus-auction": "ts-node-dev --respawn ./packages/example-guardian/src/surplusAuctionExample.ts --config ./packages/example-guardian/resources/surplus-auction-guardian.yml"
   },
   "devDependencies": {
     "@babel/core": "^7.8.4",
@@ -33,6 +36,7 @@
     "prettier": "^2.0.1",
     "pretty-quick": "^2.0.1",
     "ts-node": "^8.6.2",
+    "ts-node-dev": "^1.0.0-pre.56",
     "typescript": "^3.8.3"
   },
   "husky": {

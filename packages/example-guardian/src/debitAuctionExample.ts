@@ -24,18 +24,16 @@ const run = async () => {
         combineLatest(balance$, pool$).pipe(
           take(1),
           concatMap(async ([balance, pool]) => {
-            const maxBid = ONE.sub(ONE.mul(BN(margin)))
-              .mul(BN(pool.price))
-              .div(ONE);
+            const maxBid = ONE.sub(ONE.mul(margin)).mul(pool.price).div(ONE);
 
             if (auction.lastBid && BN(auction.lastBid).gte(maxBid)) {
-              console.error('last bid is bigger than our max bid');
+              console.log('last bid is bigger than our max bid'); // TODO: better error message
               return null;
             }
 
             // simple check for enough free balance
-            if (BN(balance.free).lt(maxBid.mul(BN(auction.amount)).div(ONE))) {
-              console.error('not enough free balance');
+            if (BN(balance.free).lt(maxBid.mul(auction.amount).div(ONE))) {
+              console.log('not enough free balance', balance.free, auction.amount.toString()); // TODO: better error message
               return null;
             }
 

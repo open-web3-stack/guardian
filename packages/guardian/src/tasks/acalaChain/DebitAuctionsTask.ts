@@ -17,6 +17,7 @@ export default class DebitAuctionsTask extends Task<{}, DebitAuction> {
   async start(guardian: AcalaGuardian) {
     const { apiRx } = await guardian.isReady();
 
+    // TODO: apiRx.query.auctionManager.debitAuctions.entries()
     return getAuctionsIds(apiRx).pipe(
       flatMap((auctionId) =>
         combineLatest(
@@ -32,7 +33,7 @@ export default class DebitAuctionsTask extends Task<{}, DebitAuction> {
 
             return {
               auctionId,
-              amount: debitAuction.amount.toString(),
+              amount: debitAuction.fix.toString(),
               fix: debitAuction.fix.toString(),
               startTime: Number.parseInt(debitAuction.startTime.toString()),
               endTime: auction.end.isSome ? Number.parseInt(auction.end.toString()) : null,
