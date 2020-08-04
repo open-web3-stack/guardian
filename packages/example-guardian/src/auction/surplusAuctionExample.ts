@@ -19,10 +19,10 @@ const run = async () => {
 
   surplusAuctions$
     .pipe(
-      concatMap((auction) =>
+      concatMap(({ data: auction }) =>
         combineLatest(balance$, pool$).pipe(
           take(1),
-          concatMap(async ([balance, pool]) => {
+          concatMap(async ([{ data: balance }, { data: pool }]) => {
             const maxBid = ONE.sub(ONE.mul(BN(margin)))
               .mul(BN(pool.price))
               .div(ONE);
@@ -58,7 +58,7 @@ const run = async () => {
   surplusAuctionDealed$
     .pipe(
       withLatestFrom(pool$),
-      concatMap(async ([event, pool]) => {
+      concatMap(async ([{ data: event }, { data: pool }]) => {
         console.log(event);
         const amountHex = event.args['surplus_amount'] || event.args['arg2'];
 

@@ -20,10 +20,10 @@ const run = async () => {
 
   debitAuctions$
     .pipe(
-      concatMap((auction) =>
+      concatMap(({ data: auction }) =>
         combineLatest(balance$, pool$).pipe(
           take(1),
-          concatMap(async ([balance, pool]) => {
+          concatMap(async ([{ data: balance }, { data: pool }]) => {
             const maxBid = ONE.sub(ONE.mul(BN(margin)))
               .mul(BN(pool.price))
               .div(ONE);
@@ -59,7 +59,7 @@ const run = async () => {
   debitAuctionDealed$
     .pipe(
       withLatestFrom(pool$),
-      concatMap(async ([event, pool]) => {
+      concatMap(async ([{ data: event }, { data: pool }]) => {
         const amountHex = event.args['debit_currency_amount'] || event.args['arg2'];
 
         const amount = Fixed18.fromParts(Number(amountHex));

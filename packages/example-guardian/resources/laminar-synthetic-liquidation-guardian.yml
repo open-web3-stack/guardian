@@ -1,0 +1,17 @@
+version: '0.1'
+guardians:
+  laminar-guardian:
+    networkType: laminarChain
+    network: dev
+    nodeEndpoint: ${NODE_ENDPOINT} # or ws://localhost:9944
+    monitors:
+      synthetic-pool:
+        task: synthetic.liquidityPool
+        arguments:
+          poolId: all
+          currencyId: all
+        conditions:
+          - owner: ${ADDRESS}
+          - collateralRatio: <= ${COLLATERAL_RATIO}
+        actions:
+          - method: liquidate

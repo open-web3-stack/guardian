@@ -61,7 +61,14 @@ export const observeRPC = <T>(method: RpcRxResult<any>, params: Parameters<any>,
 };
 
 export const getOraclePrice = (api: ApiRx, period = 30_000) => (tokenId: string) => {
-  if (tokenId === 'AUSD') return of(Big(1e18));
+  // acala chain
+  if (api.consts.cdpTreasury) {
+    const stableCurrencyId = api.consts.cdpTreasury.getStableCurrencyId.toString().toLowerCase();
+    const stableCurrencyIdPrice = api.consts.prices.stableCurrencyFixedPrice.toString();
+    if (tokenId.toLowerCase() === stableCurrencyId) return of(Big(stableCurrencyIdPrice));
+  } else {
+    if (tokenId.toLowerCase() === 'ausd') return of(Big(1e18));
+  }
 
   const price$ = observeRPC<Option<TimestampedValue>>(api.rpc['oracle'].getValue, [tokenId], period);
 

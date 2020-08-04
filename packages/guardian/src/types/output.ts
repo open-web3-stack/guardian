@@ -98,3 +98,12 @@ export type EthereumSyntheticPool = {
   collateralRatio: number;
   isSafe: boolean;
 };
+
+export type Loan = {
+  account: string;
+  currencyId: string;
+  debits: string;
+  debitsUSD: string;
+  collaterals: string;
+  collateralRatio: string;
+};
