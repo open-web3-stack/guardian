@@ -1,7 +1,10 @@
 import Joi from '@hapi/joi';
 import { Subscription, AsyncSubject } from 'rxjs';
+import { logger } from '@polkadot/util';
 import { IGuardian, IMonitor, GuardianConfig, ITaskConstructor } from '../types';
 import Monitor from '../Monitor';
+
+export const l = logger('guardian');
 
 export default abstract class Guardian<Config extends GuardianConfig = GuardianConfig, Props = {}>
   implements IGuardian {
@@ -84,12 +87,12 @@ export default abstract class Guardian<Config extends GuardianConfig = GuardianC
     // unsubscribe any current subscription
     this.subscriptions.map(({ unsubscribe }) => unsubscribe && unsubscribe());
 
-    console.log(`Starting guardian [${this.name}] ...`);
+    l.log(`[${this.name}] starting...`);
 
     // wait until guardian is ready
     this.subscriptions = await Promise.all(this.monitors.map((monitor) => monitor.start(this)));
 
-    console.log(`Guardian [${this.name}] is running ...`);
+    l.log(`[${this.name}] is running ...`);
   };
 
   /**
@@ -98,8 +101,8 @@ export default abstract class Guardian<Config extends GuardianConfig = GuardianC
    * @memberof Guardian
    */
   public readonly stop = () => {
-    console.log(`Stopping guardian [${this.name}] ...`);
     this.subscriptions.map(({ unsubscribe }) => unsubscribe && unsubscribe());
     this.subscriptions = [];
+    l.log(`[${this.name}] stopped`);
   };
 }
