@@ -14,7 +14,7 @@ MARGIN=0.1
 2. Start guardian by running from project directory
 
 ```shell
- npx @open-web3/example-guardian@beta collateral-auction-guardian
+ npx -p @open-web3/example-guardian@beta collateral-auction-guardian
 ```
 
 You can extend [YAML config file](resources/collateral-auction-guardian.yml) and run using option `--config=config.yml`
@@ -35,7 +35,7 @@ MARGIN=0.1
 2. Start guardian by running from project directory
 
 ```shell
-npx @open-web3/example-guardian@beta debit-auction-guardian
+npx -p @open-web3/example-guardian@beta debit-auction-guardian
 ```
 
 You can extend [YAML config file](resources/debit-auction-guardian.yml) and run using option `--config=config.yml`
@@ -56,7 +56,7 @@ MARGIN=0.1
 2. Start guardian by running from project directory
 
 ```shell
-npx @open-web3/example-guardian@beta surplus-auction-guardian
+npx -p @open-web3/example-guardian@beta surplus-auction-guardian
 ```
 
 You can extend [YAML config file](resources/surplus-auction-guardian.yml) and run using option `--config=config.yml`
@@ -79,7 +79,7 @@ COLLATERAL_RATIO=1.04
 2. Start guardian by running from project directory
 
 ```shell
-npx @open-web3/example-guardian@beta laminar-synthetic-liquidation-guardian --config config.yaml`
+npx -p @open-web3/example-guardian@beta laminar-synthetic-liquidation-guardian`
 ```
 
 You can extend [YAML config file](resources/laminar-synthetic-liquidation-guardian.yml) and run using option `--config=config.yml`
@@ -103,7 +103,7 @@ COLLATERAL_RATIO=1.4
 2. Start guardian by running from project directory
 
 ```shell
-npx @open-web3/example-guardian@beta cdp-guardian
+npx -p @open-web3/example-guardian@beta cdp-guardian
 ```
 
 You can extend [YAML config file](resources/cdp-guardian.yml) and run using option `--config=config.yml`

@@ -7,7 +7,7 @@ dotenv.config();
 const read = (configName: string) => {
   if (!process.argv.find((i) => i.startsWith('--config'))) {
     process.argv.push('--config');
-    process.argv.push(path.resolve(__dirname, configName));
+    process.argv.push(path.resolve(__dirname, '..', configName));
   }
 
   const { config: configPath } = require('yargs')
