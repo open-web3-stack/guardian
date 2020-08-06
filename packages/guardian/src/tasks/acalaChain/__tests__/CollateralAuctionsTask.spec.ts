@@ -3,7 +3,7 @@ import './__mocks__/mockAuctions';
 import CollateralAuctionsTask from '../CollateralAuctionsTask';
 import { AcalaGuardian } from '../../../guardians';
 
-describe('CollateralAuctionsTask', () => {
+describe.skip('CollateralAuctionsTask', () => {
   const guardian = new AcalaGuardian('acala-guardian', {
     networkType: 'acalaChain',
     network: 'dev',
