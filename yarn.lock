@@ -2294,12 +2294,23 @@
     mobx "^5.15.4"
     mobx-utils "^5.5.7"
 
-"@open-web3/api@^0.6.0-beta.1":
-  version "0.6.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@open-web3/api/-/api-0.6.0-beta.1.tgz#d994bb366b804cd49993d17b4d5ab8d225e8ed8b"
-  integrity sha512-KAVawnLMRKv5X+Ccr7ai9uyP2yuDS/gHJ1vDKDNNxFlSHF853kYSlKFMpptDdjWuOL09TCnGYfnbB2am52CY2g==
+"@open-web3/api-mobx@^0.6.0-beta.2":
+  version "0.6.0-beta.2"
+  resolved "https://registry.yarnpkg.com/@open-web3/api-mobx/-/api-mobx-0.6.0-beta.2.tgz#c3de74508e923ff68ec77e0a5547676e04718b48"
+  integrity sha512-h8TrZt4it8mFqLbhqgS2qViNT0KQYxjd4C3JMmgQ+bL8KSQxqInststn5Rw5hk/Ud/HliRoi70CBs5f2/MncMw==
   dependencies:
-    "@open-web3/util" "^0.6.0-beta.1"
+    "@polkadot/api" "^1.27.1"
+    "@polkadot/types" "^1.27.1"
+    "@polkadot/util" "^2.17.1"
+    mobx "^5.15.4"
+    mobx-utils "^5.5.7"
+
+"@open-web3/api@^0.6.0-beta.2":
+  version "0.6.0-beta.2"
+  resolved "https://registry.yarnpkg.com/@open-web3/api/-/api-0.6.0-beta.2.tgz#fcf339a647b171df990986a56670f93dc7f8d0d0"
+  integrity sha512-m4foXztHhAvQMwND/jusng9hRoxGiKlT3Vj9R+tKsGKITphOqDD3yulhwQ65jciqpE/gi0G2zTCBta+PWV67Ig==
+  dependencies:
+    "@open-web3/util" "^0.6.0-beta.2"
 
 "@open-web3/orml-api-derive@^0.6.0-beta.1":
   version "0.6.0-beta.1"
@@ -2314,6 +2325,11 @@
   resolved "https://registry.yarnpkg.com/@open-web3/orml-type-definitions/-/orml-type-definitions-0.6.0-beta.1.tgz#84cfbeec08e27085ef9ccf3ab76686e1c7d4c62c"
   integrity sha512-l4mBZCmRkZBOZ8TPr4sUPaddsnGqUOrEwdfUqRfe+Bw0f8doQ2MPI38bB6/F54U2WwBLm2CnpBny2hPa3J0GAA==
 
+"@open-web3/orml-type-definitions@^0.6.0-beta.2":
+  version "0.6.0-beta.2"
+  resolved "https://registry.yarnpkg.com/@open-web3/orml-type-definitions/-/orml-type-definitions-0.6.0-beta.2.tgz#cd522df2eebd805662eda707daf3a87e3cb5efb6"
+  integrity sha512-8mLHBYFRTzD5liq6Rsi9z+m3kXZYun0Lw3pz9WK2Zo8bp4ICfwb15bsOi033XsyTdLDqkFQ4Nwuuz7HhXM4NZg==
+
 "@open-web3/orml-types@^0.6.0-beta.1":
   version "0.6.0-beta.1"
   resolved "https://registry.yarnpkg.com/@open-web3/orml-types/-/orml-types-0.6.0-beta.1.tgz#a16f6623a624935f1f6a9f765801011c5a00498a"
@@ -2321,10 +2337,17 @@
   dependencies:
     "@open-web3/orml-type-definitions" "^0.6.0-beta.1"
 
-"@open-web3/util@^0.6.0-beta.1":
-  version "0.6.0-beta.1"
-  resolved "https://registry.yarnpkg.com/@open-web3/util/-/util-0.6.0-beta.1.tgz#d15856fc2e841f5bb317c47d8bb6d98add24f888"
-  integrity sha512-kc5YCoFY4es+vtvZZJEWF59s6F/Ewx57kpB1TylwD73C3ASM1zfJGtTYBjvRn663d2P+W+HLpISK8bSN41g87g==
+"@open-web3/orml-types@^0.6.0-beta.2":
+  version "0.6.0-beta.2"
+  resolved "https://registry.yarnpkg.com/@open-web3/orml-types/-/orml-types-0.6.0-beta.2.tgz#e73dc8162ef81a81522d4b5bf778b81189dc5c34"
+  integrity sha512-Kbq5m10hDiXbKCUUJAAqbUA9r921/97IQB0KxNwZsl50Eg3VHq4icC21FvIQdaP17CWGzWru6w7SVdruZEI8IA==
+  dependencies:
+    "@open-web3/orml-type-definitions" "^0.6.0-beta.2"
+
+"@open-web3/util@^0.6.0-beta.2":
+  version "0.6.0-beta.2"
+  resolved "https://registry.yarnpkg.com/@open-web3/util/-/util-0.6.0-beta.2.tgz#cdaec352708e4a45d5603c1699431e16610da72e"
+  integrity sha512-6cYcjJ6vdk04UUTgfD1ENI/5TKXsFBIvvKzKr2Z3v3Idsb5p2EUD32ag3DoFokNT6IVpLtlkOnafseNwH1J7Tg==
   dependencies:
     "@yarnpkg/lockfile" "^1.1.0"
     big.js "^5.2.2"
@@ -2542,7 +2565,7 @@
     chalk "^4.1.0"
     ip-regex "^4.1.0"
 
-"@polkadot/util@^2.8.1":
+"@polkadot/util@^2.17.1", "@polkadot/util@^2.8.1":
   version "2.18.1"
   resolved "https://registry.yarnpkg.com/@polkadot/util/-/util-2.18.1.tgz#81380f21e47f3c5657ef09be7c477a72838d35eb"
   integrity sha512-0KAojJMR5KDaaobIyvHVuW9vBP5LG3S0vpRSovB4UPlGDok3ETJSm5lMhA0t2KM8C4gXGBakCotFVGSOvWGgjA==

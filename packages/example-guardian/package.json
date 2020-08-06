@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/open-web3-stack/guardian",
   "dependencies": {
-    "@open-web3/api": "^0.6.0-beta.1",
+    "@open-web3/api": "^0.6.0-beta.2",
     "@open-web3/guardian": "^0.3.0-beta.17",
     "@open-web3/guardian-cli": "^0.3.0-beta.17"
   }

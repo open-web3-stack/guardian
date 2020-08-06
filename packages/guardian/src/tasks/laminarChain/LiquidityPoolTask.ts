@@ -72,13 +72,14 @@ export default class LiquidityPoolTask extends Task<
                   ? ONE.mul(0.05).toFixed()
                   : ratio.liquidation.unwrap().toString();
 
-                const { synthetic, collateral } = position;
-                if (synthetic.eq(0)) return pool;
+                const synthetic = position.synthetic.toString();
+                const collateral = position.collateral.toString();
+                if (synthetic === '0') return pool;
 
                 // syntheticValue = price * synthetic / 1e18
-                const syntheticValue = price.mul(synthetic.toString()).div(ONE);
+                const syntheticValue = price.mul(synthetic).div(ONE);
                 // collateralRatio = collateral / syntheticValue
-                const collateralRatio = new Big(collateral.toString()).div(syntheticValue);
+                const collateralRatio = new Big(collateral).div(syntheticValue);
                 // safeRatio = 1 + liquidation
                 const safeRatio = ONE.add(liquidation).div(ONE);
                 // isSafe = collateralRatio > safeRatio
