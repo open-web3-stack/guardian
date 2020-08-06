@@ -35,7 +35,7 @@ export default class CollateralAuctionsTask extends Task<
           unwrapOptionalCodec(apiRx.query.auctionManager.collateralAuctions<Option<CollateralAuctionItem>>(auctionId)),
         ]).pipe(
           filter(([, collateralAuction]) => {
-            const account = collateralAuction.owner.toString();
+            const account = collateralAuction.refundRecipient.toString();
             const currencyId = collateralAuction.currencyId.toString();
             return fulfillAccount(account) && fulfillCurrencyId(currencyId);
           }),
@@ -47,7 +47,7 @@ export default class CollateralAuctionsTask extends Task<
             }
 
             return {
-              account: collateralAuction.owner.toString(),
+              account: collateralAuction.refundRecipient.toString(),
               currencyId: collateralAuction.currencyId.toString(),
               auctionId,
               amount: collateralAuction.amount.toString(),

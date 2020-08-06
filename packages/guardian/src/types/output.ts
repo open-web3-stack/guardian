@@ -67,7 +67,7 @@ export type LiquidityPool = {
   liquidity: string;
   bidSpread: string | null;
   askSpread: string | null;
-  additionalCollateralRatio: number | null;
+  additionalCollateralRatio: string | null;
   enabled: boolean;
   syntheticIssuance: string;
   collateralBalance: string;
