@@ -22,7 +22,7 @@ export default async (nodeEndpoint: string, bidderSURI: string, bidderAddress: s
 
   const bid = async (auctionId: number, bid: string) => {
     const tx = apiManager.api.tx.auction.bid(auctionId, bid);
-    return apiManager.signAndSend(tx, { account: keyringPair }).send;
+    return apiManager.signAndSend(tx, { account: keyringPair }).finalized;
   };
 
   const swap = async (
@@ -37,7 +37,7 @@ export default async (nodeEndpoint: string, bidderSURI: string, bidderAddress: s
       targetCurrencyId as any,
       targetAmount
     );
-    return apiManager.signAndSend(tx, { account: keyringPair }).send;
+    return apiManager.signAndSend(tx, { account: keyringPair }).finalized;
   };
 
   return { exchangeFee, slippage, bid, swap };

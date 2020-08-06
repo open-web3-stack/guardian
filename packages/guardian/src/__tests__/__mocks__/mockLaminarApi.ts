@@ -48,6 +48,7 @@ const MockLaminarApi = {
     ),
   },
   api: {
+    consts: {},
     query: {
       syntheticTokens: {
         positions: jest.fn(() =>

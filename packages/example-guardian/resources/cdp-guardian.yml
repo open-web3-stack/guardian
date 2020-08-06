@@ -1,0 +1,18 @@
+version: '0.1'
+guardians:
+  acala-guardian:
+    networkType: acalaChain
+    network: dev
+    nodeEndpoint: ${NODE_ENDPOINT}
+    confirmation: finalize
+
+    monitors:
+      loans-monitor:
+        task: honzon.loans
+        arguments:
+          account: ${ADDRESS}
+          currencyId: all
+        conditions:
+          - collateralRatio: <= ${COLLATERAL_RATIO}
+        actions:
+          - method: unsafeLoan

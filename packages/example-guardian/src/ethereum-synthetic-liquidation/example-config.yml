@@ -1,0 +1,17 @@
+version: '0.1'
+guardians:
+  ethereum-guardian:
+    networkType: ethereum
+    network: kovan
+    nodeEndpoint: ${NODE_ENDPOINT} # or or wss://kovan.infura.io/ws/v3/YOUR-PROJECT-ID
+    monitors:
+      synthetic-pool:
+        task: synthetic.pools
+        arguments:
+          poolId: all
+          tokenName: all
+        conditions:
+          # - collateralRatio: <= ${COLLATERAL_RATIO}
+          # - owner: ${ADDRESS}
+        actions:
+          - method: liquidate

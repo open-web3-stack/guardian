@@ -4,12 +4,17 @@ import { Observable, of, from, combineLatest } from 'rxjs';
 import { map, flatMap, filter, concatAll } from 'rxjs/operators';
 import { LaminarApi } from '@laminar/api';
 import { SyntheticTokensRatio, SyntheticPosition } from '@laminar/types/interfaces';
+import { Permill } from '@polkadot/types/interfaces';
 import { LiquidityPool } from '../../types';
 import { isNonNull, getOraclePrice } from '../helpers';
 import Task from '../Task';
 import { LaminarGuardian } from '../../guardians';
 
 const ONE = Big(1e18);
+
+const toFixed128 = (value: Permill): Big => {
+  return Big(value.toString()).mul(1e12);
+};
 
 export default class LiquidityPoolTask extends Task<
   { poolId: number | number[] | 'all'; currencyId: string | string[]; period?: number },
@@ -27,6 +32,8 @@ export default class LiquidityPoolTask extends Task<
     const { laminarApi } = await guardian.isReady();
 
     const { poolId, currencyId, period } = this.arguments;
+
+    const getPrice = getOraclePrice(laminarApi.api, period);
 
     return LiquidityPoolTask.getPoolIds(laminarApi, poolId).pipe(
       flatMap((poolId) =>
@@ -60,17 +67,17 @@ export default class LiquidityPoolTask extends Task<
                 })
             )
           ),
-          map((pool) =>
+          flatMap((pool) =>
             combineLatest([
               laminarApi.api.query.syntheticTokens.positions<SyntheticPosition>(pool.poolId, pool.currencyId),
               laminarApi.api.query.syntheticTokens.ratios<SyntheticTokensRatio>(pool.currencyId),
-              getOraclePrice(laminarApi.api, period)(pool.currencyId),
+              getPrice(pool.currencyId),
             ]).pipe(
               map(([position, ratio, price]) => {
                 // unwrap liquidation or default 0.05%
                 const liquidation = ratio.liquidation.isEmpty
-                  ? ONE.mul(0.05).toFixed()
-                  : ratio.liquidation.unwrap().toString();
+                  ? ONE.mul(0.05).toFixed(0)
+                  : toFixed128(ratio.liquidation.unwrap()).toFixed(0);
 
                 const synthetic = position.synthetic.toString();
                 const collateral = position.collateral.toString();
@@ -94,8 +101,7 @@ export default class LiquidityPoolTask extends Task<
                 };
               })
             )
-          ),
-          concatAll()
+          )
         )
       )
     );

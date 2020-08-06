@@ -1,10 +1,14 @@
-import { Observer } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { ActionRegistry } from '@open-web3/guardian';
 
-const registerAction = (method: string, stream$: Observer<any>) => {
+const registerAction = <T>(method: string): Observable<{ args: any; data: T }> => {
+  const subject = new Subject<{ args: any; data: T }>();
+
   ActionRegistry.register(method, (args: any, data: any) => {
-    stream$.next(data);
+    subject.next({ args, data });
   });
+
+  return subject.asObservable();
 };
 
 export default registerAction;

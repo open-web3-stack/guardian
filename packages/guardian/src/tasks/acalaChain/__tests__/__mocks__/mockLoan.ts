@@ -15,6 +15,7 @@ register.register(customTypes);
 const MockLoan = of({
   consts: {
     cdpTreasury: { getStableCurrencyId: 'AUSD' },
+    prices: { stableCurrencyFixedPrice: 1e18 },
     cdpEngine: {
       collateralCurrencyIds: new (Vec.with('CurrencyId'))(register, ['DOT', 'XBTC', 'LDOT']),
     },
@@ -33,12 +34,14 @@ const MockLoan = of({
         return of({ token: currencyId, debitExchangeRate: new BN('100242367706398103') });
       }),
     },
-    price: {
-      price: jest.fn((currencyId) => {
+  },
+  rpc: {
+    oracle: {
+      getValue: jest.fn((currencyId) => {
         if (currencyId === 'DOT') {
-          return of({ value: new BN('300000000000000000000') });
+          return of(register.createType('Option<TimestampedValue>', { value: '300000000000000000000' }));
         }
-        return of({ value: new BN('1000000000000000000') });
+        return of(register.createType('Option<TimestampedValue>', { value: '1000000000000000000' }));
       }),
     },
   },

@@ -12,7 +12,9 @@ guardians:
         arguments:
           name: auctionManager.CollateralAuctionDealed
         conditions:
-          - args[3]: 'eq ${BIDDER_ADDRESS}' # do not change
+          - args.winner: 'eq ${BIDDER_ADDRESS}' # do not change
+          - $or:
+              - args.arg4: 'eq ${BIDDER_ADDRESS}' # fallback. do not change
         actions:
           - method: internal-collateral-auction-dealed # do not change
 
@@ -38,5 +40,7 @@ guardians:
         task: dex.pools
         arguments:
           currencyId: all
+        conditions:
+          - price: 'ne 0'
         actions:
           - method: internal-pool # do not change

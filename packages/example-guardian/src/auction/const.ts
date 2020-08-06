@@ -1,5 +1,8 @@
 import path from 'path';
 import { readConfig } from '@open-web3/guardian';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const read = (configName: string) => {
   if (!process.argv.find((i) => i.startsWith('--config'))) {

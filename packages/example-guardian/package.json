@@ -1,14 +1,15 @@
 {
   "name": "@open-web3/example-guardian",
   "version": "0.3.0-beta.19",
-  "description": "Bid on collateral auction and swap dealed auction to make profit",
+  "description": "Collection of guardian examples",
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
   "bin": {
-    "collateral-auction-guardian": "collateralAuctionExample.js",
-    "debit-auction-guardian": "debitAuctionExample.js",
-    "surplus-auction-guardian": "surplusAuctionExample.js",
-    "liquidation-guardian": "liquidation/index.js"
+    "collateral-auction-guardian": "auction/collateralAuctionExample.js",
+    "debit-auction-guardian": "auction/debitAuctionExample.js",
+    "surplus-auction-guardian": "auction/surplusAuctionExample.js",
+    "laminar-synthetic-liquidation-guardian": "laminar-synthetic-liquidation/index.js",
+    "cdp-guardian": "cdp/index.js"
   },
   "publishConfig": {
     "access": "public",
@@ -22,6 +23,7 @@
   "dependencies": {
     "@open-web3/api": "^0.6.0-beta.2",
     "@open-web3/guardian": "^0.3.0-beta.19",
-    "@open-web3/guardian-cli": "^0.3.0-beta.19"
+    "@open-web3/guardian-cli": "^0.3.0-beta.19",
+    "dotenv": "^8.2.0"
   }
 }

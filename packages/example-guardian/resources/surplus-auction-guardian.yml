@@ -12,7 +12,9 @@ guardians:
         arguments:
           name: auctionManager.SurplusAuctionDealed
         conditions:
-          - args[2]: 'eq ${BIDDER_ADDRESS}' # do not change
+          - args.winner: 'eq ${BIDDER_ADDRESS}' # do not change
+          - $or:
+              - arg2: 'eq ${BIDDER_ADDRESS}' # fallback. do not change
         actions:
           - method: internal-surplus-auction-dealed # do not change
 
@@ -35,5 +37,7 @@ guardians:
         task: dex.pools
         arguments:
           currencyId: ACA
+        conditions:
+          - price: 'ne 0'
         actions:
           - method: internal-pool # do not change
