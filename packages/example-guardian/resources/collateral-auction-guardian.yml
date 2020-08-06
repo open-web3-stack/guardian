@@ -12,7 +12,9 @@ guardians:
         arguments:
           name: auctionManager.CollateralAuctionDealed
         conditions:
-          - args[3]: 'eq ${BIDDER_ADDRESS}' # do not change
+          - args.winner: 'eq ${BIDDER_ADDRESS}' # do not change
+          - $or:
+              - args.arg4: 'eq ${BIDDER_ADDRESS}' # fallback. do not change
         actions:
           - method: internal-collateral-auction-dealed # do not change
 
@@ -20,7 +22,7 @@ guardians:
         task: honzon.collateralAuctions
         arguments:
           account: all
-          currencyId: XBTC
+          currencyId: all
         conditions:
           - lastBidder: 'ne ${BIDDER_ADDRESS}' # do not change
         actions:
@@ -34,9 +36,11 @@ guardians:
         actions:
           - method: internal-balance # do not change
 
-      XBTCPool:
+      DEXPool:
         task: dex.pools
         arguments:
-          currencyId: XBTC
+          currencyId: all
+        conditions:
+          - price: 'ne 0'
         actions:
           - method: internal-pool # do not change

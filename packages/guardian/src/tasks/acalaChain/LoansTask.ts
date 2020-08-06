@@ -9,7 +9,7 @@ import { Loan } from '../../types';
 import Task from '../Task';
 
 export default class LoansTask extends Task<
-  { account: string | string[]; currencyId: string | string[]; period: number },
+  { account: string | string[]; currencyId: string | string[]; period?: number },
   Loan
 > {
   validationSchema() {

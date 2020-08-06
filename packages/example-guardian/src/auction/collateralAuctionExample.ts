@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
-import BN from 'big.js';
+import Big from 'big.js';
 import { calcSwapTargetAmount } from '@acala-network/app-util';
-import { combineLatest } from 'rxjs';
-import { concatMap, take, withLatestFrom, catchError } from 'rxjs/operators';
-
+import { ReplaySubject, Observable } from 'rxjs';
+import { concatMap, take, catchError } from 'rxjs/operators';
+import { Pool } from '@open-web3/guardian/types';
 import readConst from './const';
 import setupApi from './setupApi';
 import setupMonitoring from './setupMonitoring';
 
-const ONE = BN('1000000000000000000');
+const ONE = Big(1e18);
 
 const run = async () => {
   const { nodeEndpoint, bidderAddress, margin, bidderSURI } = readConst('collateral-auction-guardian.yml');
@@ -18,52 +18,62 @@ const run = async () => {
 
   const { collateralAuctionDealed$, collateralAuctions$, balance$, pool$ } = setupMonitoring();
 
+  const pools: Record<string, Observable<Pool>> = {};
+
+  const getPool = (currencyId: string): Promise<Pool> => {
+    if (pools[currencyId] == null) {
+      const subject$ = new ReplaySubject<Pool>(1);
+      pool$.subscribe((pool) => subject$.next(pool));
+      pools[currencyId] = subject$.asObservable();
+    }
+    return pools[currencyId].pipe(take(1)).toPromise();
+  };
+
+  const getBalance = () => {
+    return balance$.asObservable().pipe(take(1)).toPromise();
+  };
+
   collateralAuctions$
     .pipe(
-      concatMap(({ data: auction }) =>
-        combineLatest(balance$, pool$).pipe(
-          take(1),
-          concatMap(async ([{ data: balance }, { data: pool }]) => {
-            const maxBid = ONE.sub(ONE.mul(BN(margin)))
-              .mul(BN(pool.price))
-              .div(ONE);
+      concatMap(async ({ data: auction }) => {
+        const balance = await getBalance();
+        const pool = await getPool(auction.currencyId);
 
-            if (auction.lastBid && BN(auction.lastBid).gte(maxBid)) {
-              console.error('last bid is bigger than our max bid');
-              return null;
-            }
+        const maxBid = ONE.sub(ONE.mul(margin)).mul(pool.price).div(ONE);
 
-            // simple check for enough free balance
-            if (BN(balance.free).lt(maxBid.mul(BN(auction.amount)).div(ONE))) {
-              console.error('not enough free balance');
-              return null;
-            }
+        if (auction.lastBid && Big(auction.lastBid).gte(maxBid)) {
+          console.error('last bid is bigger than our max bid');
+          return null;
+        }
 
-            return await bid(auction.auctionId, maxBid.toFixed(0));
-          })
-        )
-      ),
+        // simple check for enough free balance
+        if (Big(balance.free).lt(maxBid.mul(auction.amount).div(ONE))) {
+          console.error('not enough free balance');
+          return null;
+        }
+
+        return await bid(auction.auctionId, maxBid.toFixed(0));
+      }),
       catchError((error) => {
         throw error;
       })
     )
     .subscribe(
       (hash) => {
-        if (hash) {
-          console.log('Bid sent', `Hash: ${hash.toString()}`);
-        }
+        hash && console.log('Bid sent', `Hash: ${hash.toString()}`);
       },
       (error) => console.error(error)
     );
 
   collateralAuctionDealed$
     .pipe(
-      withLatestFrom(pool$),
-      concatMap(async ([{ data: event }, { data: pool }]) => {
+      concatMap(async ({ data: event }) => {
         const currencyId = event.args['collateral_type'] || event.args['arg2'];
         const amount = event.args['collateral_amount'] || event.args['arg3'];
 
-        const target = BN(
+        const pool = await getPool(currencyId);
+
+        const target = Big(
           calcSwapTargetAmount(
             Number.parseInt(amount),
             Number.parseInt(pool.otherLiquidity),

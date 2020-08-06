@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import BN from 'big.js';
+import Big from 'big.js';
 import { calcTargetInBaseToOther, Fixed18 } from '@acala-network/app-util';
 import { combineLatest } from 'rxjs';
 import { concatMap, take, withLatestFrom, catchError } from 'rxjs/operators';
@@ -9,7 +9,7 @@ import readConst from './const';
 import setupApi from './setupApi';
 import setupMonitoring from './setupMonitoring';
 
-const ONE = BN('1000000000000000000');
+const ONE = Big(1e18);
 
 const run = async () => {
   const { nodeEndpoint, bidderAddress, margin, bidderSURI } = readConst('surplus-auction-guardian.yml');
@@ -22,18 +22,16 @@ const run = async () => {
       concatMap(({ data: auction }) =>
         combineLatest(balance$, pool$).pipe(
           take(1),
-          concatMap(async ([{ data: balance }, { data: pool }]) => {
-            const maxBid = ONE.sub(ONE.mul(BN(margin)))
-              .mul(BN(pool.price))
-              .div(ONE);
+          concatMap(async ([balance, pool]) => {
+            const maxBid = ONE.sub(ONE.mul(margin)).mul(pool.price).div(ONE);
 
-            if (auction.lastBid && BN(auction.lastBid).gte(maxBid)) {
+            if (auction.lastBid && Big(auction.lastBid).gte(maxBid)) {
               console.error('last bid is bigger than our max bid');
               return null;
             }
 
             // simple check for enough free balance
-            if (BN(balance.free).lt(maxBid.mul(BN(auction.amount)).div(ONE))) {
+            if (Big(balance.free).lt(maxBid.mul(auction.amount).div(ONE))) {
               console.error('not enough free balance');
               return null;
             }
@@ -48,9 +46,7 @@ const run = async () => {
     )
     .subscribe(
       (hash) => {
-        if (hash) {
-          console.log('Bid sent', `Hash: ${hash.toString()}`);
-        }
+        hash && console.log('Bid sent', `Hash: ${hash.toString()}`);
       },
       (error) => console.error(error)
     );
@@ -58,8 +54,7 @@ const run = async () => {
   surplusAuctionDealed$
     .pipe(
       withLatestFrom(pool$),
-      concatMap(async ([{ data: event }, { data: pool }]) => {
-        console.log(event);
+      concatMap(async ([{ data: event }, pool]) => {
         const amountHex = event.args['surplus_amount'] || event.args['arg2'];
 
         const amount = Fixed18.fromParts(Number(amountHex));

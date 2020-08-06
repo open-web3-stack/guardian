@@ -1,8 +1,7 @@
-import { filter } from 'rxjs/operators';
+import { ReplaySubject } from 'rxjs';
+import { ActionRegistry } from '@open-web3/guardian';
 import { CollateralAuction, DebitAuction, SurplusAuction, Balance, Event, Pool } from '@open-web3/guardian/types';
 import registerAction from '../registerAction';
-
-export { CollateralAuction, Balance, Event };
 
 const setupMonitoring = () => {
   const collateralAuctions$ = registerAction<CollateralAuction>('internal-collateral-auctions');
@@ -14,8 +13,15 @@ const setupMonitoring = () => {
   const surplusAuctions$ = registerAction<SurplusAuction>('internal-surplus-auctions');
   const surplusAuctionDealed$ = registerAction<Event>('internal-surplus-auction-dealed');
 
-  const balance$ = registerAction<Balance>('internal-balance');
-  const pool$ = registerAction<Pool>('internal-pool');
+  const balance$ = new ReplaySubject<Balance>(1);
+  ActionRegistry.register('internal-balance', (args: any, data: any) => {
+    balance$.next(data);
+  });
+
+  const pool$ = new ReplaySubject<Pool>();
+  ActionRegistry.register('internal-pool', (args: any, data: any) => {
+    pool$.next(data);
+  });
 
   return {
     collateralAuctionDealed$,
@@ -25,7 +31,7 @@ const setupMonitoring = () => {
     debitAuctions$,
     surplusAuctions$,
     balance$,
-    pool$: pool$.pipe(filter(({ data }) => data.price > '0')),
+    pool$,
   };
 };
 
