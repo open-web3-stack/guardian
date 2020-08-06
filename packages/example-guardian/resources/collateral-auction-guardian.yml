@@ -20,7 +20,7 @@ guardians:
         task: honzon.collateralAuctions
         arguments:
           account: all
-          currencyId: XBTC
+          currencyId: all
         conditions:
           - lastBidder: 'ne ${BIDDER_ADDRESS}' # do not change
         actions:
@@ -34,9 +34,9 @@ guardians:
         actions:
           - method: internal-balance # do not change
 
-      XBTCPool:
+      DEXPool:
         task: dex.pools
         arguments:
-          currencyId: XBTC
+          currencyId: all
         actions:
           - method: internal-pool # do not change
