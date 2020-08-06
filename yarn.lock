@@ -2,50 +2,50 @@
 # yarn lockfile v1
 
 
-"@acala-network/api-derive@^0.2.0-beta.63":
-  version "0.2.0-beta.63"
-  resolved "https://registry.yarnpkg.com/@acala-network/api-derive/-/api-derive-0.2.0-beta.63.tgz#10ca87dc4cd5e00cc2718e860ef1ee2fda82a081"
-  integrity sha512-hOvD1Lae7WXRkRGyrMTzxipVmcQNf0b0+2YwXsbnCtJW0Yw0GZSL/X8upXNcn1uBVgLo8nLoJF5dDKSQWmZLig==
+"@acala-network/api-derive@^0.4.0-beta.0":
+  version "0.4.0-beta.0"
+  resolved "https://registry.yarnpkg.com/@acala-network/api-derive/-/api-derive-0.4.0-beta.0.tgz#66c05238ca571dded3d20c0a13aaf9fe602e789e"
+  integrity sha512-aV9ZqpcsV+pb82zq6faYCWlvdfVlU323OPQrkBY2Z7rC8Ln12AoTLykKdwTBEuCRftoKwlHWLJtJ3CZj0+UIxA==
   dependencies:
-    "@acala-network/types" "^0.2.0-beta.63"
+    "@acala-network/types" "^0.4.0-beta.0"
     "@babel/runtime" "^7.10.2"
     "@polkadot/rpc-core" "^1.18.1"
     memoizee "^0.4.14"
     rxjs "^6.5.5"
 
-"@acala-network/api@^0.2.0-beta.57":
-  version "0.2.0-beta.63"
-  resolved "https://registry.yarnpkg.com/@acala-network/api/-/api-0.2.0-beta.63.tgz#1eb11a7bafac35ed1c9d9210da3796efb8695ae9"
-  integrity sha512-rx6fekS1o5rOyJIvvvL2T7/mT0Wz52hn54T4h0MyIMCfNWuVawAFxkJ9dt6lP1yh/qssxYwi5oMB1OzOcD8w4Q==
+"@acala-network/api@^0.4.0-beta.0":
+  version "0.4.0-beta.0"
+  resolved "https://registry.yarnpkg.com/@acala-network/api/-/api-0.4.0-beta.0.tgz#f891eeb0a9b390fa2786129f942b17189daf93e2"
+  integrity sha512-sNNY4W6Xvdt4XBJQLQJGdvr1JAAYmIwfnq/vG4tig7JCkCPPRRH0bBpE2ATN76c0uNG3P6gFNzgWxoPgh2j8gA==
   dependencies:
-    "@acala-network/api-derive" "^0.2.0-beta.63"
-    "@acala-network/types" "^0.2.0-beta.63"
+    "@acala-network/api-derive" "^0.4.0-beta.0"
+    "@acala-network/types" "^0.4.0-beta.0"
     "@babel/runtime" "^7.10.2"
     "@open-web3/orml-api-derive" "^0.5.1"
     "@polkadot/api" "^1.18.1"
     "@polkadot/rpc-core" "^1.18.1"
 
-"@acala-network/app-util@^0.2.0-beta.57":
-  version "0.2.0-beta.63"
-  resolved "https://registry.yarnpkg.com/@acala-network/app-util/-/app-util-0.2.0-beta.63.tgz#d632447b2559019e49b0d872cc2e4851a9212bc3"
-  integrity sha512-vFpNwFRjKx+lP+nI0FdcRio/zgcr8wpeFlsZcGis4kOMJ3R/MWIKtcDUVhIy46AZSGpq7D7yqLhIb2Nuanddnw==
+"@acala-network/app-util@^0.4.0-beta.0":
+  version "0.4.0-beta.0"
+  resolved "https://registry.yarnpkg.com/@acala-network/app-util/-/app-util-0.4.0-beta.0.tgz#ee755391acdfb83b459dcb025fa695585007a885"
+  integrity sha512-y7Kl/gIoPm9PcQRwnwqIwDtPLdKEDhdoHcmVrGejhiDSiUIgPmGFc1hcpO4BuKJxwiYI7cbOrw4fL3N5OVDs3Q==
   dependencies:
     "@babel/runtime" "^7.10.2"
     bignumber.js "^9.0.0"
 
-"@acala-network/type-definitions@^0.2.0-beta.63":
-  version "0.2.0-beta.63"
-  resolved "https://registry.yarnpkg.com/@acala-network/type-definitions/-/type-definitions-0.2.0-beta.63.tgz#7be279df5a91b7c94bf6d0f5a9368e3890441652"
-  integrity sha512-YglRjk0gftWHwmpyDEPNyp6qR7/vUcIFuxTczjLSgVy24WOOUNEz69cHv10xAt/ZUH/eFZ/wW756kd8G9gewbw==
+"@acala-network/type-definitions@^0.4.0-beta.0":
+  version "0.4.0-beta.0"
+  resolved "https://registry.yarnpkg.com/@acala-network/type-definitions/-/type-definitions-0.4.0-beta.0.tgz#99f01924dc319e057dadd5b1147f81918a8cdc61"
+  integrity sha512-EOK+/uOSrx7VW45H2i2Ok6bS0ct+WdRB0mutP8BpXeRCW4mmlUjdyPLgSRprL0VgJUAw76JV+QDp2Ka6HKDsWQ==
   dependencies:
     "@open-web3/orml-type-definitions" "^0.5.1"
 
-"@acala-network/types@^0.2.0-beta.63":
-  version "0.2.0-beta.63"
-  resolved "https://registry.yarnpkg.com/@acala-network/types/-/types-0.2.0-beta.63.tgz#77fcf90c089201ca0d5f08d261536acef744009c"
-  integrity sha512-tKhZnoQCs7bB3tHLimAzzzMv9jTJzYB64dA6N2BE/d8vP7diGCHCxc/nOqkl9W4CJMhSxi/M+FeADV0zYLCyQg==
+"@acala-network/types@^0.4.0-beta.0":
+  version "0.4.0-beta.0"
+  resolved "https://registry.yarnpkg.com/@acala-network/types/-/types-0.4.0-beta.0.tgz#0ec593165f88821a9a86eccb71a1c92814c03e8b"
+  integrity sha512-x2GP0/Z3CmeRA1pA8bQyoFuQ6Q/Yaiz8wjlkVDS8vdbyXeLbL0ak2EtUd1SIndFF+g9C0VKecHKu/7WaaVCiOA==
   dependencies:
-    "@acala-network/type-definitions" "^0.2.0-beta.63"
+    "@acala-network/type-definitions" "^0.4.0-beta.0"
     "@babel/runtime" "^7.10.2"
     "@open-web3/api-mobx" "^0.5.1"
     "@open-web3/orml-types" "^0.5.1"
