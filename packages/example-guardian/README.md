@@ -19,6 +19,8 @@ MARGIN=0.1
 
 You can extend [YAML config file](resources/collateral-auction-guardian.yml) and run using option `--config=config.yml`
 
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/AcalaNetwork/collateral-auction-bot-template)
+
 #
 
 ## Debit Auction Example
