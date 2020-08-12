@@ -91,7 +91,7 @@ You can extend [YAML config file](resources/laminar-synthetic-liquidation-guardi
 # CDP Guardian Bot
 
 CDP Guardian Bot will monitor your loans and if the collateral ratio drops
-below a certain threshold it will deposit more liquidity to mantain the loan safe.
+below a certain threshold it will deposit more liquidity to maintain the loan safe.
 
 1. Create a `.env` file in the project directory
 

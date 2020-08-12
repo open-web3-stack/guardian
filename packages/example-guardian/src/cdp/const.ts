@@ -7,7 +7,7 @@ dotenv.config();
 export const readConst = () => {
   if (!process.argv.find((i) => i.startsWith('--config'))) {
     process.argv.push('--config');
-    process.argv.push(path.resolve(__dirname, 'cdp-guardian.yml'));
+    process.argv.push(path.resolve(__dirname, '..', 'cdp-guardian.yml'));
   }
 
   const nodeEndpoint = getEnv('NODE_ENDPOINT');
