@@ -109,3 +109,5 @@ npx -p @open-web3/example-guardian@beta cdp-guardian
 ```
 
 You can extend [YAML config file](resources/cdp-guardian.yml) and run using option `--config=config.yml`
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/AcalaNetwork/cdp-bot-template)

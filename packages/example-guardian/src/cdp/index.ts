@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { Loan } from '@open-web3/guardian/types';
 import { setupApi } from './setupApi';
 import registerAction from '../registerAction';

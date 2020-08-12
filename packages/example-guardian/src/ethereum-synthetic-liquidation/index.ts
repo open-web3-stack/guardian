@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 // import { setupApi } from './setupApi';
 import registerAction from '../registerAction';
 import { EthereumSyntheticPool } from '@open-web3/guardian/types';
