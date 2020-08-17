@@ -1,6 +1,7 @@
 import path from 'path';
 import { readConfig } from '@open-web3/guardian';
 import dotenv from 'dotenv';
+import { getEnv } from '../getEnv';
 
 dotenv.config();
 
@@ -22,18 +23,15 @@ const read = (configName: string) => {
 
   const config = readConfig(configPath);
 
-  const nodeEndpoint = config.guardians['acala-guardian'].nodeEndpoint; // 'ws://localhost:9944';
-  const bidderAddress = process.env.BIDDER_ADDRESS; // '5GHYezbSCbiJcU1iCwN2YMnSMohDSZdudfZyEAYGneyx4xp3'
-  const bidderSURI = process.env.BIDDER_SURI; // //Charlie
-  const margin = process.env.MARGIN || '0.05'; // 0.05
-
-  if (!bidderAddress) throw Error('process.env.BIDDER_ADDRESS is missing');
-  if (!bidderSURI) throw Error('process.env.BIDDER_SURI is missing');
+  const nodeEndpoint = config.guardians['acala-guardian'].nodeEndpoint || getEnv('NODE_ENDPOINT'); // 'ws://localhost:9944';
+  const address = getEnv('ADDRESS'); // '5GHYezbSCbiJcU1iCwN2YMnSMohDSZdudfZyEAYGneyx4xp3'
+  const SURI = getEnv('SURI'); // //Charlie
+  const margin = getEnv('MARGIN'); // 0.1
 
   return {
     nodeEndpoint,
-    bidderAddress,
-    bidderSURI,
+    address,
+    SURI,
     margin,
   };
 };

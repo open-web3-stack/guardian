@@ -5,7 +5,7 @@ import { options } from '@acala-network/api';
 import { Fixed18 } from '@acala-network/app-util';
 import { ApiManager } from '@open-web3/api';
 
-export default async (nodeEndpoint: string, bidderSURI: string, bidderAddress: string) => {
+export default async (nodeEndpoint: string, SURI: string, address: string) => {
   await cryptoWaitReady();
 
   const ws = new WsProvider(nodeEndpoint);
@@ -13,9 +13,9 @@ export default async (nodeEndpoint: string, bidderSURI: string, bidderAddress: s
 
   // setup keyring
   const keyring = new Keyring({ type: 'sr25519' });
-  keyring.addFromUri(bidderSURI);
+  keyring.addFromUri(SURI);
 
-  const keyringPair = keyring.getPair(bidderAddress);
+  const keyringPair = keyring.getPair(address);
 
   const exchangeFee = Fixed18.fromParts(apiManager.api.consts.dex.getExchangeFee.toString());
   const slippage = Fixed18.fromRational(5, 1000); // 0.5% price slippage

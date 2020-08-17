@@ -1,24 +1,25 @@
 #!/usr/bin/env node
 
 import { Loan } from '@open-web3/guardian/types';
+import { logger } from '@polkadot/util';
+import { ActionRegistry } from '@open-web3/guardian';
 import { setupApi } from './setupApi';
-import registerAction from '../registerAction';
-import { pausable } from '../pausable';
+
+const l = logger('cdp-guardian');
 
 const run = async () => {
   const { adjustLoan } = await setupApi();
 
-  const unsafeLoan$ = registerAction<Loan>('unsafeLoan');
+  let ready = true;
 
-  const { stream$, pause, resume } = pausable(unsafeLoan$);
-
-  stream$.subscribe(({ data: loan }) => {
-    pause(); // pause stream$ so we don't make double adjusments
-    adjustLoan(loan)
-      .then(() => {
-        resume();
-      })
-      .catch((e) => console.error(e));
+  ActionRegistry.register('unsafeLoan', (args: any, data: Loan) => {
+    if (!ready) return;
+    ready = false;
+    adjustLoan(data)
+      .catch(l.error)
+      .finally(() => {
+        ready = true;
+      });
   });
 
   // start guardian
@@ -30,7 +31,7 @@ export default run;
 // if called directly
 if (require.main === module) {
   run().catch((error) => {
-    console.error(error);
+    l.error(error);
     process.exit(-1);
   });
 }

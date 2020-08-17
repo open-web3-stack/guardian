@@ -1,27 +1,27 @@
 #!/usr/bin/env node
 
 import { LiquidityPool } from '@open-web3/guardian/types';
+import { ActionRegistry } from '@open-web3/guardian';
+import { logger } from '@polkadot/util';
 import { setupApi } from './setupApi';
-import registerAction from '../registerAction';
-import { pausable } from '../pausable';
+
+const l = logger('laminar-synthetic-liquidation-guardian');
 
 const run = async () => {
-  const liquidate$ = registerAction<LiquidityPool>('liquidate');
-
   const { liquidate } = await setupApi();
 
-  const { stream$, pause, resume } = pausable(liquidate$);
+  let ready = true;
 
-  stream$.subscribe(({ data: pool }) => {
-    if (pool.collateralRatio === '0') return;
-    console.log(pool);
-    pause();
-    liquidate(pool)
-      .then(() => {
-        resume();
-      })
-      .catch((error) => {
-        console.error(error);
+  ActionRegistry.register('liquidate', (args: any, data: LiquidityPool) => {
+    if (!ready) return;
+    if (data.collateralRatio === '0') return;
+
+    ready = false;
+
+    liquidate(data)
+      .catch(l.error)
+      .finally(() => {
+        ready = false;
       });
   });
 
@@ -34,7 +34,7 @@ export default run;
 // if called directly
 if (require.main === module) {
   run().catch((error) => {
-    console.error(error);
+    l.error(error);
     process.exit(-1);
   });
 }
