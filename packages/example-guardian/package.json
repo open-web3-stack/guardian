@@ -5,9 +5,9 @@
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
   "bin": {
-    "collateral-auction-guardian": "auction/collateralAuctionExample.js",
-    "debit-auction-guardian": "auction/debitAuctionExample.js",
-    "surplus-auction-guardian": "auction/surplusAuctionExample.js",
+    "collateral-auction-guardian": "auction/collateral/index.js",
+    "debit-auction-guardian": "auction/debit/index.js",
+    "surplus-auction-guardian": "auction/surplus/index.js",
     "laminar-synthetic-liquidation-guardian": "laminar-synthetic-liquidation/index.js",
     "cdp-guardian": "cdp/index.js"
   },

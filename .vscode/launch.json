@@ -12,11 +12,11 @@
       "runtimeArgs": ["-r", "ts-node/register"],
       "env": {
         "NODE_ENDPOINT": "ws://localhost:9944",
-        "BIDDER_SURI": "//Charlie",
-        "BIDDER_ADDRESS": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
+        "SURI": "//Charlie",
+        "ADDRESS": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
         "MARGIN": "0.1"
       },
-      "program": "${workspaceRoot}/packages/example-guardian/src/auction/collateralAuctionExample.ts",
+      "program": "${workspaceRoot}/packages/example-guardian/src/auction/collateral/index.ts",
       "args": ["--config", "${workspaceRoot}/packages/example-guardian/resources/collateral-auction-guardian.yml"]
     },
     {
@@ -27,11 +27,11 @@
       "runtimeArgs": ["-r", "ts-node/register"],
       "env": {
         "NODE_ENDPOINT": "ws://localhost:9944",
-        "BIDDER_SURI": "//Charlie",
-        "BIDDER_ADDRESS": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
+        "SURI": "//Charlie",
+        "ADDRESS": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
         "MARGIN": "0.1"
       },
-      "program": "${workspaceRoot}/packages/example-guardian/src/auction/debitAuctionExample.ts",
+      "program": "${workspaceRoot}/packages/example-guardian/src/auction/debit/index.ts",
       "args": ["--config", "${workspaceRoot}/packages/example-guardian/resources/debit-auction-guardian.yml"]
     },
     {
@@ -42,11 +42,11 @@
       "runtimeArgs": ["-r", "ts-node/register"],
       "env": {
         "NODE_ENDPOINT": "ws://localhost:9944",
-        "BIDDER_SURI": "//Charlie",
-        "BIDDER_ADDRESS": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
+        "SURI": "//Charlie",
+        "ADDRESS": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
         "MARGIN": "0.1"
       },
-      "program": "${workspaceRoot}/packages/example-guardian/src/auction/surplusAuctionExample.ts",
+      "program": "${workspaceRoot}/packages/example-guardian/src/auction/surplus/index.ts",
       "args": ["--config", "${workspaceRoot}/packages/example-guardian/resources/surplus-auction-guardian.yml"]
     },
     {
