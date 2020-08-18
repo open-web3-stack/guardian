@@ -1,19 +1,21 @@
 #!/usr/bin/env node
 
-import Big from 'big.js';
 import { concatMap } from 'rxjs/operators';
 import { calcSwapTargetAmount, Fixed18 } from '@acala-network/app-util';
 import { DebitAuction, Event } from '@open-web3/guardian/types';
 import { logger } from '@polkadot/util';
-import readConst from '../const';
+import config from '../config';
 import setupApi from '../setupApi';
 import { registerActions } from './registerActions';
-import { dollar } from '../../utils';
+import { setDefaultConfig } from '../../utils';
+import { calculateBid } from '../utils';
 
 const l = logger('debit-auction-guardian');
 
 const run = async () => {
-  const { nodeEndpoint, address, margin, SURI } = readConst('debit-auction-guardian.yml');
+  setDefaultConfig('debit-auction-guardian.yml');
+
+  const { nodeEndpoint, address, margin, SURI } = config();
 
   const { debitAuctionDealed$, debitAuctions$, getBalance, getPool } = registerActions();
 
@@ -23,21 +25,10 @@ const run = async () => {
     const balance = await getBalance();
     const pool = await getPool();
 
-    const maxBid = dollar(1).sub(dollar(margin)).mul(pool.price).div(dollar(1));
+    const ourBid = calculateBid(auction, pool.price, balance.free, margin);
 
-    if (auction.lastBid && Big(auction.lastBid).gte(maxBid)) {
-      l.error('last bid is bigger than our max bid');
-      return;
-    }
-
-    // simple check for enough free balance
-    if (Big(balance.free).lt(maxBid.mul(auction.amount).div(dollar(1)))) {
-      l.error('not enough aUSD balance to place the bid');
-      return;
-    }
-
-    const result = await bid(auction.auctionId, maxBid.toFixed(0));
-    l.log('Bid sent: ', result.toString());
+    const result = await bid(auction.auctionId, ourBid.toFixed(0));
+    l.log('Bid sent: ', JSON.stringify(result));
   };
 
   const onAuctionDealed = async (event: Event) => {
@@ -58,7 +49,7 @@ const run = async () => {
 
     const result = await swap('ACA', String(amount), 'AUSD', target);
 
-    l.log('Swap sent: ', result.toString());
+    l.log('Swap sent: ', JSON.stringify(result));
   };
 
   debitAuctions$.pipe(concatMap(async (auction) => await onAuction(auction).catch(l.error))).subscribe();

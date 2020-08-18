@@ -16,8 +16,7 @@
         "ADDRESS": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
         "MARGIN": "0.1"
       },
-      "program": "${workspaceRoot}/packages/example-guardian/src/auction/collateral/index.ts",
-      "args": ["--config", "${workspaceRoot}/packages/example-guardian/resources/collateral-auction-guardian.yml"]
+      "program": "${workspaceRoot}/packages/example-guardian/src/auction/collateral/index.ts"
     },
     {
       "type": "node",
@@ -31,8 +30,7 @@
         "ADDRESS": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
         "MARGIN": "0.1"
       },
-      "program": "${workspaceRoot}/packages/example-guardian/src/auction/debit/index.ts",
-      "args": ["--config", "${workspaceRoot}/packages/example-guardian/resources/debit-auction-guardian.yml"]
+      "program": "${workspaceRoot}/packages/example-guardian/src/auction/debit/index.ts"
     },
     {
       "type": "node",
@@ -46,8 +44,7 @@
         "ADDRESS": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
         "MARGIN": "0.1"
       },
-      "program": "${workspaceRoot}/packages/example-guardian/src/auction/surplus/index.ts",
-      "args": ["--config", "${workspaceRoot}/packages/example-guardian/resources/surplus-auction-guardian.yml"]
+      "program": "${workspaceRoot}/packages/example-guardian/src/auction/surplus/index.ts"
     },
     {
       "type": "node",
@@ -61,11 +58,7 @@
         "ADDRESS": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
         "COLLATERAL_RATIO": "1.1"
       },
-      "program": "${workspaceRoot}/packages/example-guardian/src/laminar-synthetic-liquidation/index.ts",
-      "args": [
-        "--config",
-        "${workspaceRoot}/packages/example-guardian/resources/laminar-synthetic-liquidation-guardian.yml"
-      ]
+      "program": "${workspaceRoot}/packages/example-guardian/src/laminar-synthetic-liquidation/index.ts"
     },
     {
       "type": "node",
@@ -79,8 +72,7 @@
         "ADDRESS": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
         "COLLATERAL_RATIO": "1.4"
       },
-      "program": "${workspaceRoot}/packages/example-guardian/src/cdp/index.ts",
-      "args": ["--config", "${workspaceRoot}/packages/example-guardian/resources/cdp-guardian.yml"]
+      "program": "${workspaceRoot}/packages/example-guardian/src/cdp/index.ts"
     }
   ]
 }

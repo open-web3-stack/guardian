@@ -5,12 +5,12 @@ import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { options } from '@acala-network/api';
 import { ApiManager } from '@open-web3/api';
 import { Loan } from '@open-web3/guardian/types';
-import { readConst } from './const';
+import { config } from './config';
 
 export const setupApi = async () => {
   await cryptoWaitReady();
 
-  const { nodeEndpoint, SURI, address } = readConst();
+  const { nodeEndpoint, SURI, address } = config();
 
   const ws = new WsProvider(nodeEndpoint);
   const apiManager = await ApiManager.create(options({ provider: ws }));

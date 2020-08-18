@@ -4,10 +4,13 @@ import { LiquidityPool } from '@open-web3/guardian/types';
 import { ActionRegistry } from '@open-web3/guardian';
 import { logger } from '@polkadot/util';
 import { setupApi } from './setupApi';
+import { setDefaultConfig } from '../utils';
 
 const l = logger('laminar-synthetic-liquidation-guardian');
 
 const run = async () => {
+  setDefaultConfig('laminar-synthetic-liquidation-guardian.yml');
+
   const { liquidate } = await setupApi();
 
   let ready = true;

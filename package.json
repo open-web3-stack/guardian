@@ -15,7 +15,7 @@
   "scripts": {
     "build": "polkadot-dev-build-ts && (cd packages/example-guardian && cp src/*.yml build)",
     "build:release": "polkadot-dev-ghact-build",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx packages && tsc --noEmit --pretty",
+    "lint": "eslint --ext .js,.ts packages && tsc --noEmit --pretty",
     "clean": "polkadot-dev-clean-build",
     "postinstall": "polkadot-dev-yarn-only",
     "test": "jest --runInBand --testPathIgnorePatterns e2e"

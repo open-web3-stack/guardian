@@ -4,10 +4,13 @@ import { Loan } from '@open-web3/guardian/types';
 import { logger } from '@polkadot/util';
 import { ActionRegistry } from '@open-web3/guardian';
 import { setupApi } from './setupApi';
+import { setDefaultConfig } from '../utils';
 
 const l = logger('cdp-guardian');
 
 const run = async () => {
+  setDefaultConfig('cdp-guardian.yml');
+
   const { adjustLoan } = await setupApi();
 
   let ready = true;

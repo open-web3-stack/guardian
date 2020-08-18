@@ -1,16 +1,10 @@
-import path from 'path';
 import { readConfig } from '@open-web3/guardian';
 import dotenv from 'dotenv';
 import { getEnv } from '../getEnv';
 
 dotenv.config();
 
-const read = (configName: string) => {
-  if (!process.argv.find((i) => i.startsWith('--config'))) {
-    process.argv.push('--config');
-    process.argv.push(path.resolve(__dirname, '..', configName));
-  }
-
+const read = () => {
   const { config: configPath } = require('yargs')
     .scriptName('guardian')
     .usage('$0 [args]')
