@@ -7,7 +7,7 @@ guardians:
     confirmation: finalize
 
     monitors:
-      AuctionDealed:
+      AuctionDealt:
         task: system.events
         arguments:
           name:
@@ -18,7 +18,7 @@ guardians:
           - $or:
               - arg2: 'eq ${ADDRESS}' # fallback. do not change
         actions:
-          - method: internal-debit-auction-dealed # do not change
+          - method: internal-debit-auction-dealt # do not change
 
       DebitAuction:
         task: honzon.debitAuctions

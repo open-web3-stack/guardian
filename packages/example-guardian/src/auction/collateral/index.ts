@@ -15,7 +15,7 @@ const run = async () => {
 
   const { nodeEndpoint, address, margin, SURI } = config();
 
-  const { collateralAuctions$, collateralAuctionDealed$, getBalance, getPool } = registerActions();
+  const { collateralAuctions$, collateralAuctionDealt$, getBalance, getPool } = registerActions();
 
   const { exchangeFee, slippage, bid, swap } = await setupApi(nodeEndpoint, SURI, address);
 
@@ -29,7 +29,7 @@ const run = async () => {
     logger.log('Bid sent: ', JSON.stringify(result));
   };
 
-  const onAuctionDealed = async (event: Event) => {
+  const onAuctionDealt = async (event: Event) => {
     const currencyId = event.args['collateral_type'] || event.args['arg2'];
     const amount = event.args['collateral_amount'] || event.args['arg3'];
 
@@ -53,8 +53,8 @@ const run = async () => {
     .pipe(concatMap(async (auction) => await onAuction(auction).catch((e) => logger.error(e))))
     .subscribe();
 
-  collateralAuctionDealed$
-    .pipe(concatMap(async (event) => await onAuctionDealed(event).catch((e) => logger.error(e))))
+  collateralAuctionDealt$
+    .pipe(concatMap(async (event) => await onAuctionDealt(event).catch((e) => logger.error(e))))
     .subscribe();
 
   // start guardian

@@ -7,7 +7,7 @@ guardians:
     confirmation: finalize
 
     monitors:
-      AuctionDealed:
+      AuctionDealt:
         task: system.events
         arguments:
           name:
@@ -18,7 +18,7 @@ guardians:
           - $or:
               - args.arg4: 'eq ${ADDRESS}' # fallback. do not change
         actions:
-          - method: internal-collateral-auction-dealed # do not change
+          - method: internal-collateral-auction-dealt # do not change
 
       CollateralAuction:
         task: honzon.collateralAuctions

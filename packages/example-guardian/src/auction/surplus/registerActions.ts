@@ -9,9 +9,9 @@ export const registerActions = () => {
     surplusAuctions$.next(data);
   });
 
-  const surplusAuctionDealed$ = new Subject<Event>();
-  ActionRegistry.register('internal-surplus-auction-dealed', (args: any, data: Event) => {
-    surplusAuctionDealed$.next(data);
+  const surplusAuctionDealt$ = new Subject<Event>();
+  ActionRegistry.register('internal-surplus-auction-dealt', (args: any, data: Event) => {
+    surplusAuctionDealt$.next(data);
   });
 
   const balance$ = new ReplaySubject<Balance>(1);
@@ -32,5 +32,5 @@ export const registerActions = () => {
     return balance$.asObservable().pipe(take(1)).toPromise();
   };
 
-  return { surplusAuctionDealed$, surplusAuctions$, getBalance, getPool };
+  return { surplusAuctionDealt$, surplusAuctions$, getBalance, getPool };
 };

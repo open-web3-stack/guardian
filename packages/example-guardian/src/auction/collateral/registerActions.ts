@@ -9,9 +9,9 @@ export const registerActions = () => {
     collateralAuctions$.next(data);
   });
 
-  const collateralAuctionDealed$ = new Subject<Event>();
-  ActionRegistry.register('internal-collateral-auction-dealed', (args: any, data: Event) => {
-    collateralAuctionDealed$.next(data);
+  const collateralAuctionDealt$ = new Subject<Event>();
+  ActionRegistry.register('internal-collateral-auction-dealt', (args: any, data: Event) => {
+    collateralAuctionDealt$.next(data);
   });
 
   const balance$ = new ReplaySubject<Balance>(1);
@@ -39,5 +39,5 @@ export const registerActions = () => {
     return balance$.asObservable().pipe(take(1)).toPromise();
   };
 
-  return { collateralAuctionDealed$, collateralAuctions$, getBalance, getPool };
+  return { collateralAuctionDealt$, collateralAuctions$, getBalance, getPool };
 };

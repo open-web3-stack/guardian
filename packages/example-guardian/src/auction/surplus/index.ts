@@ -14,7 +14,7 @@ const run = async () => {
 
   const { nodeEndpoint, address, margin, SURI } = config();
 
-  const { surplusAuctionDealed$, surplusAuctions$, getBalance, getPool } = registerActions();
+  const { surplusAuctionDealt$, surplusAuctions$, getBalance, getPool } = registerActions();
 
   const { exchangeFee, slippage, bid, swap } = await setupApi(nodeEndpoint, SURI, address);
 
@@ -28,7 +28,7 @@ const run = async () => {
     logger.log('Bid sent: ', JSON.stringify(result));
   };
 
-  const onAuctionDealed = async (event: Event) => {
+  const onAuctionDealt = async (event: Event) => {
     const pool = await getPool();
     const amountHex = event.args['surplus_amount'] || event.args['arg2'];
 
@@ -52,8 +52,8 @@ const run = async () => {
     .pipe(concatMap(async (auction) => await onAuction(auction).catch((e) => logger.error(e))))
     .subscribe();
 
-  surplusAuctionDealed$
-    .pipe(concatMap(async (event) => await onAuctionDealed(event).catch((e) => logger.error(e))))
+  surplusAuctionDealt$
+    .pipe(concatMap(async (event) => await onAuctionDealt(event).catch((e) => logger.error(e))))
     .subscribe();
 
   // start guardian
