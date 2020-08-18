@@ -1,4 +1,4 @@
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 import { Observable, from, combineLatest } from 'rxjs';
 import { map, flatMap, filter } from 'rxjs/operators';
 import { DerivedUserLoan, DerivedLoanType } from '@acala-network/api-derive';

@@ -1,4 +1,4 @@
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 import { Observable } from 'rxjs';
 import { ITask, IGuardian } from '../types';
 

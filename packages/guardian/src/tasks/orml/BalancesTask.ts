@@ -1,4 +1,4 @@
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 import { Observable, from } from 'rxjs';
 import { flatMap, map } from 'rxjs/operators';
 import { ApiRx } from '@polkadot/api';

@@ -1,7 +1,5 @@
-import Big, { BigSource } from 'big.js';
 import path from 'path';
-
-export const dollar = (value: BigSource) => Big(1e18).mul(value);
+import { defaultLogger } from '@open-web3/util';
 
 /**
  * Set default YAML config file if not specified by option `--config`
@@ -14,3 +12,5 @@ export const setDefaultConfig = (configFile: string) => {
     process.argv.push(path.resolve(__dirname, configFile));
   }
 };
+
+export const logger = defaultLogger.createLogger('@open-web3/example-guardian');

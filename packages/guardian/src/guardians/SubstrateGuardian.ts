@@ -1,4 +1,4 @@
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 import { ApiRx } from '@polkadot/api';
 import { WsProvider } from '@polkadot/rpc-provider';
 import BaseSubstrateGuardian from './BaseSubstrateGuardian';

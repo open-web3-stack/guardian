@@ -1,12 +1,9 @@
 #!/usr/bin/env node
 
 import { Loan } from '@open-web3/guardian/types';
-import { logger } from '@polkadot/util';
 import { ActionRegistry } from '@open-web3/guardian';
 import { setupApi } from './setupApi';
-import { setDefaultConfig } from '../utils';
-
-const l = logger('cdp-guardian');
+import { setDefaultConfig, logger } from '../utils';
 
 const run = async () => {
   setDefaultConfig('cdp-guardian.yml');
@@ -19,7 +16,7 @@ const run = async () => {
     if (!ready) return;
     ready = false;
     adjustLoan(data)
-      .catch(l.error)
+      .catch((e) => logger.error(e))
       .finally(() => {
         ready = true;
       });
@@ -34,7 +31,7 @@ export default run;
 // if called directly
 if (require.main === module) {
   run().catch((error) => {
-    l.error(error);
+    logger.error(error);
     process.exit(-1);
   });
 }

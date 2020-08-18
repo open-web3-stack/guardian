@@ -1,6 +1,6 @@
 import Big, { BigSource } from 'big.js';
 import { DebitAuction, CollateralAuction, SurplusAuction } from '@open-web3/guardian/types';
-import { dollar } from '../utils';
+import { toBaseUnit as dollar } from '@open-web3/util';
 
 export const calculateBid = (
   auction: CollateralAuction | DebitAuction | SurplusAuction,

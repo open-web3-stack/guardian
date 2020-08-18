@@ -1,4 +1,4 @@
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 import { ApiRx, WsProvider } from '@polkadot/api';
 import GuardianRegistry from '../GuardianRegistry';
 import { LaminarGuardian, AcalaGuardian, Guardian } from '../';

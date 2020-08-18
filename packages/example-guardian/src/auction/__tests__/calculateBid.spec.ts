@@ -1,6 +1,6 @@
-import { calculateBid } from '../utils';
+import { calculateBid } from '../calculateBid';
 
-describe('auction utils', () => {
+describe('calculateBid', () => {
   it('should calculate bid', () => {
     const price = 10_000 * 1e18;
     const balance = 10_000 * 1e18;

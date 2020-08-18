@@ -3,14 +3,11 @@
 import { concatMap } from 'rxjs/operators';
 import { calcSwapTargetAmount, Fixed18 } from '@acala-network/app-util';
 import { DebitAuction, Event } from '@open-web3/guardian/types';
-import { logger } from '@polkadot/util';
 import config from '../config';
 import setupApi from '../setupApi';
 import { registerActions } from './registerActions';
-import { setDefaultConfig } from '../../utils';
-import { calculateBid } from '../utils';
-
-const l = logger('debit-auction-guardian');
+import { setDefaultConfig, logger } from '../../utils';
+import { calculateBid } from '../calculateBid';
 
 const run = async () => {
   setDefaultConfig('debit-auction-guardian.yml');
@@ -28,7 +25,7 @@ const run = async () => {
     const ourBid = calculateBid(auction, pool.price, balance.free, margin);
 
     const result = await bid(auction.auctionId, ourBid.toFixed(0));
-    l.log('Bid sent: ', JSON.stringify(result));
+    logger.log('Bid sent: ', JSON.stringify(result));
   };
 
   const onAuctionDealed = async (event: Event) => {
@@ -49,12 +46,14 @@ const run = async () => {
 
     const result = await swap('ACA', String(amount), 'AUSD', target);
 
-    l.log('Swap sent: ', JSON.stringify(result));
+    logger.log('Swap sent: ', JSON.stringify(result));
   };
 
-  debitAuctions$.pipe(concatMap(async (auction) => await onAuction(auction).catch(l.error))).subscribe();
+  debitAuctions$.pipe(concatMap(async (auction) => await onAuction(auction).catch((e) => logger.error(e)))).subscribe();
 
-  debitAuctionDealed$.pipe(concatMap(async (event) => await onAuctionDealed(event).catch(l.error))).subscribe();
+  debitAuctionDealed$
+    .pipe(concatMap(async (event) => await onAuctionDealed(event).catch((e) => logger.error(e))))
+    .subscribe();
 
   // start guardian
   require('@open-web3/guardian-cli');
@@ -65,7 +64,7 @@ export default run;
 // if called directly
 if (require.main === module) {
   run().catch((error) => {
-    l.error(error);
+    logger.error(error);
     process.exit(-1);
   });
 }

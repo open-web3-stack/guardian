@@ -5,15 +5,7 @@ import { getEnv } from '../getEnv';
 dotenv.config();
 
 const read = () => {
-  const { config: configPath } = require('yargs')
-    .scriptName('guardian')
-    .usage('$0 [args]')
-    .option('config', {
-      type: 'string',
-      describe: 'YAML config file',
-    })
-    .help()
-    .demandOption('config').argv;
+  const { config: configPath } = require('yargs').demandOption('config').argv;
 
   const config = readConfig(configPath);
 

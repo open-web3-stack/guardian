@@ -1,4 +1,4 @@
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 import { Observable } from 'rxjs';
 import { autorun } from 'mobx';
 import { LaminarGuardian } from '@open-web3/guardian/guardians';
