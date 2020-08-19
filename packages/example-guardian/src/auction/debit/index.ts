@@ -24,8 +24,8 @@ const run = async () => {
 
     const ourBid = calculateBid(auction, pool.price, balance.free, margin);
 
-    const result = await bid(auction.auctionId, ourBid.toFixed(0));
-    logger.log('Bid sent: ', JSON.stringify(result));
+    const { blockHash, txHash } = await bid(auction.auctionId, ourBid.toFixed(0));
+    logger.log('Bid sent: ', { blockHash: blockHash.toHex(), txHash: txHash.toHex() });
   };
 
   const onAuctionDealt = async (event: Event) => {
@@ -44,9 +44,8 @@ const run = async () => {
       )
     );
 
-    const result = await swap('ACA', String(amount), 'AUSD', target);
-
-    logger.log('Swap sent: ', JSON.stringify(result));
+    const { blockHash, txHash } = await swap('ACA', String(amount), 'AUSD', target);
+    logger.log('Swap sent: ', { blockHash: blockHash.toHex(), txHash: txHash.toHex() });
   };
 
   debitAuctions$.pipe(concatMap(async (auction) => await onAuction(auction).catch((e) => logger.error(e)))).subscribe();

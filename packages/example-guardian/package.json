@@ -26,5 +26,15 @@
     "@open-web3/guardian-cli": "^0.3.0-beta.25",
     "@open-web3/util": "^0.6.0-beta.2",
     "dotenv": "^8.2.0"
+  },
+  "devDependencies": {
+    "ts-node-dev": "^1.0.0-pre.58"
+  },
+  "scripts": {
+    "dev:collateral-auction-guardian": "tsnd -r dotenv/config --respawn --transpile-only src/auction/collateral/index.ts dotenv_config_path=.env.auction",
+    "dev:debit-auction-guardian": "tsnd -r dotenv/config --respawn --transpile-only src/auction/debit/index.ts dotenv_config_path=.env.auction",
+    "dev:surplus-auction-guardian": "tsnd -r dotenv/config --respawn --transpile-only src/auction/surplus/index.ts dotenv_config_path=.env.auction",
+    "dev:laminar-synthetic-liquidation-guardian": "tsnd -r dotenv/config --respawn --transpile-only src/laminar-synthetic-liquidation/index.ts dotenv_config_path=.env.laminar-synthetic-liquidation",
+    "dev:cdp-guardian": "tsnd -r dotenv/config --respawn --transpile-only src/cdp/index.ts dotenv_config_path=.env.cdp"
   }
 }

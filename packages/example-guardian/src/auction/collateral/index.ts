@@ -25,8 +25,8 @@ const run = async () => {
 
     const ourBid = calculateBid(auction, pool.price, balance.free, margin);
 
-    const result = await bid(auction.auctionId, ourBid.toFixed(0));
-    logger.log('Bid sent: ', JSON.stringify(result));
+    const { blockHash, txHash } = await bid(auction.auctionId, ourBid.toFixed(0));
+    logger.log('Bid sent: ', { blockHash: blockHash.toHex(), txHash: txHash.toHex() });
   };
 
   const onAuctionDealt = async (event: Event) => {
@@ -45,8 +45,8 @@ const run = async () => {
       )
     ).toFixed(0);
 
-    const result = await swap(currencyId, amount, 'AUSD', target);
-    logger.log('Swap sent: ', JSON.stringify(result));
+    const { blockHash, txHash } = await swap(currencyId, amount, 'AUSD', target);
+    logger.log('Swap sent: ', { blockHash: blockHash.toHex(), txHash: txHash.toHex() });
   };
 
   collateralAuctions$

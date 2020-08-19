@@ -10,12 +10,7 @@
       "name": "Collateral Auction Guardian",
       "cwd": "${workspaceRoot}",
       "runtimeArgs": ["-r", "ts-node/register"],
-      "env": {
-        "NODE_ENDPOINT": "ws://localhost:9944",
-        "SURI": "//Charlie",
-        "ADDRESS": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
-        "MARGIN": "0.1"
-      },
+      "envFile": "${workspaceFolder}/packages/example-guardian/.env.auction",
       "program": "${workspaceRoot}/packages/example-guardian/src/auction/collateral/index.ts"
     },
     {
@@ -24,12 +19,7 @@
       "name": "Debit Auction Guardian",
       "cwd": "${workspaceRoot}",
       "runtimeArgs": ["-r", "ts-node/register"],
-      "env": {
-        "NODE_ENDPOINT": "ws://localhost:9944",
-        "SURI": "//Charlie",
-        "ADDRESS": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
-        "MARGIN": "0.1"
-      },
+      "envFile": "${workspaceFolder}/packages/example-guardian/.env.auction",
       "program": "${workspaceRoot}/packages/example-guardian/src/auction/debit/index.ts"
     },
     {
@@ -38,12 +28,7 @@
       "name": "Surplus Auction Guardian",
       "cwd": "${workspaceRoot}",
       "runtimeArgs": ["-r", "ts-node/register"],
-      "env": {
-        "NODE_ENDPOINT": "ws://localhost:9944",
-        "SURI": "//Charlie",
-        "ADDRESS": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
-        "MARGIN": "0.1"
-      },
+      "envFile": "${workspaceFolder}/packages/example-guardian/.env.auction",
       "program": "${workspaceRoot}/packages/example-guardian/src/auction/surplus/index.ts"
     },
     {
@@ -52,12 +37,7 @@
       "name": "Laminar Synthetic Liquidation Guardian",
       "cwd": "${workspaceRoot}",
       "runtimeArgs": ["-r", "ts-node/register"],
-      "env": {
-        "NODE_ENDPOINT": "ws://localhost:9944",
-        "SURI": "//Charlie",
-        "ADDRESS": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
-        "COLLATERAL_RATIO": "1.1"
-      },
+      "envFile": "${workspaceFolder}/packages/example-guardian/.env.laminar-synthetic-liquidation",
       "program": "${workspaceRoot}/packages/example-guardian/src/laminar-synthetic-liquidation/index.ts"
     },
     {
@@ -66,12 +46,7 @@
       "name": "CDP Guardian",
       "cwd": "${workspaceRoot}",
       "runtimeArgs": ["-r", "ts-node/register"],
-      "env": {
-        "NODE_ENDPOINT": "ws://localhost:9944",
-        "SURI": "//Charlie",
-        "ADDRESS": "5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y",
-        "COLLATERAL_RATIO": "1.4"
-      },
+      "envFile": "${workspaceFolder}/packages/example-guardian/.env.cdp",
       "program": "${workspaceRoot}/packages/example-guardian/src/cdp/index.ts"
     }
   ]
