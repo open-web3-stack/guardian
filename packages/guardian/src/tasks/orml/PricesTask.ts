@@ -1,4 +1,4 @@
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 import { Observable, from } from 'rxjs';
 import { flatMap, map, filter, distinctUntilChanged } from 'rxjs/operators';
 import { Codec, ITuple } from '@polkadot/types/types';

@@ -7,16 +7,18 @@ guardians:
     confirmation: finalize
 
     monitors:
-      AuctionDealed:
+      AuctionDealt:
         task: system.events
         arguments:
-          name: auctionManager.CollateralAuctionDealed
+          name:
+            - auctionManager.CollateralAuctionDealed
+            - auctionManager.CollateralAuctionDealt
         conditions:
-          - args.winner: 'eq ${BIDDER_ADDRESS}' # do not change
+          - args.winner: 'eq ${ADDRESS}' # do not change
           - $or:
-              - args.arg4: 'eq ${BIDDER_ADDRESS}' # fallback. do not change
+              - args.arg4: 'eq ${ADDRESS}' # fallback. do not change
         actions:
-          - method: internal-collateral-auction-dealed # do not change
+          - method: internal-collateral-auction-dealt # do not change
 
       CollateralAuction:
         task: honzon.collateralAuctions
@@ -24,14 +26,14 @@ guardians:
           account: all
           currencyId: all
         conditions:
-          - lastBidder: 'ne ${BIDDER_ADDRESS}' # do not change
+          - lastBidder: 'ne ${ADDRESS}' # do not change
         actions:
           - method: internal-collateral-auctions # do not change
 
       AUSDBalance:
         task: account.balances
         arguments:
-          account: ${BIDDER_ADDRESS}
+          account: ${ADDRESS}
           currencyId: AUSD
         actions:
           - method: internal-balance # do not change

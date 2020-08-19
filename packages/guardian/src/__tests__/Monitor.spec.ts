@@ -8,7 +8,7 @@ import path from 'path';
 import axios from 'axios';
 import shell from 'shelljs';
 import { LaminarGuardian } from '../guardians';
-import { sleep } from '../helpers';
+import { sleep } from '../utils';
 
 describe('LaminarGuardian', () => {
   jest.setTimeout(30_000);

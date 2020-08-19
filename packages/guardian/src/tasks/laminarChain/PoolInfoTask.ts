@@ -1,4 +1,4 @@
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 import { of, Observable } from 'rxjs';
 import { flatMap, filter, concatAll } from 'rxjs/operators';
 import { MarginPoolInfo, LaminarApi } from '@laminar/api';

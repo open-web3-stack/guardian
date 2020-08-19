@@ -2,12 +2,12 @@
 
 import { LiquidityPool } from '@open-web3/guardian/types';
 import { ActionRegistry } from '@open-web3/guardian';
-import { logger } from '@polkadot/util';
 import { setupApi } from './setupApi';
-
-const l = logger('laminar-synthetic-liquidation-guardian');
+import { setDefaultConfig, logger } from '../utils';
 
 const run = async () => {
+  setDefaultConfig('laminar-synthetic-liquidation-guardian.yml');
+
   const { liquidate } = await setupApi();
 
   let ready = true;
@@ -19,7 +19,7 @@ const run = async () => {
     ready = false;
 
     liquidate(data)
-      .catch(l.error)
+      .catch((e) => logger.error(e))
       .finally(() => {
         ready = false;
       });
@@ -34,7 +34,7 @@ export default run;
 // if called directly
 if (require.main === module) {
   run().catch((error) => {
-    l.error(error);
+    logger.error(error);
     process.exit(-1);
   });
 }

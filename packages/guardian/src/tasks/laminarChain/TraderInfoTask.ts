@@ -1,4 +1,4 @@
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 import { of, Observable, from } from 'rxjs';
 import { flatMap, concatAll } from 'rxjs/operators';
 import { TraderInfo, LaminarApi } from '@laminar/api';

@@ -1,4 +1,4 @@
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 import { options } from '@acala-network/api';
 import { AcalaGuardianConfig } from '../types';
 import { acalaNetwork } from '../constants';

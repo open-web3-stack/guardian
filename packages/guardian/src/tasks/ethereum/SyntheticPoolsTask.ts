@@ -1,4 +1,4 @@
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 import { EthereumApi } from '@laminar/api';
 import { fromPrecision } from '@laminar/types/utils/precision';
 import { from } from 'rxjs';

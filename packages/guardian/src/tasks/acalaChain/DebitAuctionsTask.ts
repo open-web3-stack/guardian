@@ -1,4 +1,4 @@
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 import { combineLatest } from 'rxjs';
 import { map, flatMap } from 'rxjs/operators';
 import { Option } from '@polkadot/types/codec';

@@ -1,4 +1,4 @@
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 import { flatMap, filter } from 'rxjs/operators';
 import BaseSubstrateGuardian from '../../guardians/BaseSubstrateGuardian';
 import Task from '../Task';

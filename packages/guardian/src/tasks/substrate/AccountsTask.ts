@@ -1,4 +1,4 @@
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 import { from } from 'rxjs';
 import { flatMap, map } from 'rxjs/operators';
 import { AccountInfo } from '@polkadot/types/interfaces';

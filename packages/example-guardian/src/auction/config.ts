@@ -1,25 +1,11 @@
-import path from 'path';
 import { readConfig } from '@open-web3/guardian';
 import dotenv from 'dotenv';
 import { getEnv } from '../getEnv';
 
 dotenv.config();
 
-const read = (configName: string) => {
-  if (!process.argv.find((i) => i.startsWith('--config'))) {
-    process.argv.push('--config');
-    process.argv.push(path.resolve(__dirname, '..', configName));
-  }
-
-  const { config: configPath } = require('yargs')
-    .scriptName('guardian')
-    .usage('$0 [args]')
-    .option('config', {
-      type: 'string',
-      describe: 'YAML config file',
-    })
-    .help()
-    .demandOption('config').argv;
+const read = () => {
+  const { config: configPath } = require('yargs').demandOption('config').argv;
 
   const config = readConfig(configPath);
 

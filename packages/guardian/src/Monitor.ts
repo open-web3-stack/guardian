@@ -1,18 +1,16 @@
 import { Subscription } from 'rxjs';
 import { filter, tap } from 'rxjs/operators';
-import { logger } from '@polkadot/util';
 import { IMonitor, MonitorConfig, IGuardian } from './types';
 import conditionBuilder from './conditions/condition-builder';
 import { ActionRegistry } from './actions/ActionRegistry';
-
-export const l = logger('task');
+import { logger } from './utils';
 
 export default class Monitor implements IMonitor {
   constructor(public readonly name: string, public readonly config: MonitorConfig) {}
 
   /// listen to output$ and trigger actions
   async start(guardian: IGuardian): Promise<Subscription> {
-    l.log(`[${this.name}] starting ...`);
+    logger.log(`[${this.name}] starting ...`);
 
     const TaskClass = guardian.getTaskOrThrow(this.config.task);
 
@@ -27,18 +25,18 @@ export default class Monitor implements IMonitor {
     const output$ = rawOutput$.pipe(
       // apply condition if any
       filter((result) => (condition ? condition(result) : true)),
-      tap((i) => l.log(`[${this.name}] output: `, i))
+      tap((i) => logger.log(`[${this.name}] output: `, i))
     );
 
     const subscription = output$.subscribe((data: any) => {
       this.config.actions.forEach((action) => {
-        l.log(`[${this.name}] called [${action.method}]`);
+        logger.log(`[${this.name}] called [${action.method}]`);
         // run action
         ActionRegistry.run(action, data);
       });
     });
 
-    l.log(`[${this.name}] is running ...`);
+    logger.log(`[${this.name}] is running ...`);
 
     return subscription;
   }

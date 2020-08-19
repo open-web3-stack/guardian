@@ -1,5 +1,5 @@
 import Big from 'big.js';
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 import { Observable, of, from, combineLatest } from 'rxjs';
 import { map, flatMap, filter, concatAll } from 'rxjs/operators';
 import { LaminarApi } from '@laminar/api';

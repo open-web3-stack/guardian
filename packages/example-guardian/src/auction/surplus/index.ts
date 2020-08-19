@@ -1,44 +1,34 @@
 #!/usr/bin/env node
 
-import Big from 'big.js';
 import { calcTargetInBaseToOther, Fixed18 } from '@acala-network/app-util';
 import { concatMap } from 'rxjs/operators';
 import { SurplusAuction, Event } from '@open-web3/guardian/types';
-import { logger } from '@polkadot/util';
-import readConst from '../const';
+import config from '../config';
 import setupApi from '../setupApi';
 import { registerActions } from './registerActions';
-import { dollar } from '../../utils';
-
-const l = logger('surplus-auction-guardian');
+import { setDefaultConfig, logger } from '../../utils';
+import { calculateBid } from '../calculateBid';
 
 const run = async () => {
-  const { nodeEndpoint, address, margin, SURI } = readConst('surplus-auction-guardian.yml');
+  setDefaultConfig('surplus-auction-guardian.yml');
+
+  const { nodeEndpoint, address, margin, SURI } = config();
+
+  const { surplusAuctionDealt$, surplusAuctions$, getBalance, getPool } = registerActions();
+
   const { exchangeFee, slippage, bid, swap } = await setupApi(nodeEndpoint, SURI, address);
-  const { surplusAuctionDealed$, surplusAuctions$, getBalance, getPool } = registerActions();
 
   const onAuction = async (auction: SurplusAuction) => {
     const balance = await getBalance();
     const pool = await getPool();
 
-    const maxBid = dollar(1).sub(dollar(margin)).mul(pool.price).div(dollar(1));
+    const ourBid = calculateBid(auction, pool.price, balance.free, margin);
 
-    if (auction.lastBid && Big(auction.lastBid).gte(maxBid)) {
-      l.error('last bid is bigger than our max bid');
-      return;
-    }
-
-    // simple check for enough free balance
-    if (Big(balance.free).lt(maxBid.mul(auction.amount).div(dollar(1)))) {
-      l.error('not enough aUSD balance to place the bid');
-      return;
-    }
-
-    const result = await bid(auction.auctionId, maxBid.toFixed(0));
-    l.log('Bid sent: ', result.toString());
+    const { blockHash, txHash } = await bid(auction.auctionId, ourBid.toFixed(0));
+    logger.log('Bid sent: ', { blockHash: blockHash.toHex(), txHash: txHash.toHex() });
   };
 
-  const onAuctionDealed = async (event: Event) => {
+  const onAuctionDealt = async (event: Event) => {
     const pool = await getPool();
     const amountHex = event.args['surplus_amount'] || event.args['arg2'];
 
@@ -54,13 +44,17 @@ const run = async () => {
       slippage
     );
 
-    const result = await swap('AUSD', amount.innerToString(), 'ACA', target.innerToString());
-    l.log('Swap sent: ', result.toString());
+    const { blockHash, txHash } = await swap('AUSD', amount.innerToString(), 'ACA', target.innerToString());
+    logger.log('Swap sent: ', { blockHash: blockHash.toHex(), txHash: txHash.toHex() });
   };
 
-  surplusAuctions$.pipe(concatMap(async (auction) => await onAuction(auction).catch(l.error))).subscribe();
+  surplusAuctions$
+    .pipe(concatMap(async (auction) => await onAuction(auction).catch((e) => logger.error(e))))
+    .subscribe();
 
-  surplusAuctionDealed$.pipe(concatMap(async (event) => await onAuctionDealed(event).catch(l.error))).subscribe();
+  surplusAuctionDealt$
+    .pipe(concatMap(async (event) => await onAuctionDealt(event).catch((e) => logger.error(e))))
+    .subscribe();
 
   // start guardian
   require('@open-web3/guardian-cli');
@@ -71,7 +65,7 @@ export default run;
 // if called directly
 if (require.main === module) {
   run().catch((error) => {
-    l.error(error);
+    logger.error(error);
     process.exit(-1);
   });
 }

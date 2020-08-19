@@ -7,28 +7,30 @@ guardians:
     confirmation: finalize
 
     monitors:
-      AuctionDealed:
+      AuctionDealt:
         task: system.events
         arguments:
-          name: auctionManager.DebitAuctionDealed
+          name:
+            - auctionManager.DebitAuctionDealed
+            - auctionManager.DebitAuctionDealt
         conditions:
-          - args.winner: 'eq ${BIDDER_ADDRESS}' # do not change
+          - args.winner: 'eq ${ADDRESS}' # do not change
           - $or:
-              - arg2: 'eq ${BIDDER_ADDRESS}' # fallback. do not change
+              - arg2: 'eq ${ADDRESS}' # fallback. do not change
         actions:
-          - method: internal-debit-auction-dealed # do not change
+          - method: internal-debit-auction-dealt # do not change
 
       DebitAuction:
         task: honzon.debitAuctions
         conditions:
-          - lastBidder: 'ne ${BIDDER_ADDRESS}' # do not change
+          - lastBidder: 'ne ${ADDRESS}' # do not change
         actions:
           - method: internal-debit-auctions # do not change
 
       AUSDBalance:
         task: account.balances
         arguments:
-          account: ${BIDDER_ADDRESS}
+          account: ${ADDRESS}
           currencyId: AUSD
         actions:
           - method: internal-balance # do not change

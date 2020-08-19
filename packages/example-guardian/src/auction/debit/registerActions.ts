@@ -9,9 +9,9 @@ export const registerActions = () => {
     debitAuctions$.next(data);
   });
 
-  const debitAuctionDealed$ = new Subject<Event>();
-  ActionRegistry.register('internal-debit-auction-dealed', (args: any, data: Event) => {
-    debitAuctionDealed$.next(data);
+  const debitAuctionDealt$ = new Subject<Event>();
+  ActionRegistry.register('internal-debit-auction-dealt', (args: any, data: Event) => {
+    debitAuctionDealt$.next(data);
   });
 
   const balance$ = new ReplaySubject<Balance>(1);
@@ -32,5 +32,5 @@ export const registerActions = () => {
     return balance$.asObservable().pipe(take(1)).toPromise();
   };
 
-  return { debitAuctionDealed$, debitAuctions$, getBalance, getPool };
+  return { debitAuctionDealt$, debitAuctions$, getBalance, getPool };
 };

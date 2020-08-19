@@ -1,4 +1,4 @@
-import Joi from '@hapi/joi';
+import Joi from 'joi';
 import { from } from 'rxjs';
 import { map, flatMap } from 'rxjs/operators';
 import { createAccountCurrencyIdPairs } from '../helpers';

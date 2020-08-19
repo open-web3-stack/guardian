@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export const readConst = () => {
+export const config = () => {
   const nodeEndpoint = process.env.NODE_ENDPOINT;
   const privateKey = process.env.PRIVATE_KEY;
   const address = process.env.ADDRESS;
