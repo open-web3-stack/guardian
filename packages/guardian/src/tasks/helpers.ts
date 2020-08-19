@@ -80,15 +80,13 @@ export const getOraclePrice = (api: ApiRx, period = 30_000) => (tokenId: string)
   );
 };
 
-const regex = new RegExp(/\[(\w?,?\s?)+\]/gm);
-
 export const getEventParams = (event: Event): string[] => {
   const argsStr = event.meta.documentation
     .reverse()
     .map((i) => i.toString())
     .map((doc) => {
-      const results = regex.exec(doc);
-      return results && results[0];
+      const results = /\[(\w?,?\s?)+\]/gm.exec(doc);
+      return results && results.length > 0 && results[0];
     })
     .filter((i): i is string => !!i);
 
