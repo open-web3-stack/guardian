@@ -1,4 +1,6 @@
-import { StorageType } from '@laminar/types';
+import { StorageType as LaminarStorageType } from '@laminar/types';
+import { StorageType as AcalaStorageType } from '@acala-network/types';
+
 import { computedFn } from 'mobx-utils';
 
 const median = (arr: number[]): number => {
@@ -7,7 +9,7 @@ const median = (arr: number[]): number => {
   return arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2;
 };
 
-const getOraclePrice = (storage: StorageType) =>
+const getOraclePrice = (storage: LaminarStorageType | AcalaStorageType) =>
   computedFn((tokenId: string) => {
     if (tokenId === 'AUSD') return 1e18;
     const prices: number[] = [];

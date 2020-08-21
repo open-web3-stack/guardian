@@ -3,7 +3,7 @@ import './__mocks__/mockLoan';
 import LoansTask from '../LoansTask';
 import { AcalaGuardian } from '../../../guardians';
 
-describe('LoansTaskMock', () => {
+describe('LoansTask', () => {
   const guardian = new AcalaGuardian('acala-guardian', {
     networkType: 'acalaChain',
     network: 'dev',

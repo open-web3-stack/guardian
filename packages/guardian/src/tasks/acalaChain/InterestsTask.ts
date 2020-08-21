@@ -1,10 +1,9 @@
 import Joi from 'joi';
-import { from } from 'rxjs';
-import { map, flatMap } from 'rxjs/operators';
 import { createAccountCurrencyIdPairs } from '../helpers';
 import { Interest } from '../../types';
 import Task from '../Task';
 import { AcalaGuardian } from '../../guardians';
+import { autorun$ } from '../../utils';
 
 export default class InterestsTask extends Task<
   { account: string | string[]; currencyId: string | string[] },
@@ -18,12 +17,12 @@ export default class InterestsTask extends Task<
   }
 
   async start(guardian: AcalaGuardian) {
-    const { apiRx } = await guardian.isReady();
+    const { apiRx, storage } = await guardian.isReady();
 
     const { account } = this.arguments;
     let { currencyId } = this.arguments;
 
-    const enabledCurrencyIds = apiRx.consts.dex.enabledCurrencyIds.toHuman() as string[];
+    const enabledCurrencyIds = apiRx.consts.dex.enabledCurrencyIds.toJSON() as string[];
 
     // validate currency id
     if (currencyId === 'all') {
@@ -39,19 +38,16 @@ export default class InterestsTask extends Task<
     // create {account, currencyId} paris
     const pairs = createAccountCurrencyIdPairs(account, currencyId);
 
-    // setup stream
-    return from(pairs).pipe(
-      flatMap(({ account, currencyId }) =>
-        apiRx.query.dex.withdrawnInterest(currencyId, account).pipe(
-          map((result) => {
-            return {
-              account,
-              currencyId,
-              interests: result.toString(),
-            };
-          })
-        )
-      )
-    );
+    return autorun$<Interest>((subscriber) => {
+      for (const { currencyId, account } of pairs) {
+        const interests = storage.dex.withdrawnInterest(currencyId as any, account);
+        if (!interests) continue;
+        subscriber.next({
+          account,
+          currencyId,
+          interests: interests.toString(),
+        });
+      }
+    });
   }
 }

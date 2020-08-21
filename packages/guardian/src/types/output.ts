@@ -15,6 +15,7 @@ export type CollateralAuction = {
   account: string;
   currencyId: string;
   auctionId: number;
+  initialAmount: string;
   amount: string;
   target: string;
   startTime: number;
@@ -25,6 +26,7 @@ export type CollateralAuction = {
 
 export type DebitAuction = {
   auctionId: number;
+  initialAmount: string;
   amount: string;
   fix: string;
   startTime: number;

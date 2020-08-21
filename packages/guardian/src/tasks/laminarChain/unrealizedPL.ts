@@ -3,7 +3,7 @@ import { LaminarApi } from '@laminar/api';
 import { MarginPosition, LiquidityPoolId, TradingPair } from '@laminar/types/interfaces';
 import { StorageType } from '@laminar/types';
 import { computedFn } from 'mobx-utils';
-import getOraclePrice from './getOraclePrice';
+import getOraclePrice from '../getOraclePrice';
 
 const ONE = Big(1e18);
 

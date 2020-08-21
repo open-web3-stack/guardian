@@ -3,7 +3,7 @@ import './__mocks__/mockAuctions';
 import CollateralAuctionsTask from '../CollateralAuctionsTask';
 import { AcalaGuardian } from '../../../guardians';
 
-describe.skip('CollateralAuctionsTask', () => {
+describe('CollateralAuctionsTask', () => {
   const guardian = new AcalaGuardian('acala-guardian', {
     networkType: 'acalaChain',
     network: 'dev',
@@ -33,13 +33,5 @@ describe.skip('CollateralAuctionsTask', () => {
       });
       done();
     });
-  });
-
-  it('fulfillArguments works', () => {
-    expect(CollateralAuctionsTask.fulfillArguments(['a'])('a')).toBe(true);
-    expect(CollateralAuctionsTask.fulfillArguments('a')('a')).toBe(true);
-    expect(CollateralAuctionsTask.fulfillArguments('all')('a')).toBe(true);
-    expect(CollateralAuctionsTask.fulfillArguments('a')('b')).toBe(false);
-    expect(CollateralAuctionsTask.fulfillArguments(['a'])('b')).toBe(false);
   });
 });

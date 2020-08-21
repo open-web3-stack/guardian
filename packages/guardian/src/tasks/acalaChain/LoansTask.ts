@@ -1,29 +1,24 @@
 import Joi from 'joi';
-import { Observable, from, combineLatest } from 'rxjs';
-import { map, flatMap, filter } from 'rxjs/operators';
-import { DerivedUserLoan, DerivedLoanType } from '@acala-network/api-derive';
 import { collateralToUSD, calcCollateralRatio, convertToFixed18, debitToUSD } from '@acala-network/app-util';
-import { createAccountCurrencyIdPairs, getOraclePrice } from '../helpers';
+import { autorun$ } from '@open-web3/guardian/utils';
+import { createAccountCurrencyIdPairs } from '../helpers';
 import { AcalaGuardian } from '../../guardians';
 import { Loan } from '../../types';
 import Task from '../Task';
+import getOraclePrice from '../getOraclePrice';
 
-export default class LoansTask extends Task<
-  { account: string | string[]; currencyId: string | string[]; period?: number },
-  Loan
-> {
+export default class LoansTask extends Task<{ account: string | string[]; currencyId: string | string[] }, Loan> {
   validationSchema() {
     return Joi.object({
       account: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
       currencyId: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
-      period: Joi.number().default(30_000),
     }).required();
   }
 
   async start(guardian: AcalaGuardian) {
-    const { apiRx } = await guardian.isReady();
+    const { apiRx, storage } = await guardian.isReady();
 
-    const { account, period } = this.arguments;
+    const { account } = this.arguments;
     let { currencyId } = this.arguments;
 
     const stableCurrencyId = apiRx.consts.cdpTreasury.getStableCurrencyId.toString();
@@ -43,42 +38,43 @@ export default class LoansTask extends Task<
     // create {account, currencyId} paris
     const pairs = createAccountCurrencyIdPairs(account, currencyId);
 
-    const getPrice = getOraclePrice(apiRx, period);
+    const oraclePrice = getOraclePrice(storage);
 
-    // setup stream
-    return from(pairs).pipe(
-      flatMap(({ account, currencyId }) =>
-        combineLatest([
-          (apiRx.derive as any).loan.loan(account, currencyId) as Observable<DerivedUserLoan>,
-          (apiRx.derive as any).loan.loanType(currencyId) as Observable<DerivedLoanType>,
-          getPrice(currencyId),
-          getPrice(stableCurrencyId),
-        ]).pipe(
-          map(([loan, loanType, collateralPrice, stableCoinPrice]) => {
-            const collateralUSD = collateralToUSD(
-              convertToFixed18(loan.collaterals),
-              convertToFixed18(Number(collateralPrice.toFixed(0)))
-            );
-            const debitsUSD = debitToUSD(
-              convertToFixed18(loan.debits),
-              convertToFixed18(loanType.debitExchangeRate),
-              convertToFixed18(Number(stableCoinPrice.toFixed(0)))
-            );
+    return autorun$<Loan>((subscriber) => {
+      for (const { account, currencyId } of pairs) {
+        const position = storage.loans.positions(currencyId as any, account);
+        if (!position) continue;
 
-            const collateralRatio = calcCollateralRatio(collateralUSD, debitsUSD);
+        const debitExchangeRate = storage.cdpEngine.debitExchangeRate(currencyId as any);
+        const exchangeRate = debitExchangeRate?.isSome
+          ? debitExchangeRate.unwrap()
+          : apiRx.consts.cdpEngine.defaultDebitExchangeRate;
 
-            return {
-              account,
-              currencyId,
-              debits: loan.debits.toString(),
-              debitsUSD: debitsUSD.toString(),
-              collaterals: loan.collaterals.toString(),
-              collateralRatio: collateralRatio.isNaN() ? '0' : collateralRatio.toString(),
-            };
-          }),
-          filter((i) => i.collateralRatio !== '0')
-        )
-      )
-    );
+        const collateralPrice = oraclePrice(currencyId);
+        const stableCoinPrice = oraclePrice(stableCurrencyId);
+
+        if (!collateralPrice || !stableCoinPrice) continue;
+
+        const collateralUSD = collateralToUSD(convertToFixed18(position.collateral), convertToFixed18(collateralPrice));
+        const debitsUSD = debitToUSD(
+          convertToFixed18(position.debit),
+          convertToFixed18(exchangeRate),
+          convertToFixed18(stableCoinPrice)
+        );
+
+        const collateralRatio = calcCollateralRatio(collateralUSD, debitsUSD);
+
+        if (collateralRatio.isNaN()) continue;
+
+        subscriber.next({
+          account,
+          currencyId,
+          debits: position.debit.toString(),
+          debitsUSD: debitsUSD.toString(),
+          collaterals: position.collateral.toString(),
+          collateralRatio: collateralRatio.toString(),
+        });
+      }
+    });
   }
 }
