@@ -1,4 +1,4 @@
-import BN from 'big.js';
+import Big from 'big.js';
 import { get, isFunction } from 'lodash';
 
 export const and = (...args: (boolean | Function)[]) => (input: any) => {
@@ -21,7 +21,6 @@ export const or = (...args: (boolean | Function)[]) => (input: any) => {
   }, false);
 };
 
-// eslint-disable-next-line
 const regex = /^\s*(?<op>!=|==|<|<=|>|>=)\s*(?<num>\$?\s*-?\s*\d[\d_\s]*(\.[\d\s]+)?\s*%?)\s*$|^\s*(?<cond>ne|eq)\s*(?<str>\$?\b\w*)\s*$/;
 
 export const parse = (prop: string, condition: string) => (input: any): boolean => {
@@ -35,27 +34,43 @@ export const parse = (prop: string, condition: string) => (input: any): boolean 
 
   // numbers
   const op = result.groups?.op;
-  let num = result.groups?.num;
-  if (op && num) {
+  let rhs = result.groups?.num;
+  if (op && rhs) {
     const isPercentage = /\d+(\.\d+)?%/;
-    if (isPercentage.test(num)) {
-      const numberStr = num.replace('%', '');
-      num = BN(numberStr).div(100).toFixed();
+    if (isPercentage.test(rhs)) {
+      const numberStr = rhs.replace('%', '');
+      rhs = Big(numberStr).div(100).toFixed();
     }
 
-    const expr = `${lhs} ${op} ${num}`;
+    const value = Big(lhs);
 
-    return eval(expr); // eslint-disable-line
+    switch (op) {
+      case '==':
+        return value.eq(rhs);
+      case '!=':
+        return !value.eq(rhs);
+      case '>':
+        return value.gt(rhs);
+      case '>=':
+        return value.gte(rhs);
+      case '<':
+        return value.lt(rhs);
+      case '<=':
+        return value.lte(rhs);
+      default:
+        return false;
+    }
   }
 
   // strings
-  const { cond, str } = result.groups as any;
-  if (cond && str) {
+  const cond = result.groups?.cond;
+  rhs = result.groups?.str;
+  if (cond && rhs) {
     switch (cond) {
       case 'eq':
-        return lhs === str;
+        return String(lhs) === rhs;
       case 'ne':
-        return lhs !== str;
+        return String(lhs) !== rhs;
       default:
         return false;
     }
