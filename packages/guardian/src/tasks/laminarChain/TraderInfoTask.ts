@@ -1,9 +1,33 @@
 import Joi from 'joi';
-import { of, Observable, from } from 'rxjs';
-import { flatMap, concatAll } from 'rxjs/operators';
-import { TraderInfo, LaminarApi } from '@laminar/api';
+import _ from 'lodash';
+import BN from 'bn.js';
+import { TraderInfo } from '@laminar/api';
+import { unit } from '@laminar/api/utils';
 import Task from '../Task';
 import { LaminarGuardian } from '@open-web3/guardian/guardians';
+import { autorun$ } from '@open-web3/guardian/utils';
+import { computedFn } from 'mobx-utils';
+import { StorageType } from '@laminar/types';
+
+const getBalancesFn = (storage: StorageType) =>
+  computedFn((account: string, poolId: number | number[] | 'all') => {
+    const balances: Record<string, string> = {};
+    if (poolId === 'all') {
+      const balanceEntries = storage.marginProtocol.balances.entries(account);
+      for (const [poolId, balance] of balanceEntries.entries()) {
+        balances[poolId] = balance.toString();
+      }
+    } else {
+      const poolIds = _.castArray(poolId);
+      for (const id of poolIds) {
+        const balance = storage.marginProtocol.balances(account, String(poolId));
+        if (balance) {
+          balances[id] = balance.toString();
+        }
+      }
+    }
+    return balances;
+  });
 
 export default class TraderInfoTask extends Task<
   { account: string | string[]; poolId: number | number[] | 'all' },
@@ -17,25 +41,37 @@ export default class TraderInfoTask extends Task<
   }
 
   async start(guardian: LaminarGuardian) {
-    const { laminarApi } = await guardian.isReady();
+    const { laminarApi, storage } = await guardian.isReady();
 
-    const { account, poolId } = this.arguments;
+    const accounts = _.castArray(this.arguments.account);
 
-    return TraderInfoTask.getPoolIds(laminarApi, poolId).pipe(
-      flatMap((poolId) =>
-        from(Array.isArray(account) ? account : [account]).pipe(
-          flatMap((account) => laminarApi.margin.traderInfo(account, poolId))
-        )
-      )
-    );
+    const getBalances = getBalancesFn(storage);
+
+    return autorun$<TraderInfo>((subscriber) => {
+      for (const account of accounts) {
+        const balances = getBalances(account, this.arguments.poolId);
+        for (const [poolId, balance] of Object.entries(balances)) {
+          laminarApi.api.rpc.margin
+            .traderState(account, laminarApi.api.createType('LiquidityPoolId', poolId))
+            .toPromise()
+            .then((result) => {
+              const equity = result.equity;
+              const marginLevel = result.margin_level;
+              const unrealizedPl = result.unrealized_pl;
+              subscriber.next({
+                balance: balance.toString(),
+                freeMargin: result.free_margin.toString(),
+                marginHeld: result.margin_held.toString(),
+                unrealizedPl: unrealizedPl.toString(),
+                accumulatedSwap: equity.sub(new BN(balance)).sub(unrealizedPl).toString(),
+                equity: equity.toString(),
+                marginLevel: marginLevel.toString(),
+                totalLeveragedPosition: equity.mul(unit).div(marginLevel).toString(),
+              });
+            })
+            .catch();
+        }
+      }
+    });
   }
-
-  private static getPoolIds = (api: LaminarApi, poolId: number | number[] | 'all'): Observable<string> => {
-    if (poolId === 'all') {
-      return api.margin.allPoolIds().pipe(concatAll());
-    }
-
-    const poolIds = typeof poolId === 'number' ? [poolId] : poolId;
-    return of(...poolIds.map((i) => String(i)));
-  };
 }
