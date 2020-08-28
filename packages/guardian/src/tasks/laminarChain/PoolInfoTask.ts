@@ -6,11 +6,11 @@ import { switchMap, distinctUntilChanged, publishReplay, refCount } from 'rxjs/o
 import { MarginPoolInfo, LaminarApi, TraderPairOptions } from '@laminar/api';
 import { StorageType } from '@laminar/types';
 import { Pool } from '@laminar/types/interfaces';
-import { autorun$ } from '@open-web3/guardian/utils';
 import { LaminarGuardian } from '@open-web3/guardian/guardians';
 import { computedFn, fromStream } from 'mobx-utils';
+import { RPCRefreshPeriod } from '../../constants';
+import { autorun$ } from '../../utils';
 import Task from '../Task';
-import { RPCRefreshPeriod } from '@open-web3/guardian/constants';
 
 const setup = async (laminarApi: LaminarApi, storage: StorageType) => {
   const getPools = computedFn((poolId: number | number[] | 'all') => {

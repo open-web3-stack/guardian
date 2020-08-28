@@ -5,10 +5,10 @@ import { Codec, ITuple } from '@polkadot/types/types';
 import { Option, Vec } from '@polkadot/types/codec';
 import { TimestampedValue } from '@open-web3/orml-types/interfaces';
 import { getValueFromTimestampValue, observeRPC, getOraclePrice } from '../helpers';
+import BaseSubstrateGuardian from '../../guardians/BaseSubstrateGuardian';
+import { RPCRefreshPeriod } from '../../constants';
 import { Price } from '../../types';
 import Task from '../Task';
-import BaseSubstrateGuardian from '../../guardians/BaseSubstrateGuardian';
-import { RPCRefreshPeriod } from '@open-web3/guardian/constants';
 
 export default class PricesTask extends Task<{ key: string | string[]; period: number }, Price> {
   validationSchema() {

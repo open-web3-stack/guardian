@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import _ from 'lodash';
 import { LaminarGuardian } from '@open-web3/guardian/guardians';
-import { autorun$ } from '@open-web3/guardian/utils';
+import { autorun$ } from '../../utils';
 import { Position } from '../../types';
 import unrealizedPL from './unrealizedPL';
 import accumulatedSwap from './accumulatedSwap';

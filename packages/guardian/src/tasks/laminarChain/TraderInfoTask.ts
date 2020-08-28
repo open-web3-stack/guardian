@@ -5,12 +5,12 @@ import { timer } from 'rxjs';
 import { switchMap, distinctUntilChanged, publishReplay, refCount } from 'rxjs/operators';
 import { TraderInfo, LaminarApi } from '@laminar/api';
 import { unit } from '@laminar/api/utils';
-import Task from '../Task';
 import { LaminarGuardian } from '@open-web3/guardian/guardians';
-import { autorun$ } from '@open-web3/guardian/utils';
 import { computedFn, fromStream } from 'mobx-utils';
 import { StorageType } from '@laminar/types';
-import { RPCRefreshPeriod } from '@open-web3/guardian/constants';
+import { RPCRefreshPeriod } from '../../constants';
+import { autorun$ } from '../../utils';
+import Task from '../Task';
 
 const getBalancesFn = (storage: StorageType) =>
   computedFn((account: string, poolId: number | number[] | 'all') => {

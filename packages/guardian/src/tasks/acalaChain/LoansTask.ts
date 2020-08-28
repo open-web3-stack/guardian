@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { collateralToUSD, calcCollateralRatio, convertToFixed18, debitToUSD } from '@acala-network/app-util';
-import { autorun$ } from '@open-web3/guardian/utils';
+import { autorun$ } from '../../utils';
 import { createAccountCurrencyIdPairs } from '../helpers';
 import { AcalaGuardian } from '../../guardians';
 import { Loan } from '../../types';

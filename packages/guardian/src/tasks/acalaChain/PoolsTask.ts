@@ -3,7 +3,7 @@ import { Fixed18 } from '@acala-network/app-util';
 import { Pool } from '../../types';
 import Task from '../Task';
 import { AcalaGuardian } from '../../guardians';
-import { autorun$ } from '@open-web3/guardian/utils';
+import { autorun$ } from '../../utils';
 
 export default class PoolsTask extends Task<{ currencyId: string | string[] }, Pool> {
   validationSchema() {

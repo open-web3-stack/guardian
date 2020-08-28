@@ -3,13 +3,13 @@ import Joi from 'joi';
 import { Pool, SyntheticPoolCurrencyOption } from '@laminar/types/interfaces';
 import { Permill } from '@polkadot/types/interfaces';
 import { LaminarGuardian } from '@open-web3/guardian/guardians';
-import { LiquidityPool } from '../../types';
-import getOraclePrice from '../getOraclePrice';
-import Task from '../Task';
-import { autorun$ } from '@open-web3/guardian/utils';
 import { StorageType } from '@laminar/types';
 import { computedFn } from 'mobx-utils';
 import { toBaseUnit as dollar } from '@open-web3/util';
+import { LiquidityPool } from '../../types';
+import getOraclePrice from '../getOraclePrice';
+import { autorun$ } from '../../utils';
+import Task from '../Task';
 
 const getSyntheticPools = (storage: StorageType) =>
   computedFn((poolId: number | number[] | 'all') => {
@@ -41,19 +41,19 @@ const getPoolCurrencyOptions = (storage: StorageType) =>
     const options = storage.syntheticLiquidityPools.poolCurrencyOptions.entries(poolId);
 
     if (currencyId === 'all') {
-      options.forEach((option, currencyId) => {
+      for (const [currencyId, option] of options.entries()) {
         output[currencyId] = option;
-      });
+      }
     }
 
     const currencyIds = typeof currencyId === 'string' ? [currencyId] : currencyId;
-    options.forEach((option, currencyId) => {
+    for (const [currencyId, option] of options.entries()) {
       if (currencyId === 'fTokens') {
         output[currencyId] = option;
       } else if (currencyIds.includes(currencyId)) {
         output[currencyId] = option;
       }
-    });
+    }
     return output;
   });
 
