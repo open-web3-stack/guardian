@@ -2,7 +2,7 @@ import LaminarGuardian from '../../../../guardians/LaminarGuardian';
 import TraderInfoTask from '../../TraderInfoTask';
 
 describe('TraderInfoTask', () => {
-  jest.setTimeout(60_000);
+  jest.setTimeout(30_000);
 
   const guardian = new LaminarGuardian('laminar-guardian', {
     network: 'dev',

@@ -24,6 +24,7 @@ describe('CollateralAuctionsTask', () => {
         account: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
         currencyId: 'ACA',
         auctionId: 0,
+        initialAmount: '100',
         amount: '100',
         target: '20',
         startTime: 20,

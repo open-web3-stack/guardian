@@ -41,7 +41,7 @@ describe('LaminarGuardian', () => {
         'monitor-poolInfo': {
           task: 'margin.poolInfo',
           arguments: {
-            poolId: 1,
+            poolId: 0,
           },
           actions: [
             {
@@ -54,6 +54,8 @@ describe('LaminarGuardian', () => {
     });
 
     await guardian.start();
+
+    await sleep(300);
 
     expect(axiosSpy).toBeCalledTimes(0);
     expect(shellSpy).toBeCalledTimes(1);

@@ -18,6 +18,7 @@ describe('DebitAuctionsTask', () => {
     output$.subscribe((result) => {
       expect(result).toStrictEqual({
         auctionId: 0,
+        initialAmount: '100',
         amount: '100',
         fix: '20',
         startTime: 1,

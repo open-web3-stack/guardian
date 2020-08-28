@@ -19,12 +19,14 @@ const COLLATERAL_AUCTION = new Option(register, 'CollateralAuctionItem', {
   refundRecipient: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
   currencyId: 'ACA',
   auctionId: 0,
+  initialAmount: 100,
   amount: 100,
   target: 20,
   startTime: 20,
 });
 
 const DEBIT_AUCTION = new Option(register, 'DebitAuctionItem', {
+  initialAmount: 100,
   amount: 100,
   fix: 20,
   startTime: 1,

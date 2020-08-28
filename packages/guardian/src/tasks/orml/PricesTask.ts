@@ -8,12 +8,13 @@ import { getValueFromTimestampValue, observeRPC, getOraclePrice } from '../helpe
 import { Price } from '../../types';
 import Task from '../Task';
 import BaseSubstrateGuardian from '../../guardians/BaseSubstrateGuardian';
+import { RPCRefreshPeriod } from '@open-web3/guardian/constants';
 
-export default class PricesTask extends Task<{ key: string | string[]; period?: number }, Price> {
+export default class PricesTask extends Task<{ key: string | string[]; period: number }, Price> {
   validationSchema() {
     return Joi.object({
       key: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
-      period: Joi.number().default(30_000),
+      period: Joi.number().default(RPCRefreshPeriod),
     }).required();
   }
 

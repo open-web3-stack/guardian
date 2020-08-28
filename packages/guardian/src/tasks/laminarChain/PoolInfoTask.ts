@@ -1,13 +1,16 @@
 import _ from 'lodash';
 import Joi from 'joi';
 import BN from 'bn.js';
+import { timer } from 'rxjs';
+import { switchMap, distinctUntilChanged, publishReplay, refCount } from 'rxjs/operators';
 import { MarginPoolInfo, LaminarApi, TraderPairOptions } from '@laminar/api';
 import { StorageType } from '@laminar/types';
 import { Pool } from '@laminar/types/interfaces';
 import { autorun$ } from '@open-web3/guardian/utils';
 import { LaminarGuardian } from '@open-web3/guardian/guardians';
-import { computedFn } from 'mobx-utils';
+import { computedFn, fromStream } from 'mobx-utils';
 import Task from '../Task';
+import { RPCRefreshPeriod } from '@open-web3/guardian/constants';
 
 const setup = async (laminarApi: LaminarApi, storage: StorageType) => {
   const getPools = computedFn((poolId: number | number[] | 'all') => {
@@ -73,21 +76,30 @@ const setup = async (laminarApi: LaminarApi, storage: StorageType) => {
 
   const tokens = await laminarApi.currencies.tokens().toPromise();
 
-  const getPairId = () => {
-    return (pair: { base: string; quote: string }): string => {
-      const baseToken = tokens.find(({ id }) => pair.base === id);
-      const quoteToken = tokens.find(({ id }) => pair.quote === id);
-      return `${baseToken?.name || pair.base}${quoteToken?.name || pair.quote}`;
-    };
+  const getPairId = (pair: { base: string; quote: string }): string => {
+    const baseToken = tokens.find(({ id }) => pair.base === id);
+    const quoteToken = tokens.find(({ id }) => pair.quote === id);
+    return `${baseToken?.name || pair.base}${quoteToken?.name || pair.quote}`;
   };
 
   return { getPools, getTradingPairOptions, getPairId };
 };
 
-export default class PoolInfoTask extends Task<{ poolId: number | number[] | 'all' }, MarginPoolInfo> {
+const getPoolState = computedFn((laminarApi: LaminarApi, poolId: string, period: number) => {
+  const stream$ = timer(0, period).pipe(
+    switchMap(() => laminarApi.api.rpc.margin.poolState(poolId)),
+    distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
+    publishReplay(1),
+    refCount()
+  );
+  return fromStream(stream$);
+});
+
+export default class PoolInfoTask extends Task<{ poolId: number | number[] | 'all'; period: number }, MarginPoolInfo> {
   validationSchema() {
     return Joi.object({
       poolId: Joi.alt(Joi.number(), Joi.array().min(1).items(Joi.number()), Joi.valid('all')).required(),
+      period: Joi.number().default(RPCRefreshPeriod),
     }).required();
   }
 
@@ -108,21 +120,20 @@ export default class PoolInfoTask extends Task<{ poolId: number | number[] | 'al
         const tradingPairOptions = getTradingPairOptions(poolId, getPairId);
         if (!tradingPairOptions) continue;
 
-        laminarApi.api.rpc.margin
-          .poolState(poolId)
-          .toPromise()
-          .then((poolState) => {
-            subscriber.next({
-              poolId,
-              owner: pool.owner.toString(),
-              balance: pool.balance.toString(),
-              enp: poolState.enp.toString(),
-              ell: poolState.ell.toString(),
-              options: tradingPairOptions,
-              minLeveragedAmount: minLeveragedAmount.toString(),
-            });
-          })
-          .catch();
+        const result = getPoolState(laminarApi, poolId, this.arguments.period);
+        if (!result.current) continue;
+
+        const poolState = result.current;
+
+        subscriber.next({
+          poolId,
+          owner: pool.owner.toString(),
+          balance: pool.balance.toString(),
+          enp: poolState.enp.toString(),
+          ell: poolState.ell.toString(),
+          options: tradingPairOptions,
+          minLeveragedAmount: minLeveragedAmount.toString(),
+        });
       }
     });
   }

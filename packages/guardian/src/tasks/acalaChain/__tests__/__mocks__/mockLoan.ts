@@ -14,15 +14,16 @@ const MockApiRx = of({
     cdpTreasury: { getStableCurrencyId: 'AUSD' },
     prices: { stableCurrencyFixedPrice: 1e18 },
     cdpEngine: {
-      collateralCurrencyIds: new (Vec.with('CurrencyId'))(register, ['DOT', 'XBTC', 'LDOT']),
+      collateralCurrencyIds: register.createType('Vec<CurrencyId>', ['DOT', 'XBTC', 'LDOT']),
     },
   },
 });
 
 const MockStorage = {
   loans: {
-    debits: jest.fn(() => register.createType('DebitBalance', '1995229380509623964735')),
-    collaterals: jest.fn(() => register.createType('Balance', '1000000000000000000')),
+    positions: jest.fn(() =>
+      register.createType('Position', { debit: '1995229380509623964735', collateral: '1000000000000000000' })
+    ),
   },
   cdpEngine: {
     debitExchangeRate: jest.fn(() => register.createType('Option<ExchangeRate>', '100242367706398103')),

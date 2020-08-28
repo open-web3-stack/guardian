@@ -14,12 +14,13 @@ describe('PoolInfoTask', () => {
   it('works', async (done) => {
     const task = new PoolInfoTask({
       poolId: 'all',
+      period: 60_000,
     });
 
     const output$ = await task.start(guardian);
 
     output$.subscribe((output) => {
-      console.log(output);
+      console.log(JSON.stringify(output, null, 2));
       expect(output).toBeTruthy();
       done();
     });
