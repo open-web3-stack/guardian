@@ -35,11 +35,20 @@ describe('gates', () => {
     expect(parse('a', '== 1.1')({ a: 1.1 })).toBe(true);
     expect(parse('a', '== 1.1')({ a: 1.2 })).toBe(false);
 
+    expect(parse('a', '== 1.1')({ a: '1.1' })).toBe(true);
+    expect(parse('a', '== 1.1')({ a: '1.2' })).toBe(false);
+
     expect(parse('a', '!= 1.1')({ a: 1.2 })).toBe(true);
     expect(parse('a', '!= 1.1')({ a: 1.1 })).toBe(false);
 
+    expect(parse('a', '!= 1.1')({ a: '1.2' })).toBe(true);
+    expect(parse('a', '!= 1.1')({ a: '1.1' })).toBe(false);
+
     expect(parse('a', '< 10.4%')({ a: 0.103 })).toBe(true);
     expect(parse('a', '< 10.4%')({ a: 0.105 })).toBe(false);
+
+    expect(parse('a', '< 10.4%')({ a: '0.103' })).toBe(true);
+    expect(parse('a', '< 10.4%')({ a: '0.105' })).toBe(false);
   });
 
   it('works with strings', () => {
@@ -47,6 +56,10 @@ describe('gates', () => {
     expect(parse('a', 'eq world')({ a: 'world' })).toBe(true);
     expect(parse('a', 'ne hello')({ a: 'hello' })).toBe(false);
     expect(parse('a', 'eq world')({ a: 'hello' })).toBe(false);
+    expect(parse('a', 'eq 1')({ a: '1' })).toBe(true);
+    expect(parse('a', 'eq 1')({ a: 1 })).toBe(true);
+    expect(parse('a', 'ne 1')({ a: '1' })).toBe(false);
+    expect(parse('a', 'ne 1')({ a: 1 })).toBe(false);
   });
 
   it('condition works', () => {

@@ -1,13 +1,8 @@
 import Joi from 'joi';
-import { combineLatest } from 'rxjs';
-import { map, flatMap } from 'rxjs/operators';
-import { Option } from '@polkadot/types/codec';
-import { AuctionInfo, AccountId, Balance } from '@open-web3/orml-types/interfaces';
-import { SurplusAuctionItem } from '@acala-network/types/interfaces';
-import { getAuctionsIds, unwrapOptionalCodec } from './helpers';
 import { SurplusAuction } from '../../types';
 import Task from '../Task';
 import { AcalaGuardian } from '../../guardians';
+import { autorun$ } from '../../utils';
 
 export default class SurplusAuctionsTask extends Task<{}, SurplusAuction> {
   validationSchema() {
@@ -15,31 +10,29 @@ export default class SurplusAuctionsTask extends Task<{}, SurplusAuction> {
   }
 
   async start(guardian: AcalaGuardian) {
-    const { apiRx } = await guardian.isReady();
-    return getAuctionsIds(apiRx).pipe(
-      flatMap((auctionId) => {
-        return combineLatest([
-          unwrapOptionalCodec(apiRx.query.auction.auctions<Option<AuctionInfo>>(auctionId)),
-          unwrapOptionalCodec(apiRx.query.auctionManager.surplusAuctions<Option<SurplusAuctionItem>>(auctionId)),
-        ]).pipe(
-          map(([auction, surplus]) => {
-            let lastBidder: AccountId | null = null;
-            let lastBid: Balance | null = null;
-            if (auction.bid.isSome) {
-              [lastBidder, lastBid] = auction.bid.unwrap();
-            }
+    const { storage } = await guardian.isReady();
 
-            return {
-              auctionId,
-              amount: surplus.amount.toString(),
-              startTime: Number.parseInt(surplus.startTime.toString()),
-              endTime: auction.end.isSome ? Number.parseInt(auction.end.toString()) : null,
-              lastBidder: lastBidder ? lastBidder.toString() : null,
-              lastBid: lastBid ? lastBid.toString() : null,
-            };
-          })
-        );
-      })
-    );
+    return autorun$<SurplusAuction>((subscriber) => {
+      const surplusAuctions = storage.auctionManager.surplusAuctions.entries();
+      for (const [auctionId, surplusAuctionWrapped] of surplusAuctions.entries()) {
+        if (surplusAuctionWrapped.isEmpty) continue;
+        const surplusAuction = surplusAuctionWrapped.unwrap();
+
+        const auctionWrapped = storage.auction.auctions(auctionId);
+        if (!auctionWrapped?.isSome) continue;
+        const auction = auctionWrapped.unwrap();
+
+        const [lastBidder, lastBid] = auction.bid.isSome ? auction.bid.unwrap() : [];
+
+        subscriber.next({
+          auctionId: Number(auctionId),
+          amount: surplusAuction.amount.toString(),
+          startTime: Number(surplusAuction.startTime.toString()),
+          endTime: auction.end.isSome ? Number(auction.end.toString()) : null,
+          lastBidder: lastBidder ? lastBidder.toString() : null,
+          lastBid: lastBid ? lastBid.toString() : null,
+        });
+      }
+    });
   }
 }

@@ -14,7 +14,7 @@ describe('LoansTaks e2e', () => {
   it('works with currencyId', async (done) => {
     const loans = new LoansTask({
       account: '5DAAzDBM2xoob4fcN4X7c8QXxZj7AEENfcMQWApUE6ALspWG',
-      currencyId: 'DOT',
+      currencyId: 'XBTC',
     });
 
     const output$ = await loans.start(guardian);

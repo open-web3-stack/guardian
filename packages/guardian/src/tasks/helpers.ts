@@ -52,7 +52,7 @@ export const isNonNull = <T>(value: T): value is NonNullable<T> => {
   return value != null;
 };
 
-export const observeRPC = <T>(method: RpcRxResult<any>, params: Parameters<any>, period = 30_000): Observable<T> => {
+export const observeRPC = <T>(method: RpcRxResult<any>, params: Parameters<any>, period: number): Observable<T> => {
   return timer(0, period).pipe(
     switchMap(() => {
       return method(...params) as Observable<T>;
@@ -60,7 +60,7 @@ export const observeRPC = <T>(method: RpcRxResult<any>, params: Parameters<any>,
   );
 };
 
-export const getOraclePrice = (api: ApiRx, period = 30_000) => (tokenId: string) => {
+export const getOraclePrice = (api: ApiRx, period: number) => (tokenId: string) => {
   // acala chain
   if (api.consts.cdpTreasury) {
     const stableCurrencyId = api.consts.cdpTreasury.getStableCurrencyId.toString().toLowerCase();

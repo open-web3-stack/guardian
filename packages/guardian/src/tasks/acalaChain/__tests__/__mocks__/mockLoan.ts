@@ -1,58 +1,52 @@
-jest.mock('@polkadot/api');
-
 import { of } from 'rxjs';
-import BN from 'bn.js';
-import { ApiRx, WsProvider } from '@polkadot/api';
 import { TypeRegistry } from '@polkadot/types';
 import { Vec } from '@polkadot/types/codec';
 import { types } from '@acala-network/types';
 import { customTypes } from '../../../../customTypes';
+import { observable } from 'mobx';
 
 const register = new TypeRegistry();
 register.register(types);
 register.register(customTypes);
 
-const MockLoan = of({
+const MockApiRx = of({
   consts: {
     cdpTreasury: { getStableCurrencyId: 'AUSD' },
     prices: { stableCurrencyFixedPrice: 1e18 },
     cdpEngine: {
-      collateralCurrencyIds: new (Vec.with('CurrencyId'))(register, ['DOT', 'XBTC', 'LDOT']),
-    },
-  },
-  derive: {
-    loan: {
-      loan: jest.fn((account, currencyId) => {
-        return of({
-          account,
-          token: currencyId,
-          debits: new BN('1995229380509623964735'),
-          collaterals: new BN('1000000000000000000'),
-        });
-      }),
-      loanType: jest.fn((currencyId) => {
-        return of({ token: currencyId, debitExchangeRate: new BN('100242367706398103') });
-      }),
-    },
-  },
-  rpc: {
-    oracle: {
-      getValue: jest.fn((currencyId) => {
-        if (currencyId === 'DOT') {
-          return of(register.createType('Option<TimestampedValue>', { value: '300000000000000000000' }));
-        }
-        return of(register.createType('Option<TimestampedValue>', { value: '1000000000000000000' }));
-      }),
+      collateralCurrencyIds: register.createType('Vec<CurrencyId>', ['DOT', 'XBTC', 'LDOT']),
     },
   },
 });
 
-// @ts-ignore
-ApiRx.create.mockImplementation(() => MockLoan);
+const MockStorage = {
+  loans: {
+    positions: jest.fn(() =>
+      register.createType('Position', { debit: '1995229380509623964735', collateral: '1000000000000000000' })
+    ),
+  },
+  cdpEngine: {
+    debitExchangeRate: jest.fn(() => register.createType('Option<ExchangeRate>', '100242367706398103')),
+  },
+  oracle: {
+    rawValues: {
+      allEntries: jest.fn(() =>
+        observable.map({
+          0: observable.map({
+            DOT: register.createType('Option<TimestampedValue>', { value: '300000000000000000000' }),
+          }),
+        })
+      ),
+    },
+  },
+};
 
-// @ts-ignore
-WsProvider.mockImplementation(() => ({
-  constructor: jest.fn(),
+jest.mock('@open-web3/api-mobx', () => ({
+  createStorage: jest.fn(() => MockStorage),
 }));
 
-import '../../../../__tests__/__mocks__/mockApiPromise';
+jest.mock('@polkadot/api', () => ({
+  WsProvider: jest.fn(() => {}),
+  ApiPromise: { create: jest.fn() },
+  ApiRx: { create: jest.fn(() => MockApiRx) },
+}));

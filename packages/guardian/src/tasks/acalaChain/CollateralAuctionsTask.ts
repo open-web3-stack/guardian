@@ -1,13 +1,8 @@
 import Joi from 'joi';
-import { combineLatest } from 'rxjs';
-import { map, flatMap, filter } from 'rxjs/operators';
-import { Option } from '@polkadot/types/codec';
-import { AuctionInfo, AccountId, Balance } from '@open-web3/orml-types/interfaces';
-import { CollateralAuctionItem } from '@acala-network/types/interfaces';
-import { getAuctionsIds, unwrapOptionalCodec } from './helpers';
-import { CollateralAuction } from '../../types';
+import { CollateralAuction } from '@open-web3/guardian/types';
 import { AcalaGuardian } from '../../guardians';
 import Task from '../Task';
+import { autorun$ } from '../../utils';
 
 export default class CollateralAuctionsTask extends Task<
   { account: string | string[]; currencyId: string | string[] },
@@ -21,49 +16,47 @@ export default class CollateralAuctionsTask extends Task<
   }
 
   async start(guardian: AcalaGuardian) {
-    const { apiRx } = await guardian.isReady();
+    const { storage } = await guardian.isReady();
 
     const { account, currencyId } = this.arguments;
 
-    const fulfillAccount = CollateralAuctionsTask.fulfillArguments(account);
-    const fulfillCurrencyId = CollateralAuctionsTask.fulfillArguments(currencyId);
+    const fulfillAccount = this.fulfillArguments(account);
+    const fulfillCurrencyId = this.fulfillArguments(currencyId);
 
-    return getAuctionsIds(apiRx).pipe(
-      flatMap((auctionId) =>
-        combineLatest([
-          unwrapOptionalCodec(apiRx.query.auction.auctions<Option<AuctionInfo>>(auctionId)),
-          unwrapOptionalCodec(apiRx.query.auctionManager.collateralAuctions<Option<CollateralAuctionItem>>(auctionId)),
-        ]).pipe(
-          filter(([, collateralAuction]) => {
-            const account = collateralAuction.refundRecipient.toString();
-            const currencyId = collateralAuction.currencyId.toString();
-            return fulfillAccount(account) && fulfillCurrencyId(currencyId);
-          }),
-          map(([auction, collateralAuction]) => {
-            let lastBidder: AccountId | null = null;
-            let lastBid: Balance | null = null;
-            if (auction.bid.isSome) {
-              [lastBidder, lastBid] = auction.bid.unwrap();
-            }
+    return autorun$<CollateralAuction>((subscriber) => {
+      const collateralAuctions = storage.auctionManager.collateralAuctions.entries();
+      for (const [auctionId, collateralAuctionWrapped] of collateralAuctions.entries()) {
+        if (collateralAuctionWrapped.isEmpty) continue;
+        const collateralAuction = collateralAuctionWrapped.unwrap();
 
-            return {
-              account: collateralAuction.refundRecipient.toString(),
-              currencyId: collateralAuction.currencyId.toString(),
-              auctionId,
-              amount: collateralAuction.amount.toString(),
-              target: collateralAuction.target.toString(),
-              startTime: Number.parseInt(collateralAuction.startTime.toString()),
-              endTime: auction.end.isSome ? Number.parseInt(auction.end.toString()) : null,
-              lastBidder: lastBidder ? lastBidder.toString() : null,
-              lastBid: lastBid ? lastBid.toString() : null,
-            };
-          })
-        )
-      )
-    );
+        const { refundRecipient, currencyId } = collateralAuction;
+
+        if (!fulfillAccount(refundRecipient.toString())) continue;
+        if (!fulfillCurrencyId(currencyId.toString())) continue;
+
+        const auctionWrapped = storage.auction.auctions(auctionId);
+        if (!auctionWrapped?.isSome) continue;
+        const auction = auctionWrapped.unwrap();
+
+        const [lastBidder, lastBid] = auction.bid.isSome ? auction.bid.unwrap() : [];
+
+        subscriber.next({
+          account: collateralAuction.refundRecipient.toString(),
+          currencyId: collateralAuction.currencyId.toString(),
+          auctionId: Number(auctionId),
+          initialAmount: collateralAuction.initialAmount.toString(),
+          amount: collateralAuction.amount.toString(),
+          target: collateralAuction.target.toString(),
+          startTime: Number(collateralAuction.startTime.toString()),
+          endTime: auction.end.isSome ? Number(auction.end.toString()) : null,
+          lastBidder: lastBidder ? lastBidder.toString() : null,
+          lastBid: lastBid ? lastBid.toString() : null,
+        });
+      }
+    });
   }
 
-  static fulfillArguments = (source: string | string[]) => (input: string): boolean => {
+  private fulfillArguments = (source: string | string[]) => (input: string): boolean => {
     if (source === 'all') {
       return true;
     } else if (typeof source === 'string') {

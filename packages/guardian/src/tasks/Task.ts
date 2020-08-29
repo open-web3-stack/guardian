@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { ITask, IGuardian } from '../types';
 
 export default abstract class Task<P extends Record<string, any>, O> implements ITask<P, O> {
-  constructor(private _arguments: P = Object.create({})) {
+  constructor(private _arguments: P) {
     this.setArguments(_arguments);
   }
 
