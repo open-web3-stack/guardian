@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import { Output } from '@open-web3/guardian/tasks/substrate/ScheduleBlockNumberTask';
 import { ActionRegistry } from '@open-web3/guardian';
 import { setupApi } from './setupApi';
 import { setDefaultConfig, logger } from '../utils';
@@ -10,10 +9,10 @@ const run = async () => {
 
   const { getBalance } = await setupApi();
 
-  ActionRegistry.register('getBalance', async () => {
-    const balance = await getBalance();
-    logger.log('balance: ', balance.toHuman());
-    return;
+  ActionRegistry.register('getBalance', () => {
+    getBalance().then((balance) => {
+      logger.log('balance: ', balance.toHuman());
+    });
   });
 
   // start guardian
