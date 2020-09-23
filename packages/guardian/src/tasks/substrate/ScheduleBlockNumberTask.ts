@@ -3,9 +3,14 @@ import { filter, map } from 'rxjs/operators';
 import BaseSubstrateGuardian from '../../guardians/BaseSubstrateGuardian';
 import Task from '../Task';
 
+export interface Output {
+  current: number;
+  next: number;
+}
+
 export default class ScheduleBlockNumberTask extends Task<
   { startNumber?: number; step: number; finalized: boolean },
-  number
+  Output
 > {
   validationSchema() {
     return Joi.object({
@@ -41,6 +46,12 @@ export default class ScheduleBlockNumberTask extends Task<
         }
 
         return !(delta % step);
+      }),
+      map((number) => {
+        return {
+          current: number,
+          next: number + step,
+        };
       })
     );
   }

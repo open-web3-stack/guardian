@@ -4,7 +4,12 @@ import { Observable } from 'rxjs';
 import Task from '../Task';
 import BaseSubstrateGuardian from '../../guardians/BaseSubstrateGuardian';
 
-export default class ScheduleTimeTask extends Task<{ cronTime: string }, number> {
+export interface Output {
+  current: number;
+  next: number;
+}
+
+export default class ScheduleTimeTask extends Task<{ cronTime: string }, Output> {
   validationSchema() {
     return Joi.object({
       cronTime: Joi.string().required(),
@@ -16,11 +21,14 @@ export default class ScheduleTimeTask extends Task<{ cronTime: string }, number>
 
     const { cronTime } = this.arguments;
 
-    return new Observable<number>((subscriber) => {
+    return new Observable<Output>((subscriber) => {
       const job = new CronJob(
         cronTime,
         () => {
-          subscriber.next(+new Date());
+          subscriber.next({
+            current: +new Date(),
+            next: +job.nextDate(),
+          });
         },
         () => {
           subscriber.complete();
