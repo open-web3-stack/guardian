@@ -10,9 +10,10 @@ const run = async () => {
 
   const { getBalance } = await setupApi();
 
-  ActionRegistry.register('getBalance', async (args: any, data: Output) => {
+  ActionRegistry.register('getBalance', async () => {
     const balance = await getBalance();
     logger.log('balance: ', balance.toHuman());
+    return;
   });
 
   // start guardian
