@@ -35,6 +35,7 @@
     "dev:debit-auction-guardian": "tsnd -r dotenv/config --respawn --transpile-only src/auction/debit/index.ts dotenv_config_path=.env.auction",
     "dev:surplus-auction-guardian": "tsnd -r dotenv/config --respawn --transpile-only src/auction/surplus/index.ts dotenv_config_path=.env.auction",
     "dev:laminar-synthetic-liquidation-guardian": "tsnd -r dotenv/config --respawn --transpile-only src/laminar-synthetic-liquidation/index.ts dotenv_config_path=.env.laminar-synthetic-liquidation",
-    "dev:cdp-guardian": "tsnd -r dotenv/config --respawn --transpile-only src/cdp/index.ts dotenv_config_path=.env.cdp"
+    "dev:cdp-guardian": "tsnd -r dotenv/config --respawn --transpile-only src/cdp/index.ts dotenv_config_path=.env.cdp",
+    "dev:schedule": "tsnd -r dotenv/config --respawn --transpile-only src/schedule/index.ts dotenv_config_path=.env.schedule"
   }
 }
