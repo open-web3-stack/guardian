@@ -1425,7 +1425,7 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
-"@laminar/api@^0.2.0-beta.138":
+"@laminar/api@0.2.0-beta.138":
   version "0.2.0-beta.138"
   resolved "https://registry.yarnpkg.com/@laminar/api/-/api-0.2.0-beta.138.tgz#618c67af6a800fd5a9f4550e4626d6140d7abe99"
   integrity sha512-KJB2Hv9tR+HUyeP3uCojw+Qd30clwig5Fc4GLr/jwcoHcxL3qTvSdVfEQ7avnLWE215s5aJw8EQCkjwVlQjbRA==
@@ -1453,7 +1453,7 @@
   dependencies:
     "@open-web3/orml-type-definitions" "^0.6.0-beta.1"
 
-"@laminar/types@^0.2.0-beta.138":
+"@laminar/types@0.2.0-beta.138", "@laminar/types@^0.2.0-beta.138":
   version "0.2.0-beta.138"
   resolved "https://registry.yarnpkg.com/@laminar/types/-/types-0.2.0-beta.138.tgz#e9119f6570e759c4ee914592fd9683f7df842ee2"
   integrity sha512-NRrBAyv+mBU6oTq0V6IvwVJY/N0E+p9rxORayB7CZGP0WTrCTvPAKf13osqvhEX0ZMdoGsSj9dnG/hBlZauiyg==

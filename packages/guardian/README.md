@@ -13,7 +13,7 @@ See [#1](https://github.com/open-web3-stack/guardian/issues/1) for spec and exam
 To use `guardian-cli` tool first install package globaly.
 
 ```
-yarn global add @open-web3/guardian-cli
+yarn global add @open-web3/guardian-cli@beta
 ```
 
 Create a YAML config file.
