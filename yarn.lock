@@ -13,7 +13,7 @@
     memoizee "^0.4.14"
     rxjs "^6.5.5"
 
-"@acala-network/api@^0.4.0-beta.3":
+"@acala-network/api@0.4.0-beta.3":
   version "0.4.0-beta.3"
   resolved "https://registry.yarnpkg.com/@acala-network/api/-/api-0.4.0-beta.3.tgz#074eedba2a8ad4c2210fba16f121baaa6aa4ef24"
   integrity sha512-6Z1wNGzwtZCPJHnpUTvB/GCgHgmF+npRr/oDXhveAfkuZ5dCEK/lyHaWWYmle/Nd+Yg9g6+8Coqm+ILc+SqZMQ==
@@ -25,7 +25,7 @@
     "@polkadot/api" "^1.27.1"
     "@polkadot/rpc-core" "^1.27.1"
 
-"@acala-network/app-util@^0.4.0-beta.3":
+"@acala-network/app-util@0.4.0-beta.3":
   version "0.4.0-beta.3"
   resolved "https://registry.yarnpkg.com/@acala-network/app-util/-/app-util-0.4.0-beta.3.tgz#79d19a68df121da4e7884bade5a523718d976ef8"
   integrity sha512-RTGBP7wnrs2DfUnao01P8O8vbA4yHUuGuEjMdbfzMLbB9YlTDrkCPsBov1dKrkLzEA64MPs/ZDmbu3iAYAkCRg==
@@ -2272,6 +2272,17 @@
   dependencies:
     "@types/node" ">= 8"
 
+"@open-web3/api-mobx@0.6.0-beta.5", "@open-web3/api-mobx@^0.6.0-beta.5":
+  version "0.6.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@open-web3/api-mobx/-/api-mobx-0.6.0-beta.5.tgz#8ee586b2abb0905a4c77a7b8676e953bfefb7878"
+  integrity sha512-w3ncsxP64E9tN9My+R+AgwWhOBCGz6VjNFHycbnmyPUnB2yqZWErb3ED5LYb8snJ49IHHSXDZJbgO18o/t2ZPQ==
+  dependencies:
+    "@polkadot/api" "^1.27.1"
+    "@polkadot/types" "^1.27.1"
+    "@polkadot/util" "^2.17.1"
+    mobx "^5.15.4"
+    mobx-utils "^5.5.7"
+
 "@open-web3/api-mobx@^0.6.0-beta.1":
   version "0.6.0-beta.3"
   resolved "https://registry.yarnpkg.com/@open-web3/api-mobx/-/api-mobx-0.6.0-beta.3.tgz#02d6d38f977afc43f862378bc1581ace618d767d"
@@ -2283,18 +2294,7 @@
     mobx "^5.15.4"
     mobx-utils "^5.5.7"
 
-"@open-web3/api-mobx@^0.6.0-beta.5":
-  version "0.6.0-beta.5"
-  resolved "https://registry.yarnpkg.com/@open-web3/api-mobx/-/api-mobx-0.6.0-beta.5.tgz#8ee586b2abb0905a4c77a7b8676e953bfefb7878"
-  integrity sha512-w3ncsxP64E9tN9My+R+AgwWhOBCGz6VjNFHycbnmyPUnB2yqZWErb3ED5LYb8snJ49IHHSXDZJbgO18o/t2ZPQ==
-  dependencies:
-    "@polkadot/api" "^1.27.1"
-    "@polkadot/types" "^1.27.1"
-    "@polkadot/util" "^2.17.1"
-    mobx "^5.15.4"
-    mobx-utils "^5.5.7"
-
-"@open-web3/api@^0.6.0-beta.5":
+"@open-web3/api@0.6.0-beta.5":
   version "0.6.0-beta.5"
   resolved "https://registry.yarnpkg.com/@open-web3/api/-/api-0.6.0-beta.5.tgz#a94cbee7a40eb25930d278315277a68e9d9ee46d"
   integrity sha512-UIlUGbGvCNOaw4d9e91jks9CxvF1phsWHhy6ifa0H3JIQWpZW+cpVRnIm3OqncR9htHTHYCLwYCWDIC8tQt8RQ==
@@ -2327,6 +2327,13 @@
   resolved "https://registry.yarnpkg.com/@open-web3/orml-type-definitions/-/orml-type-definitions-0.6.0-beta.5.tgz#5d88cda501ecd7de497e38daead1d085c422abc4"
   integrity sha512-ZWENOxFn6TOrFgUREMIbxiB10ptOLoDsdBrOVzRqxiMu4n1idybjWoDKKT2E4TCHu/hZvTwhFKs+13Xzp6NRfw==
 
+"@open-web3/orml-types@0.6.0-beta.5", "@open-web3/orml-types@^0.6.0-beta.5":
+  version "0.6.0-beta.5"
+  resolved "https://registry.yarnpkg.com/@open-web3/orml-types/-/orml-types-0.6.0-beta.5.tgz#c5621dd2c03b1c8a5694ee0dce8624b9166e7fcd"
+  integrity sha512-GzYD/ePLMd1GVI4P0bLP8N91VDUUjuO+df8vRy8mrH5uKKnBKYocinQqtOOvto/wLJ+O2iGoAWTWIiurnzMoDg==
+  dependencies:
+    "@open-web3/orml-type-definitions" "^0.6.0-beta.5"
+
 "@open-web3/orml-types@^0.6.0-beta.1":
   version "0.6.0-beta.3"
   resolved "https://registry.yarnpkg.com/@open-web3/orml-types/-/orml-types-0.6.0-beta.3.tgz#a82fb3db0adab73a110de5d2716c2554e18ea6e6"
@@ -2334,14 +2341,7 @@
   dependencies:
     "@open-web3/orml-type-definitions" "^0.6.0-beta.3"
 
-"@open-web3/orml-types@^0.6.0-beta.5":
-  version "0.6.0-beta.5"
-  resolved "https://registry.yarnpkg.com/@open-web3/orml-types/-/orml-types-0.6.0-beta.5.tgz#c5621dd2c03b1c8a5694ee0dce8624b9166e7fcd"
-  integrity sha512-GzYD/ePLMd1GVI4P0bLP8N91VDUUjuO+df8vRy8mrH5uKKnBKYocinQqtOOvto/wLJ+O2iGoAWTWIiurnzMoDg==
-  dependencies:
-    "@open-web3/orml-type-definitions" "^0.6.0-beta.5"
-
-"@open-web3/util@^0.6.0-beta.5":
+"@open-web3/util@0.6.0-beta.5", "@open-web3/util@^0.6.0-beta.5":
   version "0.6.0-beta.5"
   resolved "https://registry.yarnpkg.com/@open-web3/util/-/util-0.6.0-beta.5.tgz#7af562d2d6264604088383f0346557080029a8b3"
   integrity sha512-FfcyEOLqMVjvDuI+Ol13mngYnjGe5mjutNDRG78h0cwlzDvm7ALeF+jBM8vpFVpsS2kQnJ23bUlqV+dFMgrCSQ==
