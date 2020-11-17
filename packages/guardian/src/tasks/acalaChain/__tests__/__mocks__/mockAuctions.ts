@@ -17,8 +17,7 @@ const AUCTION = new Option(register, 'AuctionInfo', {
 
 const COLLATERAL_AUCTION = new Option(register, 'CollateralAuctionItem', {
   refundRecipient: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-  currencyId: 'ACA',
-  auctionId: 0,
+  currencyId: { token: 'ACA' },
   initialAmount: 100,
   amount: 100,
   target: 20,

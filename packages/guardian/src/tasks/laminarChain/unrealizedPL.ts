@@ -8,7 +8,7 @@ import getOraclePrice from '../getOraclePrice';
 const ONE = Big(1e18);
 
 export default (laminarApi: LaminarApi, storage: StorageType) => {
-  const oraclePrice = getOraclePrice(storage);
+  const oraclePrice = getOraclePrice(storage.laminarOracle);
 
   return computedFn((position: MarginPosition) => {
     const getAskSpread = (poolId: LiquidityPoolId, pair: TradingPair) => {

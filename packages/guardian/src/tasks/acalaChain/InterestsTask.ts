@@ -40,13 +40,13 @@ export default class InterestsTask extends Task<
 
     return autorun$<Interest>((subscriber) => {
       for (const { currencyId, account } of pairs) {
-        const interests = storage.dex.withdrawnInterest(currencyId as any, account);
-        if (!interests) continue;
-        subscriber.next({
-          account,
-          currencyId,
-          interests: interests.toString(),
-        });
+        // const interests = storage.dex.withdrawnInterest(currencyId as any, account);
+        // if (!interests) continue;
+        // subscriber.next({
+        //   account,
+        //   currencyId,
+        //   interests: interests.toString(),
+        // });
       }
     });
   }

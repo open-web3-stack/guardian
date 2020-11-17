@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { fromPrecision } from '@laminar/types/utils/precision';
+import { fixed18toString } from '@laminar/api/utils/precision';
 import { switchMap } from 'rxjs/operators';
 import { convertToNewHeader } from './helpers';
 import Task from '../Task';
@@ -45,7 +45,7 @@ export default class MarginAccountTask extends Task<{ poolId: string; address: s
         return {
           equity,
           leveragedDebits,
-          marginLevel: Number(fromPrecision(marginLevel)),
+          marginLevel: Number(fixed18toString(marginLevel)),
           isSafe,
           isMarginCalled,
           isLiquidated: !isSafe,

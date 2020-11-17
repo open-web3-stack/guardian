@@ -9,7 +9,9 @@
   ],
   "resolutions": {
     "babel-core": "^7.0.0-bridge.0",
-    "typescript": "^3.8.3"
+    "typescript": "^3.8.3",
+    "@polkadot/api": "^2.7.1",
+    "@polkadot/types": "^2.7.1"
   },
   "homepage": "https://github.com/open-web3-stack/guardian",
   "scripts": {

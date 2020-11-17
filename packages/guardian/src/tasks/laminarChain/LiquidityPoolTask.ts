@@ -77,7 +77,7 @@ export default class LiquidityPoolTask extends Task<
 
     const { poolId, currencyId } = this.arguments;
 
-    const oraclePrice = getOraclePrice(storage);
+    const oraclePrice = getOraclePrice(storage.laminarOracle);
     const getPools = getSyntheticPools(storage);
     const getOptions = getPoolCurrencyOptions(storage);
 

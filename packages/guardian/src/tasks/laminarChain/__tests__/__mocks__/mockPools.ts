@@ -41,7 +41,7 @@ const MockStorage = {
     positions: jest.fn(() => register.createType('SyntheticPosition', { collateral: 100, synthetic: 10 })),
     ratios: jest.fn(() => register.createType('SyntheticTokensRatio')),
   },
-  oracle: {
+  laminarOracle: {
     rawValues: {
       allEntries: jest.fn(() =>
         observable.map({

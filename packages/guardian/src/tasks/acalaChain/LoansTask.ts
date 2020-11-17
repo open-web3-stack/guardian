@@ -22,7 +22,7 @@ export default class LoansTask extends Task<{ account: string | string[]; curren
     let { currencyId } = this.arguments;
 
     const stableCurrencyId = apiRx.consts.cdpTreasury.getStableCurrencyId.toString();
-    const collateralCurrencyIds = apiRx.consts.cdpEngine.collateralCurrencyIds.toJSON() as string[];
+    const collateralCurrencyIds = apiRx.consts.cdpEngine.collateralCurrencyIds.map((i) => i.asToken.toString());
 
     // validate currency id
     if (currencyId === 'all') {
@@ -38,7 +38,7 @@ export default class LoansTask extends Task<{ account: string | string[]; curren
     // create {account, currencyId} paris
     const pairs = createAccountCurrencyIdPairs(account, currencyId);
 
-    const oraclePrice = getOraclePrice(storage);
+    const oraclePrice = getOraclePrice(storage.acalaOracle);
 
     return autorun$<Loan>((subscriber) => {
       for (const { account, currencyId } of pairs) {

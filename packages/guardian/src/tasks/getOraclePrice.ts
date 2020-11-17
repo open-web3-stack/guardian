@@ -9,11 +9,11 @@ const median = (arr: number[]): number => {
   return arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2;
 };
 
-const getOraclePrice = (storage: LaminarStorageType | AcalaStorageType) =>
+const getOraclePrice = (oracle: LaminarStorageType['laminarOracle'] | AcalaStorageType['acalaOracle']) =>
   computedFn((tokenId: string) => {
     if (tokenId === 'AUSD') return 1e18;
     const prices: number[] = [];
-    const rawValues = storage.oracle.rawValues.allEntries();
+    const rawValues = oracle.rawValues.allEntries();
 
     for (const rawValue of rawValues.values()) {
       for (const [key, price] of rawValue.entries()) {
