@@ -9,7 +9,6 @@ import BalancesTask from '../tasks/orml/BalancesTask';
 import PricesTask from '../tasks/orml/PricesTask';
 import LoansTask from '../tasks/acalaChain/LoansTask';
 import CollateralAuctionsTask from '../tasks/acalaChain/CollateralAuctionsTask';
-import InterestsTask from '../tasks/acalaChain/InterestsTask';
 import DebitAuctionsTask from '../tasks/acalaChain/DebitAuctionsTask';
 import SurplusAuctionsTask from '../tasks/acalaChain/SurplusAuctionsTask';
 import PoolsTask from '../tasks/acalaChain/PoolsTask';
@@ -42,7 +41,6 @@ export default class AcalaGuardian extends BaseSubstrateGuardian<
       'honzon.debitAuctions': DebitAuctionsTask,
       'honzon.surplusAuctions': SurplusAuctionsTask,
       'dex.pools': PoolsTask,
-      'dex.interests': InterestsTask,
     };
   }
 
