@@ -25,7 +25,7 @@ export default class BalancesTask<CurrencyId extends Codec> extends Task<
 
     const { account, currencyId } = this.arguments;
 
-    let currencyIds = (Array.isArray(currencyId) ? currencyId : [currencyId]).map((x) =>
+    const currencyIds = (Array.isArray(currencyId) ? currencyId : [currencyId]).map((x) =>
       apiRx.createType('CurrencyId', x)
     );
 

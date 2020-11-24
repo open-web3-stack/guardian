@@ -43,7 +43,7 @@ export default class PricesTask<CurrencyId extends Codec> extends Task<{ key: an
       );
     }
 
-    let keys = (Array.isArray(key) ? key : [key]).map((x) => apiRx.createType('CurrencyId', x));
+    const keys = (Array.isArray(key) ? key : [key]).map((x) => apiRx.createType('CurrencyId', x));
     return from(keys).pipe(
       flatMap((key) =>
         from(getOraclePrice(apiRx, period)(key)).pipe(
