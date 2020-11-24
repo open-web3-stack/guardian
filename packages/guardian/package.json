@@ -1,6 +1,6 @@
 {
   "name": "@open-web3/guardian",
-  "version": "0.3.0-beta.32",
+  "version": "0.3.0-beta.33",
   "description": "Web3 Guardian - a blockchain monitoring and alerting tool",
   "main": "index.js",
   "author": "Laminar Developers <hello@laminar.one>",
@@ -16,8 +16,8 @@
   "homepage": "https://github.com/open-web3-stack/guardian",
   "dependencies": {
     "@acala-network/api": "0.4.0-beta.33",
-    "@acala-network/types": "0.4.0-beta.33",
     "@acala-network/app-util": "0.4.0-beta.33",
+    "@acala-network/types": "0.4.0-beta.33",
     "@laminar/api": "^0.2.0-beta.143",
     "@laminar/types": "^0.2.0-beta.143",
     "@open-web3/api": "^0.7.0-beta.4",
