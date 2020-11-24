@@ -95,7 +95,6 @@ export default class LiquidityPoolTask extends Task<
           const position = storage.syntheticTokens.positions(poolId, currency);
           const ratio = storage.syntheticTokens.ratios(currency);
           const price = oraclePrice(currency);
-          console.log(price);
           if (!position || !ratio || !price) continue;
 
           // unwrap liquidation or default 0.05%

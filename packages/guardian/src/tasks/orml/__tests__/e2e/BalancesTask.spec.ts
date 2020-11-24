@@ -1,5 +1,3 @@
-import { CurrencyId as LaminarCurrencyId } from '@laminar/types/interfaces';
-import { CurrencyId as AcalaCurrencyId } from '@acala-network/types/interfaces';
 import BalancesTask from '../../BalancesTask';
 import { AcalaGuardian, LaminarGuardian } from '../../../../guardians';
 
@@ -13,7 +11,7 @@ describe('BalancesTask with laminarChain', () => {
     monitors: {},
   });
 
-  const task = new BalancesTask<LaminarCurrencyId>({
+  const task = new BalancesTask({
     account: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
     currencyId: ['FEUR'],
   });
@@ -32,7 +30,7 @@ describe('BalancesTask with laminarChain', () => {
 describe('BalancesTask with acalaChain', async () => {
   jest.setTimeout(60_000);
 
-  const task = new BalancesTask<AcalaCurrencyId>({
+  const task = new BalancesTask({
     account: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
     currencyId: { token: 'AUSD' },
   });

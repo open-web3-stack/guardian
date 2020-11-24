@@ -31,14 +31,16 @@ guardians:
         task: account.balances
         arguments:
           account: ${ADDRESS}
-          currencyId: ACA
+          currencyId:
+            token: ACA
         actions:
           - method: internal-balance # do not change
 
       ACAPool:
         task: dex.pools
         arguments:
-          currencyId: ACA
+          currencyId:
+            token: ACA
         conditions:
           - price: 'ne 0'
         actions:
