@@ -10,10 +10,10 @@ import { RPCRefreshPeriod } from '../../constants';
 import { Price } from '../../types';
 import Task from '../Task';
 
-export default class PricesTask extends Task<{ key: string | string[]; period: number }, Price> {
+export default class PricesTask<CurrencyId extends Codec> extends Task<{ key: any; period: number }, Price> {
   validationSchema() {
     return Joi.object({
-      key: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
+      key: Joi.any().required(),
       period: Joi.number().default(RPCRefreshPeriod),
     }).required();
   }
@@ -25,8 +25,8 @@ export default class PricesTask extends Task<{ key: string | string[]; period: n
 
     if (key === 'all') {
       return observeRPC<Vec<ITuple<[Codec, Option<TimestampedValue>]>>>(
-        (apiRx.rpc as any).oracle.getAllValues,
-        [],
+        apiRx.rpc.oracle.getAllValues,
+        ['Aggregated'],
         period
       ).pipe(
         flatMap(
@@ -43,9 +43,12 @@ export default class PricesTask extends Task<{ key: string | string[]; period: n
       );
     }
 
-    return from(Array.isArray(key) ? key : [key]).pipe(
+    let keys = (Array.isArray(key) ? key : [key]).map((x) => apiRx.createType('CurrencyId', x));
+    return from(keys).pipe(
       flatMap((key) =>
-        from(getOraclePrice(apiRx, period)(key)).pipe(map((price) => ({ key, value: price.toFixed(0) })))
+        from(getOraclePrice(apiRx, period)(key)).pipe(
+          map((price) => ({ key: key.toString(), value: price.toFixed(0) }))
+        )
       ),
       distinctUntilChanged((a, b) => JSON.stringify(a) !== JSON.stringify(b)),
       filter((price) => price.value.length > 0)

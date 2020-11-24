@@ -39,7 +39,7 @@
   dependencies:
     "@open-web3/orml-type-definitions" "^0.6.0-beta.26"
 
-"@acala-network/types@^0.4.0-beta.33":
+"@acala-network/types@0.4.0-beta.33", "@acala-network/types@^0.4.0-beta.33":
   version "0.4.0-beta.33"
   resolved "https://registry.yarnpkg.com/@acala-network/types/-/types-0.4.0-beta.33.tgz#bc7b81e8ba0ed2c3996c765213947cbff039f51b"
   integrity sha512-q8d1I2HZYuhWYqY3gVPk7ksM0BjQTmbDm2vdF0sWEA9ikyEfO7lGVHFZuIL8EXbeO4q0BInvCBp1OEHlw4EjCg==
@@ -2413,10 +2413,10 @@
     mobx "^5.15.4"
     mobx-utils "^5.5.7"
 
-"@open-web3/api-mobx@^0.7.0-beta.2":
-  version "0.7.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@open-web3/api-mobx/-/api-mobx-0.7.0-beta.2.tgz#b7aeeb871775f3c2ba1cb78c94981ad8da99a7f0"
-  integrity sha512-SHeHkKtL8UhE+K32TBLq9uUSSVaH+RazT82JSVU7hp4vmcG0qoER/SBk7NYDbFLhWYg68O2XpS7Ih0o3doMeNA==
+"@open-web3/api-mobx@^0.7.0-beta.4":
+  version "0.7.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@open-web3/api-mobx/-/api-mobx-0.7.0-beta.4.tgz#5e5ac86816cea4296238e989a20de9d0651442cc"
+  integrity sha512-y8FrW2dC0UVjNzKJDX7uwZQjxdDcwr/ayy4rR2ptuHecNZQOeHUEpcAIw7CW27iaVeSc4As9ht3B3JhLukX/5Q==
   dependencies:
     "@polkadot/util" "^3.7.1"
     mobx "^5.15.4"
@@ -2429,12 +2429,12 @@
   dependencies:
     "@open-web3/util" "^0.6.0-beta.5"
 
-"@open-web3/api@^0.7.0-beta.2":
-  version "0.7.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@open-web3/api/-/api-0.7.0-beta.2.tgz#fd5eb52a1eedc42725b57a4cffbed0c2ed96f7ea"
-  integrity sha512-TXyV7TX4eLHCXDjccpEsD8MMG/QQ5qawX5WF+JqGNJqJLPvf7hQRZ5cHyFTZmABMusa0K1Hl7x7+/jLbGBrSHw==
+"@open-web3/api@^0.7.0-beta.4":
+  version "0.7.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@open-web3/api/-/api-0.7.0-beta.4.tgz#ebe7d12459f999305fc9a5b81bd4913401146a5c"
+  integrity sha512-NuLf0PRNwHQPjo6ekbJHPVQn3vYoVCrqHRicI1MMI5KHba8ju8DKTlQ/1f4I+6252vz+5Ri0QQIbdleMQI1z9g==
   dependencies:
-    "@open-web3/util" "^0.7.0-beta.2"
+    "@open-web3/util" "^0.7.0-beta.4"
 
 "@open-web3/orml-api-derive@^0.6.0-beta.26":
   version "0.6.1"
@@ -2449,10 +2449,10 @@
   resolved "https://registry.yarnpkg.com/@open-web3/orml-type-definitions/-/orml-type-definitions-0.6.1.tgz#eb7fadf598f24f5024f5d2a1fd39ccc97c801104"
   integrity sha512-6asf2W/sluGQ6LNiGSdCg/Xop54mq/Q2FcV2Z9cBxys6QC4qXfo4JwUL6kJsRh/vcIIbUxoyGgKUrU/6Xdm7wA==
 
-"@open-web3/orml-type-definitions@^0.7.0-beta.2":
-  version "0.7.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@open-web3/orml-type-definitions/-/orml-type-definitions-0.7.0-beta.2.tgz#3712b96c98801786ae76407992a6029ef29d4f78"
-  integrity sha512-z6W8kU8C4o0MhGxCmWUNgXWpD3pEiefMfAy55+ESDCHB7c0xmKuRbY1q3o7+f3US+WEntnJmsOMKWNghTgyrkg==
+"@open-web3/orml-type-definitions@^0.7.0-beta.4":
+  version "0.7.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@open-web3/orml-type-definitions/-/orml-type-definitions-0.7.0-beta.4.tgz#1dd214a3caf256c3bc1fc65bea89ca642a252ce0"
+  integrity sha512-HRZUrhaSn89QinF9L+H8EEuwJkDdMFVL/r/BBzKGOFM5vRu0EzP9tKYEySiWqZ9JAx/IBSBcZCziTA0M1S9gng==
 
 "@open-web3/orml-types@^0.6.0-beta.26":
   version "0.6.1"
@@ -2461,12 +2461,12 @@
   dependencies:
     "@open-web3/orml-type-definitions" "^0.6.1"
 
-"@open-web3/orml-types@^0.7.0-beta.2":
-  version "0.7.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@open-web3/orml-types/-/orml-types-0.7.0-beta.2.tgz#0b9645b709e16d1078a26dc7714a9093e52a18a8"
-  integrity sha512-ILeAmN3utEACOKuHB/Cw1MDcrX1PNLkcY1X+7v0JRFXrJ/IumR/YKOr5DzncJYwBrgmdV78FBQlEZDJ1/SQicA==
+"@open-web3/orml-types@^0.7.0-beta.4":
+  version "0.7.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@open-web3/orml-types/-/orml-types-0.7.0-beta.4.tgz#649b923b147da948c44cb98b6f827d3cdcd6e29c"
+  integrity sha512-8WJBjPopFMtZn6CCJxqvEB0ikfhYOUCi/kMi8mBRGa2tUkmrOt9+QVa94BM6aqkv1UnsOU1QWZDZiOd1DHkPEw==
   dependencies:
-    "@open-web3/orml-type-definitions" "^0.7.0-beta.2"
+    "@open-web3/orml-type-definitions" "^0.7.0-beta.4"
 
 "@open-web3/util@0.6.0-beta.5", "@open-web3/util@^0.6.0-beta.5":
   version "0.6.0-beta.5"
@@ -2476,10 +2476,10 @@
     "@yarnpkg/lockfile" "^1.1.0"
     big.js "^5.2.2"
 
-"@open-web3/util@^0.7.0-beta.2":
-  version "0.7.0-beta.2"
-  resolved "https://registry.yarnpkg.com/@open-web3/util/-/util-0.7.0-beta.2.tgz#44a7bae802179c151563f79c3d7a4f3e18e65ebe"
-  integrity sha512-CpzrBWQw295Qix50hJY8nKGxWkmSkODB7GNuSSDuEbOyRehB7Xw5mnobiZyXXpMrLdSzYnDQgdskF7suvTJIpw==
+"@open-web3/util@^0.7.0-beta.4":
+  version "0.7.0-beta.4"
+  resolved "https://registry.yarnpkg.com/@open-web3/util/-/util-0.7.0-beta.4.tgz#f38e52230e726e907eec8db5ceb21a1d412baeff"
+  integrity sha512-ZSld3Lv0bsIOerblUGU0qq4LkyGYz72Bo39zGUif1ZoK2CuSBh2OoI1vVx7ndlQRapUc/yCxxwNkvsqUAtbmoA==
   dependencies:
     "@yarnpkg/lockfile" "^1.1.0"
     big.js "^5.2.2"

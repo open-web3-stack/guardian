@@ -13,7 +13,7 @@ describe('LoansTask', () => {
 
   const task = new LoansTask({
     account: '5DAAzDBM2xoob4fcN4X7c8QXxZj7AEENfcMQWApUE6ALspWG',
-    currencyId: 'DOT',
+    currencyId: { token: 'DOT' },
   });
 
   it('works with mock', async (done) => {
@@ -22,7 +22,7 @@ describe('LoansTask', () => {
     output$.subscribe((output) => {
       expect(output).toStrictEqual({
         account: '5DAAzDBM2xoob4fcN4X7c8QXxZj7AEENfcMQWApUE6ALspWG',
-        currencyId: 'DOT',
+        currencyId: '{"Token":"DOT"}',
         debits: '1995229380509623964735',
         debitsUSD: '200006517219654621946',
         collaterals: '1000000000000000000',

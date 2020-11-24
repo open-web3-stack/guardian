@@ -1,3 +1,5 @@
+import { CurrencyId as LaminarCurrencyId } from '@laminar/types/interfaces';
+import { CurrencyId as AcalaCurrencyId } from '@acala-network/types/interfaces';
 import BalancesTask from '../../BalancesTask';
 import { AcalaGuardian, LaminarGuardian } from '../../../../guardians';
 
@@ -7,11 +9,14 @@ describe('BalancesTask with laminarChain', () => {
   const guardian = new LaminarGuardian('laminar-guardian', {
     network: 'dev',
     networkType: 'laminarChain',
-    nodeEndpoint: ['ws://localhost:9944', 'wss://testnet-node-1.laminar-chain.laminar.one/ws'],
+    nodeEndpoint: ['wss://testnet-node-1.laminar-chain.laminar.one/ws'],
     monitors: {},
   });
 
-  const task = new BalancesTask({ account: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY', currencyId: ['FEUR'] });
+  const task = new BalancesTask<LaminarCurrencyId>({
+    account: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+    currencyId: ['FEUR'],
+  });
 
   it('get laminar balance', async (done) => {
     const output$ = await task.start(guardian);
@@ -27,14 +32,20 @@ describe('BalancesTask with laminarChain', () => {
 describe('BalancesTask with acalaChain', async () => {
   jest.setTimeout(60_000);
 
-  const guardian = new AcalaGuardian('acala-guardian', {
-    network: 'dev',
-    networkType: 'acalaChain',
-    nodeEndpoint: 'wss://node-6684611762228215808.jm.onfinality.io/ws',
-    monitors: {},
+  const task = new BalancesTask<AcalaCurrencyId>({
+    account: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
+    currencyId: { token: 'AUSD' },
   });
 
-  const task = new BalancesTask({ account: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY', currencyId: 'AUSD' });
+  let guardian: AcalaGuardian;
+  beforeAll(() => {
+    guardian = new AcalaGuardian('acala-guardian', {
+      network: 'dev',
+      networkType: 'acalaChain',
+      nodeEndpoint: 'wss://testnet-node-1.acala.laminar.one/ws',
+      monitors: {},
+    });
+  });
 
   it('get acala balance', async (done) => {
     const output$ = await task.start(guardian);

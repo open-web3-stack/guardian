@@ -29,10 +29,10 @@ export /**
  * @param {(string | string[])} currencyId
  * @returns {{ account: string; currencyId: string }[]}
  */
-const createAccountCurrencyIdPairs = (
+const createAccountCurrencyIdPairs = <CurrencyId>(
   account: string | string[],
-  currencyId: string | string[]
-): { account: string; currencyId: string }[] => {
+  currencyId: CurrencyId | CurrencyId[]
+): { account: string; currencyId: CurrencyId }[] => {
   const accounts = Array.isArray(account) ? account : [account];
   const currencyIds = Array.isArray(currencyId) ? currencyId : [currencyId];
 
@@ -60,17 +60,18 @@ export const observeRPC = <T>(method: RpcRxResult<any>, params: Parameters<any>,
   );
 };
 
-export const getOraclePrice = (api: ApiRx, period: number) => (tokenId: string) => {
+export const getOraclePrice = <CurrencyId extends Codec>(api: ApiRx, period: number) => (tokenId: CurrencyId) => {
+  let ausd = api.createType('CurrencyId', 'ausd') || api.createType('CurrencyId', { token: 'ausd' });
   // acala chain
   if (api.consts.cdpTreasury) {
-    const stableCurrencyId = api.consts.cdpTreasury.getStableCurrencyId.toString().toLowerCase();
+    const stableCurrencyId = api.consts.cdpTreasury.getStableCurrencyId;
     const stableCurrencyIdPrice = api.consts.prices.stableCurrencyFixedPrice.toString();
-    if (tokenId.toLowerCase() === stableCurrencyId) return of(Big(stableCurrencyIdPrice));
+    if (tokenId.eq(stableCurrencyId)) return of(Big(stableCurrencyIdPrice));
   } else {
-    if (tokenId.toLowerCase() === 'ausd') return of(Big(1e18));
+    if (tokenId.eq(ausd)) return of(Big(1e18));
   }
 
-  const price$ = observeRPC<Option<TimestampedValue>>(api.rpc['oracle'].getValue, [tokenId], period);
+  const price$ = observeRPC<Option<TimestampedValue>>(api.rpc.oracle.getValue, ['Aggregated', tokenId], period);
 
   return price$.pipe(
     filter((i) => i.isSome),

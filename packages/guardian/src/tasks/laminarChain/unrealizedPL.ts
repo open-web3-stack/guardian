@@ -1,6 +1,6 @@
 import Big from 'big.js';
 import { LaminarApi } from '@laminar/api';
-import { MarginPosition, LiquidityPoolId, TradingPair } from '@laminar/types/interfaces';
+import { CurrencyId, MarginPosition, LiquidityPoolId, TradingPair } from '@laminar/types/interfaces';
 import { StorageType } from '@laminar/types';
 import { computedFn } from 'mobx-utils';
 import getOraclePrice from '../getOraclePrice';
@@ -8,7 +8,7 @@ import getOraclePrice from '../getOraclePrice';
 const ONE = Big(1e18);
 
 export default (laminarApi: LaminarApi, storage: StorageType) => {
-  const oraclePrice = getOraclePrice(storage.laminarOracle);
+  const oraclePrice = getOraclePrice<CurrencyId>(storage.laminarOracle);
 
   return computedFn((position: MarginPosition) => {
     const getAskSpread = (poolId: LiquidityPoolId, pair: TradingPair) => {
@@ -26,8 +26,8 @@ export default (laminarApi: LaminarApi, storage: StorageType) => {
     };
 
     const getPrice = (pair: TradingPair) => {
-      const base = oraclePrice(pair.base.toString());
-      const quote = oraclePrice(pair.quote.toString());
+      const base = oraclePrice(pair.base);
+      const quote = oraclePrice(pair.quote);
       if (base && quote) {
         return Big(base).div(quote);
       }

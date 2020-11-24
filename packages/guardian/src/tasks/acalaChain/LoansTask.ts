@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import { CurrencyId } from '@acala-network/types/interfaces';
 import { collateralToUSD, calcCollateralRatio, convertToFixed18, debitToUSD } from '@acala-network/app-util';
 import { autorun$ } from '../../utils';
 import { createAccountCurrencyIdPairs } from '../helpers';
@@ -7,53 +8,49 @@ import { Loan } from '../../types';
 import Task from '../Task';
 import getOraclePrice from '../getOraclePrice';
 
-export default class LoansTask extends Task<{ account: string | string[]; currencyId: string | string[] }, Loan> {
+export default class LoansTask extends Task<{ account: string | string[]; currencyId: any }, Loan> {
   validationSchema() {
     return Joi.object({
       account: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
-      currencyId: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
+      currencyId: Joi.any().required(),
     }).required();
   }
 
   async start(guardian: AcalaGuardian) {
     const { apiRx, storage } = await guardian.isReady();
 
-    const { account } = this.arguments;
-    let { currencyId } = this.arguments;
+    const { account, currencyId } = this.arguments;
 
-    const stableCurrencyId = apiRx.consts.cdpTreasury.getStableCurrencyId.toString();
-    const collateralCurrencyIds = apiRx.consts.cdpEngine.collateralCurrencyIds.map((i) => i.asToken.toString());
+    const stableCoinPrice = apiRx.consts.prices.stableCurrencyFixedPrice;
+    const collateralCurrencyIds = apiRx.consts.cdpEngine.collateralCurrencyIds;
 
-    // validate currency id
+    let currencyIds: CurrencyId[];
+
     if (currencyId === 'all') {
-      currencyId = collateralCurrencyIds;
-    } else if (typeof currencyId === 'string') {
-      if (!collateralCurrencyIds.includes(currencyId)) throw Error(`${currencyId} is not collateral currencyId`);
+      currencyIds = collateralCurrencyIds;
     } else {
-      currencyId.forEach((currencyId) => {
-        if (!collateralCurrencyIds.includes(currencyId)) throw Error(`${currencyId} is not collateral currencyId`);
-      });
+      currencyIds = (Array.isArray(currencyId) ? currencyId : [currencyId]).map(
+        (x) => apiRx.createType('CurrencyId', x) as any
+      );
     }
 
     // create {account, currencyId} paris
-    const pairs = createAccountCurrencyIdPairs(account, currencyId);
+    const pairs = createAccountCurrencyIdPairs<CurrencyId>(account, currencyIds);
 
-    const oraclePrice = getOraclePrice(storage.acalaOracle);
+    const oraclePrice = getOraclePrice<CurrencyId>(storage.acalaOracle);
 
     return autorun$<Loan>((subscriber) => {
       for (const { account, currencyId } of pairs) {
-        const position = storage.loans.positions(currencyId as any, account);
+        const position = storage.loans.positions(currencyId.toHex(), account);
         if (!position) continue;
 
-        const debitExchangeRate = storage.cdpEngine.debitExchangeRate(currencyId as any);
+        const debitExchangeRate = storage.cdpEngine.debitExchangeRate(currencyId.toHex());
         const exchangeRate = debitExchangeRate?.isSome
           ? debitExchangeRate.unwrap()
           : apiRx.consts.cdpEngine.defaultDebitExchangeRate;
 
         const collateralPrice = oraclePrice(currencyId);
-        const stableCoinPrice = oraclePrice(stableCurrencyId);
-
-        if (!collateralPrice || !stableCoinPrice) continue;
+        if (!collateralPrice) continue;
 
         const collateralUSD = collateralToUSD(convertToFixed18(position.collateral), convertToFixed18(collateralPrice));
         const debitsUSD = debitToUSD(
@@ -68,7 +65,7 @@ export default class LoansTask extends Task<{ account: string | string[]; curren
 
         subscriber.next({
           account,
-          currencyId,
+          currencyId: currencyId.toString(),
           debits: position.debit.toString(),
           debitsUSD: debitsUSD.toString(),
           collaterals: position.collateral.toString(),

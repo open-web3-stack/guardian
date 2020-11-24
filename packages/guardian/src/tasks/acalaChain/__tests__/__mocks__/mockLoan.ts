@@ -8,9 +8,10 @@ const register = new TypeRegistry();
 register.register(types);
 register.register(customTypes);
 
+const DOT = register.createType('CurrencyId', { token: 'DOT' });
+
 const MockApiRx = of({
   consts: {
-    cdpTreasury: { getStableCurrencyId: 'AUSD' },
     prices: { stableCurrencyFixedPrice: 1e18 },
     cdpEngine: {
       collateralCurrencyIds: register.createType('Vec<CurrencyId>', [
@@ -20,6 +21,7 @@ const MockApiRx = of({
       ]),
     },
   },
+  createType: (type: any, value: any) => register.createType(type, value),
 });
 
 const MockStorage = {
@@ -36,7 +38,7 @@ const MockStorage = {
       allEntries: jest.fn(() =>
         observable.map({
           0: observable.map({
-            DOT: register.createType('Option<TimestampedValue>', { value: '300000000000000000000' }),
+            [DOT.toString()]: register.createType('Option<TimestampedValue>', { value: '300000000000000000000' }),
           }),
         })
       ),

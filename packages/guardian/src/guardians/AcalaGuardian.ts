@@ -21,7 +21,7 @@ const defaultNodeEndpoint = ({ network }: { network: AcalaGuardianConfig['networ
     case 'dev':
       return 'ws://localhost:9944';
     case 'mandala':
-      return 'wss://node-6684611762228215808.jm.onfinality.io/ws';
+      return 'wss://testnet-node-1.acala.laminar.one/ws';
     case 'mainnet':
       return 'ws://localhost:9944';
   }
