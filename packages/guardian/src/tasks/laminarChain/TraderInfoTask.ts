@@ -17,6 +17,7 @@ const getBalancesFn = (storage: StorageType) =>
     const balances: Record<string, string> = {};
     if (poolId === 'all') {
       const balanceEntries = storage.marginProtocol.balances.entries(account);
+      if (!balanceEntries) return balances;
       for (const [poolId, balance] of balanceEntries.entries()) {
         balances[poolId] = balance.toString();
       }

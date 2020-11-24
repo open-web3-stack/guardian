@@ -1,44 +1,43 @@
 import Joi from 'joi';
+import { TradingPair } from '@acala-network/types/interfaces';
 import { Fixed18 } from '@acala-network/app-util';
 import { Pool } from '../../types';
 import Task from '../Task';
 import { AcalaGuardian } from '../../guardians';
 import { autorun$ } from '../../utils';
 
-export default class PoolsTask extends Task<{ currencyId: string | string[] }, Pool> {
+export default class PoolsTask extends Task<{ currencyId: any }, Pool> {
   validationSchema() {
     return Joi.object({
-      currencyId: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
+      currencyId: Joi.any().required(),
     }).required();
   }
 
   async start(guardian: AcalaGuardian) {
     const { apiRx, storage } = await guardian.isReady();
 
-    let { currencyId } = this.arguments;
+    const { currencyId } = this.arguments;
 
-    const enabledCurrencyIds = apiRx.consts.dex.enabledCurrencyIds.toHuman() as string[];
+    let pairs: TradingPair[];
 
     if (currencyId === 'all') {
-      currencyId = enabledCurrencyIds;
-    } else if (typeof currencyId === 'string') {
-      currencyId = [currencyId];
+      pairs = apiRx.consts.dex.enabledTradingPairs.toArray();
+    } else {
+      pairs = (Array.isArray(currencyId) ? currencyId : [currencyId]).map(
+        (x) => apiRx.createType('TradingPair', { base: { token: 'AUSD', quote: { token: x } } }) as any
+      );
     }
 
-    currencyId.forEach((currencyId) => {
-      if (!enabledCurrencyIds.includes(currencyId)) throw Error(`${currencyId} is not enabled currencyId`);
-    });
-
     return autorun$<Pool>((subscriber) => {
-      for (const token of currencyId) {
-        const pool = storage.dex.liquidityPool(token as any);
+      for (const pair of pairs) {
+        const pool = storage.dex.liquidityPool(pair.toHex() as any);
         if (!pool) continue;
 
         const [other, base] = pool;
         const price = Fixed18.fromRational(base.toString(), other.toString()).innerToString();
 
         subscriber.next({
-          currencyId: token,
+          currencyId: pair.toString(),
           price,
           baseLiquidity: base.toString(),
           otherLiquidity: other.toString(),

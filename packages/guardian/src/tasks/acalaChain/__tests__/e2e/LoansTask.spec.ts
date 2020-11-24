@@ -7,14 +7,14 @@ describe('LoansTaks e2e', () => {
   const guardian = new AcalaGuardian('acala-guardian', {
     network: 'dev',
     networkType: 'acalaChain',
-    nodeEndpoint: 'wss://node-6684611762228215808.jm.onfinality.io/ws',
+    nodeEndpoint: 'wss://testnet-node-1.acala.laminar.one/ws',
     monitors: {},
   });
 
   it('works with currencyId', async (done) => {
     const loans = new LoansTask({
-      account: '5DAAzDBM2xoob4fcN4X7c8QXxZj7AEENfcMQWApUE6ALspWG',
-      currencyId: 'XBTC',
+      account: '5DrAKb6enqoZv2yUnE44WXnCMAWCMuBx3t8LGseHhh9L4ti2',
+      currencyId: { token: 'XBTC' },
     });
 
     const output$ = await loans.start(guardian);
@@ -28,7 +28,7 @@ describe('LoansTaks e2e', () => {
 
   it('works with all', async (done) => {
     const loans = new LoansTask({
-      account: '5DAAzDBM2xoob4fcN4X7c8QXxZj7AEENfcMQWApUE6ALspWG',
+      account: '5DrAKb6enqoZv2yUnE44WXnCMAWCMuBx3t8LGseHhh9L4ti2',
       currencyId: 'all',
     });
 

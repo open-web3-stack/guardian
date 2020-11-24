@@ -32,7 +32,7 @@ export default class CollateralAuctionsTask extends Task<
         const { refundRecipient, currencyId } = collateralAuction;
 
         if (!fulfillAccount(refundRecipient.toString())) continue;
-        if (!fulfillCurrencyId(currencyId.toString())) continue;
+        if (!fulfillCurrencyId(currencyId.asToken.toString())) continue;
 
         const auctionWrapped = storage.auction.auctions(auctionId);
         if (!auctionWrapped?.isSome) continue;
@@ -42,7 +42,7 @@ export default class CollateralAuctionsTask extends Task<
 
         subscriber.next({
           account: collateralAuction.refundRecipient.toString(),
-          currencyId: collateralAuction.currencyId.toString(),
+          currencyId: collateralAuction.currencyId.asToken.toString(),
           auctionId: Number(auctionId),
           initialAmount: collateralAuction.initialAmount.toString(),
           amount: collateralAuction.amount.toString(),

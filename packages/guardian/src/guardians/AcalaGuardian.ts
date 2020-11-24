@@ -9,7 +9,6 @@ import BalancesTask from '../tasks/orml/BalancesTask';
 import PricesTask from '../tasks/orml/PricesTask';
 import LoansTask from '../tasks/acalaChain/LoansTask';
 import CollateralAuctionsTask from '../tasks/acalaChain/CollateralAuctionsTask';
-import InterestsTask from '../tasks/acalaChain/InterestsTask';
 import DebitAuctionsTask from '../tasks/acalaChain/DebitAuctionsTask';
 import SurplusAuctionsTask from '../tasks/acalaChain/SurplusAuctionsTask';
 import PoolsTask from '../tasks/acalaChain/PoolsTask';
@@ -22,7 +21,7 @@ const defaultNodeEndpoint = ({ network }: { network: AcalaGuardianConfig['networ
     case 'dev':
       return 'ws://localhost:9944';
     case 'mandala':
-      return 'wss://node-6684611762228215808.jm.onfinality.io/ws';
+      return 'wss://testnet-node-1.acala.laminar.one/ws';
     case 'mainnet':
       return 'ws://localhost:9944';
   }
@@ -42,7 +41,6 @@ export default class AcalaGuardian extends BaseSubstrateGuardian<
       'honzon.debitAuctions': DebitAuctionsTask,
       'honzon.surplusAuctions': SurplusAuctionsTask,
       'dex.pools': PoolsTask,
-      'dex.interests': InterestsTask,
     };
   }
 

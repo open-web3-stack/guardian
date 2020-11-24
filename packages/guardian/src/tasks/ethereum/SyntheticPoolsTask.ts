@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { EthereumApi } from '@laminar/api';
-import { fromPrecision } from '@laminar/types/utils/precision';
+import { fixed18toString } from '@laminar/api/utils/precision';
 import { from } from 'rxjs';
 import { switchMap, flatMap, concatAll } from 'rxjs/operators';
 import { convertToNewHeader } from './helpers';
@@ -68,12 +68,12 @@ export default class SyntheticPoolsTask extends Task<
                   tokenContract.methods.defaultCollateralRatio().call() as Promise<string>,
                 ]);
 
-                const additionalCollateralRatio = Number(fromPrecision(_additionalCollateralRatio));
-                const minCollateralRatio = Number(fromPrecision(defaultCollateralRatio));
+                const additionalCollateralRatio = Number(fixed18toString(_additionalCollateralRatio));
+                const minCollateralRatio = Number(fixed18toString(defaultCollateralRatio));
                 const collateralRatio =
                   1 +
                   (additionalCollateralRatio >= minCollateralRatio ? additionalCollateralRatio : minCollateralRatio);
-                const isSafe = 1 + Number(fromPrecision(liquidationCollateralRatio)) > collateralRatio;
+                const isSafe = 1 + Number(fixed18toString(liquidationCollateralRatio)) > collateralRatio;
 
                 return {
                   poolId,

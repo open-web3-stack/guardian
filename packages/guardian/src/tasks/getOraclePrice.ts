@@ -1,3 +1,4 @@
+import { Codec } from '@polkadot/types/types';
 import { StorageType as LaminarStorageType } from '@laminar/types';
 import { StorageType as AcalaStorageType } from '@acala-network/types';
 
@@ -9,15 +10,17 @@ const median = (arr: number[]): number => {
   return arr.length % 2 !== 0 ? nums[mid] : (nums[mid - 1] + nums[mid]) / 2;
 };
 
-const getOraclePrice = (storage: LaminarStorageType | AcalaStorageType) =>
-  computedFn((tokenId: string) => {
-    if (tokenId === 'AUSD') return 1e18;
+const getOraclePrice = <CurrencyId extends Codec>(
+  oracle: LaminarStorageType['laminarOracle'] | AcalaStorageType['acalaOracle']
+) =>
+  computedFn((tokenId: CurrencyId) => {
+    if (['{"Token":"AUSD"}', 'AUSD'].includes(tokenId.toString())) return 1e18;
     const prices: number[] = [];
-    const rawValues = storage.oracle.rawValues.allEntries();
+    const rawValues = oracle.rawValues.allEntries();
 
     for (const rawValue of rawValues.values()) {
       for (const [key, price] of rawValue.entries()) {
-        if (key === tokenId && price.isSome) {
+        if (key === tokenId.toString() && price.isSome) {
           prices.push(Number(price.unwrap().value.toString()));
         }
       }

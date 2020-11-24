@@ -13,8 +13,9 @@ describe('TraderInfoTask', () => {
 
   it('works', async (done) => {
     const task = new TraderInfoTask({
-      account: '5GHYezbSCbiJcU1iCwN2YMnSMohDSZdudfZyEAYGneyx4xp3',
+      account: '5EhUhUxwnR99NAkqSNiDzx5m3wijfVaekaR67BEq5yyj8AhP',
       poolId: 'all',
+      period: 30_000,
     });
 
     const output$ = await task.start(guardian);

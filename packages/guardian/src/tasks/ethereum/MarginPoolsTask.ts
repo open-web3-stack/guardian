@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { fromPrecision } from '@laminar/types/utils/precision';
+import { fixed18toString } from '@laminar/api/utils/precision';
 import { switchMap } from 'rxjs/operators';
 import { EthereumGuardian } from '../../guardians';
 import { convertToNewHeader } from './helpers';
@@ -45,8 +45,8 @@ export default class MarginPoolsTask extends Task<{ poolId: string }, Output> {
 
         return {
           owner,
-          enp: Number(fromPrecision(enp)),
-          ell: Number(fromPrecision(ell)),
+          enp: Number(fixed18toString(enp)),
+          ell: Number(fixed18toString(ell)),
           equity,
           isSafe,
           isMarginCalled,

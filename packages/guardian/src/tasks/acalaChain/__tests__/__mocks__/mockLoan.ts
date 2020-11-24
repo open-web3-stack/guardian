@@ -1,6 +1,5 @@
 import { of } from 'rxjs';
 import { TypeRegistry } from '@polkadot/types';
-import { Vec } from '@polkadot/types/codec';
 import { types } from '@acala-network/types';
 import { customTypes } from '../../../../customTypes';
 import { observable } from 'mobx';
@@ -9,14 +8,20 @@ const register = new TypeRegistry();
 register.register(types);
 register.register(customTypes);
 
+const DOT = register.createType('CurrencyId', { token: 'DOT' });
+
 const MockApiRx = of({
   consts: {
-    cdpTreasury: { getStableCurrencyId: 'AUSD' },
     prices: { stableCurrencyFixedPrice: 1e18 },
     cdpEngine: {
-      collateralCurrencyIds: register.createType('Vec<CurrencyId>', ['DOT', 'XBTC', 'LDOT']),
+      collateralCurrencyIds: register.createType('Vec<CurrencyId>', [
+        { token: 'DOT' },
+        { token: 'XBTC' },
+        { token: 'LDOT' },
+      ]),
     },
   },
+  createType: (type: any, value: any) => register.createType(type, value),
 });
 
 const MockStorage = {
@@ -28,12 +33,12 @@ const MockStorage = {
   cdpEngine: {
     debitExchangeRate: jest.fn(() => register.createType('Option<ExchangeRate>', '100242367706398103')),
   },
-  oracle: {
+  acalaOracle: {
     rawValues: {
       allEntries: jest.fn(() =>
         observable.map({
           0: observable.map({
-            DOT: register.createType('Option<TimestampedValue>', { value: '300000000000000000000' }),
+            [DOT.toString()]: register.createType('Option<TimestampedValue>', { value: '300000000000000000000' }),
           }),
         })
       ),

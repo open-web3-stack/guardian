@@ -11,7 +11,7 @@ describe('SurplusAuctionsTask', () => {
     monitors: {},
   });
 
-  const task = new SurplusAuctionsTask();
+  const task = new SurplusAuctionsTask({});
 
   it('works with mock', async (done) => {
     const output$ = await task.start(guardian);

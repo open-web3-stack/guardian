@@ -34,7 +34,8 @@ guardians:
         task: account.balances
         arguments:
           account: ${ADDRESS}
-          currencyId: AUSD
+          currencyId:
+            token: AUSD
         actions:
           - method: internal-balance # do not change
 

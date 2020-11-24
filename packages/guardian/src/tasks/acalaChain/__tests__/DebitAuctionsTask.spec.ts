@@ -11,7 +11,7 @@ describe('DebitAuctionsTask', () => {
     monitors: {},
   });
 
-  const task = new DebitAuctionsTask();
+  const task = new DebitAuctionsTask({});
 
   it('works with mock', async (done) => {
     const output$ = await task.start(guardian);

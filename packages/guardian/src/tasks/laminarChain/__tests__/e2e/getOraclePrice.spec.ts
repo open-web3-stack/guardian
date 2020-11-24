@@ -10,7 +10,7 @@ describe('getOraclePrice', () => {
     const ws = new WsProvider('wss://testnet-node-1.laminar-chain.laminar.one/ws');
     const apiPromise = await ApiPromise.create(options({ provider: ws }));
     const storage = createStorage<StorageType>(apiPromise, ws);
-    const oraclePrice = getOraclePrice(storage);
+    const oraclePrice = getOraclePrice(storage.laminarOracle);
     autorun(() => {
       const price = oraclePrice('FEUR');
       if (price) {

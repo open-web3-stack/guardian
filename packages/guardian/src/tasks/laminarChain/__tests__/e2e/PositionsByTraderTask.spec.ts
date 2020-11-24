@@ -1,7 +1,7 @@
 import LaminarGuardian from '../../../../guardians/LaminarGuardian';
 import PositionsByTraderTask from '../../PositionsByTraderTask';
 
-describe('PositionsByTraderTask', async () => {
+describe('PositionsByTraderTask', () => {
   const guardian = new LaminarGuardian('laminar-guardian', {
     network: 'dev',
     networkType: 'laminarChain',
@@ -11,7 +11,7 @@ describe('PositionsByTraderTask', async () => {
 
   it('works with account', async (done) => {
     const task = new PositionsByTraderTask({
-      account: '5GHYezbSCbiJcU1iCwN2YMnSMohDSZdudfZyEAYGneyx4xp3',
+      account: '5FvX1agFoW3xfcj14PrKpjBE5An2FDYkRbUxoEKNsqdi2fB8',
     });
 
     const output$ = await task.start(guardian);
@@ -25,7 +25,7 @@ describe('PositionsByTraderTask', async () => {
 
   it('works with multiple accounts', async (done) => {
     const task = new PositionsByTraderTask({
-      account: ['5GHYezbSCbiJcU1iCwN2YMnSMohDSZdudfZyEAYGneyx4xp3'],
+      account: ['5FvX1agFoW3xfcj14PrKpjBE5An2FDYkRbUxoEKNsqdi2fB8'],
     });
 
     const output$ = await task.start(guardian);
