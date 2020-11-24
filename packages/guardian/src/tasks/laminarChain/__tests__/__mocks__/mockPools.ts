@@ -3,7 +3,6 @@ import { TypeRegistry } from '@polkadot/types';
 import { types } from '@laminar/types';
 import { observable } from 'mobx';
 import { customTypes } from '../../../../customTypes';
-import { LaminarApi } from '@laminar/api';
 
 const register = new TypeRegistry();
 register.register(types);
@@ -54,7 +53,10 @@ const MockStorage = {
   },
 };
 
-const MockApiRx = { isReady: of({}) };
+const MockApiRx = {
+  isReady: of({}),
+  createType: (type: any, value: any) => register.createType(type, value),
+};
 
 jest.mock('@open-web3/api-mobx', () => ({
   createStorage: jest.fn(() => MockStorage),

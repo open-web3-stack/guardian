@@ -149,7 +149,7 @@ const MockLaminarApi = {
     ),
   },
   api: {
-    createType: jest.fn(() => register.createType('TradingPair', { base: 'FEUR', quote: 'AUSD' })),
+    createType: (type: any, value: any) => register.createType(type, value),
     consts: {},
     query: {
       syntheticTokens: {

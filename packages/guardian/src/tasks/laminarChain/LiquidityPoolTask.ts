@@ -1,6 +1,6 @@
 import Big from 'big.js';
 import Joi from 'joi';
-import { Pool, SyntheticPoolCurrencyOption } from '@laminar/types/interfaces';
+import { CurrencyId, Pool, SyntheticPoolCurrencyOption } from '@laminar/types/interfaces';
 import { Permill } from '@polkadot/types/interfaces';
 import { LaminarGuardian } from '@open-web3/guardian/guardians';
 import { StorageType } from '@laminar/types';
@@ -39,6 +39,7 @@ const getPoolCurrencyOptions = (storage: StorageType) =>
     const output: Record<string, SyntheticPoolCurrencyOption> = {};
 
     const options = storage.syntheticLiquidityPools.poolCurrencyOptions.entries(poolId);
+    if (!options) return output;
 
     if (currencyId === 'all') {
       for (const [currencyId, option] of options.entries()) {
@@ -73,11 +74,11 @@ export default class LiquidityPoolTask extends Task<
   }
 
   async start(guardian: LaminarGuardian) {
-    const { storage } = await guardian.isReady();
+    const { apiRx, storage } = await guardian.isReady();
 
     const { poolId, currencyId } = this.arguments;
 
-    const oraclePrice = getOraclePrice(storage.laminarOracle);
+    const oraclePrice = getOraclePrice<CurrencyId>(storage.laminarOracle);
     const getPools = getSyntheticPools(storage);
     const getOptions = getPoolCurrencyOptions(storage);
 
@@ -89,9 +90,12 @@ export default class LiquidityPoolTask extends Task<
         for (const [currencyId, option] of Object.entries(options)) {
           const { askSpread, bidSpread, additionalCollateralRatio } = option;
 
-          const position = storage.syntheticTokens.positions(poolId, currencyId as any);
-          const ratio = storage.syntheticTokens.ratios(currencyId as any);
-          const price = oraclePrice(currencyId);
+          const currency = apiRx.createType('CurrencyId', currencyId);
+
+          const position = storage.syntheticTokens.positions(poolId, currency);
+          const ratio = storage.syntheticTokens.ratios(currency);
+          const price = oraclePrice(currency);
+          console.log(price);
           if (!position || !ratio || !price) continue;
 
           // unwrap liquidation or default 0.05%
