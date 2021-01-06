@@ -1,6 +1,6 @@
 {
   "name": "@open-web3/example-guardian",
-  "version": "0.3.0-beta.33",
+  "version": "0.3.0-beta.34",
   "description": "Collection of guardian examples",
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
@@ -22,8 +22,8 @@
   "homepage": "https://github.com/open-web3-stack/guardian",
   "dependencies": {
     "@open-web3/api": "0.6.0-beta.5",
-    "@open-web3/guardian": "^0.3.0-beta.33",
-    "@open-web3/guardian-cli": "^0.3.0-beta.33",
+    "@open-web3/guardian": "^0.3.0-beta.34",
+    "@open-web3/guardian-cli": "^0.3.0-beta.34",
     "@open-web3/util": "0.6.0-beta.5",
     "dotenv": "^8.2.0"
   },
