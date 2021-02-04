@@ -1,5 +1,5 @@
 {
-  "extends": "./node_modules/@polkadot/dev/config/tsconfig",
+  "extends": "@open-web3/dev-config/config/tsconfig.json",
   "exclude": ["build/**/*", "**/build/**/*", "**/__tests__/**/*"],
   "compilerOptions": {
     "target": "es2019",

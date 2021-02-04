@@ -4,7 +4,7 @@ import Task from '../Task';
 import { AcalaGuardian } from '../../guardians';
 import { autorun$ } from '../../utils';
 
-export default class SurplusAuctionsTask extends Task<{}, SurplusAuction> {
+export default class SurplusAuctionsTask extends Task<Record<string, unknown>, SurplusAuction> {
   validationSchema() {
     return Joi.any();
   }

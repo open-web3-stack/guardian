@@ -1,6 +1,7 @@
 import Joi from 'joi';
 import { TradingPair } from '@acala-network/types/interfaces';
 import { Fixed18 } from '@acala-network/app-util';
+import { take } from 'rxjs/operators';
 import { Pool } from '../../types';
 import Task from '../Task';
 import { AcalaGuardian } from '../../guardians';
@@ -21,7 +22,16 @@ export default class PoolsTask extends Task<{ currencyId: any }, Pool> {
     let pairs: TradingPair[];
 
     if (currencyId === 'all') {
-      pairs = apiRx.consts.dex.enabledTradingPairs.toArray();
+      const tradingPair = await apiRx.query.dex.tradingPairStatuses.entries().pipe(take(1)).toPromise();
+
+      pairs = tradingPair
+        .map(([key, value]) => {
+          if (value.isEnabled) {
+            return key.args[0];
+          }
+          return undefined;
+        })
+        .filter((p): p is TradingPair => p !== undefined);
     } else {
       pairs = (Array.isArray(currencyId) ? currencyId : [currencyId]).map(
         (x) => apiRx.createType('TradingPair', { base: { token: 'AUSD', quote: { token: x } } }) as any
