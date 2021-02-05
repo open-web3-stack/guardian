@@ -1,0 +1,13 @@
+version: '0.1'
+guardians:
+  substrate-chain:
+    networkType: substrateChain
+    nodeEndpoint: ${NODE_ENDPOINT}
+    monitors:
+      staking-reward:
+        task: system.events
+        arguments:
+          name:
+            - staking.Reward
+        actions:
+          - method: stakingReward
