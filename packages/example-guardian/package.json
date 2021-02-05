@@ -9,7 +9,9 @@
     "collateral-auction-guardian": "auction/collateral/index.js",
     "debit-auction-guardian": "auction/debit/index.js",
     "laminar-synthetic-liquidation-guardian": "laminar-synthetic-liquidation/index.js",
-    "surplus-auction-guardian": "auction/surplus/index.js"
+    "surplus-auction-guardian": "auction/surplus/index.js",
+    "schedule": "schedule/index.js",
+    "staking": "staking/index.js"
   },
   "publishConfig": {
     "access": "public",
