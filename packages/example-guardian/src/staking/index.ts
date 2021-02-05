@@ -6,10 +6,10 @@ import { config as getConfig } from './config';
 import nodemailer from 'nodemailer';
 
 const sendEmail = async (value: string) => {
-  let testAccount = await nodemailer.createTestAccount();
+  const testAccount = await nodemailer.createTestAccount();
 
   // create reusable transporter object using the default SMTP transport
-  let transporter = nodemailer.createTransport({
+  const transporter = nodemailer.createTransport({
     host: 'smtp.ethereal.email',
     port: 587,
     secure: false, // true for 465, false for other ports
@@ -21,7 +21,7 @@ const sendEmail = async (value: string) => {
 
   try {
     // send mail with defined transport object
-    let info = await transporter.sendMail({
+    const info = await transporter.sendMail({
       from: '"Fred Foo 👻" <foo@example.com>', // sender address
       to: 'bar@example.com, baz@example.com', // list of receivers
       subject: 'Staking Reward ✔', // Subject line
