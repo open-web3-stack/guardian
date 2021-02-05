@@ -5,9 +5,7 @@
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
   "main": "cli.js",
-  "bin": {
-    "guardian-cli": "cli.js"
-  },
+  "bin": "cli.js",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"

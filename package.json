@@ -8,16 +8,15 @@
     "packages/*"
   ],
   "resolutions": {
-    "babel-core": "^7.0.0-bridge.0",
-    "typescript": "^3.8.3",
-    "@polkadot/api": "^2.7.1",
-    "@polkadot/types": "^2.7.1"
+    "typescript": "^4.0.5",
+    "@polkadot/api": "^3.6.4",
+    "@polkadot/types": "^3.6.4"
   },
   "homepage": "https://github.com/open-web3-stack/guardian",
   "scripts": {
     "build": "polkadot-dev-build-ts && (cd packages/example-guardian && cp src/*.yml build)",
     "build:release": "polkadot-dev-ghact-build",
-    "lint": "eslint --ext .js,.ts packages && tsc --noEmit --pretty",
+    "lint": "polkadot-dev-run-lint",
     "clean": "polkadot-dev-clean-build",
     "postinstall": "polkadot-dev-yarn-only",
     "test": "jest --runInBand --testPathIgnorePatterns e2e"
@@ -26,20 +25,11 @@
     "@babel/core": "^7.8.4",
     "@babel/register": "^7.8.4",
     "@babel/runtime": "^7.8.4",
-    "@polkadot/api": "^2.7.1",
-    "@polkadot/dev": "^0.32.17",
-    "@polkadot/ts": "^0.3.14",
-    "@types/jest": "^25.1.4",
-    "husky": "^4.2.3",
-    "jest": "^25.2.0",
-    "prettier": "^2.0.1",
-    "pretty-quick": "^2.0.1",
+    "@open-web3/dev-config": "^0.1.10",
+    "@polkadot/api": "^3.6.4",
+    "@types/jest": "^25.2.1",
+    "jest": "^25.5.4",
     "ts-node": "^8.6.2",
-    "typescript": "^3.8.3"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "pretty-quick --staged"
-    }
+    "typescript": "^4.0.5"
   }
 }

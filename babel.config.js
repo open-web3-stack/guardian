@@ -1,3 +1,3 @@
 module.exports = {
-  extends: '@polkadot/dev/config/babel'
+  extends: '@open-web3/dev-config/config/babel-config-cjs.cjs',
 };

@@ -5,11 +5,11 @@
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
   "bin": {
+    "cdp-guardian": "cdp/index.js",
     "collateral-auction-guardian": "auction/collateral/index.js",
     "debit-auction-guardian": "auction/debit/index.js",
-    "surplus-auction-guardian": "auction/surplus/index.js",
     "laminar-synthetic-liquidation-guardian": "laminar-synthetic-liquidation/index.js",
-    "cdp-guardian": "cdp/index.js"
+    "surplus-auction-guardian": "auction/surplus/index.js"
   },
   "publishConfig": {
     "access": "public",
@@ -21,11 +21,13 @@
   },
   "homepage": "https://github.com/open-web3-stack/guardian",
   "dependencies": {
-    "@open-web3/api": "0.6.0-beta.5",
+    "@open-web3/api": "^0.8.2-9",
     "@open-web3/guardian": "^0.3.0-beta.35",
     "@open-web3/guardian-cli": "^0.3.0-beta.35",
-    "@open-web3/util": "0.6.0-beta.5",
-    "dotenv": "^8.2.0"
+    "@open-web3/util": "^0.8.2-9",
+    "@types/nodemailer": "^6.4.0",
+    "dotenv": "^8.2.0",
+    "nodemailer": "^6.4.17"
   },
   "devDependencies": {
     "ts-node-dev": "^1.0.0-pre.58"
@@ -36,6 +38,7 @@
     "dev:surplus-auction-guardian": "tsnd -r dotenv/config --respawn --transpile-only src/auction/surplus/index.ts dotenv_config_path=.env.auction",
     "dev:laminar-synthetic-liquidation-guardian": "tsnd -r dotenv/config --respawn --transpile-only src/laminar-synthetic-liquidation/index.ts dotenv_config_path=.env.laminar-synthetic-liquidation",
     "dev:cdp-guardian": "tsnd -r dotenv/config --respawn --transpile-only src/cdp/index.ts dotenv_config_path=.env.cdp",
-    "dev:schedule": "tsnd -r dotenv/config --respawn --transpile-only src/schedule/index.ts dotenv_config_path=.env.schedule"
+    "dev:schedule": "tsnd -r dotenv/config --respawn --transpile-only src/schedule/index.ts dotenv_config_path=.env.schedule",
+    "dev:staking": "tsnd -r dotenv/config --respawn --transpile-only src/staking/index.ts dotenv_config_path=.env.staking"
   }
 }

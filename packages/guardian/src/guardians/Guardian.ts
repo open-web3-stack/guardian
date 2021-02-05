@@ -4,7 +4,7 @@ import { IGuardian, IMonitor, GuardianConfig, ITaskConstructor } from '../types'
 import Monitor from '../Monitor';
 import { logger } from '../utils';
 
-export default abstract class Guardian<Config extends GuardianConfig = GuardianConfig, Props = {}>
+export default abstract class Guardian<Config extends GuardianConfig = GuardianConfig, Props = Record<string, unknown>>
   implements IGuardian {
   public readonly monitors: IMonitor[] = [];
 

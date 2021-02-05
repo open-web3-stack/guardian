@@ -4,7 +4,7 @@ import { AcalaGuardian } from '@open-web3/guardian/guardians';
 import Task from '../Task';
 import { autorun$ } from '../../utils';
 
-export default class DebitAuctionsTask extends Task<{}, DebitAuction> {
+export default class DebitAuctionsTask extends Task<Record<string, unknown>, DebitAuction> {
   validationSchema() {
     return Joi.any();
   }
