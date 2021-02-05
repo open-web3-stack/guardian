@@ -1,6 +1,6 @@
 {
   "name": "@open-web3/guardian-cli",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Web3 Guardian CLI - a blockchain monitoring and alerting tool",
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
@@ -16,7 +16,7 @@
   },
   "homepage": "https://github.com/open-web3-stack/guardian",
   "dependencies": {
-    "@open-web3/guardian": "^0.4.0",
+    "@open-web3/guardian": "^0.4.1",
     "js-yaml": "^3.13.1"
   }
 }
