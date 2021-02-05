@@ -15,7 +15,7 @@
   "homepage": "https://github.com/open-web3-stack/guardian",
   "scripts": {
     "build": "polkadot-dev-build-ts && (cd packages/example-guardian && cp src/*.yml build)",
-    "build:release": "polkadot-dev-ghact-build",
+    "build:release": "polkadot-ci-ghact-build",
     "lint": "polkadot-dev-run-lint",
     "clean": "polkadot-dev-clean-build",
     "postinstall": "polkadot-dev-yarn-only",
