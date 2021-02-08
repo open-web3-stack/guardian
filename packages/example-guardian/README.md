@@ -53,8 +53,9 @@ ADDRESS=CzBwcfFuWHRw5JJ3ZZF5xWvKZKrvQgcsg2XJPUwMLx9fm1u
 npx -p @open-web3/example-guardian@beta staking
 ```
 
+## Application-specific Chain Example - Acala
 
-## Collateral Auction Example
+### Collateral Auction Example
 
 1. Create a `.env` file in the project directory
 
@@ -77,7 +78,7 @@ You can extend [YAML config file](src/collateral-auction-guardian.yml) and run u
 
 #
 
-## Debit Auction Example
+### Debit Auction Example
 
 1. Create a `.env` file in the project directory
 
@@ -98,7 +99,8 @@ You can extend [YAML config file](src/debit-auction-guardian.yml) and run using 
 
 #
 
-## Surplus Auction Example
+## Application-specific Chain Example - Laminar
+### Surplus Auction Example
 
 1. Create a `.env` file in the project directory
 
