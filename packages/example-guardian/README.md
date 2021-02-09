@@ -1,5 +1,8 @@
 # Guardian examples
 
+You can extend the YAML config files and run `Guardian` using option `--config=config.yml`.
+Note: find update to date public node info [here](https://wiki.acala.network/learn/get-started/public-nodes).
+
 ## Kusama Example
 
 ### Periodically Check Balance
@@ -56,11 +59,12 @@ npx -p @open-web3/example-guardian@beta staking
 ## Application-specific Chain Example - Acala
 
 ### Collateral Auction Example
+This example uses the `collateral auction` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/collateral-auction-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/auction/collateral). It will watch collateral auctions and dex pools, (dex is used to liquidate collaterals if price is more favorable) and bid from specified account. 
 
 1. Create a `.env` file in the project directory
 
 ```
-NODE_ENDPOINT=ws://localhost:9944
+NODE_ENDPOINT=wss://mandala.laminar.codes/ws
 SURI=//Charlie
 ADDRESS=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y
 MARGIN=0.1
@@ -76,14 +80,45 @@ You can extend [YAML config file](src/collateral-auction-guardian.yml) and run u
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/AcalaNetwork/collateral-auction-bot-template)
 
+3. The log should show something like this  
+```
+0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [acala-guardian] starting...
+0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [AuctionDealt.system.events] starting ...
+0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [CollateralAuction.honzon.collateralAuctions] starting ...
+0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [AUSDBalance.account.balances] starting ...
+0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [DEXPool.dex.pools] starting ...
+0000-00-00000:00:00        REGISTRY: Unknown signed extensions SetEvmOrigin found, treating them as no-effect
+0000-00-00000:00:00        REGISTRY: Unknown signed extensions SetEvmOrigin found, treating them as no-effect
+0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [AuctionDealt.system.events] is running ...
+0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [CollateralAuction.honzon.collateralAuctions] is running ...
+0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [AUSDBalance.account.balances] is running ...
+0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [DEXPool.dex.pools] is running ...
+0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [acala-guardian] is running ...
+0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [AUSDBalance.account.balances] output:  {
+  account: '5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y',
+  currencyId: '{"Token":"AUSD"}',
+  free: '0'
+}
+0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [AUSDBalance.account.balances] called [internal-balance]
+0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [DEXPool.dex.pools] output:  {
+  currencyId: '[{"Token":"AUSD"},{"Token":"XBTC"}]',
+  price: '23311448701827',
+  baseLiquidity: '9970922954616215557',
+  otherLiquidity: '427726439577067600000000'
+}
+
+```
+
 #
 
 ### Debit Auction Example
 
+This example uses the `debit auction` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/debit-auction-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/auction/debit). It will watch debit auctions and dex pools, (dex is used to liquidate collaterals if price is more favorable) and bid from specified account. 
+
 1. Create a `.env` file in the project directory
 
 ```
-NODE_ENDPOINT=ws://localhost:9944
+NODE_ENDPOINT=wss://mandala.laminar.codes/ws
 SURI=//Charlie
 ADDRESS=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y
 MARGIN=0.1
@@ -98,14 +133,14 @@ npx -p @open-web3/example-guardian@beta debit-auction-guardian
 You can extend [YAML config file](src/debit-auction-guardian.yml) and run using option `--config=config.yml`
 
 #
-
-## Application-specific Chain Example - Laminar
 ### Surplus Auction Example
+
+This example uses the `surplus auction` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/surplus-auction-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/auction/surplus). It will watch surplus auctions and dex pools, (dex is used to liquidate assets if price is more favorable) and bid from specified account. 
 
 1. Create a `.env` file in the project directory
 
 ```
-NODE_ENDPOINT=ws://localhost:9944
+NODE_ENDPOINT=wss://mandala.laminar.codes/ws
 SURI=//Charlie
 ADDRESS=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y
 MARGIN=0.1
@@ -117,42 +152,14 @@ MARGIN=0.1
 npx -p @open-web3/example-guardian@beta surplus-auction-guardian
 ```
 
-You can extend [YAML config file](src/surplus-auction-guardian.yml) and run using option `--config=config.yml`
-
 #
-
-## Laminar Synthetic Liquidation Bot
-
-### _working in progress..._
+### CDP Guardian Bot
+This example uses the `cdp guardian` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/cdp-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/cdp). It will monitor specified account's loan positions. If the collateral ratio of the loans drops below a given threshold, it will deposit more liquidity to de-risk loan and keep the position open.
 
 1. Create a `.env` file in the project directory
 
 ```
-NODE_ENDPOINT=ws://localhost:9944
-SURI=//Charlie
-ADDRESS=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y
-COLLATERAL_RATIO=1.04
-```
-
-2. Start guardian by running from project directory
-
-```shell
-npx -p @open-web3/example-guardian@beta laminar-synthetic-liquidation-guardian`
-```
-
-You can extend [YAML config file](src/laminar-synthetic-liquidation-guardian.yml) and run using option `--config=config.yml`
-
-#
-
-# CDP Guardian Bot
-
-CDP Guardian Bot will monitor your loans and if the collateral ratio drops
-below a certain threshold it will deposit more liquidity to maintain the loan safe.
-
-1. Create a `.env` file in the project directory
-
-```
-NODE_ENDPOINT=ws://localhost:9944
+NODE_ENDPOINT=wss://mandala.laminar.codes/ws
 SURI=//Charlie
 ADDRESS=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y
 COLLATERAL_RATIO=1.4
@@ -164,6 +171,25 @@ COLLATERAL_RATIO=1.4
 npx -p @open-web3/example-guardian@beta cdp-guardian
 ```
 
-You can extend [YAML config file](src/cdp-guardian.yml) and run using option `--config=config.yml`
-
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/AcalaNetwork/cdp-bot-template)
+
+#
+## Application-specific Chain Example - Laminar
+### Laminar Synthetic Liquidation Bot
+This example uses the `laminar synthetic liquidation` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/laminar-synthetic-liquidation-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/laminar-synthetic-liquidation). It will monitor specified account's synthetic asset trading positions. If the collateral ratio of the trade drops below a given threshold, it will liquidate the position.
+
+1. Create a `.env` file in the project directory
+
+```
+NODE_ENDPOINT=wss://node-6729167516986527744.jm.onfinality.io/ws
+SURI=//Charlie
+ADDRESS=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y
+COLLATERAL_RATIO=1.04
+```
+
+2. Start guardian by running from project directory
+
+```shell
+npx -p @open-web3/example-guardian@beta laminar-synthetic-liquidation-guardian`
+```
+
