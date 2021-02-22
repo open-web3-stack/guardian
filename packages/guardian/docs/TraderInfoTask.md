@@ -1,0 +1,3 @@
+# TraderInfoTask
+
+TODO
