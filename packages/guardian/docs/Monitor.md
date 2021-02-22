@@ -22,4 +22,4 @@ acala-guardian: # any name for your guardian
               X-API-KEY: ${API_KEY}
     ...
 ```
-For more info see the [example](https://github.com/open-web3-stack/guardian/tree/master/packages/guardian/example-guardian) that monitors `system.events` for `balances.Transfers`
+For more info see the [example](../example-guardian) that monitors `system.events` for `balances.Transfers`

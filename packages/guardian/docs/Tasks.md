@@ -4,32 +4,31 @@ The task job is to listen to a single or multiple data sources and combined them
 
 ---
 ### Substrate
-- [AccountsTask](packages/guardian/docs/AccountsTask.md)
-- [EventsTask](packages/guardian/docs/EventsTask.md)
-- [ScheduleBlockNumberTask](packages/guardian/docs/ScheduleBlockNumberTask.md)
-- [ScheduleTimeTask](packages/guardian/docs/ScheduleTimeTask.md)
-- [StorageTask](packages/guardian/docs/StorageTask.md)
+- [AccountsTask](AccountsTask.md)
+- [EventsTask](EventsTask.md)
+- [ScheduleBlockNumberTask](ScheduleBlockNumberTask.md)
+- [ScheduleTimeTask](ScheduleTimeTask.md)
+- [StorageTask](StorageTask.md)
 
 ### ORML
-- [BalancesTask](packages/guardian/docs/BalancesTask.md)
-- [PricesTask](packages/guardian/docs/PricesTask.md)
+- [BalancesTask](BalancesTask.md)
+- [PricesTask](PricesTask.md)
 
 ### Acala
-- [CollateralAuctionsTask](packages/guardian/docs/CollateralAuctionsTask.md)
-- [DebitAuctionsTask](packages/guardian/docs/DebitAuctionsTask.md)
-- [LoansTask](packages/guardian/docs/LoansTask.md)
-- [PoolsTask](packages/guardian/docs/PoolsTask.md)
-- [SurplusAuctionsTask](packages/guardian/docs/SurplusAuctionsTask.md)
+- [CollateralAuctionsTask](CollateralAuctionsTask.md)
+- [DebitAuctionsTask](DebitAuctionsTask.md)
+- [LoansTask](LoansTask.md)
+- [PoolsTask](PoolsTask.md)
+- [SurplusAuctionsTask](SurplusAuctionsTask.md)
 
 ## Laminar
-- [LiquidityPoolTask](packages/guardian/docs/LiquidityPoolTask.md)
-- [PoolInfoTask](packages/guardian/docs/PoolInfoTask.md)
-- [PositionsByTraderTask](packages/guardian/docs/PositionsByTraderTask.md)
-- [TraderInfoTask](packages/guardian/docs/TraderInfoTask.md)
-
+- [LiquidityPoolTask](LiquidityPoolTask.md)
+- [PoolInfoTask](PoolInfoTask.md)
+- [PositionsByTraderTask](PositionsByTraderTask.md)
+- [TraderInfoTask](TraderInfoTask.md)
 ---
 
-An example task might be [system.accounts](packages/guardian/src/tasks/substrate/AccountsTask.ts) which job is to monitor `Accounts` and output the data into format: 
+An example task might be [system.accounts](../src/tasks/substrate/AccountsTask.ts) which job is to monitor `Accounts` and output the data into format: 
 ```typescript
 {
   "account": string;
