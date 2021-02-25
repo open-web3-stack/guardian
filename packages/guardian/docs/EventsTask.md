@@ -22,7 +22,7 @@ The output for this task will be in the following format:
 
 ```typescript
 {
-  "name": string,
+  "name": string, // Name of the event
   "args": {
     "arg1": string,
     "arg2": string,
