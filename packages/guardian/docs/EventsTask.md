@@ -24,8 +24,8 @@ The output for this task will be in the following format:
 {
   "name": string, // Name of the event
   "args": {
-    "arg1": string,
-    "arg2": string,
+    "arg1": any,
+    "arg2": any,
     ...
   }
 }
