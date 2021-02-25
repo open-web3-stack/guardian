@@ -1,5 +1,7 @@
 # Guardians
-Guardians only task is to connect to the node and provide a list of tasks it can run. You can either extend a build-in guardian or create a new one. See following example:
+
+A Guardian's only job is to connect to the node and be provided a list of tasks it can run. You can either extend a built-in guardian or create a new one. See the following example:
+
 ```typescript
 import MyTask from './MyTask.js';
 
@@ -26,7 +28,9 @@ export default class MyGuardian extends BaseSubstrateGuardian<
   }
 }
 ```
-then on your `index.js` you can register your guardian calling 
+
+then in your `index.js` file you can register your guardian: 
+
 ```typescript
 import { GuardianRegistry } from '@open-web3/guardian';
 import MyGuardian from './MyGuardian.js';
@@ -37,7 +41,8 @@ GuardianRegistry.register('myChain', MyGuardian);
 require('@open-web3/guardian-cli');
 ```
 
-Your YAML config then will be:
+Your YAML config will then be:
+
 ```yaml
 version: '0.1'
 guardians:
@@ -46,4 +51,4 @@ guardians:
     nodeEndpoint: ${NODE_ENDPOINT} # rest of arguments required to setup your guardian...
 ```
 
-Finally you can run `node index.js --config=config.yml`
+Finally you can run `node index.js --config=config.yml` to start your guardian.
