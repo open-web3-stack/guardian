@@ -1,6 +1,6 @@
 # Tasks
 
-The task job is to listen to a single or multiple data sources and combined them into preferred output format. 
+The task's job is to listen to a single or mulitiple data sources and combine them into one preffered output format.
 
 ---
 ### Substrate
@@ -28,7 +28,8 @@ The task job is to listen to a single or multiple data sources and combined them
 - [TraderInfoTask](TraderInfoTask.md)
 ---
 
-An example task might be [system.accounts](../src/tasks/substrate/AccountsTask.ts) which job is to monitor `Accounts` and output the data into format: 
+An example task might be [system.accounts](../src/tasks/substrate/AccountsTask.ts) whose job it is to monitor `Accounts` and output the data into the following format:
+
 ```typescript
 {
   "account": string;
@@ -39,8 +40,10 @@ An example task might be [system.accounts](../src/tasks/substrate/AccountsTask.t
   "feeFroze": number;
 }
 ```
+
 Tasks can also take arguments i.e:
-`AccountsTask` requires an argument which is `account: string | string[]` and it can be a single address or and array of addresses and it's provided in YAML config like:
+`AccountsTask` requires an argument which is `account: string | string[]` and it can be a single address or an array of addresses and is provided in the YAML config as follows:
+
 ```yaml
 ...
 task: system.accounts
@@ -59,9 +62,10 @@ arguments:
 ...
 ```
 
-**_NOTE:_** `system.accounts` is AccountsTask identifier and is defined on `BaseSubstrateGuardian`
+**_NOTE:_** `system.accounts` is the AccountsTask identifier and is defined in `BaseSubstrateGuardian`
 
-In order to setup a task you need to define 2 methods:
+In order to setup a custom task you need to define 2 methods:
+
 ```typescript
 export default class MyTask extends Task<ArgumentsType, OutputType> {
   validationSchema(): Joi.Schema {
@@ -73,4 +77,4 @@ export default class MyTask extends Task<ArgumentsType, OutputType> {
   }
 }
 ```
-Then you register your task to a guardian either by extending current guardians or creating a new one.
+Then you can register your task to a guardian either by extending current guardians or creating a new one.
