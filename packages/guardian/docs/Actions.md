@@ -1,5 +1,7 @@
 # Actions
-Guardian library has build-in action method `POST` for doing http calls and action method `script` for executing a script with a given path. They are called from `Monitor` instance when task emits an output. You can easly create and register your custom actions. Actions are very simple functions that takes config arguments and task output. See example below:
+
+The Guardian library has a built-in action method `POST` for doing http calls, and an action method `script` for executing a script from a given path. They are called from an instance of `Monitor` when a task emits an output. You can also easily create and register your own custom actions with very simple functions that take config arguments and a task output. See the example below:
+
 ```typescript
 import { Action } from '@open-web3/guardian/types';
 
@@ -10,7 +12,9 @@ const myAction: Action<Args> = (args: Args, data: any) => {
   // do anything
 };
 ```
-then this action can be registered on your `index.js`
+
+then this action can be registered in your `index.js` file
+
 ```typescript
 import { Action } from '@open-web3/guardian/types';
 import { ActionRegistry } from '@open-web3/guardian';
@@ -29,6 +33,7 @@ require('@open-web3/guardian-cli');
 ```
 
 Your YAML config then will be:
+
 ```yaml
 ...
 actions:
@@ -37,4 +42,4 @@ actions:
 ...
 ```
 
-Finally you can run `node index.js --config=config.yml`
+Finally you can run `node index.js --config=config.yml` to start your Guardian.
