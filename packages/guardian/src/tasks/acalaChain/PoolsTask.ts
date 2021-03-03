@@ -34,7 +34,7 @@ export default class PoolsTask extends Task<{ currencyId: any }, Pool> {
         .filter((p): p is TradingPair => p !== undefined);
     } else {
       pairs = (Array.isArray(currencyId) ? currencyId : [currencyId]).map(
-        (x) => apiRx.createType('TradingPair', [{token: 'AUSD'}, {token: x}]) as any
+        (x) => apiRx.createType('TradingPair', [{ token: 'AUSD' }, { token: x }]) as any
       );
     }
 
