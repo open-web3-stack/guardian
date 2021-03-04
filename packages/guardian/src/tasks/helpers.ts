@@ -61,7 +61,7 @@ export const observeRPC = <T>(method: RpcRxResult<any>, params: Parameters<any>,
 };
 
 export const getOraclePrice = <CurrencyId extends Codec>(api: ApiRx, period: number) => (tokenId: CurrencyId) => {
-  const ausd = api.createType('CurrencyId', 'ausd') || api.createType('CurrencyId', { token: 'ausd' });
+  const ausd = api.createType('CurrencyId', { token: 'ausd' });
   // acala chain
   if (api.consts.cdpTreasury) {
     const stableCurrencyId = api.consts.cdpTreasury.getStableCurrencyId;

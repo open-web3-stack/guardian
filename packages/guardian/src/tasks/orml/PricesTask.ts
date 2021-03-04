@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { Observable, from } from 'rxjs';
-import { flatMap, map, filter, distinctUntilChanged } from 'rxjs/operators';
+import { mergeMap, map, filter, distinctUntilChanged } from 'rxjs/operators';
 import { Codec, ITuple } from '@polkadot/types/types';
 import { Option, Vec } from '@polkadot/types/codec';
 import { TimestampedValue } from '@open-web3/orml-types/interfaces';
@@ -22,14 +22,13 @@ export default class PricesTask<CurrencyId extends Codec> extends Task<{ key: an
     const { apiRx } = await guardian.isReady();
 
     const { key, period } = this.arguments;
-
     if (key === 'all') {
       return observeRPC<Vec<ITuple<[Codec, Option<TimestampedValue>]>>>(
         apiRx.rpc.oracle.getAllValues,
         ['Aggregated'],
         period
       ).pipe(
-        flatMap(
+        mergeMap(
           (result): Observable<Price> => {
             return from(result).pipe(
               filter(([, item]) => item.isSome),
@@ -45,7 +44,7 @@ export default class PricesTask<CurrencyId extends Codec> extends Task<{ key: an
 
     const keys = (Array.isArray(key) ? key : [key]).map((x) => apiRx.createType('CurrencyId', x));
     return from(keys).pipe(
-      flatMap((key) =>
+      mergeMap((key) =>
         from(getOraclePrice(apiRx, period)(key)).pipe(
           map((price) => ({ key: key.toString(), value: price.toFixed(0) }))
         )
