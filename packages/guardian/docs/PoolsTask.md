@@ -10,7 +10,7 @@ for example:
 
 ```yaml
 ...
-task: account.balances
+task: dex.pools
 arguments:
     account: 5HmWP5WF24fchkiTqJPn5q2nrgFf3VD81LfdU7KRJLPve3fj
     currencyId:
