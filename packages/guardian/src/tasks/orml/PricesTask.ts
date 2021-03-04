@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { Observable, from } from 'rxjs';
-import { mergeMap, map, filter, distinctUntilChanged } from 'rxjs/operators';
+import { mergeMap, map, filter } from 'rxjs/operators';
 import { Codec, ITuple } from '@polkadot/types/types';
 import { Option, Vec } from '@polkadot/types/codec';
 import { TimestampedValue } from '@open-web3/orml-types/interfaces';
