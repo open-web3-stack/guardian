@@ -6,9 +6,9 @@ The `PricesTask` can be used to query a chain's oracle for token prices on a fix
 
 `PricesTask` takes two arguments:
 
-1) `key: string | string[]`
+1) `key: any`
     
-    The token, or a list of tokens you want to monitor the oracle price of. If `all` is provided to this argument all available tokens will be monitored.
+    the `CurrencyId` or a list of `CurrencyId`'s of the tokens to be monitored.
 
 2) `period: number`
 
@@ -20,7 +20,8 @@ For example:
 ...
 task: oracle.prices
 arguments: 
-    key: DOT
+    key: 
+      Token: DOT
     period: 10000
 ...
 ```
@@ -31,7 +32,7 @@ The output for this task will be in the following format:
 
 ```typescript
 { 
-    key: 'string', // The token being monitored
-    value: '1000000000000000000' // The price of the token
+    "key": string, // The token being monitored
+    "value": string // The price of the token
 }
 ```
