@@ -77,7 +77,6 @@ export const getOraclePrice = <CurrencyId extends Codec>(api: ApiRx, period: num
     filter((i) => i.isSome),
     map((i) => i.unwrap()),
     map((i) => Big(getValueFromTimestampValue(i).toString())),
-    distinctUntilChanged((a, b) => a.eq(b))
   );
 };
 

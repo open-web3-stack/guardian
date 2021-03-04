@@ -49,7 +49,6 @@ export default class PricesTask<CurrencyId extends Codec> extends Task<{ key: an
           map((price) => ({ key: key.toString(), value: price.toFixed(0) }))
         )
       ),
-      distinctUntilChanged((a, b) => JSON.stringify(a) !== JSON.stringify(b)),
       filter((price) => price.value.length > 0)
     );
   }
