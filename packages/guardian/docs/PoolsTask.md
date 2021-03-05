@@ -4,7 +4,7 @@ The `PoolsTask` can be used to monitor one or more liquidity pools for changes. 
 
 ## Arguments
 
-`PoolsTask` takes one argument `currencyId` of type `any` that represents the token in a trading pool with `aUSD`
+`PoolsTask` takes one argument `currencyId: any` that represents the token in a liquidity pool with `aUSD`. It can either be a single token or a list of token's you would like to monitor. The value `all` cal also be passed to `currencyId` to monitor all of the liquidity pools.
 
 for example:
 
@@ -12,7 +12,6 @@ for example:
 ...
 task: dex.pools
 arguments:
-    account: 5HmWP5WF24fchkiTqJPn5q2nrgFf3VD81LfdU7KRJLPve3fj
     currencyId:
         - DOT
         - ACA
@@ -25,7 +24,7 @@ The output for this task will be in the following format:
 
 ```typescript
 {
-  "currencyId": Token[], // A two element array with representing the trading pool of the input token and aUSD
+  "currencyId": Token[], // A two element array with representing the liquidityc pool of the input token and aUSD
   "price": number,
   "baseLiquidity": number,
   "otherLiquidity": number
