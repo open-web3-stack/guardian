@@ -31,15 +31,13 @@ The output for this task will be in the following format:
 
 ```typescript
 {
-  "account": string;
-  "currencyId": string;
-  "auctionId": number;
-  "initialAmount": string;
-  "amount": string;
-  "target": string;
-  "startTime": number;
-  "endTime": number | null;
-  "lastBidder": string | null;
-  "lastBid": string | null;
+  "poolId": string;
+  "owner": string;
+  "balance": string;
+  "ell": string;
+  "enp": string;
+  "options": TraderPairOptions[];
+  "minLeveragedAmount": string;
+  "astBid": string | null;
 }
 ```
