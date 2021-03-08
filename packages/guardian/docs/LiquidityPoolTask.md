@@ -31,4 +31,19 @@ arguments:
 
 The output for this task will be in the following format:
 
-TODO
+```typescript
+{
+  "poolId": string;
+  "currencyId": string;
+  "owner: string";
+  "liquidity": string;
+  "bidSpread": string | null;
+  "askSpread": string | null;
+  "additionalCollateralRatio": string | null;
+  "enabled": boolean;
+  "syntheticIssuance": string;
+  "collateralBalance": string;
+  "collateralRatio": string;
+  "isSafe": boolean;
+}
+```

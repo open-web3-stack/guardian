@@ -36,10 +36,10 @@ The output for this task will be in the following format:
 ```typescript
 {
   "account": string,
-  "currencyId": currencyId,
-  "debits": number,
-  "debitsUSD": number,
-  "collaterals": number,
-  "collateralRatio": number
+  "currencyId": string,
+  "debits": string,
+  "debitsUSD": string,
+  "collaterals": string,
+  "collateralRatio": string
 }
 ```

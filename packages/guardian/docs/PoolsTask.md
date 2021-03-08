@@ -24,10 +24,10 @@ The output for this task will be in the following format:
 
 ```typescript
 {
-  "currencyId": Token[], // A two element array with representing the liquidityc pool of the input token and aUSD
-  "price": number,
-  "baseLiquidity": number,
-  "otherLiquidity": number
+  "currencyId": string, // A two element array with representing the liquidityc pool of the input token and aUSD
+  "price": string,
+  "baseLiquidity": string,
+  "otherLiquidity": string
 }
 }
 ```

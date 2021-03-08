@@ -34,7 +34,7 @@ The output for this task will be in the following format:
 ```typescript
 {
   "account": string, // The account that had the change
-  "currencyId": any, // The currencyId taht had the change
+  "currencyId": string, // The currencyId taht had the change
   "free": string // The current amount free as a string
 }
 ```
