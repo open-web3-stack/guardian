@@ -4,7 +4,7 @@ The `SurplusAuctionsTask` can be used to monitor surplus auctions. It's identifi
 
 ## Arguments
 
-TODO
+There are no arguments for this task.
 
 ## Output
 

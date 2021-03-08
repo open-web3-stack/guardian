@@ -4,7 +4,7 @@ The `DebitAuctionsTask` can be used to monitor debit auctions. It's identifier i
 
 ## Arguments
 
-TODO
+There are no arguments for this task.
 
 ## Output
 
