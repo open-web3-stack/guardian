@@ -6,6 +6,7 @@ import { Pool } from '../../types';
 import Task from '../Task';
 import { AcalaGuardian } from '../../guardians';
 import { autorun$ } from '../../utils';
+import { values } from 'lodash';
 
 export default class PoolsTask extends Task<{ currencyId: any }, Pool> {
   validationSchema() {
@@ -22,20 +23,28 @@ export default class PoolsTask extends Task<{ currencyId: any }, Pool> {
     let pairs: TradingPair[];
 
     if (currencyId === 'all') {
-      const tradingPair = await apiRx.query.dex.tradingPairStatuses.entries().pipe(take(1)).toPromise();
+      const tradingPair = await apiRx.query.dex.liquidityPool.entries().pipe(take(1)).toPromise();
 
       pairs = tradingPair
         .map(([key, value]) => {
-          if (value.isEnabled) {
+          const [balance1, balance2] = value;
+
+          if (balance1 && balance2) {
             return key.args[0];
           }
+
           return undefined;
         })
         .filter((p): p is TradingPair => p !== undefined);
     } else {
-      pairs = (Array.isArray(currencyId) ? currencyId : [currencyId]).map(
-        (x) => apiRx.createType('TradingPair', { base: { token: 'AUSD', quote: { token: x } } }) as any
-      );
+      pairs = (Array.isArray(currencyId) ? currencyId : [currencyId]).map((x) => {
+        const newPair =
+          x !== 'ACA'
+            ? (apiRx.createType('TradingPair', [{ token: 'AUSD' }, { token: x }]) as any)
+            : (apiRx.createType('TradingPair', [{ token: x }, { token: 'AUSD' }]) as any);
+
+        return newPair;
+      });
     }
 
     return autorun$<Pool>((subscriber) => {

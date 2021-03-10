@@ -4,7 +4,7 @@ import { Option } from '@polkadot/types/codec';
 import { Event } from '@polkadot/types/interfaces';
 import { TimestampedValue } from '@open-web3/orml-types/interfaces';
 import { Observable, timer, of } from 'rxjs';
-import { switchMap, distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { switchMap, filter, map } from 'rxjs/operators';
 import { RpcRxResult } from '@polkadot/api/types';
 import { ApiRx } from '@polkadot/api';
 
@@ -61,7 +61,7 @@ export const observeRPC = <T>(method: RpcRxResult<any>, params: Parameters<any>,
 };
 
 export const getOraclePrice = <CurrencyId extends Codec>(api: ApiRx, period: number) => (tokenId: CurrencyId) => {
-  const ausd = api.createType('CurrencyId', 'ausd') || api.createType('CurrencyId', { token: 'ausd' });
+  const ausd = api.createType('CurrencyId', { token: 'ausd' });
   // acala chain
   if (api.consts.cdpTreasury) {
     const stableCurrencyId = api.consts.cdpTreasury.getStableCurrencyId;
@@ -76,8 +76,7 @@ export const getOraclePrice = <CurrencyId extends Codec>(api: ApiRx, period: num
   return price$.pipe(
     filter((i) => i.isSome),
     map((i) => i.unwrap()),
-    map((i) => Big(getValueFromTimestampValue(i).toString())),
-    distinctUntilChanged((a, b) => a.eq(b))
+    map((i) => Big(getValueFromTimestampValue(i).toString()))
   );
 };
 
