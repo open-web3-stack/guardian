@@ -2572,8 +2572,8 @@ __metadata:
   resolution: "@open-web3/example-guardian@workspace:packages/example-guardian"
   dependencies:
     "@open-web3/api": ^0.8.2-9
-    "@open-web3/guardian": ^0.4.2-3
-    "@open-web3/guardian-cli": ^0.4.2-3
+    "@open-web3/guardian": ^0.4.2-4
+    "@open-web3/guardian-cli": ^0.4.2-4
     "@open-web3/util": ^0.8.2-9
     "@types/nodemailer": ^6.4.0
     dotenv: ^8.2.0
@@ -2590,18 +2590,18 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@open-web3/guardian-cli@^0.4.2-3, @open-web3/guardian-cli@workspace:packages/guardian-cli":
+"@open-web3/guardian-cli@^0.4.2-4, @open-web3/guardian-cli@workspace:packages/guardian-cli":
   version: 0.0.0-use.local
   resolution: "@open-web3/guardian-cli@workspace:packages/guardian-cli"
   dependencies:
-    "@open-web3/guardian": ^0.4.2-3
+    "@open-web3/guardian": ^0.4.2-4
     js-yaml: ^3.13.1
   bin:
     guardian-cli: cli.js
   languageName: unknown
   linkType: soft
 
-"@open-web3/guardian@^0.4.2-3, @open-web3/guardian@workspace:packages/guardian":
+"@open-web3/guardian@^0.4.2-4, @open-web3/guardian@workspace:packages/guardian":
   version: 0.0.0-use.local
   resolution: "@open-web3/guardian@workspace:packages/guardian"
   dependencies:
