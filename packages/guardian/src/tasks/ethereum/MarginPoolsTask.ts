@@ -18,7 +18,7 @@ export type Output = {
 export default class MarginPoolsTask extends Task<{ poolId: string }, Output> {
   validationSchema() {
     return Joi.object({
-      poolId: Joi.alt(Joi.string()).required(),
+      poolId: Joi.alt(Joi.string()).required()
     }).required();
   }
 
@@ -40,7 +40,7 @@ export default class MarginPoolsTask extends Task<{ poolId: string }, Output> {
           marginFlowProtocolSafety.methods.getEnpAndEll(poolId).call() as Promise<[[string], [string]]>,
           marginFlowProtocolSafety.methods.getEquityOfPool(poolId).call() as Promise<string>,
           marginFlowProtocolSafety.methods.isPoolSafe(poolId).call() as Promise<boolean>,
-          marginLiquidityPoolRegistry.methods.isMarginCalled(poolId).call() as Promise<boolean>,
+          marginLiquidityPoolRegistry.methods.isMarginCalled(poolId).call() as Promise<boolean>
         ]);
 
         return {
@@ -50,7 +50,7 @@ export default class MarginPoolsTask extends Task<{ poolId: string }, Output> {
           equity,
           isSafe,
           isMarginCalled,
-          isLiquidated: !isSafe,
+          isLiquidated: !isSafe
         };
       })
     );

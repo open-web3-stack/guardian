@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+
+import run from '../staking';
+
+run().catch((error) => {
+  console.error(error);
+  process.exit(-1);
+});

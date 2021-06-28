@@ -69,7 +69,7 @@ export default class LiquidityPoolTask extends Task<
   validationSchema() {
     return Joi.object({
       poolId: Joi.alt(Joi.number(), Joi.array().min(1).items(Joi.number()), Joi.valid('all')).required(),
-      currencyId: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
+      currencyId: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required()
     }).required();
   }
 
@@ -125,7 +125,7 @@ export default class LiquidityPoolTask extends Task<
             collateralRatio: collateralRatio.toFixed(),
             syntheticIssuance: synthetic,
             collateralBalance: collateral,
-            isSafe,
+            isSafe
           });
         }
       }

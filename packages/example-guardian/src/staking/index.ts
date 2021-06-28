@@ -1,7 +1,5 @@
-#!/usr/bin/env node
-
 import { ActionRegistry } from '@open-web3/guardian';
-import { setDefaultConfig, logger } from '../utils';
+import { setDefaultConfig } from '../utils';
 import { config as getConfig } from './config';
 import nodemailer from 'nodemailer';
 
@@ -15,8 +13,8 @@ const sendEmail = async (value: string) => {
     secure: false, // true for 465, false for other ports
     auth: {
       user: testAccount.user, // generated ethereal user
-      pass: testAccount.pass, // generated ethereal password
-    },
+      pass: testAccount.pass // generated ethereal password
+    }
   });
 
   try {
@@ -25,7 +23,7 @@ const sendEmail = async (value: string) => {
       from: '"Fred Foo 👻" <foo@example.com>', // sender address
       to: 'bar@example.com, baz@example.com', // list of receivers
       subject: 'Staking Reward ✔', // Subject line
-      text: `Staking Reward ${value}`, // plain text body
+      text: `Staking Reward ${value}` // plain text body
     });
 
     console.log('Message sent: %s', info.messageId);
@@ -38,7 +36,7 @@ const sendEmail = async (value: string) => {
   }
 };
 
-const run = async () => {
+export default async () => {
   setDefaultConfig('staking.yml');
 
   ActionRegistry.register('stakingReward', (_, data) => {
@@ -52,13 +50,3 @@ const run = async () => {
   // start guardian
   require('@open-web3/guardian-cli');
 };
-
-export default run;
-
-// if called directly
-if (require.main === module) {
-  run().catch((error) => {
-    logger.error(error);
-    process.exit(-1);
-  });
-}

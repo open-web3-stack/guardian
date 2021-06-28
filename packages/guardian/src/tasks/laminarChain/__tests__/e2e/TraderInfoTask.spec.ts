@@ -13,7 +13,7 @@ describe('TraderInfoTask', () => {
 
   it('works', async (done) => {
     const task = new TraderInfoTask({
-      account: '5EhUhUxwnR99NAkqSNiDzx5m3wijfVaekaR67BEq5yyj8AhP',
+      account: '5GmfNisGuwvwoyaZJyr2LX7ebyBf5pCz7cqeTDqoP6okQg1Y',
       poolId: 'all',
       period: 30_000,
     });

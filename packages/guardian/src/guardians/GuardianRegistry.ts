@@ -20,7 +20,7 @@ export default class GuardianRegistry {
     ethereum: EthereumGuardian,
     laminarChain: LaminarGuardian,
     acalaChain: AcalaGuardian,
-    substrateChain: SubstrateGuardian,
+    substrateChain: SubstrateGuardian
   };
 
   /**

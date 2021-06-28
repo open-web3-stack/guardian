@@ -1,13 +1,17 @@
-#!/usr/bin/env node
-
 import { ActionRegistry } from '@open-web3/guardian';
-import { setupApi } from './setupApi';
+import { config } from './config';
+import setupAcalaApi from '../setupAcalaApi';
 import { setDefaultConfig, logger } from '../utils';
 
-const run = async () => {
+export default async () => {
   setDefaultConfig('schedule.yml');
 
-  const { getBalance } = await setupApi();
+  const { nodeEndpoint, address } = config();
+  const { apiManager } = await setupAcalaApi(nodeEndpoint, '', address);
+
+  const getBalance = () => {
+    return apiManager.api.query.system.account(address);
+  };
 
   ActionRegistry.register('getBalance', () => {
     getBalance().then((balance) => {
@@ -18,13 +22,3 @@ const run = async () => {
   // start guardian
   require('@open-web3/guardian-cli');
 };
-
-export default run;
-
-// if called directly
-if (require.main === module) {
-  run().catch((error) => {
-    logger.error(error);
-    process.exit(-1);
-  });
-}

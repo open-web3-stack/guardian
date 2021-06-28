@@ -73,7 +73,7 @@ MARGIN=0.1
 2. Start guardian by running from project directory
 
 ```shell
- npx -p @open-web3/example-guardian@beta collateral-auction-guardian
+ npx -p @open-web3/example-guardian@beta collateral-auction
 ```
 
 You can extend [YAML config file](src/collateral-auction-guardian.yml) and run using option `--config=config.yml`
@@ -110,49 +110,6 @@ You can extend [YAML config file](src/collateral-auction-guardian.yml) and run u
 ```
 
 #
-
-### Debit Auction Example
-
-This example uses the `debit auction` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/debit-auction-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/auction/debit). It will watch debit auctions and dex pools, (dex is used to liquidate collaterals if price is more favorable) and bid from specified account. 
-
-1. Create a `.env` file in the project directory
-
-```
-NODE_ENDPOINT=wss://mandala.laminar.codes/ws
-SURI=//Charlie
-ADDRESS=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y
-MARGIN=0.1
-```
-
-2. Start guardian by running from project directory
-
-```shell
-npx -p @open-web3/example-guardian@beta debit-auction-guardian
-```
-
-You can extend [YAML config file](src/debit-auction-guardian.yml) and run using option `--config=config.yml`
-
-#
-### Surplus Auction Example
-
-This example uses the `surplus auction` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/surplus-auction-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/auction/surplus). It will watch surplus auctions and dex pools, (dex is used to liquidate assets if price is more favorable) and bid from specified account. 
-
-1. Create a `.env` file in the project directory
-
-```
-NODE_ENDPOINT=wss://mandala.laminar.codes/ws
-SURI=//Charlie
-ADDRESS=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y
-MARGIN=0.1
-```
-
-2. Start guardian by running from project directory
-
-```shell
-npx -p @open-web3/example-guardian@beta surplus-auction-guardian
-```
-
-#
 ### CDP Guardian Bot
 This example uses the `cdp guardian` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/cdp-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/cdp). It will monitor specified account's loan positions. If the collateral ratio of the loans drops below a given threshold, it will deposit more liquidity to de-risk loan and keep the position open.
 
@@ -168,7 +125,7 @@ COLLATERAL_RATIO=1.4
 2. Start guardian by running from project directory
 
 ```shell
-npx -p @open-web3/example-guardian@beta cdp-guardian
+npx -p @open-web3/example-guardian@beta cdp
 ```
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/AcalaNetwork/cdp-bot-template)
@@ -190,6 +147,6 @@ COLLATERAL_RATIO=1.04
 2. Start guardian by running from project directory
 
 ```shell
-npx -p @open-web3/example-guardian@beta laminar-synthetic-liquidation-guardian`
+npx -p @open-web3/example-guardian@beta laminar-synthetic-liquidation
 ```
 

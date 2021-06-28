@@ -15,6 +15,7 @@ const getOraclePrice = <CurrencyId extends Codec>(
 ) =>
   computedFn((tokenId: CurrencyId) => {
     if (['{"Token":"AUSD"}', 'AUSD'].includes(tokenId.toString())) return 1e18;
+    if (['{"Token":"KUSD"}', 'KUSD'].includes(tokenId.toString())) return 1e18;
     const prices: number[] = [];
     const rawValues = oracle.rawValues.allEntries();
 

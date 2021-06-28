@@ -22,11 +22,11 @@ describe('LoansTask', () => {
     output$.subscribe((output) => {
       expect(output).toStrictEqual({
         account: '5DAAzDBM2xoob4fcN4X7c8QXxZj7AEENfcMQWApUE6ALspWG',
-        currencyId: '{"Token":"DOT"}',
-        debits: '1995229380509623964735',
-        debitsUSD: '200006517219654621946',
-        collaterals: '1000000000000000000',
-        collateralRatio: '1.499951',
+        currencyId: '{"token":"DOT"}',
+        debits: '2500000000000000',
+        debitsUSD: '250000000000000',
+        collaterals: '10000000000',
+        collateralRatio: '1.2',
       });
       done();
     });

@@ -60,25 +60,27 @@ export const observeRPC = <T>(method: RpcRxResult<any>, params: Parameters<any>,
   );
 };
 
-export const getOraclePrice = <CurrencyId extends Codec>(api: ApiRx, period: number) => (tokenId: CurrencyId) => {
-  const ausd = api.createType('CurrencyId', { token: 'ausd' });
-  // acala chain
-  if (api.consts.cdpTreasury) {
-    const stableCurrencyId = api.consts.cdpTreasury.getStableCurrencyId;
-    const stableCurrencyIdPrice = api.consts.prices.stableCurrencyFixedPrice.toString();
-    if (tokenId.eq(stableCurrencyId)) return of(Big(stableCurrencyIdPrice));
-  } else {
-    if (tokenId.eq(ausd)) return of(Big(1e18));
-  }
+export const getOraclePrice =
+  <CurrencyId extends Codec>(api: ApiRx, period: number) =>
+  (tokenId: CurrencyId) => {
+    // acala chain
+    if (api.consts.cdpTreasury) {
+      const stableCurrencyId = api.consts.cdpTreasury.getStableCurrencyId;
+      const stableCurrencyIdPrice = api.consts.prices.stableCurrencyFixedPrice.toString();
+      if (tokenId.eq(stableCurrencyId)) return of(Big(stableCurrencyIdPrice));
+    } else {
+      const ausd = api.createType('CurrencyId', 'AUSD');
+      if (tokenId.eq(ausd)) return of(Big(1e18));
+    }
 
-  const price$ = observeRPC<Option<TimestampedValue>>(api.rpc.oracle.getValue, ['Aggregated', tokenId], period);
+    const price$ = observeRPC<Option<TimestampedValue>>(api.rpc.oracle.getValue, ['Aggregated', tokenId], period);
 
-  return price$.pipe(
-    filter((i) => i.isSome),
-    map((i) => i.unwrap()),
-    map((i) => Big(getValueFromTimestampValue(i).toString()))
-  );
-};
+    return price$.pipe(
+      filter((i) => i.isSome),
+      map((i) => i.unwrap()),
+      map((i) => Big(getValueFromTimestampValue(i).toString()))
+    );
+  };
 
 export const getEventParams = (event: Event): string[] => {
   const argsStr = event.meta.documentation

@@ -1,14 +1,30 @@
-#!/usr/bin/env node
-
 import { Loan } from '@open-web3/guardian/types';
 import { ActionRegistry } from '@open-web3/guardian';
-import { setupApi } from './setupApi';
+import { FixedPointNumber } from '@acala-network/sdk-core';
+import { config } from './config';
+import setupAcalaApi from '../setupAcalaApi';
 import { setDefaultConfig, logger } from '../utils';
+import { tokenPrecision } from '../../../guardian/src/utils';
 
-const run = async () => {
+export default async () => {
   setDefaultConfig('cdp-guardian.yml');
 
-  const { adjustLoan } = await setupApi();
+  const { nodeEndpoint, SURI, address } = config();
+  const { apiManager, keyringPair } = await setupAcalaApi(nodeEndpoint, SURI, address);
+
+  // adjust loan by +10% collateral
+  const adjustLoan = (loan: Loan) => {
+    const currencyId = apiManager.api.createType('CurrencyId', JSON.parse(loan.currencyId));
+    const precision = tokenPrecision((currencyId as any).asToken.toString());
+
+    const amount = FixedPointNumber.fromInner(loan.collaterals, precision);
+    const adjusment = amount.times(FixedPointNumber.fromRational(1, 10)); // +10% collateral
+    adjusment.setPrecision(precision);
+
+    const tx = apiManager.api.tx.honzon.adjustLoan(currencyId as any, adjusment._getInner().toString(), 0);
+
+    return apiManager.signAndSend(tx, { account: keyringPair }).inBlock;
+  };
 
   let ready = true;
 
@@ -25,13 +41,3 @@ const run = async () => {
   // start guardian
   require('@open-web3/guardian-cli');
 };
-
-export default run;
-
-// if called directly
-if (require.main === module) {
-  run().catch((error) => {
-    logger.error(error);
-    process.exit(-1);
-  });
-}

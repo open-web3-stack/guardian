@@ -42,7 +42,7 @@ export default class LaminarGuardian extends BaseSubstrateGuardian<
       'margin.poolInfo': PoolInfoTask,
       'account.balances': BalancesTask,
       'oracle.prices': PricesTask,
-      'synthetic.liquidityPool': LiquidityPoolTask,
+      'synthetic.liquidityPool': LiquidityPoolTask
     };
   }
 
@@ -63,7 +63,7 @@ export default class LaminarGuardian extends BaseSubstrateGuardian<
     return Joi.object({
       networkType: Joi.valid('laminarChain').required(),
       network: Joi.valid(...laminarNetwork).required(),
-      nodeEndpoint: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).default(defaultNodeEndpoint),
+      nodeEndpoint: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).default(defaultNodeEndpoint)
     }).required();
   }
 }

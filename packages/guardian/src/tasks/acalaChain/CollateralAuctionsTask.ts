@@ -11,7 +11,7 @@ export default class CollateralAuctionsTask extends Task<
   validationSchema() {
     return Joi.object({
       account: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
-      currencyId: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
+      currencyId: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required()
     }).required();
   }
 
@@ -26,7 +26,7 @@ export default class CollateralAuctionsTask extends Task<
     return autorun$<CollateralAuction>((subscriber) => {
       const collateralAuctions = storage.auctionManager.collateralAuctions.entries();
       for (const [auctionId, collateralAuctionWrapped] of collateralAuctions.entries()) {
-        if (collateralAuctionWrapped.isEmpty) continue;
+        if (!collateralAuctionWrapped?.isSome) continue;
         const collateralAuction = collateralAuctionWrapped.unwrap();
 
         const { refundRecipient, currencyId } = collateralAuction;
@@ -50,19 +50,21 @@ export default class CollateralAuctionsTask extends Task<
           startTime: Number(collateralAuction.startTime.toString()),
           endTime: auction.end.isSome ? Number(auction.end.toString()) : null,
           lastBidder: lastBidder ? lastBidder.toString() : null,
-          lastBid: lastBid ? lastBid.toString() : null,
+          lastBid: lastBid ? lastBid.toString() : null
         });
       }
     });
   }
 
-  private fulfillArguments = (source: string | string[]) => (input: string): boolean => {
-    if (source === 'all') {
-      return true;
-    } else if (typeof source === 'string') {
-      return source === input;
-    } else {
-      return source.includes(input);
-    }
-  };
+  private fulfillArguments =
+    (source: string | string[]) =>
+    (input: string): boolean => {
+      if (source === 'all') {
+        return true;
+      } else if (typeof source === 'string') {
+        return source === input;
+      } else {
+        return source.includes(input);
+      }
+    };
 }

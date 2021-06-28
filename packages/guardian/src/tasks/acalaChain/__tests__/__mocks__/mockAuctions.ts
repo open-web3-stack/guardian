@@ -24,28 +24,10 @@ const COLLATERAL_AUCTION = new Option(register, 'CollateralAuctionItem', {
   startTime: 20,
 });
 
-const DEBIT_AUCTION = new Option(register, 'DebitAuctionItem', {
-  initialAmount: 100,
-  amount: 100,
-  fix: 20,
-  startTime: 1,
-});
-
-const SURPLUS_AUCTION = new Option(register, 'SurplusAuctionItem', {
-  amount: 100,
-  startTime: 1,
-});
-
 const MockStorage = {
   auctionManager: {
     collateralAuctions: {
       entries: jest.fn(() => observable.map({ 0: COLLATERAL_AUCTION })),
-    },
-    debitAuctions: {
-      entries: jest.fn(() => observable.map({ 0: DEBIT_AUCTION })),
-    },
-    surplusAuctions: {
-      entries: jest.fn(() => observable.map({ 0: SURPLUS_AUCTION })),
     },
   },
   auction: {

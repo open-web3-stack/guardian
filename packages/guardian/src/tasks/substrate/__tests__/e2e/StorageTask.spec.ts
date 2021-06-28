@@ -14,7 +14,7 @@ describe('StorageTask', () => {
   const guardian = new SubstrateGuardian('substrate-guardian', config);
 
   it('works with single args', async (done) => {
-    const task = new StorageTask({ name: 'system.account', args: '5DAAzDBM2xoob4fcN4X7c8QXxZj7AEENfcMQWApUE6ALspWG' });
+    const task = new StorageTask({ name: 'system.account', args: 'FcxNWVy5RESDsErjwyZmPCW6Z8Y3fbfLzmou34YZTrbcraL' });
     const output$ = await task.start(guardian);
     output$.subscribe((output) => {
       console.log(output.value.toString());
@@ -26,7 +26,7 @@ describe('StorageTask', () => {
   it('works with multiple args', async (done) => {
     const task = new StorageTask({
       name: 'system.account',
-      args: ['5DAAzDBM2xoob4fcN4X7c8QXxZj7AEENfcMQWApUE6ALspWG'],
+      args: ['FcxNWVy5RESDsErjwyZmPCW6Z8Y3fbfLzmou34YZTrbcraL'],
     });
     const output$ = await task.start(guardian);
     output$.subscribe((output) => {

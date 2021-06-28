@@ -67,7 +67,7 @@ const setup = async (laminarApi: LaminarApi, storage: StorageType) => {
         pairId,
         enabledTrades: options.enabledTrades.toJSON(),
         askSpread: askSpread.toString(),
-        bidSpread: bidSpread.toString(),
+        bidSpread: bidSpread.toString()
       });
     }
 
@@ -99,7 +99,7 @@ export default class PoolInfoTask extends Task<{ poolId: number | number[] | 'al
   validationSchema() {
     return Joi.object({
       poolId: Joi.alt(Joi.number(), Joi.array().min(1).items(Joi.number()), Joi.valid('all')).required(),
-      period: Joi.number().default(RPCRefreshPeriod),
+      period: Joi.number().default(RPCRefreshPeriod)
     }).required();
   }
 
@@ -132,7 +132,7 @@ export default class PoolInfoTask extends Task<{ poolId: number | number[] | 'al
           enp: poolState.enp.toString(),
           ell: poolState.ell.toString(),
           options: tradingPairOptions,
-          minLeveragedAmount: minLeveragedAmount.toString(),
+          minLeveragedAmount: minLeveragedAmount.toString()
         });
       }
     });

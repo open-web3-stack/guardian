@@ -13,12 +13,12 @@ const schema = Joi.object({
             task: Joi.string().required(),
             arguments: Joi.any(),
             conditions: Joi.any(),
-            actions: Joi.any(),
+            actions: Joi.any()
           })
         )
-        .required(),
+        .required()
     }).unknown()
-  ),
+  )
 });
 
 export default (config: any): any => {

@@ -18,7 +18,7 @@ export default class MarginAccountTask extends Task<{ poolId: string; address: s
   validationSchema() {
     return Joi.object({
       poolId: Joi.alt(Joi.string()).required(),
-      address: Joi.alt(Joi.string()).required(),
+      address: Joi.alt(Joi.string()).required()
     }).required();
   }
 
@@ -39,7 +39,7 @@ export default class MarginAccountTask extends Task<{ poolId: string; address: s
           marginFlowProtocolSafety.methods.getLeveragedDebitsOfTrader(poolId, address).call() as Promise<string>,
           marginFlowProtocolSafety.methods.getMarginLevel(poolId, address).call() as Promise<[string]>,
           marginFlowProtocolSafety.methods.isTraderSafe(poolId, address).call() as Promise<boolean>,
-          marginFlowProtocol.methods.traderIsMarginCalled(poolId, address).call() as Promise<boolean>,
+          marginFlowProtocol.methods.traderIsMarginCalled(poolId, address).call() as Promise<boolean>
         ]);
 
         return {
@@ -48,7 +48,7 @@ export default class MarginAccountTask extends Task<{ poolId: string; address: s
           marginLevel: Number(fixed18toString(marginLevel)),
           isSafe,
           isMarginCalled,
-          isLiquidated: !isSafe,
+          isLiquidated: !isSafe
         };
       })
     );

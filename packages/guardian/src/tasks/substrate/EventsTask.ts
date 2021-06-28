@@ -8,7 +8,7 @@ import { getEventParams } from '../helpers';
 export default class EventsTask extends Task<{ name: string | string[] }, Event> {
   validationSchema() {
     return Joi.object({
-      name: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
+      name: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required()
     }).required();
   }
 

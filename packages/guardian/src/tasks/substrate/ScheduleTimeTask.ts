@@ -12,7 +12,7 @@ export interface Output {
 export default class ScheduleTimeTask extends Task<{ cronTime: string }, Output> {
   validationSchema() {
     return Joi.object({
-      cronTime: Joi.string().required(),
+      cronTime: Joi.string().required()
     }).required();
   }
 
@@ -27,7 +27,7 @@ export default class ScheduleTimeTask extends Task<{ cronTime: string }, Output>
         () => {
           subscriber.next({
             current: +new Date(),
-            next: +job.nextDate(),
+            next: +job.nextDate()
           });
         },
         () => {

@@ -24,7 +24,7 @@ export const setupApi = async () => {
   const liquidate = (pool: LiquidityPool) => {
     const { poolId, currencyId, syntheticIssuance } = pool;
     const tx = apiManager.api.tx.syntheticProtocol.liquidate(poolId, currencyId as any, syntheticIssuance);
-    return apiManager.signAndSend(tx, { account: keyringPair }).finalized;
+    return apiManager.signAndSend(tx, { account: keyringPair }).inBlock;
   };
 
   return { liquidate };

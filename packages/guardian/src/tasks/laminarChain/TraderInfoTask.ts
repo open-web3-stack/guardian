@@ -52,7 +52,7 @@ export default class TraderInfoTask extends Task<
     return Joi.object({
       account: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
       poolId: Joi.alt(Joi.number(), Joi.array().min(1).items(Joi.number()), Joi.valid('all')).required(),
-      period: Joi.number().default(RPCRefreshPeriod),
+      period: Joi.number().default(RPCRefreshPeriod)
     }).required();
   }
 
@@ -84,7 +84,7 @@ export default class TraderInfoTask extends Task<
             accumulatedSwap: equity.sub(new BN(balance)).sub(unrealizedPl).toString(),
             equity: equity.toString(),
             marginLevel: marginLevel.toString(),
-            totalLeveragedPosition: equity.mul(unit).div(marginLevel).toString(),
+            totalLeveragedPosition: equity.mul(unit).div(marginLevel).toString()
           });
         }
       }

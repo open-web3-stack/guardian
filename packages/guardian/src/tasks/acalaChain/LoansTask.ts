@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import { CurrencyId } from '@acala-network/types/interfaces';
-import { collateralToUSD, calcCollateralRatio, convertToFixed18, debitToUSD } from '@acala-network/app-util';
-import { autorun$ } from '../../utils';
+import { FixedPointNumber } from '@acala-network/sdk-core';
+import { autorun$, tokenPrecision } from '../../utils';
 import { createAccountCurrencyIdPairs } from '../helpers';
 import { AcalaGuardian } from '../../guardians';
 import { Loan } from '../../types';
@@ -12,7 +12,7 @@ export default class LoansTask extends Task<{ account: string | string[]; curren
   validationSchema() {
     return Joi.object({
       account: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
-      currencyId: Joi.any().required(),
+      currencyId: Joi.any().required()
     }).required();
   }
 
@@ -44,6 +44,8 @@ export default class LoansTask extends Task<{ account: string | string[]; curren
         const position = storage.loans.positions(currencyId.toHex(), account);
         if (!position) continue;
 
+        const stableCoin = apiRx.consts.cdpEngine.getStableCurrencyId;
+        const stableCoinPrecision = tokenPrecision(stableCoin.asToken.toString());
         const debitExchangeRate = storage.cdpEngine.debitExchangeRate(currencyId.toHex());
         const exchangeRate = debitExchangeRate?.isSome
           ? debitExchangeRate.unwrap()
@@ -52,24 +54,31 @@ export default class LoansTask extends Task<{ account: string | string[]; curren
         const collateralPrice = oraclePrice(currencyId);
         if (!collateralPrice) continue;
 
-        const collateralUSD = collateralToUSD(convertToFixed18(position.collateral), convertToFixed18(collateralPrice));
-        const debitsUSD = debitToUSD(
-          convertToFixed18(position.debit),
-          convertToFixed18(exchangeRate),
-          convertToFixed18(stableCoinPrice)
-        );
+        const collateralPrecision = tokenPrecision(currencyId.asToken.toString());
 
-        const collateralRatio = calcCollateralRatio(collateralUSD, debitsUSD);
+        const collateral = FixedPointNumber.fromInner(position.collateral.toString(), collateralPrecision);
+        const collateralUSD = FixedPointNumber.fromInner(collateralPrice).times(collateral);
+
+        const debit = FixedPointNumber.fromInner(position.debit.toString(), stableCoinPrecision);
+        if (debit.isZero()) continue;
+        const debitsUSD = debit
+          .times(FixedPointNumber.fromInner(exchangeRate.toString()))
+          .times(FixedPointNumber.fromInner(stableCoinPrice.toString()));
+
+        const collateralRatio = collateralUSD.div(debitsUSD);
 
         if (collateralRatio.isNaN()) continue;
+
+        // set precision back stable coin
+        debitsUSD.setPrecision(stableCoinPrecision);
 
         subscriber.next({
           account,
           currencyId: currencyId.toString(),
           debits: position.debit.toString(),
-          debitsUSD: debitsUSD.toString(),
+          debitsUSD: debitsUSD._getInner().toFixed(0),
           collaterals: position.collateral.toString(),
-          collateralRatio: collateralRatio.toString(),
+          collateralRatio: collateralRatio.toString()
         });
       }
     });
