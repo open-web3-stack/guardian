@@ -19,7 +19,7 @@ export default async () => {
     liquidate(data)
       .catch((e) => logger.error(e))
       .finally(() => {
-        ready = false;
+        ready = true;
       });
   });
 
