@@ -12,12 +12,14 @@ export const setupApi = async () => {
   const { nodeEndpoint, SURI, address } = config();
 
   const ws = new WsProvider(nodeEndpoint);
-  const apiManager = await ApiManager.create(options({
-    provider: ws,
-    types: {
-      AccountInfo: 'AccountInfoWithRefCount',
-    }
-  }));
+  const apiManager = await ApiManager.create(
+    options({
+      provider: ws,
+      types: {
+        AccountInfo: 'AccountInfoWithRefCount'
+      }
+    })
+  );
 
   // setup keyring
   const keyring = new Keyring({ type: 'sr25519' });
