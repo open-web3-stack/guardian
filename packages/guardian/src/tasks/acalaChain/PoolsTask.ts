@@ -1,11 +1,11 @@
 import Joi from 'joi';
 import { TradingPair } from '@acala-network/types/interfaces';
+import { FixedPointNumber } from '@acala-network/sdk-core';
 import { take } from 'rxjs/operators';
 import { Pool } from '../../types';
 import Task from '../Task';
 import { AcalaGuardian } from '../../guardians';
 import { autorun$, tokenPrecision } from '../../utils';
-import { FixedPointNumber } from '@acala-network/sdk-core';
 
 export default class PoolsTask extends Task<{ currencyId: any }, Pool> {
   validationSchema() {
@@ -36,11 +36,12 @@ export default class PoolsTask extends Task<{ currencyId: any }, Pool> {
         })
         .filter((p): p is TradingPair => p !== undefined);
     } else {
+      const stableCoin = apiRx.consts.cdpEngine.getStableCurrencyId;
       pairs = (Array.isArray(currencyId) ? currencyId : [currencyId]).map((x) => {
         const newPair =
-          x !== 'ACA'
-            ? (apiRx.createType('TradingPair', [{ token: 'AUSD' }, { token: x }]) as any)
-            : (apiRx.createType('TradingPair', [{ token: x }, { token: 'AUSD' }]) as any);
+          x === 'ACA' || x === 'KAR'
+            ? (apiRx.createType('TradingPair', [{ token: x }, stableCoin]) as any)
+            : (apiRx.createType('TradingPair', [stableCoin, { token: x }]) as any);
 
         return newPair;
       });

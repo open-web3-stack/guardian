@@ -118,9 +118,11 @@ export default class LiquidityPoolTask extends Task<
             currencyId,
             owner: pool.owner.toString(),
             liquidity: pool.balance.toString(),
-            askSpread: askSpread.isSome ? askSpread.toString() : null,
-            bidSpread: bidSpread.isSome ? bidSpread.toString() : null,
-            additionalCollateralRatio: additionalCollateralRatio.isSome ? additionalCollateralRatio.toString() : null,
+            askSpread: askSpread.isSome ? askSpread.toString() : undefined,
+            bidSpread: bidSpread.isSome ? bidSpread.toString() : undefined,
+            additionalCollateralRatio: additionalCollateralRatio.isSome
+              ? additionalCollateralRatio.toString()
+              : undefined,
             enabled: option.syntheticEnabled.toJSON(),
             collateralRatio: collateralRatio.toFixed(),
             syntheticIssuance: synthetic,

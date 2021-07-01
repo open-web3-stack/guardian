@@ -21,6 +21,7 @@ export default class LoansTask extends Task<{ account: string | string[]; curren
 
     const { account, currencyId } = this.arguments;
 
+    const stableCoin = apiRx.consts.cdpEngine.getStableCurrencyId;
     const stableCoinPrice = apiRx.consts.prices.stableCurrencyFixedPrice;
     const collateralCurrencyIds = apiRx.consts.cdpEngine.collateralCurrencyIds;
 
@@ -44,12 +45,13 @@ export default class LoansTask extends Task<{ account: string | string[]; curren
         const position = storage.loans.positions(currencyId.toHex(), account);
         if (!position) continue;
 
-        const stableCoin = apiRx.consts.cdpEngine.getStableCurrencyId;
         const stableCoinPrecision = tokenPrecision(stableCoin.asToken.toString());
         const debitExchangeRate = storage.cdpEngine.debitExchangeRate(currencyId.toHex());
         const exchangeRate = debitExchangeRate?.isSome
           ? debitExchangeRate.unwrap()
           : apiRx.consts.cdpEngine.defaultDebitExchangeRate;
+
+        console.log(debitExchangeRate?.toString());
 
         const collateralPrice = oraclePrice(currencyId);
         if (!collateralPrice) continue;

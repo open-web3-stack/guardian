@@ -19,29 +19,9 @@ export type CollateralAuction = {
   amount: string;
   target: string;
   startTime: number;
-  endTime: number | null;
-  lastBidder: string | null;
-  lastBid: string | null;
-};
-
-export type DebitAuction = {
-  auctionId: number;
-  initialAmount: string;
-  amount: string;
-  fix: string;
-  startTime: number;
-  endTime: number | null;
-  lastBidder: string | null;
-  lastBid: string | null;
-};
-
-export type SurplusAuction = {
-  auctionId: number;
-  amount: string;
-  startTime: number;
-  endTime: number | null;
-  lastBidder: string | null;
-  lastBid: string | null;
+  endTime?: number;
+  lastBidder?: string;
+  lastBid?: string;
 };
 
 export type Event = {
@@ -67,9 +47,9 @@ export type LiquidityPool = {
   currencyId: string;
   owner: string;
   liquidity: string;
-  bidSpread: string | null;
-  askSpread: string | null;
-  additionalCollateralRatio: string | null;
+  bidSpread?: string;
+  askSpread?: string;
+  additionalCollateralRatio?: string;
   enabled: boolean;
   syntheticIssuance: string;
   collateralBalance: string;
