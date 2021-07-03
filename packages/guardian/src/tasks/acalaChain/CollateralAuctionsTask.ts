@@ -1,9 +1,11 @@
 import Joi from 'joi';
+import { Observable } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
+import { autorun, observe, Lambda } from 'mobx';
+import { isEqual } from 'lodash';
 import { CollateralAuction } from '@open-web3/guardian/types';
 import { AcalaGuardian } from '../../guardians';
 import Task from '../Task';
-import { Observable } from 'rxjs';
-import { autorun, observe, Lambda } from 'mobx';
 
 export default class CollateralAuctionsTask extends Task<
   { account: string | string[]; currencyId: string | string[] },
@@ -77,7 +79,7 @@ export default class CollateralAuctionsTask extends Task<
         disposeObserve();
         disposeAutorun();
       };
-    });
+    }).pipe(distinctUntilChanged(isEqual));
   }
 
   private fulfillArguments =

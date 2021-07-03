@@ -2478,15 +2478,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@open-web3/api-mobx@npm:^0.9.4-10":
-  version: 0.9.4-10
-  resolution: "@open-web3/api-mobx@npm:0.9.4-10"
+"@open-web3/api-mobx@npm:^0.9.4-13":
+  version: 0.9.4-13
+  resolution: "@open-web3/api-mobx@npm:0.9.4-13"
   dependencies:
     mobx: ^5.15.7
     mobx-utils: ^5.6.2
   peerDependencies:
     "@polkadot/api": 4.*
-  checksum: a6bbf2d3b44060b1bc9c28c8a1d39b17e302e13186416561f1e17ff97bc9ee5ab5fe39826c97724dfe5670f0f5d50514aa4606c6e27322deb914cafa8c73ce41
+  checksum: 039f053aadf0643dec3eee751655b974233d2a49a77bdfedaa3fabc177478fdedffc6cf00956593e30816e963cab96e67a7094219b8354c81e7cf2d1b9aa4170
   languageName: node
   linkType: hard
 
@@ -2502,14 +2502,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@open-web3/api@npm:^0.9.4-10":
-  version: 0.9.4-10
-  resolution: "@open-web3/api@npm:0.9.4-10"
+"@open-web3/api@npm:^0.9.4-13":
+  version: 0.9.4-13
+  resolution: "@open-web3/api@npm:0.9.4-13"
   dependencies:
-    "@open-web3/util": 0.9.4-10
+    "@open-web3/util": 0.9.4-13
   peerDependencies:
     "@polkadot/api": 4.*
-  checksum: 93bfbc637fad606adc8c1afad186dc47345b4833a25b4180c930b311a1373b2edb44d897c6b5a995c5e57e417021706a603a9d4c0bc448e53ef9bb51bb44b82d
+  checksum: b158b342ea37b30d4f2735d86ae71dd38c212c97cba3279dba95cc6b252de835848c6d30237958bafed98bbca68f3152fe321290a8b2674518a4bd051d8174b8
   languageName: node
   linkType: hard
 
@@ -2660,9 +2660,9 @@ __metadata:
     "@acala-network/types": 0.7.4-20
     "@laminar/api": ^0.3.2-1
     "@laminar/types": ^0.3.2-1
-    "@open-web3/api": ^0.9.4-10
-    "@open-web3/api-mobx": ^0.9.4-10
-    "@open-web3/orml-types": ^0.9.4-10
+    "@open-web3/api": ^0.9.4-13
+    "@open-web3/api-mobx": ^0.9.4-13
+    "@open-web3/orml-types": ^0.9.4-13
     "@polkadot/typegen": ^4.14.1
     "@types/axios": ^0.14.0
     "@types/big.js": ^6.1.1
@@ -2713,10 +2713,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@open-web3/orml-type-definitions@npm:0.9.4-10":
-  version: 0.9.4-10
-  resolution: "@open-web3/orml-type-definitions@npm:0.9.4-10"
-  checksum: 0e0af58e25ffda6da769955d4a22e5a3525cfe5842e3306f6e2949462a061f8848ad51c949f35cb8e01c50eac44e0228cd6695fbc6c5f2f87c325e36a75c6e4b
+"@open-web3/orml-type-definitions@npm:0.9.4-13":
+  version: 0.9.4-13
+  resolution: "@open-web3/orml-type-definitions@npm:0.9.4-13"
+  dependencies:
+    lodash.merge: ^4.6.2
+  checksum: 8a3bf7c643be2d1b02cbf1c2c443465cee6f0f03f1c234c182e29720ea0a42755c408a02d8594c62cf4364dc5ddbb5697fdfcb804098e0e7825e51437ccc3696
   languageName: node
   linkType: hard
 
@@ -2739,15 +2741,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@open-web3/orml-types@npm:^0.9.4-10":
-  version: 0.9.4-10
-  resolution: "@open-web3/orml-types@npm:0.9.4-10"
+"@open-web3/orml-types@npm:^0.9.4-13":
+  version: 0.9.4-13
+  resolution: "@open-web3/orml-types@npm:0.9.4-13"
   dependencies:
-    "@open-web3/orml-type-definitions": 0.9.4-10
+    "@open-web3/orml-type-definitions": 0.9.4-13
   peerDependencies:
     "@polkadot/api": 4.*
     "@polkadot/typegen": 4.*
-  checksum: 0ca9b6f4e1bc19c2d2820138053379da685c4806a8c52b2722fc95033348f446d640b8dea7ecfa4abbc75cf153ed780154db338e372dd2bdb0f537d4ec5b716e
+  checksum: 07aa8ae1d356ce892b61261ed150318723ce509e3ab52a0d0081c1a0764bea9ffd3745d2c331a835c9e88d50f358c8c04f8e83e0f1858d00c404c3d5e5f2eff2
   languageName: node
   linkType: hard
 
@@ -2763,13 +2765,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@open-web3/util@npm:0.9.4-10":
-  version: 0.9.4-10
-  resolution: "@open-web3/util@npm:0.9.4-10"
+"@open-web3/util@npm:0.9.4-13":
+  version: 0.9.4-13
+  resolution: "@open-web3/util@npm:0.9.4-13"
   dependencies:
     "@yarnpkg/lockfile": ^1.1.0
     big.js: ^6.1.1
-  checksum: 1dbe8024d978c4404f8a2499b1fe10da4ceeed3440f3844ca0256288b11e7b69dc560e8fc2734fdaaf4b4a55858a3fedced3b0fb68c8730c8ceb2aad462e5829
+  checksum: a7ca7d9b0ebdab68cb6356e41b3b147624017fbf7e87e1caee80b7cbaddf3935cae437600cc690ff0d5167b57513495369f431e8589a227fc33c2e715cb97a8c
   languageName: node
   linkType: hard
 

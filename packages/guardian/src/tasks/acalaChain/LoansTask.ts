@@ -51,11 +51,8 @@ export default class LoansTask extends Task<{ account: string | string[]; curren
           ? debitExchangeRate.unwrap()
           : apiRx.consts.cdpEngine.defaultDebitExchangeRate;
 
-        console.log(debitExchangeRate?.toString());
-
         const collateralPrice = oraclePrice(currencyId);
         if (!collateralPrice) continue;
-
         const collateralPrecision = tokenPrecision(currencyId.asToken.toString());
 
         const collateral = FixedPointNumber.fromInner(position.collateral.toString(), collateralPrecision);
