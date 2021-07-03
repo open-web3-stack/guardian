@@ -4,7 +4,6 @@ import { cryptoWaitReady } from '@polkadot/util-crypto';
 import { options } from '@laminar/api/laminar/options';
 import { ApiManager } from '@open-web3/api';
 import { LiquidityPool } from '@open-web3/guardian/types';
-import { u64 } from '@polkadot/types/primitive';
 import { config } from './config';
 
 export const setupApi = async () => {
@@ -13,7 +12,14 @@ export const setupApi = async () => {
   const { nodeEndpoint, SURI, address } = config();
 
   const ws = new WsProvider(nodeEndpoint);
-  const apiManager = await ApiManager.create(options({ provider: ws, types: { TransactionPriority: u64 } }));
+  const apiManager = await ApiManager.create(
+    options({
+      provider: ws,
+      types: {
+        AccountInfo: 'AccountInfoWithRefCount'
+      }
+    })
+  );
 
   // setup keyring
   const keyring = new Keyring({ type: 'sr25519' });

@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { Observable, from } from 'rxjs';
-import { flatMap, map } from 'rxjs/operators';
+import { mergeMap, map } from 'rxjs/operators';
 import { ApiRx } from '@polkadot/api';
 import { Codec } from '@polkadot/types/types';
 import { Balance as ORMLBalance } from '@open-web3/orml-types/interfaces';
@@ -13,7 +13,7 @@ export default class BalancesTask extends Task<{ account: string | string[]; cur
   validationSchema() {
     return Joi.object({
       account: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
-      currencyId: Joi.any().required(),
+      currencyId: Joi.any().required()
     }).required();
   }
 
@@ -27,7 +27,7 @@ export default class BalancesTask extends Task<{ account: string | string[]; cur
     );
 
     const pairs = createAccountCurrencyIdPairs(account, currencyIds);
-    return from(pairs).pipe(flatMap(({ account, currencyId }) => this.getBalance(apiRx, account, currencyId)));
+    return from(pairs).pipe(mergeMap(({ account, currencyId }) => this.getBalance(apiRx, account, currencyId)));
   }
 
   getBalance<CurrencyId extends Codec>(api: ApiRx, account: string, currencyId: CurrencyId): Observable<Balance> {
@@ -36,7 +36,7 @@ export default class BalancesTask extends Task<{ account: string | string[]; cur
         return {
           account,
           currencyId: currencyId.toString(),
-          free: result.toString(),
+          free: result.toString()
         };
       })
     );

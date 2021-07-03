@@ -13,5 +13,5 @@ export {
   SubstrateGuardian,
   LaminarGuardian,
   EthereumGuardian,
-  AcalaGuardian,
+  AcalaGuardian
 };

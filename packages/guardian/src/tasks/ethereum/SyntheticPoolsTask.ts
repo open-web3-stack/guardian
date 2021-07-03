@@ -22,7 +22,7 @@ export default class SyntheticPoolsTask extends Task<
         Joi.array()
           .min(1)
           .items(Joi.string().valid(...validTokens))
-      ).required(),
+      ).required()
     }).required();
   }
 
@@ -56,7 +56,7 @@ export default class SyntheticPoolsTask extends Task<
                   { collaterals, minted },
                   liquidationCollateralRatio,
                   _additionalCollateralRatio,
-                  defaultCollateralRatio,
+                  defaultCollateralRatio
                 ] = await Promise.all([
                   poolInterface.methods.owner().call() as Promise<string>,
                   tokenContract.methods.liquidityPoolPositions(poolId).call() as Promise<{
@@ -65,7 +65,7 @@ export default class SyntheticPoolsTask extends Task<
                   }>,
                   tokenContract.methods.liquidationCollateralRatio().call() as Promise<string>,
                   poolInterface.methods.getAdditionalCollateralRatio(tokenId).call() as Promise<string>,
-                  tokenContract.methods.defaultCollateralRatio().call() as Promise<string>,
+                  tokenContract.methods.defaultCollateralRatio().call() as Promise<string>
                 ]);
 
                 const additionalCollateralRatio = Number(fixed18toString(_additionalCollateralRatio));
@@ -82,7 +82,7 @@ export default class SyntheticPoolsTask extends Task<
                   collaterals,
                   minted,
                   collateralRatio,
-                  isSafe,
+                  isSafe
                 };
               })
             )

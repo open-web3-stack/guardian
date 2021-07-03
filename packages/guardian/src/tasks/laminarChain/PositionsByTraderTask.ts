@@ -10,7 +10,7 @@ import Task from '../Task';
 export default class PositionsByTraderTask extends Task<{ account: string | string[] }, Position> {
   validationSchema() {
     return Joi.object({
-      account: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
+      account: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required()
     }).required();
   }
 
@@ -48,12 +48,12 @@ export default class PositionsByTraderTask extends Task<{ account: string | stri
             positionId: positionId.toString(),
             pair: {
               base: position.pair.base.toString(),
-              quote: position.pair.quote.toString(),
+              quote: position.pair.quote.toString()
             },
             leverage: position.leverage.toString(),
             marginHeld: position.marginHeld.toString(),
             accumulatedSwap: swap ? swap.toFixed(0) : '',
-            profit: profit ? profit.toFixed(0) : '',
+            profit: profit ? profit.toFixed(0) : ''
           });
         }
       }

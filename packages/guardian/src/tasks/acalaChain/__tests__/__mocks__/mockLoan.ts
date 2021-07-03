@@ -14,9 +14,9 @@ const MockApiRx = of({
   consts: {
     prices: { stableCurrencyFixedPrice: 1e18 },
     cdpEngine: {
+      getStableCurrencyId: register.createType('CurrencyId', { Token: 'AUSD'}),
       collateralCurrencyIds: register.createType('Vec<CurrencyId>', [
         { token: 'DOT' },
-        { token: 'XBTC' },
         { token: 'LDOT' },
       ]),
     },
@@ -27,11 +27,11 @@ const MockApiRx = of({
 const MockStorage = {
   loans: {
     positions: jest.fn(() =>
-      register.createType('Position', { debit: '1995229380509623964735', collateral: '1000000000000000000' })
+      register.createType('Position', { debit: '2500000000000000', collateral: '10000000000' })
     ),
   },
   cdpEngine: {
-    debitExchangeRate: jest.fn(() => register.createType('Option<ExchangeRate>', '100242367706398103')),
+    debitExchangeRate: jest.fn(() => register.createType('Option<ExchangeRate>', '100000000000000000')),
   },
   acalaOracle: {
     rawValues: {

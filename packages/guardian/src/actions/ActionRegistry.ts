@@ -11,7 +11,7 @@ import script from './script';
 export class ActionRegistry {
   private static actions: { [key: string]: Action<any> } = {
     POST,
-    script,
+    script
   };
 
   /**

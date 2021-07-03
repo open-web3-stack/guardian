@@ -5,13 +5,11 @@
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
   "bin": {
-    "cdp-guardian": "cdp/index.js",
-    "collateral-auction-guardian": "auction/collateral/index.js",
-    "debit-auction-guardian": "auction/debit/index.js",
-    "laminar-synthetic-liquidation-guardian": "laminar-synthetic-liquidation/index.js",
-    "schedule": "schedule/index.js",
-    "staking": "staking/index.js",
-    "surplus-auction-guardian": "auction/surplus/index.js"
+    "cdp": "scripts/cdp.js",
+    "collateral-auction": "scripts/collateral-auction.js",
+    "laminar-synthetic-liquidation": "scripts/laminar-synthetic-liquidation.js",
+    "schedule": "scripts/schedule.js",
+    "staking": "scripts/staking.js"
   },
   "publishConfig": {
     "access": "public",
@@ -23,24 +21,23 @@
   },
   "homepage": "https://github.com/open-web3-stack/guardian",
   "dependencies": {
-    "@open-web3/api": "^0.8.2-9",
+    "@open-web3/api": "^0.9.4-9",
     "@open-web3/guardian": "^0.4.2-5",
     "@open-web3/guardian-cli": "^0.4.2-5",
-    "@open-web3/util": "^0.8.2-9",
-    "@types/nodemailer": "^6.4.0",
-    "dotenv": "^8.2.0",
-    "nodemailer": "^6.4.17"
+    "@open-web3/util": "^0.9.4-9",
+    "@types/nodemailer": "^6.4.2",
+    "dotenv": "^10.0.0",
+    "nodemailer": "^6.6.2"
   },
   "devDependencies": {
-    "ts-node-dev": "^1.0.0-pre.58"
+    "ts-node-dev": "^1.1.6"
   },
   "scripts": {
-    "dev:collateral-auction-guardian": "tsnd -r dotenv/config --respawn --transpile-only src/auction/collateral/index.ts dotenv_config_path=.env.auction",
-    "dev:debit-auction-guardian": "tsnd -r dotenv/config --respawn --transpile-only src/auction/debit/index.ts dotenv_config_path=.env.auction",
-    "dev:surplus-auction-guardian": "tsnd -r dotenv/config --respawn --transpile-only src/auction/surplus/index.ts dotenv_config_path=.env.auction",
-    "dev:laminar-synthetic-liquidation-guardian": "tsnd -r dotenv/config --respawn --transpile-only src/laminar-synthetic-liquidation/index.ts dotenv_config_path=.env.laminar-synthetic-liquidation",
-    "dev:cdp-guardian": "tsnd -r dotenv/config --respawn --transpile-only src/cdp/index.ts dotenv_config_path=.env.cdp",
-    "dev:schedule": "tsnd -r dotenv/config --respawn --transpile-only src/schedule/index.ts dotenv_config_path=.env.schedule",
-    "dev:staking": "tsnd -r dotenv/config --respawn --transpile-only src/staking/index.ts dotenv_config_path=.env.staking"
+    "dev:collateral-auction": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/collateral-auction.ts dotenv_config_path=.env.auction",
+    "dev:laminar-synthetic-liquidation": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/laminar-synthetic-liquidation.ts dotenv_config_path=.env.laminar-synthetic-liquidation",
+    "dev:cdp": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/cdp.ts dotenv_config_path=.env.cdp",
+    "dev:schedule": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/schedule.ts dotenv_config_path=.env.schedule",
+    "dev:staking": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/staking.ts dotenv_config_path=.env.staking",
+    "dev:simulate-cdp": "tsnd --transpile-only src/scripts/simulate-cdp.ts"
   }
 }

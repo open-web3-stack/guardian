@@ -9,8 +9,8 @@
   ],
   "resolutions": {
     "typescript": "^4.0.5",
-    "@polkadot/api": "^3.6.4",
-    "@polkadot/types": "^3.6.4"
+    "@polkadot/api": "^4.14.1",
+    "@polkadot/types": "^4.14.1"
   },
   "homepage": "https://github.com/open-web3-stack/guardian",
   "scripts": {
@@ -19,17 +19,18 @@
     "lint": "polkadot-dev-run-lint",
     "clean": "polkadot-dev-clean-build",
     "postinstall": "polkadot-dev-yarn-only",
-    "test": "jest --runInBand --testPathIgnorePatterns e2e"
+    "test": "yarn test:e2e --testPathIgnorePatterns e2e",
+    "test:e2e": "polkadot-dev-run-test --runInBand --verbose"
   },
   "devDependencies": {
-    "@babel/core": "^7.8.4",
-    "@babel/register": "^7.8.4",
-    "@babel/runtime": "^7.8.4",
-    "@open-web3/dev-config": "^0.1.10",
-    "@polkadot/api": "^3.6.4",
-    "@types/jest": "^25.2.1",
-    "jest": "^25.5.4",
-    "ts-node": "^8.6.2",
-    "typescript": "^4.0.5"
+    "@acala-network/e2e": "^0.1.19",
+    "@babel/core": "^7.14.6",
+    "@babel/register": "^7.14.5",
+    "@babel/runtime": "^7.14.6",
+    "@open-web3/dev-config": "^0.1.13",
+    "@types/jest": "^26.0.23",
+    "jest": "^27.0.4",
+    "ts-node": "^10.0.0",
+    "typescript": "^4.3.0"
   }
 }

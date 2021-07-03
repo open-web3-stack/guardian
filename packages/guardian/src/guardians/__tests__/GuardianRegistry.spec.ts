@@ -1,9 +1,11 @@
 import Joi from 'joi';
 import { ApiRx, WsProvider } from '@polkadot/api';
+import { Observable } from 'rxjs';
 import GuardianRegistry from '../GuardianRegistry';
-import { LaminarGuardian, AcalaGuardian, Guardian } from '../';
+import { LaminarGuardian, AcalaGuardian, Guardian } from '..';
 import { LaminarGuardianConfig, AcalaGuardianConfig, GuardianConfig, BaseSubstrateGuardianConfig } from '../../types';
 import EventsTask from '../../tasks/substrate/EventsTask';
+import Task from '../../tasks/Task';
 
 const laminarConfig: LaminarGuardianConfig = {
   networkType: 'laminarChain',
@@ -45,10 +47,22 @@ const customConfig: GuardianConfig = {
   },
 };
 
+class BarTask extends Task<{name: string}, boolean> {
+  validationSchema() {
+    return Joi.any();
+  }
+
+  async start(guardian: Guardian) {
+    const {} = await guardian.isReady();
+    return new Observable<boolean>();
+  }
+}
+
 class CustomGuardian extends Guardian<BaseSubstrateGuardianConfig> {
   tasks() {
     return {
       'system.event': EventsTask,
+      'foo.bar': BarTask,
     };
   }
 

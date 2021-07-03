@@ -10,11 +10,11 @@ import { RPCRefreshPeriod } from '../../constants';
 import { Price } from '../../types';
 import Task from '../Task';
 
-export default class PricesTask<CurrencyId extends Codec> extends Task<{ key: any; period: number }, Price> {
+export default class PricesTask extends Task<{ key: any; period: number }, Price> {
   validationSchema() {
     return Joi.object({
       key: Joi.any().required(),
-      period: Joi.number().default(RPCRefreshPeriod),
+      period: Joi.number().default(RPCRefreshPeriod)
     }).required();
   }
 
@@ -28,17 +28,15 @@ export default class PricesTask<CurrencyId extends Codec> extends Task<{ key: an
         ['Aggregated'],
         period
       ).pipe(
-        mergeMap(
-          (result): Observable<Price> => {
-            return from(result).pipe(
-              filter(([, item]) => item.isSome),
-              map(([key, item]) => ({
-                key: key.toString(),
-                value: getValueFromTimestampValue(item.unwrap()).toString(),
-              }))
-            );
-          }
-        )
+        mergeMap((result): Observable<Price> => {
+          return from(result).pipe(
+            filter(([, item]) => item.isSome),
+            map(([key, item]) => ({
+              key: key.toString(),
+              value: getValueFromTimestampValue(item.unwrap()).toString()
+            }))
+          );
+        })
       );
     }
 

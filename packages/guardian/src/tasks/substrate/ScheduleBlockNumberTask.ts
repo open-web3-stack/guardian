@@ -16,7 +16,7 @@ export default class ScheduleBlockNumberTask extends Task<
     return Joi.object({
       startNumber: Joi.number().optional(),
       step: Joi.number().default(1).optional(),
-      finalized: Joi.boolean().default(false).optional(),
+      finalized: Joi.boolean().default(false).optional()
     }).required();
   }
 
@@ -50,7 +50,7 @@ export default class ScheduleBlockNumberTask extends Task<
       map((number) => {
         return {
           current: number,
-          next: number + step,
+          next: number + step
         };
       })
     );

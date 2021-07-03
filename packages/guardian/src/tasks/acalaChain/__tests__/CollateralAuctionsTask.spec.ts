@@ -13,7 +13,7 @@ describe('CollateralAuctionsTask', () => {
 
   const task = new CollateralAuctionsTask({
     account: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-    currencyId: 'ACA',
+    currencyId: 'RENBTC',
   });
 
   it('works with mock', async (done) => {
@@ -22,7 +22,7 @@ describe('CollateralAuctionsTask', () => {
     output$.subscribe((result) => {
       expect(result).toStrictEqual({
         account: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-        currencyId: 'ACA',
+        currencyId: 'RENBTC',
         auctionId: 0,
         initialAmount: '100',
         amount: '100',

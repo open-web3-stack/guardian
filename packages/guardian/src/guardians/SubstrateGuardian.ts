@@ -15,7 +15,7 @@ export default class SubstrateGuardian extends BaseSubstrateGuardian<SubstrateGu
   validationSchema() {
     return Joi.object({
       networkType: Joi.valid('substrateChain').required(),
-      nodeEndpoint: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
+      nodeEndpoint: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required()
     }).required();
   }
 }

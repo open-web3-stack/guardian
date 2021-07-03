@@ -2,7 +2,7 @@ import { CurrencyId } from '@laminar/types/interfaces';
 import PricesTask from '../../PricesTask';
 import { LaminarGuardian } from '../../../../guardians';
 
-describe('PricesTask', async () => {
+describe('PricesTask', () => {
   jest.setTimeout(30_000);
 
   const guardian = new LaminarGuardian('laminar-guardian', {
@@ -14,7 +14,7 @@ describe('PricesTask', async () => {
 
   it('get oracle value', async (done) => {
     const task = new PricesTask<CurrencyId>({ key: 'FEUR', period: 1000 });
-    const output$ = await task.start(guardian);
+    const output$ = await task.start(guardian as any);
     output$.subscribe((output) => {
       console.log(output);
       expect(output).toBeTruthy();
@@ -24,7 +24,7 @@ describe('PricesTask', async () => {
 
   it('get oracle values [FEUR, FJPY]', async (done) => {
     const task = new PricesTask<CurrencyId>({ key: ['FEUR', 'FJPY'], period: 1000 });
-    const output$ = await task.start(guardian);
+    const output$ = await task.start(guardian as any);
     output$.subscribe((output) => {
       console.log(output);
       expect(output).toBeTruthy();
@@ -34,7 +34,7 @@ describe('PricesTask', async () => {
 
   it('get all oracle values', async (done) => {
     const task = new PricesTask<CurrencyId>({ key: 'all', period: 1000 });
-    const output$ = await task.start(guardian);
+    const output$ = await task.start(guardian as any);
     output$.subscribe((output) => {
       console.log(output);
       expect(output).toBeTruthy();

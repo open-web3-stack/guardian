@@ -7,13 +7,13 @@ describe('PoolsTask e2e', () => {
   const guardian = new AcalaGuardian('acala-guardian', {
     network: 'dev',
     networkType: 'acalaChain',
-    nodeEndpoint: 'wss://testnet-node-1.acala.laminar.one/ws',
+    nodeEndpoint: 'wss://acala-mandala.api.onfinality.io/public-ws',
     monitors: {},
   });
 
   it('works with currencyId', async (done) => {
     const loans = new PoolsTask({
-      currencyId: { token: 'DOT' },
+      currencyId: 'DOT',
     });
 
     const output$ = await loans.start(guardian);
@@ -27,7 +27,7 @@ describe('PoolsTask e2e', () => {
 
   it('works with currencyIds', async (done) => {
     const loans = new PoolsTask({
-      currencyId: [{ token: 'ACA' }],
+      currencyId: ['ACA', 'DOT'],
     });
 
     const output$ = await loans.start(guardian);

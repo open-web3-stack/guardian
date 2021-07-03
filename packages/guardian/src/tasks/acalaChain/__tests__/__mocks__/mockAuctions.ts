@@ -15,37 +15,19 @@ const AUCTION = new Option(register, 'AuctionInfo', {
   end: 125,
 });
 
-const COLLATERAL_AUCTION = new Option(register, 'CollateralAuctionItem', {
+const MOCK_COLLATERAL_AUCTION = new Option(register, 'CollateralAuctionItem', {
   refundRecipient: '5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQY',
-  currencyId: { token: 'ACA' },
+  currencyId: { token: 'RENBTC' },
   initialAmount: 100,
   amount: 100,
   target: 20,
   startTime: 20,
 });
 
-const DEBIT_AUCTION = new Option(register, 'DebitAuctionItem', {
-  initialAmount: 100,
-  amount: 100,
-  fix: 20,
-  startTime: 1,
-});
-
-const SURPLUS_AUCTION = new Option(register, 'SurplusAuctionItem', {
-  amount: 100,
-  startTime: 1,
-});
-
 const MockStorage = {
   auctionManager: {
     collateralAuctions: {
-      entries: jest.fn(() => observable.map({ 0: COLLATERAL_AUCTION })),
-    },
-    debitAuctions: {
-      entries: jest.fn(() => observable.map({ 0: DEBIT_AUCTION })),
-    },
-    surplusAuctions: {
-      entries: jest.fn(() => observable.map({ 0: SURPLUS_AUCTION })),
+      entries: jest.fn(() => observable.map({ 0: MOCK_COLLATERAL_AUCTION })),
     },
   },
   auction: {
@@ -57,7 +39,25 @@ jest.mock('@open-web3/api-mobx', () => ({
   createStorage: jest.fn(() => MockStorage),
 }));
 
-const MockApiRx = of({});
+jest.mock("mobx", () => {
+  const mobx = jest.requireActual("mobx");
+  return {
+      ...mobx,
+      observe: jest.fn((_, cb) => cb(({  type: 'add', name: '0', newValue: MOCK_COLLATERAL_AUCTION })))
+  };
+});
+
+const MockApiRx = of({
+  consts: {
+    cdpEngine: {
+      collateralCurrencyIds: [
+        { Token: 'DOT' },
+        { Token: 'LDOT' },
+        { Token: 'RENBTC' }
+      ].map(x => register.createType('CurrencyId', x))
+    }
+  }
+});
 
 jest.mock('@polkadot/api', () => ({
   WsProvider: jest.fn(() => {}),

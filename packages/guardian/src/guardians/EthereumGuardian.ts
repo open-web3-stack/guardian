@@ -20,7 +20,7 @@ export default class EthereumGuardian extends Guardian<EthereumGuardianConfig, {
     return {
       'synthetic.pools': SyntheticPoolsTask,
       'margin.pools': MarginPoolsTask,
-      'margin.account': MarginAccountTask,
+      'margin.account': MarginAccountTask
     };
   }
 
@@ -33,7 +33,7 @@ export default class EthereumGuardian extends Guardian<EthereumGuardianConfig, {
     return Joi.object({
       networkType: Joi.valid('ethereum').required(),
       network: Joi.valid(...ethereumNetwork).required(),
-      nodeEndpoint: Joi.string().default(defaultNodeEndpoint),
+      nodeEndpoint: Joi.string().default(defaultNodeEndpoint)
     }).required();
   }
 }

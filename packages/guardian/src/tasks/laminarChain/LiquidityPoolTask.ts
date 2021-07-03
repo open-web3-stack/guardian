@@ -69,7 +69,7 @@ export default class LiquidityPoolTask extends Task<
   validationSchema() {
     return Joi.object({
       poolId: Joi.alt(Joi.number(), Joi.array().min(1).items(Joi.number()), Joi.valid('all')).required(),
-      currencyId: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
+      currencyId: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required()
     }).required();
   }
 
@@ -118,14 +118,16 @@ export default class LiquidityPoolTask extends Task<
             currencyId,
             owner: pool.owner.toString(),
             liquidity: pool.balance.toString(),
-            askSpread: askSpread.isSome ? askSpread.toString() : null,
-            bidSpread: bidSpread.isSome ? bidSpread.toString() : null,
-            additionalCollateralRatio: additionalCollateralRatio.isSome ? additionalCollateralRatio.toString() : null,
+            askSpread: askSpread.isSome ? askSpread.toString() : undefined,
+            bidSpread: bidSpread.isSome ? bidSpread.toString() : undefined,
+            additionalCollateralRatio: additionalCollateralRatio.isSome
+              ? additionalCollateralRatio.toString()
+              : undefined,
             enabled: option.syntheticEnabled.toJSON(),
             collateralRatio: collateralRatio.toFixed(),
             syntheticIssuance: synthetic,
             collateralBalance: collateral,
-            isSafe,
+            isSafe
           });
         }
       }

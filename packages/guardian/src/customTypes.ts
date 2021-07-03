@@ -1,4 +1,4 @@
-import { i128, u128, u64 } from '@polkadot/types/primitive';
+import { i128, u128 } from '@polkadot/types/primitive';
 
 class FixedI128 extends i128 {
   toHuman() {
@@ -20,4 +20,4 @@ class Balance extends u128 {
   }
 }
 
-export const customTypes = { FixedI128, Balance, TransactionPriority: u64 };
+export const customTypes = { FixedI128, Balance };

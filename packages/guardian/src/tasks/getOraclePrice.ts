@@ -14,13 +14,15 @@ const getOraclePrice = <CurrencyId extends Codec>(
   oracle: LaminarStorageType['laminarOracle'] | AcalaStorageType['acalaOracle']
 ) =>
   computedFn((tokenId: CurrencyId) => {
-    if (['{"Token":"AUSD"}', 'AUSD'].includes(tokenId.toString())) return 1e18;
+    const tokenIdStr = tokenId.toString();
+    if (tokenIdStr.includes('AUSD')) return 1e18;
+    if (tokenIdStr.includes('KUSD')) return 1e18;
     const prices: number[] = [];
     const rawValues = oracle.rawValues.allEntries();
 
     for (const rawValue of rawValues.values()) {
       for (const [key, price] of rawValue.entries()) {
-        if (key === tokenId.toString() && price.isSome) {
+        if (key === tokenIdStr && price.isSome) {
           prices.push(Number(price.unwrap().value.toString()));
         }
       }

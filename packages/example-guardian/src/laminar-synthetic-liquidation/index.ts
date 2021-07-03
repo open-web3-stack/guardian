@@ -1,11 +1,9 @@
-#!/usr/bin/env node
-
 import { LiquidityPool } from '@open-web3/guardian/types';
 import { ActionRegistry } from '@open-web3/guardian';
 import { setupApi } from './setupApi';
 import { setDefaultConfig, logger } from '../utils';
 
-const run = async () => {
+export default async () => {
   setDefaultConfig('laminar-synthetic-liquidation-guardian.yml');
 
   const { liquidate } = await setupApi();
@@ -21,20 +19,10 @@ const run = async () => {
     liquidate(data)
       .catch((e) => logger.error(e))
       .finally(() => {
-        ready = false;
+        ready = true;
       });
   });
 
   // start guardian
   require('@open-web3/guardian-cli');
 };
-
-export default run;
-
-// if called directly
-if (require.main === module) {
-  run().catch((error) => {
-    logger.error(error);
-    process.exit(-1);
-  });
-}

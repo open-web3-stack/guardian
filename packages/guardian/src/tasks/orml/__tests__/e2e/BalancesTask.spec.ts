@@ -17,7 +17,7 @@ describe('BalancesTask with laminarChain', () => {
   });
 
   it('get laminar balance', async (done) => {
-    const output$ = await task.start(guardian);
+    const output$ = await task.start(guardian as any);
 
     output$.subscribe((output) => {
       console.log(JSON.stringify(output, null, 2));
@@ -27,7 +27,7 @@ describe('BalancesTask with laminarChain', () => {
   });
 });
 
-describe('BalancesTask with acalaChain', async () => {
+describe('BalancesTask with acalaChain', () => {
   jest.setTimeout(60_000);
 
   const task = new BalancesTask({
@@ -40,13 +40,13 @@ describe('BalancesTask with acalaChain', async () => {
     guardian = new AcalaGuardian('acala-guardian', {
       network: 'dev',
       networkType: 'acalaChain',
-      nodeEndpoint: 'wss://testnet-node-1.acala.laminar.one/ws',
+      nodeEndpoint: 'wss://acala-mandala.api.onfinality.io/public-ws',
       monitors: {},
     });
   });
 
   it('get acala balance', async (done) => {
-    const output$ = await task.start(guardian);
+    const output$ = await task.start(guardian as any);
 
     output$.subscribe((output) => {
       console.log(output);

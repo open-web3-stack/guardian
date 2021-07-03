@@ -17,7 +17,7 @@ export default abstract class BaseSubstrateGuardian<
       'schedule.blockNumber': ScheduleBlockNumberTask,
       'system.events': EventsTask,
       'system.storage': StorageTask,
-      'system.accounts': AccountsTask,
+      'system.accounts': AccountsTask
     };
   }
 }

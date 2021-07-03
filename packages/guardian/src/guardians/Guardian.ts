@@ -5,7 +5,8 @@ import Monitor from '../Monitor';
 import { logger } from '../utils';
 
 export default abstract class Guardian<Config extends GuardianConfig = GuardianConfig, Props = Record<string, unknown>>
-  implements IGuardian {
+  implements IGuardian
+{
   public readonly monitors: IMonitor[] = [];
 
   // config validation schema

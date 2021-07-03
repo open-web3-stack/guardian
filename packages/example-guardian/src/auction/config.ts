@@ -12,13 +12,13 @@ const read = () => {
   const nodeEndpoint = config.guardians['acala-guardian'].nodeEndpoint || getEnv('NODE_ENDPOINT'); // 'ws://localhost:9944';
   const address = getEnv('ADDRESS'); // '5GHYezbSCbiJcU1iCwN2YMnSMohDSZdudfZyEAYGneyx4xp3'
   const SURI = getEnv('SURI'); // //Charlie
-  const margin = getEnv('MARGIN'); // 0.1
+  const margin = parseFloat(getEnv('MARGIN')); // 0.1
 
   return {
     nodeEndpoint,
     address,
     SURI,
-    margin,
+    margin
   };
 };
 

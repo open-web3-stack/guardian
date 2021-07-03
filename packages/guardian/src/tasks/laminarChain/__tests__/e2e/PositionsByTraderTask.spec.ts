@@ -11,7 +11,7 @@ describe('PositionsByTraderTask', () => {
 
   it('works with account', async (done) => {
     const task = new PositionsByTraderTask({
-      account: '5FvX1agFoW3xfcj14PrKpjBE5An2FDYkRbUxoEKNsqdi2fB8',
+      account: '5FySxAHYXDzgDY8BTVnbZ6dygkXJwG27pKmgCLeSRSFEG2dy',
     });
 
     const output$ = await task.start(guardian);
@@ -25,7 +25,7 @@ describe('PositionsByTraderTask', () => {
 
   it('works with multiple accounts', async (done) => {
     const task = new PositionsByTraderTask({
-      account: ['5FvX1agFoW3xfcj14PrKpjBE5An2FDYkRbUxoEKNsqdi2fB8'],
+      account: ['5FySxAHYXDzgDY8BTVnbZ6dygkXJwG27pKmgCLeSRSFEG2dy'],
     });
 
     const output$ = await task.start(guardian);

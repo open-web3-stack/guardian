@@ -7,7 +7,7 @@ const { config: configPath } = require('yargs')
   .usage('$0 [args]')
   .option('config', {
     type: 'string',
-    describe: 'YAML config file',
+    describe: 'YAML config file'
   })
   .help()
   .demandOption('config').argv;

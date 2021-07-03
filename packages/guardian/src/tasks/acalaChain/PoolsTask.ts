@@ -1,17 +1,16 @@
 import Joi from 'joi';
 import { TradingPair } from '@acala-network/types/interfaces';
-import { Fixed18 } from '@acala-network/app-util';
+import { FixedPointNumber } from '@acala-network/sdk-core';
 import { take } from 'rxjs/operators';
 import { Pool } from '../../types';
 import Task from '../Task';
 import { AcalaGuardian } from '../../guardians';
-import { autorun$ } from '../../utils';
-import { values } from 'lodash';
+import { autorun$, tokenPrecision } from '../../utils';
 
 export default class PoolsTask extends Task<{ currencyId: any }, Pool> {
   validationSchema() {
     return Joi.object({
-      currencyId: Joi.any().required(),
+      currencyId: Joi.any().required()
     }).required();
   }
 
@@ -37,11 +36,12 @@ export default class PoolsTask extends Task<{ currencyId: any }, Pool> {
         })
         .filter((p): p is TradingPair => p !== undefined);
     } else {
+      const stableCoin = apiRx.consts.cdpEngine.getStableCurrencyId;
       pairs = (Array.isArray(currencyId) ? currencyId : [currencyId]).map((x) => {
         const newPair =
-          x !== 'ACA'
-            ? (apiRx.createType('TradingPair', [{ token: 'AUSD' }, { token: x }]) as any)
-            : (apiRx.createType('TradingPair', [{ token: x }, { token: 'AUSD' }]) as any);
+          x === 'ACA' || x === 'KAR'
+            ? (apiRx.createType('TradingPair', [{ token: x }, stableCoin]) as any)
+            : (apiRx.createType('TradingPair', [stableCoin, { token: x }]) as any);
 
         return newPair;
       });
@@ -52,14 +52,17 @@ export default class PoolsTask extends Task<{ currencyId: any }, Pool> {
         const pool = storage.dex.liquidityPool(pair.toHex() as any);
         if (!pool) continue;
 
-        const [other, base] = pool;
-        const price = Fixed18.fromRational(base.toString(), other.toString()).innerToString();
-
+        const [baseCurrency, otherCurrency] = pair;
+        const [base, other] = pool;
+        const _other = FixedPointNumber.fromInner(other.toString(), tokenPrecision(baseCurrency.asToken.toString()));
+        const _base = FixedPointNumber.fromInner(base.toString(), tokenPrecision(otherCurrency.asToken.toString()));
+        const price = _other.div(_base);
+        price.setPrecision(18);
         subscriber.next({
           currencyId: pair.toString(),
-          price,
+          price: price._getInner().toString(),
           baseLiquidity: base.toString(),
-          otherLiquidity: other.toString(),
+          otherLiquidity: other.toString()
         });
       }
     });
