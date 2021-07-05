@@ -41,9 +41,10 @@ export default async () => {
 
   ActionRegistry.register('stakingReward', (_, data) => {
     const config = getConfig();
-
-    if (config.address === data.args.arg1) {
-      sendEmail(data.args.arg2);
+    const stash = data.args['stash'] || data.args['0'];
+    const amount = data.args['amount'] || data.args['1'];
+    if (config.address === stash) {
+      sendEmail(amount);
     }
   });
 
