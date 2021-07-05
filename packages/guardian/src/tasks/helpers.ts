@@ -93,7 +93,7 @@ export const getEventParams = (event: Event): string[] => {
         // try different regex [ key1, key2 ]
         results = /\[(.*?)\]/gm.exec(doc);
       }
-      return results ? results.length > 1 ? results[1].split(',').map(x => x.trim()) : [] : [];
+      return results ? (results.length > 1 ? results[1].split(',').map((x) => x.trim()) : []) : [];
     });
 
   if (args.length > 0) {
