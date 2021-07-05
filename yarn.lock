@@ -2481,7 +2481,9 @@ __metadata:
   resolution: "@open-web3/guardian-cli@workspace:packages/guardian-cli"
   dependencies:
     "@open-web3/guardian": 0.4.2-8
+    "@types/js-yaml": ^4.0.1
     js-yaml: ^4.1.0
+    yargs: ^17.0.1
   bin:
     guardian-cli: cli.js
   languageName: unknown
@@ -3160,6 +3162,13 @@ __metadata:
     jest-diff: ^26.0.0
     pretty-format: ^26.0.0
   checksum: a015676b78bdc51be6f6315acef10d9106ea8064e3e49143bca3c75b834b61285b45c5f5ccfd049a80107f1e2869a9183cdb5be85816c073ea8dd05852fafdc6
+  languageName: node
+  linkType: hard
+
+"@types/js-yaml@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "@types/js-yaml@npm:4.0.1"
+  checksum: fd8985289c713e3b2a494d6c243139c94bdda856af60346cf0c0da25bd6289e0165d367e623202b8cdfab7cef73a424a183282063beb0c0823d152dbec6d4959
   languageName: node
   linkType: hard
 

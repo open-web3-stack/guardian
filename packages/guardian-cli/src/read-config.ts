@@ -13,5 +13,5 @@ export default (path: string) => {
   const configStr = data.replace(regex, '');
   // replace variables
   const config = template(configStr)(process.env);
-  return yaml.safeLoad(config);
+  return yaml.load(config);
 };
