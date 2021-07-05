@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-import guardian, { readConfig } from '@open-web3/guardian';
+import guardian from '@open-web3/guardian';
+import readConfig from './read-config';
 
 const { config: configPath } = require('yargs')
   .scriptName('guardian')
@@ -15,4 +16,4 @@ const { config: configPath } = require('yargs')
 const config = readConfig(configPath);
 
 // run guardian
-guardian(config);
+guardian(config as any);

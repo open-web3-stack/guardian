@@ -1,4 +1,4 @@
-import { readConfig } from '@open-web3/guardian';
+import { readConfig } from '@open-web3/guardian-cli';
 import dotenv from 'dotenv';
 import { getEnv } from '../getEnv';
 
@@ -9,7 +9,12 @@ const read = () => {
 
   const config = readConfig(configPath);
 
-  const nodeEndpoint = config.guardians['acala-guardian'].nodeEndpoint || getEnv('NODE_ENDPOINT'); // 'ws://localhost:9944';
+  let nodeEndpoint: string; // 'ws://localhost:9944';
+  if (config && config['guardians']) {
+    nodeEndpoint = config['guardians']['acala-guardian'].nodeEndpoint;
+  } else {
+    nodeEndpoint = getEnv('NODE_ENDPOINT');
+  }
   const address = getEnv('ADDRESS'); // '5GHYezbSCbiJcU1iCwN2YMnSMohDSZdudfZyEAYGneyx4xp3'
   const SURI = getEnv('SURI'); // //Charlie
   const margin = parseFloat(getEnv('MARGIN')); // 0.1
