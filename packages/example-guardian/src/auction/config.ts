@@ -1,6 +1,6 @@
-import { readConfig } from '@open-web3/guardian-cli';
 import dotenv from 'dotenv';
 import { getEnv } from '../getEnv';
+import readConfig from './read-config';
 
 dotenv.config();
 

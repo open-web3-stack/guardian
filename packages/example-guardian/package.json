@@ -37,7 +37,6 @@
     "dev:laminar-synthetic-liquidation": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/laminar-synthetic-liquidation.ts dotenv_config_path=.env.laminar-synthetic-liquidation",
     "dev:cdp": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/cdp.ts dotenv_config_path=.env.cdp",
     "dev:schedule": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/schedule.ts dotenv_config_path=.env.schedule",
-    "dev:staking": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/staking.ts dotenv_config_path=.env.staking",
-    "dev:simulate-cdp": "tsnd --transpile-only src/scripts/simulate-cdp.ts"
+    "dev:staking": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/staking.ts dotenv_config_path=.env.staking"
   }
 }
