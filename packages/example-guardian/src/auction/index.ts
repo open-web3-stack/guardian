@@ -1,11 +1,10 @@
 import Big from 'big.js';
 import { Subject } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
-import { ActionRegistry } from '@open-web3/guardian';
+import { ActionRegistry, utils } from '@open-web3/guardian';
 import { CollateralAuction, Event } from '@open-web3/guardian/types';
 import { FixedPointNumber } from '@acala-network/sdk-core';
 import { OrmlAccountData, Balance } from '@open-web3/orml-types/interfaces';
-import { tokenPrecision } from '../../../guardian/src/utils';
 import config from './config';
 import setupAcalaApi from '../setupAcalaApi';
 import { setDefaultConfig, logger } from '../utils';
@@ -28,7 +27,7 @@ export default async () => {
     const balance = await apiManager.api.query.tokens.accounts<OrmlAccountData>(address, stableCoin);
 
     // collateral token precision
-    const precision = tokenPrecision(auction.currencyId);
+    const precision = utils.tokenPrecision(auction.currencyId);
 
     // calculate dex price
     const baseCurrency = apiManager.api.createType('CurrencyId', stableCoin);
@@ -39,7 +38,7 @@ export default async () => {
     ]);
 
     const _other = FixedPointNumber.fromInner(other.toString(), precision);
-    const _base = FixedPointNumber.fromInner(base.toString(), tokenPrecision(stableCoin.asToken.toString()));
+    const _base = FixedPointNumber.fromInner(base.toString(), utils.tokenPrecision(stableCoin.asToken.toString()));
     if (_other.isZero()) return;
     const price = _base.div(_other);
     price.setPrecision(18);
