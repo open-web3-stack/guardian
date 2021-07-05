@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { flatMap, filter } from 'rxjs/operators';
+import { mergeMap, filter } from 'rxjs/operators';
 import BaseSubstrateGuardian from '../../guardians/BaseSubstrateGuardian';
 import Task from '../Task';
 import { Event } from '../../types';
@@ -18,14 +18,14 @@ export default class EventsTask extends Task<{ name: string | string[] }, Event>
     const { name } = this.arguments;
 
     return apiRx.query.system.events().pipe(
-      flatMap((records) => {
+      mergeMap((records) => {
         return records.map(({ event }) => {
           const params = getEventParams(event);
           const { section, method, data } = event;
           const name = `${section}.${method}`;
           const args = {};
           data.forEach((value, index) => {
-            const key = params[index] || `arg${index + 1}`;
+            const key = params[index] || index.toString();
             args[key] = value.toJSON();
           });
           return { name, args };

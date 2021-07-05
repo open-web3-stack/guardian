@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { from } from 'rxjs';
-import { flatMap, map } from 'rxjs/operators';
+import { mergeMap, map } from 'rxjs/operators';
 import { AccountInfo } from '@polkadot/types/interfaces';
 import Task from '../Task';
 import BaseSubstrateGuardian from '../../guardians/BaseSubstrateGuardian';
@@ -40,6 +40,6 @@ export default class AccountsTask extends Task<{ account: string | string[] }, O
     const { account } = this.arguments;
     const accoutns = Array.isArray(account) ? account : [account];
 
-    return from(accoutns).pipe(flatMap((account) => apiRx.query.system.account(account).pipe(map(mapResult(account)))));
+    return from(accoutns).pipe(mergeMap((account) => apiRx.query.system.account(account).pipe(map(mapResult(account)))));
   }
 }

@@ -55,8 +55,8 @@ export default async () => {
   };
 
   const onAuctionDealt = async (event: Event) => {
-    const currencyId = event.args['collateral_type'] || event.args['arg2'];
-    const amount = event.args['collateral_amount'] || event.args['arg3'];
+    const currencyId = event.args['collateral_type'] || event.args['1'];
+    const amount = event.args['collateral_amount'] || event.args['2'];
 
     const tx = apiManager.api.tx.dex.swapWithExactSupply([currencyId, stableCoin], amount, 0);
     await apiManager.signAndSend(tx, { account: keyringPair }).inBlock;

@@ -83,22 +83,21 @@ export const getOraclePrice =
   };
 
 export const getEventParams = (event: Event): string[] => {
-  const argsStr = event.meta.documentation
+  const args = event.meta.documentation
     .reverse()
     .map((i) => i.toString())
     .map((doc) => {
-      const results = /\[(\w?,?\s?)+\]/gm.exec(doc);
-      return results && results.length > 0 && results[0];
-    })
-    .filter((i): i is string => !!i);
+      // try regex \[ key1, key2 \]
+      let results = /\\\[(.*?)\\\]/gm.exec(doc);
+      if (!results) {
+        // try different regex [ key1, key2 ]
+        results = /\[(.*?)\]/gm.exec(doc);
+      }
+      return results ? results.length > 1 ? results[1].split(',').map(x => x.trim()) : [] : [];
+    });
 
-  if (argsStr.length > 0) {
-    return argsStr[0]
-      .slice(1)
-      .slice(0, -1)
-      .split(',')
-      .map((i) => i.trim())
-      .filter((i) => i !== '');
+  if (args.length > 0) {
+    return args[0];
   }
   return [];
 };

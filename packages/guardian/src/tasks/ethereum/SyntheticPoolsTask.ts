@@ -2,7 +2,7 @@ import Joi from 'joi';
 import { EthereumApi } from '@laminar/api';
 import { fixed18toString } from '@laminar/api/utils/precision';
 import { from } from 'rxjs';
-import { switchMap, flatMap, concatAll } from 'rxjs/operators';
+import { switchMap, mergeMap, concatAll } from 'rxjs/operators';
 import { convertToNewHeader } from './helpers';
 import Task from '../Task';
 import { EthereumGuardian } from '../../guardians';
@@ -43,9 +43,9 @@ export default class SyntheticPoolsTask extends Task<
     const newHeader$ = convertToNewHeader(ethereumApi);
 
     return this.getPoolIds(ethereumApi, poolId).pipe(
-      flatMap((poolId) =>
+      mergeMap((poolId) =>
         from(tokenIds).pipe(
-          flatMap((tokenId) =>
+          mergeMap((tokenId) =>
             newHeader$.pipe(
               switchMap(async () => {
                 const poolInterface = ethereumApi.getSyntheticPoolInterfaceContract(poolId);
