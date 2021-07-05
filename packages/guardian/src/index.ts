@@ -3,10 +3,16 @@ import validateConfig from './validate-config';
 import { GuardianRegistry } from './guardians';
 import readConfig from './read-config';
 
+import { tokenPrecision } from './utils';
+
 export * from './guardians';
 export * from './actions';
 
-export { readConfig };
+const utils = {
+  tokenPrecision
+};
+
+export { readConfig, utils };
 
 export default async (config: Config) => {
   config = validateConfig(config);
