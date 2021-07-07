@@ -7,7 +7,7 @@ export default async () => {
   setDefaultConfig('schedule.yml');
 
   const { nodeEndpoint, address } = config();
-  const { apiManager } = await setupAcalaApi(nodeEndpoint, '', address);
+  const { apiManager } = await setupAcalaApi(nodeEndpoint);
 
   const getBalance = () => {
     return apiManager.api.query.system.account(address);

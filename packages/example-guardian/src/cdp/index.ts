@@ -3,13 +3,15 @@ import { ActionRegistry, utils } from '@open-web3/guardian';
 import { FixedPointNumber } from '@acala-network/sdk-core';
 import { config } from './config';
 import setupAcalaApi from '../setupAcalaApi';
+import setupKeyring from '../setupKeyring';
 import { setDefaultConfig, logger } from '../utils';
 
 export default async () => {
   setDefaultConfig('cdp-guardian.yml');
 
   const { nodeEndpoint, SURI, address } = config();
-  const { apiManager, keyringPair } = await setupAcalaApi(nodeEndpoint, SURI, address);
+  const { apiManager } = await setupAcalaApi(nodeEndpoint);
+  const { signer } = await setupKeyring(SURI, address);
 
   // adjust loan by +10% collateral
   const adjustLoan = (loan: Loan) => {
@@ -22,7 +24,7 @@ export default async () => {
 
     const tx = apiManager.api.tx.honzon.adjustLoan(currencyId as any, adjusment._getInner().toString(), 0);
 
-    return apiManager.signAndSend(tx, { account: keyringPair }).inBlock;
+    return apiManager.signAndSend(tx, { account: signer }).inBlock;
   };
 
   let ready = true;
