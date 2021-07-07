@@ -7,6 +7,7 @@ import { FixedPointNumber } from '@acala-network/sdk-core';
 import { OrmlAccountData, Balance } from '@open-web3/orml-types/interfaces';
 import config from './config';
 import setupAcalaApi from '../setupAcalaApi';
+import setupKeyring from '../setupKeyring';
 import { setDefaultConfig, logger } from '../utils';
 import { calculateBid } from './calculateBid';
 
@@ -18,7 +19,8 @@ export default async () => {
   const auction$ = new Subject<CollateralAuction>();
   const auctionDealt$ = new Subject<Event>();
 
-  const { apiManager, keyringPair } = await setupAcalaApi(nodeEndpoint, SURI, address);
+  const { apiManager } = await setupAcalaApi(nodeEndpoint);
+  const { signer } = await setupKeyring(SURI, address);
 
   const stableCoin = apiManager.api.consts.cdpEngine.getStableCurrencyId;
 
@@ -51,7 +53,7 @@ export default async () => {
     }
 
     const tx = apiManager.api.tx.auction.bid(auction.auctionId, bid.toFixed(0));
-    await apiManager.signAndSend(tx, { account: keyringPair }).inBlock;
+    await apiManager.signAndSend(tx, { account: signer }).inBlock;
   };
 
   const onAuctionDealt = async (event: Event) => {
@@ -59,7 +61,7 @@ export default async () => {
     const amount = event.args['collateral_amount'] || event.args['2'];
 
     const tx = apiManager.api.tx.dex.swapWithExactSupply([currencyId, stableCoin], amount, 0);
-    await apiManager.signAndSend(tx, { account: keyringPair }).inBlock;
+    await apiManager.signAndSend(tx, { account: signer }).inBlock;
   };
 
   auction$.pipe(concatMap(async (auction) => await onAuction(auction).catch((e) => logger.error(e)))).subscribe();
