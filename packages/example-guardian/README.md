@@ -133,12 +133,13 @@ npx -p @open-web3/example-guardian@beta cdp
 #
 ## Application-specific Chain Example - Laminar
 ### Laminar Synthetic Liquidation Bot
-This example uses the `laminar synthetic liquidation` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/laminar-synthetic-liquidation-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/laminar-synthetic-liquidation). It will monitor specified account's synthetic asset trading positions. If the collateral ratio of the trade drops below a given threshold, it will liquidate the position.
+This example uses the `laminar synthetic liquidation` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/laminar-synthetic-liquidation-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/laminar-synthetic-liquidation). 
+This example uses the laminar synthetic liquidation yaml config file and task source code here. It will monitor specified account's synthetic pools. If the collateral ratio of the pool drops below a liquidation threshold, it will liquidate the pool.
 
 1. Create a `.env` file in the project directory
 
 ```
-NODE_ENDPOINT=wss://node-6729167516986527744.jm.onfinality.io/ws
+NODE_ENDPOINT=wss://testnet-node-1.laminar-chain.laminar.one/ws
 SURI=//Charlie
 ADDRESS=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y
 COLLATERAL_RATIO=1.04
@@ -150,3 +151,97 @@ COLLATERAL_RATIO=1.04
 npx -p @open-web3/example-guardian@beta laminar-synthetic-liquidation
 ```
 
+### Running bot on local testnet
+
+The best way to test how the guardian is to run it on your local testnet where you have full control.
+
+1. **Run local laminar node**
+
+You can follow the guide for installing Rust and dependencies: https://github.com/laminar-protocol/laminar-chain#building--running-laminarchain
+
+clone laminar-chain repo
+```
+git clone https://github.com/laminar-protocol/laminar-chain.git
+cd laminar-chain
+```
+
+install toolchain
+```
+make init
+```
+
+run the node with `--tmp` flag to build ledger from scratch
+```
+SKIP_WASM_BUILD= cargo run -- --dev -lruntime=debug --tmp
+```
+
+When the node is successfully running, it should look like this:
+![](https://i.imgur.com/ksVj9WM.png)
+
+2. Run `laminar-synthetic-liquidation` guardian
+
+Clone guardian repository
+```
+git clone https://github.com/open-web3-stack/guardian.git
+cd guardian
+```
+
+navigate to `guarding-example` folder
+```
+cd packages/guardian/example-guardian
+```
+
+install dependencies
+```
+yarn
+```
+
+> :warning: make sure you are using the latest version of `yarn` and 16.x.x `node` version  
+
+All environment variables with standart local node endpoint are predefined in the [.env.laminar-synthetic-liquidation](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/.env.laminar-synthetic-liquidation)
+```
+NODE_ENDPOINT=ws://localhost:9944
+SURI=//Charlie
+ADDRESS=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y
+COLLATERAL_RATIO=1.1
+```
+
+And now you can run the guardian:
+```
+yarn dev:laminar-synthetic-liquidation
+```
+You will the similar screen:
+![](https://i.imgur.com/wmlzd98.png)
+
+The guardian is constantly checking the synthetic pool ratio and once it will drop below the liquidation threshold, the guarding will liquidate the pool.
+
+3. Emulating the drop of synthetic pool ration
+
+For emulation of drop synthetic pool ration we will use laminar-e2e tests from the repo: [laminar-protocol/e2e](https://github.com/laminar-protocol/e2e)
+
+Clone the repo & install dependencies:
+```
+git clone https://github.com/laminar-protocol/e2e.git laminar-e2e
+cd laminar-e2e
+yarn
+```
+
+Run the simulation with providing the environment variable `OWNER`. We set it to the standard dev account `Charlie` with a fixed account address. Feel free to change it both in the guardian and e2e test.
+```
+OWNER=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y yarn dev:simulate-liquidate-synthetic-pool
+```
+
+The guardian should pick the changes and show the result like in the screenshot:
+
+![](https://i.imgur.com/GvuFf2A.png)
+
+You can verify the set of actions that were taken in the polkadot.js.org/apps. 
+
+Navigate to https://polkadot.js.org/apps and connect to local node: Select the local node and click "Switch"
+![](https://i.imgur.com/VtIMv1c.png)
+
+After navigate to Network -> Explorer and in the list of events you will be able to see a number of events, with the last one `syntheticProtocol.Liquidated`
+
+![](https://i.imgur.com/czSGefR.png)
+
+> :warning: you may see the empty screen if you ran the script before you opened polkadot.js.org/apps as it may not fetch all system events recently happened. You can repeat the set of actions to have all events in the browser cache.
