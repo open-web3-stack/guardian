@@ -185,8 +185,10 @@ cargo run -- --dev --tmp
 ```shell
 npx -p @open-web3/example-guardian@beta laminar-margin-position
 ```
-4. Use laminar-e2e scripts to simulate the event. It prepares the environment, creates a position and drops the price
-  ```shell
-  TRADER=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y npx -p @laminar/e2e@beta simulate-margin-position
-  ```
+4. Open another window/tab and use laminar-e2e scripts to simulate the event. It prepares the environment, creates a position and drops the price
+
+*IMPORTANT NOTE: Make sure you're in a directory without `.env` file so it doesn't affect default environmental variables*
+```shell
+TRADER=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y npx -p @laminar/e2e@latest simulate-margin-position
+```
   You will see guardian calling action `close_position` and the bot will close it.
