@@ -1,0 +1,15 @@
+version: '0.1'
+guardians:
+  laminar-guardian:
+    networkType: laminarChain
+    network: dev
+    nodeEndpoint: ${NODE_ENDPOINT} # or ws://localhost:9944
+    monitors:
+      margin-positions:
+        task: margin.positionsByTraders
+        arguments:
+          account: ${ADDRESS}
+        conditions:
+          - profit: < ${PROFIT} # profit goes below threshold i.e: -10000000000000000000 (-10aUSD)
+        actions:
+          - method: close_position
