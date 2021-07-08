@@ -15,7 +15,7 @@ guardians:
         conditions:
           - args.winner: 'eq ${ADDRESS}' # do not change
           - $or:
-              - args.arg4: 'eq ${ADDRESS}' # fallback. do not change
+              - args.3: 'eq ${ADDRESS}' # fallback. do not change
         actions:
           - method: collateral_auction_dealt # do not change
 
