@@ -150,3 +150,43 @@ COLLATERAL_RATIO=1.04
 npx -p @open-web3/example-guardian@beta laminar-synthetic-liquidation
 ```
 
+### Laminar Margin Position Bot
+This example uses the `laminar margin position` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/laminar-margin-position-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/laminar-margin-position). It will monitor specified account's margin positions. If the profit goes below a given threshold, it will close the position.
+
+1. Create a `.env` file in the project directory
+
+```
+NODE_ENDPOINT=wss://testnet-node-1.laminar-chain.laminar.one/ws
+SURI=//Charlie # your private key
+ADDRESS=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y # your address
+PROFIT=-10000000000000000000 # close position if profit goes below -10aUSD
+```
+
+2. Start guardian by running from project directory
+
+```shell
+npx -p @open-web3/example-guardian@beta laminar-margin-position
+```
+
+#### Run on local testnet
+1. Create a `.env` file in the project directory
+```
+NODE_ENDPOINT=ws://localhost:9944
+SURI=//Charlie
+ADDRESS=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y
+PROFIT=-10000000000000000000 # close position if profit goes below -10aUSD
+```
+2. Run [laminar-chain](https://github.com/laminar-protocol/laminar-chain#building--running-laminarchain) local testnet with `--tmp` so it start from scratch or purge old chain data everytime you start the node
+```
+cargo run -- --dev --tmp
+```
+
+3. Start guardian by running from project directory
+```shell
+npx -p @open-web3/example-guardian@beta laminar-margin-position
+```
+4. Use laminar-e2e scripts to simulate the event. It prepares the environment, creates a position and drops the price
+  ```shell
+  TRADER=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y npx -p @laminar/e2e@beta simulate-margin-position
+  ```
+  You will see guardian calling action `close_position` and the bot will close it.

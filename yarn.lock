@@ -2463,13 +2463,16 @@ __metadata:
     "@open-web3/guardian": 0.4.2-12
     "@open-web3/guardian-cli": 0.4.2-12
     "@open-web3/util": ^0.9.4-13
+    "@polkadot/api": ^4.14.1
     "@types/nodemailer": ^6.4.2
     dotenv: ^10.0.0
     nodemailer: ^6.6.2
     ts-node-dev: ^1.1.6
+    typescript: ^4.3.0
   bin:
     cdp: scripts/cdp.js
     collateral-auction: scripts/collateral-auction.js
+    laminar-margin-position: scripts/laminar-margin-position.js
     laminar-synthetic-liquidation: scripts/laminar-synthetic-liquidation.js
     schedule: scripts/schedule.js
     staking: scripts/staking.js
@@ -2502,6 +2505,7 @@ __metadata:
     "@open-web3/api": ^0.9.4-13
     "@open-web3/api-mobx": ^0.9.4-13
     "@open-web3/orml-types": ^0.9.4-13
+    "@polkadot/api": ^4.14.1
     "@polkadot/typegen": ^4.14.1
     "@types/axios": ^0.14.0
     "@types/big.js": ^6.1.1
@@ -3230,6 +3234,13 @@ __metadata:
   version: 12.20.15
   resolution: "@types/node@npm:12.20.15"
   checksum: 1233326726d017e9fdc1b89e966e5e4a3944060e00308ba6fbf4c6e91f307612dbf2e2bcab4132c35f6195b310a902ef6fe10a107e3e67c7582d31b79f1bef30
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^16.0.1":
+  version: 16.0.1
+  resolution: "@types/node@npm:16.0.1"
+  checksum: 0f3d559689763cef9c2cf593a9190ead7adc8b71aeaef5c446bda96a781c22e39806780ee240c7272dddf01b82008d84e49a4298fba88b6d7726af76f00fc3ad
   languageName: node
   linkType: hard
 
@@ -12755,6 +12766,7 @@ resolve@^2.0.0-next.3:
     "@babel/runtime": ^7.14.6
     "@open-web3/dev-config": ^0.1.13
     "@types/jest": ^26.0.23
+    "@types/node": ^16.0.1
     jest: ^27.0.4
     ts-node: ^10.0.0
     typescript: ^4.3.0

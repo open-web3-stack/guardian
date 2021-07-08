@@ -7,6 +7,7 @@
   "bin": {
     "cdp": "scripts/cdp.js",
     "collateral-auction": "scripts/collateral-auction.js",
+    "laminar-margin-position": "scripts/laminar-margin-position.js",
     "laminar-synthetic-liquidation": "scripts/laminar-synthetic-liquidation.js",
     "schedule": "scripts/schedule.js",
     "staking": "scripts/staking.js"
@@ -25,16 +26,19 @@
     "@open-web3/guardian": "0.4.2-12",
     "@open-web3/guardian-cli": "0.4.2-12",
     "@open-web3/util": "^0.9.4-13",
+    "@polkadot/api": "^4.14.1",
     "@types/nodemailer": "^6.4.2",
     "dotenv": "^10.0.0",
     "nodemailer": "^6.6.2"
   },
   "devDependencies": {
-    "ts-node-dev": "^1.1.6"
+    "ts-node-dev": "^1.1.6",
+    "typescript": "^4.3.0"
   },
   "scripts": {
     "dev:collateral-auction": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/collateral-auction.ts dotenv_config_path=.env.auction",
     "dev:laminar-synthetic-liquidation": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/laminar-synthetic-liquidation.ts dotenv_config_path=.env.laminar-synthetic-liquidation",
+    "dev:laminar-margin-position": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/laminar-margin-position.ts dotenv_config_path=.env.laminar-margin-position",
     "dev:cdp": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/cdp.ts dotenv_config_path=.env.cdp",
     "dev:schedule": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/schedule.ts dotenv_config_path=.env.schedule",
     "dev:staking": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/staking.ts dotenv_config_path=.env.staking"
