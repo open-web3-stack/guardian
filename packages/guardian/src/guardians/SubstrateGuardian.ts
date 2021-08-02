@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import { firstValueFrom } from 'rxjs';
 import { ApiRx } from '@polkadot/api';
 import { WsProvider } from '@polkadot/rpc-provider';
 import BaseSubstrateGuardian from './BaseSubstrateGuardian';
@@ -8,7 +9,7 @@ import { SubstrateGuardianConfig } from '../types';
 export default class SubstrateGuardian extends BaseSubstrateGuardian<SubstrateGuardianConfig> {
   async setup(config: SubstrateGuardianConfig) {
     const provider = new WsProvider(config.nodeEndpoint);
-    const apiRx = await ApiRx.create({ provider, types: customTypes }).toPromise();
+    const apiRx = await firstValueFrom(ApiRx.create({ provider, types: customTypes }));
     return { apiRx };
   }
 

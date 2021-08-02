@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import { options } from '@acala-network/api';
+import { firstValueFrom } from 'rxjs';
 import { AcalaGuardianConfig } from '../types';
 import { acalaNetwork } from '../constants';
 import BaseSubstrateGuardian from './BaseSubstrateGuardian';
@@ -44,7 +45,7 @@ export default class AcalaGuardian extends BaseSubstrateGuardian<
     const ws = new WsProvider(config.nodeEndpoint);
     const apiOptions = options({ provider: ws, types: customTypes });
 
-    const apiRx = await ApiRx.create(apiOptions).toPromise();
+    const apiRx = await firstValueFrom(ApiRx.create(apiOptions));
     const apiPromise = await ApiPromise.create(apiOptions);
 
     const storage = createStorage<StorageType>(apiPromise, ws);

@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { ApiRx, WsProvider } from '@polkadot/api';
-import { Observable } from 'rxjs';
+import { Observable, firstValueFrom } from 'rxjs';
 import GuardianRegistry from '../GuardianRegistry';
 import { LaminarGuardian, AcalaGuardian, Guardian } from '..';
 import { LaminarGuardianConfig, AcalaGuardianConfig, GuardianConfig, BaseSubstrateGuardianConfig } from '../../types';
@@ -68,7 +68,7 @@ class CustomGuardian extends Guardian<BaseSubstrateGuardianConfig> {
 
   async setup(config: BaseSubstrateGuardianConfig) {
     const ws = new WsProvider(config.nodeEndpoint);
-    const apiRx = await ApiRx.create({ provider: ws }).toPromise();
+    const apiRx = await firstValueFrom(ApiRx.create({ provider: ws }));
     return { apiRx };
   }
 
