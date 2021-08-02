@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { Subscription, AsyncSubject } from 'rxjs';
+import { Subscription, AsyncSubject, firstValueFrom } from 'rxjs';
 import { IGuardian, IMonitor, GuardianConfig, ITaskConstructor } from '../types';
 import Monitor from '../Monitor';
 import { logger } from '../utils';
@@ -54,7 +54,7 @@ export default abstract class Guardian<Config extends GuardianConfig = GuardianC
 
   // Guardian is ready to run tasks
   public isReady(): Promise<Props> {
-    return this.props.toPromise();
+    return firstValueFrom(this.props);
   }
 
   // Perform any necessary setup. This method gets called before running task

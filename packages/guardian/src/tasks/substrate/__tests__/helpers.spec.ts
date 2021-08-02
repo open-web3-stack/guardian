@@ -5,7 +5,7 @@ describe('substrate helpers', () => {
   const event = new TypeRegistry().createType('Event');
   event.set('data', {
     meta: {
-      documentation: ['hello world', 'Transfer amount. \\[sender, receiver, amount\\]'],
+      docs: ['hello world', 'Transfer amount. \\[sender, receiver, amount\\]'],
     },
   } as any);
 
@@ -17,7 +17,7 @@ describe('substrate helpers', () => {
   it('getEventParams fallback', () => {
     event.set('data', {
       meta: {
-        documentation: ['Transfer amount. [sender, receiver, amount]'],
+        docs: ['Transfer amount. [sender, receiver, amount]'],
       },
     } as any);
     const params = getEventParams(event);

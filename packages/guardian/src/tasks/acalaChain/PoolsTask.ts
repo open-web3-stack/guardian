@@ -1,6 +1,7 @@
 import Joi from 'joi';
 import { TradingPair } from '@acala-network/types/interfaces';
 import { FixedPointNumber } from '@acala-network/sdk-core';
+import { lastValueFrom } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Pool } from '../../types';
 import Task from '../Task';
@@ -22,7 +23,7 @@ export default class PoolsTask extends Task<{ currencyId: any }, Pool> {
     let pairs: TradingPair[];
 
     if (currencyId === 'all') {
-      const tradingPair = await apiRx.query.dex.liquidityPool.entries().pipe(take(1)).toPromise();
+      const tradingPair = await lastValueFrom(apiRx.query.dex.liquidityPool.entries().pipe(take(1)));
 
       pairs = tradingPair
         .map(([key, value]) => {

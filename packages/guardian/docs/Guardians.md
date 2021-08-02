@@ -3,6 +3,7 @@
 A Guardian's only job is to connect to the node and be provided a list of tasks it can run. You can either extend a built-in guardian or create a new one. See the following example:
 
 ```typescript
+import { firstValueFrom } from 'rxjs';
 import MyTask from './MyTask.js';
 
 export default class MyGuardian extends BaseSubstrateGuardian<
@@ -18,7 +19,7 @@ export default class MyGuardian extends BaseSubstrateGuardian<
 
   async setup(config: MyGuardianConfigType): { apiRx: ApiRx } {
     const privider = new WsProvider(config.nodeEndpoint);
-    const apiRx = await ApiRx.create({ provider }).toPromise();
+    const apiRx = await firstValueFrom(ApiRx.create({ provider }));
     // do any setup. In case of a substrate base guardian you probably need an ApiRx instance.
     return { apiRx };
   }

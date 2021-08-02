@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import Joi from 'joi';
 import BN from 'bn.js';
-import { timer } from 'rxjs';
-import { switchMap, distinctUntilChanged, publishReplay, refCount } from 'rxjs/operators';
+import { timer, lastValueFrom, shareReplay } from 'rxjs';
+import { switchMap, distinctUntilChanged } from 'rxjs/operators';
 import { MarginPoolInfo, LaminarApi, TraderPairOptions } from '@laminar/api';
 import { StorageType } from '@laminar/types';
 import { Pool } from '@laminar/types/interfaces';
@@ -74,7 +74,7 @@ const setup = async (laminarApi: LaminarApi, storage: StorageType) => {
     return output.length > 0 ? output : undefined;
   });
 
-  const tokens = await laminarApi.currencies.tokens().toPromise();
+  const tokens = await lastValueFrom(laminarApi.currencies.tokens());
 
   const getPairId = (pair: { base: string; quote: string }): string => {
     const baseToken = tokens.find(({ id }) => pair.base === id);
@@ -89,8 +89,7 @@ const getPoolState = computedFn((laminarApi: LaminarApi, poolId: string, period:
   const stream$ = timer(0, period).pipe(
     switchMap(() => laminarApi.api.rpc.margin.poolState(poolId)),
     distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
-    publishReplay(1),
-    refCount()
+    shareReplay({ refCount: true, bufferSize: 1 })
   );
   return fromStream(stream$);
 });
