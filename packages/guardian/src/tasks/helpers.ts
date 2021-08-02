@@ -83,7 +83,7 @@ export const getOraclePrice =
   };
 
 export const getEventParams = (event: Event): string[] => {
-  const args = event.meta.documentation
+  const args = event.meta.docs
     .reverse()
     .map((i) => i.toString())
     .map((doc) => {
