@@ -18,9 +18,9 @@ export default class EventsTask extends Task<{ name: string | string[] }, Event>
 
     const { name } = this.arguments;
 
-    return apiRx.rpc.chain.getBlock().pipe(
-      mergeMap(({ block }) => Promise.all([block, firstValueFrom(apiRx.query.system.events.at(block.header.hash))])),
-      mergeMap(([block, records]) => {
+    return apiRx.derive.chain.subscribeNewHeads().pipe(
+      mergeMap((header) => Promise.all([header, firstValueFrom(apiRx.query.system.events.at(header.hash))])),
+      mergeMap(([header, records]) => {
         return records.map(({ phase, event }) => {
           const params = getEventParams(event);
           const { index, section, method, data } = event;
@@ -31,8 +31,8 @@ export default class EventsTask extends Task<{ name: string | string[] }, Event>
             args[key] = value.toJSON();
           });
           return {
-            blockNumber: block.header.number.toNumber(),
-            blockHash: block.header.hash.toHex(),
+            blockNumber: header.number.toNumber(),
+            blockHash: header.hash.toHex(),
             phase: phase.toJSON(),
             index: index.toHex(),
             name,
