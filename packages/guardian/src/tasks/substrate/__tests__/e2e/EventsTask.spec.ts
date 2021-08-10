@@ -17,7 +17,7 @@ describe('EventsTask', () => {
     const task = new EventsTask({ name: 'system.ExtrinsicSuccess' });
     const output$ = await task.start(guardian);
     output$.subscribe((output) => {
-      console.log(output.args);
+      console.log(output);
       expect(output.args['info']).toBeTruthy();
       done();
     });
@@ -27,7 +27,7 @@ describe('EventsTask', () => {
     const task = new EventsTask({ name: ['system.ExtrinsicSuccess'] });
     const output$ = await task.start(guardian);
     output$.subscribe((output) => {
-      console.log(output.args);
+      console.log(output);
       expect(output.args['info']).toBeTruthy();
       done();
     });

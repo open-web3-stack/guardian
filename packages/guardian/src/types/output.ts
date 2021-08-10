@@ -1,3 +1,5 @@
+import { AnyJson } from '@polkadot/types/types';
+
 export type Balance = {
   account: string;
   currencyId: string;
@@ -25,6 +27,10 @@ export type CollateralAuction = {
 };
 
 export type Event = {
+  blockNumber: number;
+  blockHash: string;
+  phase: AnyJson;
+  index: string;
   name: string;
   args: Record<string, any>;
 };
