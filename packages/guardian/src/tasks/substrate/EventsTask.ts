@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import { firstValueFrom } from 'rxjs';
 import { mergeMap, filter } from 'rxjs/operators';
 import BaseSubstrateGuardian from '../../guardians/BaseSubstrateGuardian';
 import Task from '../Task';
@@ -17,18 +18,26 @@ export default class EventsTask extends Task<{ name: string | string[] }, Event>
 
     const { name } = this.arguments;
 
-    return apiRx.query.system.events().pipe(
-      mergeMap((records) => {
-        return records.map(({ event }) => {
+    return apiRx.rpc.chain.getBlock().pipe(
+      mergeMap(({ block }) => Promise.all([block, firstValueFrom(apiRx.query.system.events.at(block.header.hash))])),
+      mergeMap(([block, records]) => {
+        return records.map(({ phase, event }) => {
           const params = getEventParams(event);
-          const { section, method, data } = event;
+          const { index, section, method, data } = event;
           const name = `${section}.${method}`;
           const args = {};
           data.forEach((value, index) => {
             const key = params[index] || index.toString();
             args[key] = value.toJSON();
           });
-          return { name, args };
+          return {
+            blockNumber: block.header.number.toNumber(),
+            blockHash: block.header.hash.toHex(),
+            phase: phase.toJSON(),
+            index: index.toHex(),
+            name,
+            args
+          };
         });
       }),
       filter((event) => {
