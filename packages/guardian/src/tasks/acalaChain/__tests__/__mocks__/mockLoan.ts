@@ -1,8 +1,9 @@
 import { of } from 'rxjs';
 import { TypeRegistry } from '@polkadot/types';
 import { types } from '@acala-network/types';
-import { customTypes } from '../../../../customTypes';
 import { observable } from 'mobx';
+import { customTypes } from '../../../../customTypes';
+import { MockApiPromise } from '../../../../__tests__/__mocks__/mockApiPromise';
 
 const register = new TypeRegistry();
 register.register(types);
@@ -52,6 +53,6 @@ jest.mock('@open-web3/api-mobx', () => ({
 
 jest.mock('@polkadot/api', () => ({
   WsProvider: jest.fn(() => {}),
-  ApiPromise: { create: jest.fn() },
+  ApiPromise: { create: jest.fn(async () => MockApiPromise) },
   ApiRx: { create: jest.fn(() => MockApiRx) },
 }));

@@ -1,7 +1,8 @@
+import assert from 'assert';
 import Joi from 'joi';
 import { CurrencyId } from '@acala-network/types/interfaces';
 import { FixedPointNumber } from '@acala-network/sdk-core';
-import { autorun$, tokenPrecision } from '../../utils';
+import { autorun$ } from '../../utils';
 import { createAccountCurrencyIdPairs } from '../helpers';
 import { AcalaGuardian } from '../../guardians';
 import { Loan } from '../../types';
@@ -17,7 +18,7 @@ export default class LoansTask extends Task<{ account: string | string[]; curren
   }
 
   async start(guardian: AcalaGuardian) {
-    const { apiRx, storage } = await guardian.isReady();
+    const { apiRx, storage, getTokenPrecision } = await guardian.isReady();
 
     const { account, currencyId } = this.arguments;
 
@@ -45,7 +46,8 @@ export default class LoansTask extends Task<{ account: string | string[]; curren
         const position = storage.loans.positions(currencyId.toHex(), account);
         if (!position) continue;
 
-        const stableCoinPrecision = tokenPrecision(stableCoin.asToken.toString());
+        const stableCoinPrecision = getTokenPrecision(stableCoin.asToken.toString());
+        assert(stableCoinPrecision);
         const debitExchangeRate = storage.cdpEngine.debitExchangeRate(currencyId.toHex());
         const exchangeRate = debitExchangeRate?.isSome
           ? debitExchangeRate.unwrap()
@@ -53,7 +55,8 @@ export default class LoansTask extends Task<{ account: string | string[]; curren
 
         const collateralPrice = oraclePrice(currencyId);
         if (!collateralPrice) continue;
-        const collateralPrecision = tokenPrecision(currencyId.asToken.toString());
+        const collateralPrecision = getTokenPrecision(currencyId.asToken.toString());
+        assert(collateralPrecision);
 
         const collateral = FixedPointNumber.fromInner(position.collateral.toString(), collateralPrecision);
         const collateralUSD = FixedPointNumber.fromInner(collateralPrice).times(collateral);
