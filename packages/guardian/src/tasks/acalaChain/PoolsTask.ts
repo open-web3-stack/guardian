@@ -1,3 +1,4 @@
+import assert from 'assert';
 import Joi from 'joi';
 import { TradingPair } from '@acala-network/types/interfaces';
 import { FixedPointNumber } from '@acala-network/sdk-core';
@@ -6,7 +7,7 @@ import { take } from 'rxjs/operators';
 import { Pool } from '../../types';
 import Task from '../Task';
 import { AcalaGuardian } from '../../guardians';
-import { autorun$, tokenPrecision } from '../../utils';
+import { autorun$ } from '../../utils';
 
 export default class PoolsTask extends Task<{ currencyId: any }, Pool> {
   validationSchema() {
@@ -16,9 +17,11 @@ export default class PoolsTask extends Task<{ currencyId: any }, Pool> {
   }
 
   async start(guardian: AcalaGuardian) {
-    const { apiRx, storage } = await guardian.isReady();
+    const { apiRx, storage, getTokenPrecision } = await guardian.isReady();
 
     const { currencyId } = this.arguments;
+
+    const stableCoin = apiRx.consts.cdpEngine.getStableCurrencyId;
 
     let pairs: TradingPair[];
 
@@ -37,7 +40,6 @@ export default class PoolsTask extends Task<{ currencyId: any }, Pool> {
         })
         .filter((p): p is TradingPair => p !== undefined);
     } else {
-      const stableCoin = apiRx.consts.cdpEngine.getStableCurrencyId;
       pairs = (Array.isArray(currencyId) ? currencyId : [currencyId]).map((x) => {
         const newPair =
           x === 'ACA' || x === 'KAR'
@@ -55,13 +57,17 @@ export default class PoolsTask extends Task<{ currencyId: any }, Pool> {
 
         const [baseCurrency, otherCurrency] = pair;
         const [base, other] = pool;
-        const _other = FixedPointNumber.fromInner(other.toString(), tokenPrecision(baseCurrency.asToken.toString()));
-        const _base = FixedPointNumber.fromInner(base.toString(), tokenPrecision(otherCurrency.asToken.toString()));
-        const price = _other.div(_base);
+        const basePrecision = getTokenPrecision(baseCurrency.asToken.toString());
+        assert(basePrecision);
+        const otherPrecision = getTokenPrecision(otherCurrency.asToken.toString());
+        assert(otherPrecision);
+        const _base = FixedPointNumber.fromInner(base.toString(), basePrecision);
+        const _other = FixedPointNumber.fromInner(other.toString(), otherPrecision);
+        const price = baseCurrency.eq(stableCoin) ? _base.div(_other) : _other.div(_base);
         price.setPrecision(18);
         subscriber.next({
           currencyId: pair.toString(),
-          price: price._getInner().toString(),
+          price: price._getInner().toFixed(0),
           baseLiquidity: base.toString(),
           otherLiquidity: other.toString()
         });

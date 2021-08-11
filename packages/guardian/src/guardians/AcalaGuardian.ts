@@ -28,8 +28,10 @@ const defaultNodeEndpoint = ({ network }: { network: AcalaGuardianConfig['networ
 
 export default class AcalaGuardian extends BaseSubstrateGuardian<
   AcalaGuardianConfig,
-  { apiRx: ApiRx; storage: StorageType }
+  { apiRx: ApiRx; storage: StorageType; getTokenPrecision: (token: string) => number | undefined }
 > {
+  private readonly tokenDecimals: Record<string, number> = {};
+
   tasks() {
     return {
       ...super.tasks(),
@@ -50,7 +52,22 @@ export default class AcalaGuardian extends BaseSubstrateGuardian<
 
     const storage = createStorage<StorageType>(apiPromise, ws);
 
-    return { apiRx, storage };
+    // fetch token precision
+    const properties = await apiPromise.rpc.system.properties();
+    const tokenSymbol = properties.tokenSymbol.unwrapOrDefault();
+    const tokenDecimals = properties.tokenDecimals.unwrapOrDefault();
+    if (tokenSymbol.length !== tokenDecimals.length) {
+      throw Error(`Token symbols/decimals mismatch ${tokenSymbol} ${tokenDecimals}`);
+    }
+    tokenSymbol.forEach((symbol, index) => {
+      this.tokenDecimals[symbol.toString()] = tokenDecimals[index].toNumber();
+    });
+
+    const getTokenPrecision = (token: string): number | undefined => {
+      return this.tokenDecimals[token.toUpperCase()];
+    };
+
+    return { apiRx, storage, getTokenPrecision };
   }
 
   validationSchema() {

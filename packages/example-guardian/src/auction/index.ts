@@ -1,15 +1,36 @@
 import Big from 'big.js';
 import { Subject } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
-import { ActionRegistry, utils } from '@open-web3/guardian';
+import { ActionRegistry } from '@open-web3/guardian';
 import { CollateralAuction, Event } from '@open-web3/guardian/types';
 import { FixedPointNumber } from '@acala-network/sdk-core';
 import { OrmlAccountData, Balance } from '@open-web3/orml-types/interfaces';
 import config from './config';
 import setupAcalaApi from '../setupAcalaApi';
 import setupKeyring from '../setupKeyring';
-import { setDefaultConfig, logger } from '../utils';
+import { setDefaultConfig, logger, tokenPrecision } from '../utils';
 import { calculateBid } from './calculateBid';
+import { ApiManager } from '@open-web3/api';
+
+const getDexPrice = async (apiManager: ApiManager, stableCoin: any, currencyId: any) => {
+  const stableCoinPrecision = await tokenPrecision(apiManager.api, stableCoin.asToken.toString());
+
+  // collateral token precision
+  const precision = await tokenPrecision(apiManager.api, currencyId);
+
+  // calculate dex price
+  const baseCurrency = apiManager.api.createType('CurrencyId', stableCoin);
+  const otherCurrency = apiManager.api.createType('CurrencyId', { token: currencyId });
+  const [base, other] = await apiManager.api.query.dex.liquidityPool<[Balance, Balance]>([baseCurrency, otherCurrency]);
+
+  const _other = FixedPointNumber.fromInner(other.toString(), precision);
+  const _base = FixedPointNumber.fromInner(base.toString(), stableCoinPrecision);
+  if (_other.isZero()) throw Error('Other liquidity is zero');
+  const price = _base.div(_other);
+  price.setPrecision(18);
+
+  return price._getInner().toFixed(0);
+};
 
 export default async () => {
   setDefaultConfig('collateral-auction-guardian.yml');
@@ -28,31 +49,19 @@ export default async () => {
     // current stableCoin balance
     const balance = await apiManager.api.query.tokens.accounts<OrmlAccountData>(address, stableCoin);
 
-    // collateral token precision
-    const precision = utils.tokenPrecision(auction.currencyId);
+    const stableCoinPrecision = await tokenPrecision(apiManager.api, stableCoin.asToken.toString());
+    const collateralPrecision = await tokenPrecision(apiManager.api, auction.currencyId);
 
-    // calculate dex price
-    const baseCurrency = apiManager.api.createType('CurrencyId', stableCoin);
-    const otherCurrency = apiManager.api.createType('CurrencyId', { token: auction.currencyId });
-    const [base, other] = await apiManager.api.query.dex.liquidityPool<[Balance, Balance]>([
-      baseCurrency,
-      otherCurrency
-    ]);
+    const price = await getDexPrice(apiManager, stableCoin, auction.currencyId);
 
-    const _other = FixedPointNumber.fromInner(other.toString(), precision);
-    const _base = FixedPointNumber.fromInner(base.toString(), utils.tokenPrecision(stableCoin.asToken.toString()));
-    if (_other.isZero()) return;
-    const price = _base.div(_other);
-    price.setPrecision(18);
-
-    const bid = await calculateBid(auction, price._getInner().toString(), margin, precision);
+    const bid = await calculateBid(auction, price, margin, stableCoinPrecision, collateralPrecision);
 
     // simple check for enough balance
     if (Big(balance.free.toString()).lt(bid)) {
       throw Error('Not enough balance to place the bid');
     }
 
-    const tx = apiManager.api.tx.auction.bid(auction.auctionId, bid.toFixed(0));
+    const tx = apiManager.api.tx.auction.bid(auction.auctionId, bid);
     await apiManager.signAndSend(tx, { account: signer }).inBlock;
   };
 

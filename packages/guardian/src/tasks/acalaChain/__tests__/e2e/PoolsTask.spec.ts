@@ -27,7 +27,7 @@ describe('PoolsTask e2e', () => {
 
   it('works with currencyIds', async (done) => {
     const loans = new PoolsTask({
-      currencyId: ['ACA', 'DOT'],
+      currencyId: ['ACA', 'DOT', 'RENBTC'],
     });
 
     const output$ = await loans.start(guardian);

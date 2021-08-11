@@ -4,6 +4,7 @@ import { Option } from '@polkadot/types/codec';
 import { types } from '@acala-network/types';
 import { observable } from 'mobx';
 import { customTypes } from '../../../../customTypes';
+import { MockApiPromise } from '../../../../__tests__/__mocks__/mockApiPromise';
 
 const register = new TypeRegistry();
 register.register(types);
@@ -61,6 +62,6 @@ const MockApiRx = of({
 
 jest.mock('@polkadot/api', () => ({
   WsProvider: jest.fn(() => {}),
-  ApiPromise: { create: jest.fn() },
+  ApiPromise: { create: jest.fn(async () => MockApiPromise) },
   ApiRx: { create: jest.fn(() => MockApiRx) },
 }));

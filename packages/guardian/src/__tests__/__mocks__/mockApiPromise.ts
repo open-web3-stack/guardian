@@ -9,8 +9,37 @@ const register = new TypeRegistry();
 register.register(types);
 register.register(customTypes);
 
-const MockApiPromise = {
+const tokenSymbol = [
+  'ACA',
+  'AUSD',
+  'DOT',
+  'LDOT',
+  'XBTC',
+  'RENBTC',
+  'KAR',
+  'KUSD',
+  'KSM',
+  'LKSM'
+];
+
+const tokenDecimals = [
+  13,
+  12,
+  10,
+  10,
+  8,
+  8,
+  12,
+  12,
+  12,
+  12
+];
+
+export const MockApiPromise = {
   runtimeMetadata: { asLatest: { modules: [] } },
+  rpc: { system: { properties: () => {
+    return register.createType('ChainProperties', { tokenSymbol, tokenDecimals });
+  }}}
 };
 
 // @ts-ignore
