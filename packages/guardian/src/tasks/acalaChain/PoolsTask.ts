@@ -67,7 +67,7 @@ export default class PoolsTask extends Task<{ currencyId: any }, Pool> {
         price.setPrecision(18);
         subscriber.next({
           currencyId: pair.toString(),
-          price: price._getInner().toString(),
+          price: price._getInner().toFixed(0),
           baseLiquidity: base.toString(),
           otherLiquidity: other.toString()
         });

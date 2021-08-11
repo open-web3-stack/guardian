@@ -1,10 +1,10 @@
 import { Loan } from '@open-web3/guardian/types';
-import { ActionRegistry, utils } from '@open-web3/guardian';
+import { ActionRegistry } from '@open-web3/guardian';
 import { FixedPointNumber } from '@acala-network/sdk-core';
 import { config } from './config';
 import setupAcalaApi from '../setupAcalaApi';
 import setupKeyring from '../setupKeyring';
-import { setDefaultConfig, logger } from '../utils';
+import { setDefaultConfig, logger, tokenPrecision } from '../utils';
 
 export default async () => {
   setDefaultConfig('cdp-guardian.yml');
@@ -14,15 +14,15 @@ export default async () => {
   const { signer } = await setupKeyring(SURI, address);
 
   // adjust loan by +10% collateral
-  const adjustLoan = (loan: Loan) => {
+  const adjustLoan = async (loan: Loan) => {
     const currencyId = apiManager.api.createType('CurrencyId', JSON.parse(loan.currencyId));
-    const precision = utils.tokenPrecision((currencyId as any).asToken.toString());
+    const precision = await tokenPrecision(apiManager.api, (currencyId as any).asToken.toString());
 
     const amount = FixedPointNumber.fromInner(loan.collaterals, precision);
     const adjusment = amount.times(FixedPointNumber.fromRational(1, 10)); // +10% collateral
     adjusment.setPrecision(precision);
 
-    const tx = apiManager.api.tx.honzon.adjustLoan(currencyId as any, adjusment._getInner().toString(), 0);
+    const tx = apiManager.api.tx.honzon.adjustLoan(currencyId as any, adjusment._getInner().toFixed(0), 0);
 
     return apiManager.signAndSend(tx, { account: signer }).inBlock;
   };
