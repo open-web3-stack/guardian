@@ -1,4 +1,3 @@
-import assert from 'assert';
 import Joi from 'joi';
 import { options } from '@acala-network/api';
 import { firstValueFrom } from 'rxjs';
@@ -29,7 +28,7 @@ const defaultNodeEndpoint = ({ network }: { network: AcalaGuardianConfig['networ
 
 export default class AcalaGuardian extends BaseSubstrateGuardian<
   AcalaGuardianConfig,
-  { apiRx: ApiRx; storage: StorageType, getTokenPrecision: (token: string) => number | undefined }
+  { apiRx: ApiRx; storage: StorageType; getTokenPrecision: (token: string) => number | undefined }
 > {
   private readonly tokenDecimals: Record<string, number> = {};
 
@@ -57,7 +56,7 @@ export default class AcalaGuardian extends BaseSubstrateGuardian<
     const properties = await apiPromise.rpc.system.properties();
     const tokenSymbol = properties.tokenSymbol.unwrapOrDefault();
     const tokenDecimals = properties.tokenDecimals.unwrapOrDefault();
-    if(tokenSymbol.length !== tokenDecimals.length) {
+    if (tokenSymbol.length !== tokenDecimals.length) {
       throw Error(`Token symbols/decimals mismatch ${tokenSymbol} ${tokenDecimals}`);
     }
     tokenSymbol.forEach((symbol, index) => {
@@ -66,7 +65,7 @@ export default class AcalaGuardian extends BaseSubstrateGuardian<
 
     const getTokenPrecision = (token: string): number | undefined => {
       return this.tokenDecimals[token.toUpperCase()];
-    }
+    };
 
     return { apiRx, storage, getTokenPrecision };
   }

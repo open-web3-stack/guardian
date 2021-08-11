@@ -11,7 +11,7 @@ export const calculateBid = async (
   const amount = FixedPointNumber.fromInner(auction.initialAmount, collateralPrecision);
   // price per unit we're willing to pay
   // unit_price = (1 - margin) * market_price
-  const unitPrice = FixedPointNumber.fromInner(price).times(new FixedPointNumber(1 - margin))
+  const unitPrice = FixedPointNumber.fromInner(price).times(new FixedPointNumber(1 - margin));
   // bid = unit_price * auction_amount
   const bid = unitPrice.times(amount);
   bid.setPrecision(stablecoinPrecision);

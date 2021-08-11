@@ -21,10 +21,7 @@ const getDexPrice = async (apiManager: ApiManager, stableCoin: any, currencyId: 
   // calculate dex price
   const baseCurrency = apiManager.api.createType('CurrencyId', stableCoin);
   const otherCurrency = apiManager.api.createType('CurrencyId', { token: currencyId });
-  const [base, other] = await apiManager.api.query.dex.liquidityPool<[Balance, Balance]>([
-    baseCurrency,
-    otherCurrency
-  ]);
+  const [base, other] = await apiManager.api.query.dex.liquidityPool<[Balance, Balance]>([baseCurrency, otherCurrency]);
 
   const _other = FixedPointNumber.fromInner(other.toString(), precision);
   const _base = FixedPointNumber.fromInner(base.toString(), stableCoinPrecision);
@@ -33,7 +30,7 @@ const getDexPrice = async (apiManager: ApiManager, stableCoin: any, currencyId: 
   price.setPrecision(18);
 
   return price._getInner().toFixed(0);
-}
+};
 
 export default async () => {
   setDefaultConfig('collateral-auction-guardian.yml');

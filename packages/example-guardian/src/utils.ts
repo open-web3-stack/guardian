@@ -23,7 +23,7 @@ export const tokenPrecision = async (api: ApiPromise, token: any): Promise<numbe
     const properties = await api.rpc.system.properties();
     const tokenSymbol = properties.tokenSymbol.unwrapOrDefault();
     const tokenDecimals = properties.tokenDecimals.unwrapOrDefault();
-    if(tokenSymbol.length !== tokenDecimals.length) {
+    if (tokenSymbol.length !== tokenDecimals.length) {
       throw Error(`Token symbols/decimals mismatch ${tokenSymbol} ${tokenDecimals}`);
     }
     tokenSymbol.forEach((symbol, index) => {
