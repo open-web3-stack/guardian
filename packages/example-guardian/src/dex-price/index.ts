@@ -1,10 +1,10 @@
 import { Pool } from '@open-web3/guardian/types';
 import { ActionRegistry } from '@open-web3/guardian';
 import { setDefaultConfig } from '../utils';
-import { config } from "./config";
+import { config } from './config';
 
 interface Token {
-  token: string
+  token: string;
 }
 
 export default () => {
@@ -24,7 +24,7 @@ export default () => {
 
       if (prevPrice == null) {
         prevPrice = price;
-      } else if (prevPrice != price) {
+      } else if (prevPrice !== price) {
         prevPrice = price;
         console.log(`New Price: ${price}`);
       }
