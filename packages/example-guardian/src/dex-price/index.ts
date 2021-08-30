@@ -8,7 +8,7 @@ export default () => {
   let prevPrice: BigInt | null = null;
 
   ActionRegistry.register('dexPriceChange', (args: any, data: Pool) => {
-    if (data.price != 'NaN') {
+    if (data.price !== 'NaN') {
       const price = BigInt(data.price);
 
       if (prevPrice == null) {
