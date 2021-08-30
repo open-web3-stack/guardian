@@ -12,6 +12,5 @@ guardians:
         arguments: 
             currencyId:
                 - ${TOKEN_A}
-                - ${TOKEN_B}
         actions:
         - method: "dexPriceChange"
