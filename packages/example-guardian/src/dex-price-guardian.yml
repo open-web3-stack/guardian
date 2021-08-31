@@ -1,0 +1,16 @@
+version: '0.1'
+guardians:
+  acala-guardian:
+    networkType: acalaChain
+    network: dev
+    nodeEndpoint: ${NODE_ENDPOINT}
+    confirmation: finalize
+
+    monitors:
+      dex-price-monitor:
+        task: dex.pools
+        arguments: 
+            currencyId:
+                - ${TOKEN_A}
+        actions:
+        - method: "dexPriceChange"
