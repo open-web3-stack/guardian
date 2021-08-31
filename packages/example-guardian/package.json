@@ -1,6 +1,6 @@
 {
   "name": "@open-web3/example-guardian",
-  "version": "0.4.2-18",
+  "version": "0.4.2-19",
   "description": "Collection of guardian examples",
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
@@ -23,8 +23,8 @@
   "homepage": "https://github.com/open-web3-stack/guardian",
   "dependencies": {
     "@open-web3/api": "^0.9.4-19",
-    "@open-web3/guardian": "0.4.2-18",
-    "@open-web3/guardian-cli": "0.4.2-18",
+    "@open-web3/guardian": "0.4.2-19",
+    "@open-web3/guardian-cli": "0.4.2-19",
     "@open-web3/util": "^0.9.4-19",
     "@polkadot/api": "^5.2.1",
     "@types/nodemailer": "^6.4.4",
