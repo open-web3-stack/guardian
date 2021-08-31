@@ -151,13 +151,37 @@ COLLATERAL_RATIO=1.4
 yarn global add @open-web3/example-guardian@beta
 ```
 
-2. Start guardian by running from the directory with `.env` file
+3. Start guardian by running from the directory with `.env` file
 
 ```shell
 cdp
 ```
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/AcalaNetwork/cdp-bot-template)
+
+#
+### Dex Price Guardian Bot
+This example uses the `dex-price guardian` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/dex-price-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/dex-price). It will monitor a specified liquidity pair and perform an action whenever there is a price change for that pair.
+
+1. Create a `.env` file in the project directory
+
+```
+NODE_ENDPOINT=wss://karura.api.onfinality.io/public-ws
+TOKEN_A=KUSD
+TOKEN_B=KSM
+```
+
+2. Install globally `@open-web3/example-guardian@beta` (optional if you did it)
+
+```shell=
+yarn global add @open-web3/example-guardian@beta
+```
+
+3. Start the guardian by running the following from the directory with the .env file
+
+```shell
+dex-price
+```
 
 #
 ## Application-specific Chain Example - Laminar
