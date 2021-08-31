@@ -7,8 +7,8 @@ interface Token {
   token: string;
 }
 
-export default () => {
-  setDefaultConfig('./acala-dex-price-guardian.yml');
+export default async () => {
+  setDefaultConfig('./dex-price-guardian.yml');
 
   const { tokenA, tokenB } = config();
 

@@ -10,7 +10,8 @@
     "laminar-margin-position": "scripts/laminar-margin-position.js",
     "laminar-synthetic-liquidation": "scripts/laminar-synthetic-liquidation.js",
     "schedule": "scripts/schedule.js",
-    "staking": "scripts/staking.js"
+    "staking": "scripts/staking.js",
+    "dex-price": "scripts/dex-price.js"
   },
   "publishConfig": {
     "access": "public",
@@ -41,6 +42,7 @@
     "dev:laminar-margin-position": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/laminar-margin-position.ts dotenv_config_path=.env.laminar-margin-position",
     "dev:cdp": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/cdp.ts dotenv_config_path=.env.cdp",
     "dev:schedule": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/schedule.ts dotenv_config_path=.env.schedule",
-    "dev:staking": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/staking.ts dotenv_config_path=.env.staking"
+    "dev:staking": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/staking.ts dotenv_config_path=.env.staking",
+    "dev:dex-price": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/dex-price.ts dotenv_config_path=.env.dex-price"
   }
 }
