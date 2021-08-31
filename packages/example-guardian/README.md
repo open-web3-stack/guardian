@@ -217,44 +217,76 @@ All of the shown here examples can be ran on a local testnet. Besides having ful
 
 In this example, we will run **Margin Position Bot** on a local chain and will use `simulate-margin-position` to trigger it.
 
-#### Margin Position Bot on local testnet
 
-1. Create a `.env` file in the project directory
+To test the bot we need to setup 3 processes: local node, bot and simulation of changing positions.
+
+
+**Running Laminar local node**
+
+Run [laminar-chain](https://github.com/laminar-protocol/laminar-chain#building--running-laminarchain) local testnet with `--tmp` so it starts from scratch or purges old chain data every time you start the node
+```
+cargo run -- --dev --tmp
+```
+
+You can follow more detailed instructions in the repository.
+
+---
+
+**Running Guardian Bot**
+1. Create a bot project folder
+```shell=
+mkdir position-bot
+cd position-bot
+```
+2. Create a `.env` file in the project directory
+
+```shell=
+touch .env
+```
+Insert in `.env` file next content:
 ```
 NODE_ENDPOINT=ws://localhost:9944
 SURI=//Charlie
 ADDRESS=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y
 PROFIT=-10000000000000000000 # close position if profit goes below -10aUSD
 ```
-2. Run [laminar-chain](https://github.com/laminar-protocol/laminar-chain#building--running-laminarchain) local testnet with `--tmp` so it starts from scratch or purges old chain data every time you start the node
-```
-cargo run -- --dev --tmp
-```
 
-2. Install globally `@open-web3/example-guardian@beta` (optional if you did it)
+3. Install bot globally `@open-web3/example-guardian@beta`
 
 ```shell=
 yarn global add @open-web3/example-guardian@beta
 ```
 
-3. Start guardian by running from the directory with `.env` file
+4. Start guardian bot
+
 ```shell
 laminar-margin-position
 ```
-4. Open another terminal and navigate to the same folder **WITHOUT** `.env` file, otherwise, it will override standard dependencies.
-5. Install laminar e2e simulations globally
+
+---
+
+**Running simulation**
+
+1. Create a separate folder for simulations
+
+```shell=
+mkdir margin-position-simulations
+cd margin-position-simulations
+```
+
+2. Install laminar simulations globally
 
 ```shell=
 yarn global add @laminar/e2e
 ```
-The output should look like:
+The output should look like this:
 ![](https://i.imgur.com/poXicL4.png)
 
 It shows that the library has two available scripts: `simulate-liquidate-synthetic-pool` and `simulate-margin-position`
 
 > Note :warning:  : in the same way you can install e2e examples for acala.
 
-7. Run simulation scripts to simulate the event. It prepares the environment, creates a position and drops the price
+3. Run simulation scripts to simulate the event. It prepares the environment, creates a position and drops the price
 
 ```shell
 TRADER=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y simulate-margin-position
@@ -265,9 +297,16 @@ We pass `TRADER` environment variable with `Charlie` account address.
 The output of running the simulator should look like this:
 ![](https://i.imgur.com/xR2ztRo.png)
 
-And you should see in your Guardian Bot terminal window activity of calling action `close_position`:
+---
+
+**Checking the results**
+
+After simulation ran successfully you should see in your Guardian Bot terminal window activity of calling action `close_position`:
 
 ![](https://i.imgur.com/OZ6x4pl.png)
+
+
+You can also check the chain state and emitted events using polkadot.js apps:
 
 You can also navigate to https://polkadot.js.org/apps/#/explorer, connect to the local node and check the events happening in the **Network** -> **Explorer** tab, to check all events were happening:
 
