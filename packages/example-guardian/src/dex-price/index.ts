@@ -25,8 +25,13 @@ export default async () => {
       if (prevPrice == null) {
         prevPrice = price;
       } else if (prevPrice !== price) {
-        prevPrice = price;
-        console.log(`New Price: ${price}`);
+        const [token1, token2] = JSON.parse(data.currencyId);
+        
+        const currentPool = {};
+        currentPool[token1.token] = data.baseLiquidity;
+        currentPool[token2.token] = data.otherLiquidity;
+        
+        console.log(currentPool);
       }
     }
   });
