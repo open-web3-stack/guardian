@@ -7,35 +7,51 @@ interface Token {
   token: string;
 }
 
-export default async () => {
-  setDefaultConfig('./dex-price-guardian.yml');
-
+const registerEventHandler = () => {
   const { tokenA, tokenB } = config();
+
+  console.log('-'.repeat(20));
+  console.log(`PAIR:  ${tokenA} - ${tokenB}`);
+  console.log('-'.repeat(20));
 
   let prevPrice: BigInt | null = null;
 
-  ActionRegistry.register('dexPriceChange', (args: any, data: Pool) => {
+  ActionRegistry.register('dexPriceChange', (_args, data: Pool) => {
     const pool: string[] = JSON.parse(data.currencyId).map((token: Token) => token.token);
 
-    if (!(pool.includes(tokenA) && pool.includes(tokenB))) return;
+    if (!(pool.includes(tokenA) && pool.includes(tokenB))) {
+      return;
+    }
 
-    if (data.price !== 'NaN') {
-      const price = BigInt(data.price);
+    const newPrice = (data.price !== 'NaN' && BigInt(data.price)) || null;
 
-      if (prevPrice == null) {
-        prevPrice = price;
-      } else if (prevPrice !== price) {
-        const [token1, token2] = JSON.parse(data.currencyId);
-        
-        const currentPool = {};
-        currentPool[token1.token] = data.baseLiquidity;
-        currentPool[token2.token] = data.otherLiquidity;
-        
-        console.log(currentPool);
-      }
+    // taking action only if liquidity in pools has changed
+    if (newPrice !== prevPrice) {
+      const [tokenA, tokenB] = JSON.parse(data.currencyId);
+
+      const currentPool = {
+        [tokenA.token]: data.baseLiquidity,
+        [tokenB.token]: data.otherLiquidity
+      };
+      currentPool[tokenA.token] = data.baseLiquidity;
+      currentPool[tokenB.token] = data.otherLiquidity;
+
+      prevPrice = newPrice;
+
+      console.log(currentPool);
+
+      // @TODO: ADD CUSTOM LOGIC HERE
     }
   });
+};
+
+export const runPairMonitorBot = () => {
+  setDefaultConfig('./dex-price-guardian.yml');
+
+  registerEventHandler();
 
   // start guardian
   require('@open-web3/guardian-cli');
 };
+
+export default async () => runPairMonitorBot();
