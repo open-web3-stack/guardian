@@ -45,7 +45,7 @@ const registerEventHandler = () => {
   });
 };
 
-export const runPairMonitorBot = () => {
+export const runPairMonitorBot = async () => {
   setDefaultConfig('./dex-price-guardian.yml');
 
   registerEventHandler();
@@ -54,4 +54,4 @@ export const runPairMonitorBot = () => {
   require('@open-web3/guardian-cli');
 };
 
-export default async () => runPairMonitorBot();
+export default runPairMonitorBot;

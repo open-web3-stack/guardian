@@ -1549,6 +1549,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cspotcode/source-map-consumer@npm:0.8.0":
+  version: 0.8.0
+  resolution: "@cspotcode/source-map-consumer@npm:0.8.0"
+  checksum: fc32215a353c7b3d039f5d4b93329200264daeabb0739dcf53eb78f779e37e5f5c281aad281f86781c930011d354612aafab887304451a46f16b10f0f919297f
+  languageName: node
+  linkType: hard
+
+"@cspotcode/source-map-support@npm:0.6.1":
+  version: 0.6.1
+  resolution: "@cspotcode/source-map-support@npm:0.6.1"
+  dependencies:
+    "@cspotcode/source-map-consumer": 0.8.0
+  checksum: eda5227576981f3a16bd1b0940f11bffe96a7dad36da6f2e5e3a8ee5b3ecb153359df08084684509adc63ffe12e14894b6f6f8f9423780895cf7cd9d66c8bbd6
+  languageName: node
+  linkType: hard
+
 "@eslint/eslintrc@npm:^0.4.3":
   version: 0.4.3
   resolution: "@eslint/eslintrc@npm:0.4.3"
@@ -2493,11 +2509,13 @@ __metadata:
     "@types/nodemailer": ^6.4.4
     dotenv: ^10.0.0
     nodemailer: ^6.6.3
+    ts-node: ^10.2.1
     ts-node-dev: ^1.1.8
     typescript: ^4.3.5
   bin:
     cdp: scripts/cdp.js
     collateral-auction: scripts/collateral-auction.js
+    dex-price: scripts/dex-price.js
     laminar-margin-position: scripts/laminar-margin-position.js
     laminar-synthetic-liquidation: scripts/laminar-synthetic-liquidation.js
     schedule: scripts/schedule.js
@@ -2964,7 +2982,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tsconfig/node16@npm:^1.0.1":
+"@tsconfig/node16@npm:^1.0.1, @tsconfig/node16@npm:^1.0.2":
   version: 1.0.2
   resolution: "@tsconfig/node16@npm:1.0.2"
   checksum: 57310e88858be59b36603e5d9bd7bd1714d16402ef1e536c01521ad3b207833a2fc64d260d362cae07bf4e50759a3aba3958c2faf9c42b52c4c817be60a93123
@@ -3486,6 +3504,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"acorn-walk@npm:^8.1.1":
+  version: 8.1.1
+  resolution: "acorn-walk@npm:8.1.1"
+  checksum: 611ed68ed745414d46ccd4ccd5a4469a9420be4af59126ab66d1c51e1e48fe80bf41cce48a27efbfb777d6eea221f73f57a19d129f3114cae49fedc9a2b21a5b
+  languageName: node
+  linkType: hard
+
 "acorn@npm:^7.1.1, acorn@npm:^7.4.0":
   version: 7.4.1
   resolution: "acorn@npm:7.4.1"
@@ -3495,7 +3520,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"acorn@npm:^8.2.4":
+"acorn@npm:^8.2.4, acorn@npm:^8.4.1":
   version: 8.4.1
   resolution: "acorn@npm:8.4.1"
   bin:
@@ -13781,6 +13806,42 @@ resolve@^2.0.0-next.3:
     ts-node-transpile-only: dist/bin-transpile.js
     ts-script: dist/bin-script-deprecated.js
   checksum: d1b582dc3624061d86c2657507e21c3875919b7d108db16cde5507f2aa75b025be2e09b35ec607900eb525e429ebd14f0cf1c5f4b81292a191c0f8c7bfdf0720
+  languageName: node
+  linkType: hard
+
+"ts-node@npm:^10.2.1":
+  version: 10.2.1
+  resolution: "ts-node@npm:10.2.1"
+  dependencies:
+    "@cspotcode/source-map-support": 0.6.1
+    "@tsconfig/node10": ^1.0.7
+    "@tsconfig/node12": ^1.0.7
+    "@tsconfig/node14": ^1.0.0
+    "@tsconfig/node16": ^1.0.2
+    acorn: ^8.4.1
+    acorn-walk: ^8.1.1
+    arg: ^4.1.0
+    create-require: ^1.1.0
+    diff: ^4.0.1
+    make-error: ^1.1.1
+    yn: 3.1.1
+  peerDependencies:
+    "@swc/core": ">=1.2.50"
+    "@swc/wasm": ">=1.2.50"
+    "@types/node": "*"
+    typescript: ">=2.7"
+  peerDependenciesMeta:
+    "@swc/core":
+      optional: true
+    "@swc/wasm":
+      optional: true
+  bin:
+    ts-node: dist/bin.js
+    ts-node-cwd: dist/bin-cwd.js
+    ts-node-script: dist/bin-script.js
+    ts-node-transpile-only: dist/bin-transpile.js
+    ts-script: dist/bin-script-deprecated.js
+  checksum: 528e79c827198c6333830b7f6a92a9af8ac7932c0acb55db5376046cd2fabddf95ff2e1dff572d0175c68d0781f4401142625f3fa3a515124407b8670f3d3835
   languageName: node
   linkType: hard
 
