@@ -1,17 +1,17 @@
 {
   "name": "@open-web3/example-guardian",
-  "version": "0.4.2-20",
+  "version": "0.4.2-21",
   "description": "Collection of guardian examples",
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
   "bin": {
     "cdp": "scripts/cdp.js",
     "collateral-auction": "scripts/collateral-auction.js",
+    "dex-price": "scripts/dex-price.js",
     "laminar-margin-position": "scripts/laminar-margin-position.js",
     "laminar-synthetic-liquidation": "scripts/laminar-synthetic-liquidation.js",
     "schedule": "scripts/schedule.js",
-    "staking": "scripts/staking.js",
-    "dex-price": "scripts/dex-price.js"
+    "staking": "scripts/staking.js"
   },
   "publishConfig": {
     "access": "public",
@@ -24,8 +24,8 @@
   "homepage": "https://github.com/open-web3-stack/guardian",
   "dependencies": {
     "@open-web3/api": "^0.9.4-19",
-    "@open-web3/guardian": "0.4.2-20",
-    "@open-web3/guardian-cli": "0.4.2-20",
+    "@open-web3/guardian": "0.4.2-21",
+    "@open-web3/guardian-cli": "0.4.2-21",
     "@open-web3/util": "^0.9.4-19",
     "@polkadot/api": "^5.2.1",
     "@types/nodemailer": "^6.4.4",
