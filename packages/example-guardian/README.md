@@ -22,7 +22,7 @@ Installing dependencies
 yarn 
 ```
 
-## Setting network :male-mechanic: 
+## Setting up network
 
 Each of the examples is meant to work on the respective network: Acala, Karura, Laminar, Kusama, Polkadot, etc. 
 
@@ -67,7 +67,7 @@ Run the node with:
 cargo run -- --dev --tmp
 ```
 
-## Simulations :robot_face: 
+## Simulations  
 
 To help you trigger certain events and to ensure that the bot picks them up we provide sets of emulations:
 - for Acala: https://github.com/AcalaNetwork/e2e
@@ -179,7 +179,7 @@ Run in **prod** mode:
 yarn prod:collateral-auction
 ```
 
-#### :robot_face: Liquidation Simulation :robot_face:
+####  Liquidation Simulation 
 
 > :warning: **TEMPORARILY UNAVAILABLE**, needs to resolve https://github.com/AcalaNetwork/e2e/issues/4
 
@@ -231,7 +231,7 @@ Run in **prod** mode:
 yarn prod:cdp
 ```
 
-#### :robot_face: Loan collater ratio drop Simulation :robot_face:
+####  Loan collater ratio drop Simulation 
 
 > :warning: **TEMPORARILY UNAVAILABLE**, needs to resolve https://github.com/AcalaNetwork/e2e/issues/4
 
@@ -304,7 +304,7 @@ Run in **prod** mode:
 yarn prod:laminar-synthetic-liquidation
 ```
 
-#### :robot_face: Synthetic pool liquidation Simulation :robot_face:  
+####  Synthetic pool liquidation Simulation   
 
 The synthetic pool liquidation simulation script will work only for your local Laminar testnet, you should ensure that it's running.
 
@@ -361,7 +361,7 @@ Run in **prod** mode:
 yarn prod:laminar-margin-position
 ```
 
-### :robot_face: Margin position price drop Simulation :robot_face: 
+###  Margin position price drop Simulation  
 
 The Margin position price drop simulation script will work only for your local Laminar testnet, you should ensure that it's running.
 
