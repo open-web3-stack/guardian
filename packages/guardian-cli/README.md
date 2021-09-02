@@ -1,10 +1,11 @@
 # @open-web3/guardian-cli
 
-_Working In Progess_
-
 ## Overview
 
-`guardian` is a CLI tool & JS library to monitor on chian states and events. When user defined criteria are met, it will execute a script or post a webhook to perform an action. This action can notify users, or initiate/participate in collateral auctions such as send a transaction.
+`guardian-cli` is a tool to configure and run `guardian` JS library.
+
+`Guardian library` is used to monitor on-chain states and events. When a user has defined criteria are met, it will execute a script or post a webhook to perform an action. This action can notify users, or initiate/participate in collateral auctions such as send a transaction.
+
 
 See [#1](https://github.com/open-web3-stack/guardian/issues/1) for spec and example.
 
@@ -40,7 +41,7 @@ guardians:
             path: ./do_something # any script
 ```
 
-Start guardian using command.
+Start guardian using the command.
 
 ```
 guardian-cli --config=./config.yaml
