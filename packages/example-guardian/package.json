@@ -44,12 +44,13 @@
     "dev:cdp": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/cdp.ts dotenv_config_path=.env.cdp",
     "dev:schedule": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/schedule.ts dotenv_config_path=.env.schedule",
     "dev:staking": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/staking.ts dotenv_config_path=.env.staking",
+    "prod:collateral-auction": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/collateral-auction.ts dotenv_config_path=.env.auction",
     "dev:dex-price": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/dex-price.ts dotenv_config_path=.env.dex-price",
-    "prod:dex-price": "ts-node -r dotenv/config src/scripts/dex-price.ts dotenv_config_path=.env.dex-price",
     "prod:laminar-synthetic-liquidation": "ts-node -r dotenv/config src/scripts/laminar-synthetic-liquidation.ts dotenv_config_path=.env.laminar-synthetic-liquidation",
     "prod:laminar-margin-position": "ts-node -r dotenv/config src/scripts/laminar-margin-position.ts dotenv_config_path=.env.laminar-margin-position",
     "prod:cdp": "ts-node -r dotenv/config src/scripts/cdp.ts dotenv_config_path=.env.cdp",
     "prod:schedule": "ts-node -r dotenv/config src/scripts/schedule.ts dotenv_config_path=.env.schedule",
-    "prod:staking": "ts-node -r dotenv/config  src/scripts/staking.ts dotenv_config_path=.env.staking"
+    "prod:staking": "ts-node -r dotenv/config  src/scripts/staking.ts dotenv_config_path=.env.staking",
+    "prod:dex-price": "ts-node -r dotenv/config src/scripts/dex-price.ts dotenv_config_path=.env.dex-price"
   }
 }

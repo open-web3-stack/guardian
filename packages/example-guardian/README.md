@@ -1,36 +1,111 @@
 # Guardian examples
 
+Here are presented different use cases for Guardian with running as in development environment and production.
+
+Each of the examples contains 2 parts:
+1. Guardian config `config.yml` that describes types of events to subscribe to.
+2. Node.js scripts that are fired if a certain event was emmited.
+
+Both of the scripts can be customized.
+
+## Setting up environment
+
+Cloning project, navigating to the examples folder
+
+```shell=
+git clone https://github.com/open-web3-stack/guardian.git
+cd guardian/packages/example-guardian
+```
+
+Installing dependencies
+```shell=
+yarn 
+```
+
+## Setting network :male-mechanic: 
+
+Each of the examples is meant to work on the respective network: Acala, Karura, Laminar, Kusama, Polkadot, etc. 
+
+You can find some public nodes [here](https://wiki.acala.network/learn/get-started/public-nodes).
+
+You may want to try the scripts running your local testnet. For some examples like Bots for Liquidations, it may be more convenient as it's way easier to trigger liquidation in the network you can control. 
+To run local testnets you need to follow guides in the respective projects.
+
+Each example is provided with `.env.<example-name>` file that contains example of configuration, and includes network:
+`NODE_ENDPOINT` environment variable.
+For local testnet it conventionally equals `ws://localhost:9944`.
+
+### Running Laminar local node
+
+Using `docker`:
+```shell=
+docker run --rm -p 9944:9944  laminar/laminar-node:latest \
+--dev --ws-external --rpc-methods=unsafe \
+-levm=trace --tmp
+```
+
+To build the project without `docker` use the guidelines here:
+[**laminar-protocol/laminar-chain**](https://github.com/laminar-protocol/laminar-chain)
+Run the node with:
+```
+cargo run -- --dev --tmp
+```
+
+### Running Acala local node
+
+Using `docker`:
+```shell=
+docker run --rm -p 9944:9944 acala/mandala-node:latest \
+--dev --ws-external --rpc-methods=unsafe \
+--instant-sealing  -levm=trace --tmp
+```
+
+To build the project without docker use the guidelines here:
+[**AcalaNetwork/Acala**](https://github.com/AcalaNetwork/Acala)
+Run the node with:
+```
+cargo run -- --dev --tmp
+```
+
+## Simulations :robot_face: 
+
+To help you trigger certain events and to ensure that the bot picks them up we provide sets of emulations:
+- for Acala: https://github.com/AcalaNetwork/e2e
+- for Laminar: https://github.com/laminar-protocol/e2e
+
+In this guide, we provide a way how to use them.
+
+
 You can extend the YAML config files and run `Guardian` using option `--config=config.yml`.
 Note: find the update to date public node info [here](https://wiki.acala.network/learn/get-started/public-nodes).
 
-## Kusama Example
+---
+# Bots
 
-### Periodically Check Balance
+## Periodic Checking balance in Kusama
+
 This example uses the `scheduler` [yaml config file](https://github.com/open-web3-stack/guardian/blob/readme/packages/example-guardian/src/schedule.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/readme/packages/example-guardian/src/schedule). It will periodically (every s blocks) get the balance of a given address on the Kusama network.
 
-1. Create a `.env` file in the project directory
+The configuration file you can find here:
+[.env.schedule](https://github.com/open-web3-stack/guardian/blob/5b88526b37ffce7ad3e1c570f33e9ce756554112/packages/example-guardian/.env.schedule)
 
-```
-NODE_ENDPOINT=wss://kusama-rpc.polkadot.io/
-ADDRESS=GPkEmnRRzk65vw5fqZmaPbAmCGDKRWqXAgT3ydiQxHvqePE
-```
-
-2. Install globally `@open-web3/example-guardian@beta`
-
+It cointains next env variables:
 ```shell=
-yarn global add @open-web3/example-guardian@beta
-```
-![](https://i.imgur.com/NOUz1BL.png)
-it installs few guardians: `cdp`, `collateral-auction`, ..., `schedule`. Many of them will be used later.
-
-3. Start the Guardian by running this command in the directory with created `.env` file
-```shell
-schedule
+NODE_ENDPOINT=wss://kusama-rpc.polkadot.io/
+ADDRESS=<YOUR_KUSAMA_ADDRESS>
 ```
 
+Run in **dev** mode:
+```shell=
+yarn dev:schedule
+```
 
+Run in **prod** mode:
+```shell=
+yarn prod:schedule
+```
 
-4. The log should show something like this
+The output should look like this:
 ```
 0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [substrate-chain] starting...
 0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [time-monitor.schedule.time] starting ...
@@ -51,286 +126,264 @@ schedule
   }
 }
 ```
-### Staking Reward Notification Example
-This example uses the `staking` [yaml config file](https://github.com/open-web3-stack/guardian/blob/readme/packages/example-guardian/src/staking.yml) and tasks source code [here](https://github.com/open-web3-stack/guardian/tree/readme/packages/example-guardian/src/staking). It will check for staking reward event for a given address on the Kusama network, and send out an email notification if there's an event. Currently reward is given out once a day.
 
-1. Create a `.env` file in the project directory
+## Staking Reward Notifications for Kusama
 
-```
-NODE_ENDPOINT=wss://kusama-rpc.polkadot.io/
-ADDRESS=CzBwcfFuWHRw5JJ3ZZF5xWvKZKrvQgcsg2XJPUwMLx9fm1u
-```
+This example uses the `staking` [yaml config file](https://github.com/open-web3-stack/guardian/blob/readme/packages/example-guardian/src/staking.yml) and tasks source code [here](https://github.com/open-web3-stack/guardian/tree/readme/packages/example-guardian/src/staking). It will check staking reward event for a given address on the Kusama network, and send out an email notification if there's an event. Currently reward is given out once a day.
 
-2. Install globally `@open-web3/example-guardian@beta` (optional if you did it)
+The configuration file you can find here:
+[.env.staking](https://github.com/open-web3-stack/guardian/blob/33c399ba3f4d5b3923a2479d2dc8fcee803bf96e/packages/example-guardian/.env.staking)
 
+It cointains next env variables:
 ```shell=
-yarn global add @open-web3/example-guardian@beta
+NODE_ENDPOINT=wss://kusama-rpc.polkadot.io/
+ADDRESS=<YOUR_KUSAMA_ADDRESS>
 ```
 
-3. Start the Guardian by running this command in the same directory with `.env` file
-```shell
-staking
+Run in **dev** mode:
+```shell=
+yarn dev:staking
 ```
 
-## Application-specific Chain Example - Acala
-
-### Collateral Auction Example
-This example uses the `collateral auction` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/collateral-auction-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/auction/collateral). It will watch collateral auctions and dex pools, (dex is used to liquidate collaterals if the price is more favourable) and bid from the specified account. 
-
-1. Create a `.env` file in the project directory
-
+Run in **prod** mode:
+```shell=
+yarn prod:staking
 ```
-NODE_ENDPOINT=wss://mandala.laminar.codes/ws
+
+
+## Collateral Auction Bot for Acala/Karura
+
+This example uses the `collateral auction` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/collateral-auction-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/auction/collateral). It will watch collateral auctions and DEX pools, (DEX is used to liquidate collaterals if the price slippage is acceptable) and bid from the specified account if the price of collater is lower than the price from Price oracle for `MARGIN` coefficient. 
+
+Configuration file you can find here:
+[.env.auction](https://github.com/open-web3-stack/guardian/blob/d9b5a2a82f84d4a1909f7ef1d4bb868ddb1105fb/packages/example-guardian/.env.auction)
+
+It cointains next env variables:
+```shell=
+NODE_ENDPOINT=ws://localhost:9944
 SURI=//Charlie
 ADDRESS=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y
 MARGIN=0.1
 ```
 
-2. Install globally `@open-web3/example-guardian@beta` (optional if you did it)
+> Note :warning: to test out this example it's recommended to use a local testnet.
 
+
+Run in **dev** mode:
 ```shell=
-yarn global add @open-web3/example-guardian@beta
+yarn dev:collateral-auction
+```
+
+Run in **prod** mode:
+```shell=
+yarn prod:collateral-auction
+```
+
+#### :robot_face: Liquidation Simulation :robot_face:
+
+The liquidation simulation script will work only for your local Acala testnet, you should ensure that it's running.
+
+To use simulation you need to clone the repository and run the simulation script:
+```shell=
+git clone https://github.com/AcalaNetwork/e2e.git acala-simulations
+cd acala-simulations
+```
+Install dependencies:
+```
+yarn
+```
+
+Run simulation:
+```shell=
+yarn dev:simulate-liquidate-cdp
 ```
 
 
-3. Start guardian by running from the directory with `.env` file
 
-```shell
-collateral-auction
-```
 
-You can extend [YAML config file](src/collateral-auction-guardian.yml) and run using the option `--config=config.yml`
+## Monitoring Loans Bot for Acala/Karura
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/AcalaNetwork/collateral-auction-bot-template)
+This example uses the `cdp guardian` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/cdp-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/cdp). It will monitor specified account's loan positions. If the collateral ratio of the loans drops below a given threshold (`COLLATERAL_RATIO`) for a selected account (`ADDRESS`), it will deposit more liquidity to de-risk the loan and keep the position open.
 
-3. The log should show something like this  
-```
-0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [acala-guardian] starting...
-0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [AuctionDealt.system.events] starting ...
-0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [CollateralAuction.honzon.collateralAuctions] starting ...
-0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [AUSDBalance.account.balances] starting ...
-0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [DEXPool.dex.pools] starting ...
-0000-00-00000:00:00        REGISTRY: Unknown signed extensions SetEvmOrigin found, treating them as no-effect
-0000-00-00000:00:00        REGISTRY: Unknown signed extensions SetEvmOrigin found, treating them as no-effect
-0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [AuctionDealt.system.events] is running ...
-0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [CollateralAuction.honzon.collateralAuctions] is running ...
-0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [AUSDBalance.account.balances] is running ...
-0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [DEXPool.dex.pools] is running ...
-0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [acala-guardian] is running ...
-0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [AUSDBalance.account.balances] output:  {
-  account: '5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y',
-  currencyId: '{"Token":"AUSD"}',
-  free: '0'
-}
-0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [AUSDBalance.account.balances] called [internal-balance]
-0000-00-00000:00:00.000Z   LOG [@open-web3/guardian]: [DEXPool.dex.pools] output:  {
-  currencyId: '[{"Token":"AUSD"},{"Token":"XBTC"}]',
-  price: '23311448701827',
-  baseLiquidity: '9970922954616215557',
-  otherLiquidity: '427726439577067600000000'
-}
 
-```
+Configuration file you can find here:
+[.env.cdp](https://github.com/open-web3-stack/guardian/blob/d9b5a2a82f84d4a1909f7ef1d4bb868ddb1105fb/packages/example-guardian/.env.cdp)
 
-#
-### CDP Guardian Bot
-This example uses the `cdp guardian` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/cdp-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/cdp). It will monitor specified account's loan positions. If the collateral ratio of the loans drops below a given threshold, it will deposit more liquidity to de-risk the loan and keep the position open.
-
-1. Create a `.env` file in the project directory
-
-```
-NODE_ENDPOINT=wss://mandala.laminar.codes/ws
+It cointains next env variables:
+```shell=
+NODE_ENDPOINT=ws://localhost:9944
 SURI=//Charlie
 ADDRESS=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y
 COLLATERAL_RATIO=1.4
 ```
 
-2. Install globally `@open-web3/example-guardian@beta` (optional if you did it)
+> Note :warning: to test out this example it's recommended to use a local testnet. 
 
+Run in **dev** mode:
 ```shell=
-yarn global add @open-web3/example-guardian@beta
+yarn dev:cdp
 ```
 
-3. Start guardian by running from the directory with `.env` file
-
-```shell
-cdp
+Run in **prod** mode:
+```shell=
+yarn prod:cdp
 ```
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/AcalaNetwork/cdp-bot-template)
+#### :robot_face: Loan collater ratio drop Simulation :robot_face:
 
-#
-### Dex Price Guardian Bot
-This example uses the `dex-price guardian` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/dex-price-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/dex-price). It will monitor a specified liquidity pair and perform an action whenever there is a price change for that pair.
+The Loan collater ratio drop simulation script will work only for your local Acala testnet, you should ensure that it's running.
 
-1. Create a `.env` file in the project directory
-
+To use simulation you need to clone the repository and run the simulation script:
+```shell=
+git clone https://github.com/AcalaNetwork/e2e.git acala-simulations
+cd acala-simulations
 ```
+Install dependencies:
+```
+yarn
+```
+
+Run simulation:
+```shell=
+yarn dev:dev:simulate-loan
+```
+
+
+## Dex Price Guardian Bot for Acala/Karura
+
+This example uses the `dex-price guardian` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/dex-price-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/dex-price). It will monitor a specified liquidity pair (`TOKEN_A` and `TOKEN_B`) and perform an action whenever there is a price change for that pair.
+
+Configuration file you can find here:
+[.env.dex-price](https://github.com/open-web3-stack/guardian/blob/33c399ba3f4d5b3923a2479d2dc8fcee803bf96e/packages/example-guardian/.env.dex-price)
+
+It cointains next env variables:
+```shell=
 NODE_ENDPOINT=wss://karura.api.onfinality.io/public-ws
 TOKEN_A=KUSD
 TOKEN_B=KSM
 ```
 
-2. Install globally `@open-web3/example-guardian@beta` (optional if you did it)
-
+Run in **dev** mode:
 ```shell=
-yarn global add @open-web3/example-guardian@beta
+yarn dev:dex-price
 ```
 
-3. Start the guardian by running the following from the directory with the .env file
-
-```shell
-dex-price
-```
-
-#
-## Application-specific Chain Example - Laminar
-### Laminar Synthetic Liquidation Bot
-This example uses the `laminar synthetic liquidation` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/laminar-synthetic-liquidation-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/laminar-synthetic-liquidation). It will monitor specified account's synthetic asset trading positions. If the collateral ratio of the trade drops below a given threshold, it will liquidate the position.
-
-1. Create a `.env` file in the project directory
-
-```
-NODE_ENDPOINT=wss://node-6729167516986527744.jm.onfinality.io/ws
-SURI=//Charlie
-ADDRESS=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y
-COLLATERAL_RATIO=1.04
-```
-
-2. Install globally `@open-web3/example-guardian@beta` (optional if you did it)
-
+Run in **prod** mode:
 ```shell=
-yarn global add @open-web3/example-guardian@beta
+yarn prod:dex-price
 ```
 
-2. Start guardian by running from the directory with `.env` file
+## Synthetic Liquidation Bot for Laminar
+This example uses the `laminar synthetic liquidation` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/laminar-synthetic-liquidation-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/laminar-synthetic-liquidation). It will monitor specified account's (`ADDRESS`) synthetic asset trading positions. If the collateral ratio of the trade drops below a given threshold (`COLLATERAL_RATIO`), it will liquidate the position.
 
-```shell
-laminar-synthetic-liquidation
-```
 
-### Laminar Margin Position Bot
-This example uses the `laminar margin position` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/laminar-margin-position-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/laminar-margin-position). It will monitor specified account's margin positions. If the profit goes below a given threshold, it will close the position.
+Configuration file you can find here:
+[.env.laminar-synthetic-liquidation](https://github.com/open-web3-stack/guardian/blob/d9b5a2a82f84d4a1909f7ef1d4bb868ddb1105fb/packages/example-guardian/.env.laminar-synthetic-liquidation)
 
-1. Create a `.env` file in the project directory
-
-```
-NODE_ENDPOINT=wss://testnet-node-1.laminar-chain.laminar.one/ws
-SURI=//Charlie # your private key
-ADDRESS=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y # your address
-PROFIT=-10000000000000000000 # close position if profit goes below -10aUSD
-```
-
-2. Install globally `@open-web3/example-guardian@beta` (optional if you did it)
-
+It cointains next env variables:
 ```shell=
-yarn global add @open-web3/example-guardian@beta
-```
-
-3. Start guardian by running from project directory with `.env` file
-
-```shell
-laminar-margin-position
-```
-
-### Running Examples on local testnet
-
-All of the shown here examples can be ran on a local testnet. Besides having full control over your local chain, we have a bunch of scripts to simulate behaviour that will trigger guardian to act:
-- [acala-e2e](https://github.com/AcalaNetwork/e2e) simulations to test Acala guardians: `simulate-liquidate-cdp`, `simulate-loan`
-- [laminar-e2e](https://github.com/laminar-protocol/e2e) simulations to test laminar guardians: `simulate-liquidate-synthetic-pool`, `simulate-margin-position`
-
-In this example, we will run **Margin Position Bot** on a local chain and will use `simulate-margin-position` to trigger it.
-
-
-To test the bot we need to setup 3 processes: local node, bot and simulation of changing positions.
-
-
-**Running Laminar local node**
-
-Run [laminar-chain](https://github.com/laminar-protocol/laminar-chain#building--running-laminarchain) local testnet with `--tmp` so it starts from scratch or purges old chain data every time you start the node
-```
-cargo run -- --dev --tmp
-```
-
-You can follow more detailed instructions in the repository.
-
----
-
-**Running Guardian Bot**
-1. Create a bot project folder
-```shell=
-mkdir position-bot
-cd position-bot
-```
-2. Create a `.env` file in the project directory
-
-```shell=
-touch .env
-```
-Insert in `.env` file next content:
-```
 NODE_ENDPOINT=ws://localhost:9944
 SURI=//Charlie
 ADDRESS=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y
-PROFIT=-10000000000000000000 # close position if profit goes below -10aUSD
+COLLATERAL_RATIO=1.1
 ```
 
-3. Install bot globally `@open-web3/example-guardian@beta`
+> Note :warning: to test out this example it's recommended to use **local testnet**.
 
+Run in **dev** mode:
 ```shell=
-yarn global add @open-web3/example-guardian@beta
+yarn dev:laminar-synthetic-liquidation
 ```
 
-4. Start guardian bot
-
-```shell
-laminar-margin-position
-```
-
----
-
-**Running simulation**
-
-1. Create a separate folder for simulations
-
+Run in **prod** mode:
 ```shell=
-mkdir margin-position-simulations
-cd margin-position-simulations
+yarn prod:laminar-synthetic-liquidation
 ```
 
-2. Install laminar simulations globally
+#### :robot_face: Synthetic pool liquidation Simulation :robot_face:  
 
+The synthetic pool liquidation simulation script will work only for your local Laminar testnet, you should ensure that it's running.
+
+To use simulation you need to clone the repository and run the simulation script:
 ```shell=
-yarn global add @laminar/e2e
+git clone https://github.com/laminar-protocol/e2e.git laminar-simulations
+cd laminar-simulations
 ```
-The output should look like this:
-![](https://i.imgur.com/poXicL4.png)
-
-It shows that the library has two available scripts: `simulate-liquidate-synthetic-pool` and `simulate-margin-position`
-
-> Note :warning:  : in the same way you can install e2e examples for acala.
-
-3. Run simulation scripts to simulate the event. It prepares the environment, creates a position and drops the price
-
-```shell
-TRADER=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y simulate-margin-position
+Install dependencies:
 ```
-We pass `TRADER` environment variable with `Charlie` account address.
->:warning: be sure that TRADER account number is the same  account in `.env` file in Margin Position Guardian Bot (in our case Charlie's address)
+yarn
+```
 
-The output of running the simulator should look like this:
-![](https://i.imgur.com/xR2ztRo.png)
+Run simulation:
+```shell=
+yarn dev:simulate-liquidate-synthetic-pool
+```
 
----
+Simulation output should look like this:
 
-**Checking the results**
+![simulation-output](https://i.imgur.com/9cZpRUG.png)
 
-After simulation ran successfully you should see in your Guardian Bot terminal window activity of calling action `close_position`:
+The bot should pick up the event and display next output:
 
-![](https://i.imgur.com/OZ6x4pl.png)
+![synthetic-position-output](https://i.imgur.com/osmwnXk.png)
 
 
-You can also check the chain state and emitted events using polkadot.js apps:
+## Laminar Margin Position Bot
+
+This example uses the `laminar margin position` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/laminar-margin-position-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/laminar-margin-position). It will monitor specified account's margin positions. If the profit goes below a given threshold, it will close the position.
+
+
+Configuration file you can find here:
+[.env.laminar-margin-position](https://github.com/open-web3-stack/guardian/blob/d9b5a2a82f84d4a1909f7ef1d4bb868ddb1105fb/packages/example-guardian/.env.laminar-margin-position)
+
+It cointains next env variables:
+```shell=
+NODE_ENDPOINT=ws://localhost:9944
+SURI=//Charlie
+ADDRESS=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y
+# close position if profit goes below -10aUSD
+PROFIT=-10000000000000000000 
+```
+
+> Note :warning: to test out this example it's recommended to use **local testnet**. 
+
+Run in **dev** mode:
+```shell=
+yarn dev:laminar-margin-position
+```
+
+Run in **prod** mode:
+```shell=
+yarn prod:laminar-margin-position
+```
+
+### :robot_face: Margin position price drop Simulation :robot_face: 
+
+The Margin position price drop simulation script will work only for your local Laminar testnet, you should ensure that it's running.
+
+To use simulation you need to clone the repository and run the simulation script:
+```shell=
+git clone https://github.com/laminar-protocol/e2e.git laminar-simulations
+cd laminar-simulations
+```
+Install dependencies:
+```
+yarn
+```
+
+Run simulation:
+```shell=
+yarn dev:simulate-margin-position
+```
+
+The simulation terminal should look like this:
+![](https://i.imgur.com/mXaONb2.png)
+
+
+The bot terminal should pick up the dropped position and display it like this:
+![](https://i.imgur.com/FuqI43b.png)
+
+### Checking results of simulations, bots activity in web UI
 
 You can also navigate to https://polkadot.js.org/apps/#/explorer, connect to the local node and check the events happening in the **Network** -> **Explorer** tab, to check all events were happening:
 
