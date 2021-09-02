@@ -1,6 +1,6 @@
 {
   "name": "@open-web3/guardian",
-  "version": "0.4.2-23",
+  "version": "0.4.2-24",
   "description": "Web3 Guardian - a blockchain monitoring and alerting tool",
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
