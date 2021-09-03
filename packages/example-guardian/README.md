@@ -140,6 +140,10 @@ NODE_ENDPOINT=wss://kusama-rpc.polkadot.io/
 ADDRESS=<YOUR_KUSAMA_ADDRESS>
 ```
 
+This Bot can be used for the following rewards for 3d party protocols built on top on top of Polkadot/Kusama staking.
+One of them is Karura Staking Derivative. You can check the rewards using providing L-KSM staking address:
+`HTAeD1dokCVs9MwnC1q9s2a7d2kQ52TAjrxE1y5mj5MFLLA`. To check the rewards in UI, use the [link here](https://kusama.subscan.io/account/HTAeD1dokCVs9MwnC1q9s2a7d2kQ52TAjrxE1y5mj5MFLLA).
+
 Run in **dev** mode:
 ```shell=
 yarn dev:staking
