@@ -7,7 +7,7 @@ dotenv.config();
 const read = () => {
   const { config: configPath } = require('yargs').demandOption('config').argv;
 
-  const config = readConfig(configPath);
+  const config = readConfig(configPath) as any;
 
   let nodeEndpoint: string; // 'ws://localhost:9944';
   if (config && config['guardians']) {
