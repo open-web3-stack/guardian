@@ -4,11 +4,11 @@ Here are presented different use cases for Guardian with running as in developme
 
 Each of the examples contains 2 parts:
 1. Guardian config `config.yml` that describes types of events to subscribe to.
-2. Node.js scripts that are fired if a certain event was emmited.
+2. Node.js scripts that are fired if a certain event was emitted.
 
 Both of the scripts can be customized.
 
-## Setting up environment
+## Setting up the environment
 
 Cloning project, navigating to the examples folder
 
@@ -22,7 +22,7 @@ Installing dependencies
 yarn 
 ```
 
-## Setting up network
+## Setting up the network
 
 Each of the examples is meant to work on the respective network: Acala, Karura, Laminar, Kusama, Polkadot, etc. 
 
@@ -31,7 +31,7 @@ You can find some public nodes [here](https://wiki.acala.network/learn/get-start
 You may want to try the scripts running your local testnet. For some examples like Bots for Liquidations, it may be more convenient as it's way easier to trigger liquidation in the network you can control. 
 To run local testnets you need to follow guides in the respective projects.
 
-Each example is provided with `.env.<example-name>` file that contains example of configuration, and includes network:
+Each example is provided with `.env.<example-name>` file that contains an example of configuration, and includes network:
 `NODE_ENDPOINT` environment variable.
 For local testnet it conventionally equals `ws://localhost:9944`.
 
@@ -78,6 +78,12 @@ In this guide, we provide a way how to use them.
 
 You can extend the YAML config files and run `Guardian` using option `--config=config.yml`.
 Note: find the update to date public node info [here](https://wiki.acala.network/learn/get-started/public-nodes).
+
+## Heroku Deployment 
+
+All presented examples can be automatically deployed to Heroku for use in production. Here you can find an example for Dex Price bot and a way how to modify it with other samples: 
+
+**[Dex Price Heroku Deployment](https://github.com/AcalaNetwork/collateral-auction-bot-template)**
 
 ---
 # Bots
@@ -329,7 +335,7 @@ Simulation output should look like this:
 
 ![simulation-output](https://i.imgur.com/9cZpRUG.png)
 
-The bot should pick up the event and display next output:
+The bot should pick up the event and display the next output:
 
 ![synthetic-position-output](https://i.imgur.com/osmwnXk.png)
 
