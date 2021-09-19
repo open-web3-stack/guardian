@@ -185,7 +185,6 @@ yarn prod:collateral-auction
 
 ####  Liquidation Simulation 
 
-> :warning: **TEMPORARILY UNAVAILABLE**, needs to resolve https://github.com/AcalaNetwork/e2e/issues/4
 
 The liquidation simulation script will work only for your local Acala testnet, you should ensure that it's running.
 
@@ -237,7 +236,6 @@ yarn prod:cdp
 
 ####  Loan collater ratio drop Simulation 
 
-> :warning: **TEMPORARILY UNAVAILABLE**, needs to resolve https://github.com/AcalaNetwork/e2e/issues/4
 
 The Loan collater ratio drop simulation script will work only for your local Acala testnet, you should ensure that it's running.
 
