@@ -83,7 +83,7 @@ Note: find the update to date public node info [here](https://wiki.acala.network
 
 All presented examples can be automatically deployed to Heroku for use in production. Here you can find an example for Dex Price bot and a way how to modify it with other samples: 
 
-**[Dex Price Heroku Deployment](https://github.com/AcalaNetwork/collateral-auction-bot-template)**
+**[Dex Price Heroku Deployment](https://github.com/AcalaNetwork/guardian-bot-heroku-template)**
 
 ---
 # Bots
@@ -314,7 +314,7 @@ yarn prod:laminar-synthetic-liquidation
 
 ####  Synthetic pool liquidation Simulation   
 
-The synthetic pool liquidation simulation script will work only for your local Laminar testnet, you should ensure that it's running.
+The synthetic pool liquidation simulation script will work only for your local **Laminar** testnet, you should ensure that it's running.
 
 To use simulation you need to clone the repository and run the simulation script:
 ```shell=
@@ -371,7 +371,7 @@ yarn prod:laminar-margin-position
 
 ###  Margin position price drop Simulation  
 
-The Margin position price drop simulation script will work only for your local Laminar testnet, you should ensure that it's running.
+The Margin position price drop simulation script will work only for your local **Laminar** testnet, you should ensure that it's running.
 
 To use simulation you need to clone the repository and run the simulation script:
 ```shell=
