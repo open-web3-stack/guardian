@@ -135,7 +135,7 @@ The output should look like this:
 
 ## Staking Reward Notifications for Kusama
 
-This example uses the `staking` [yaml config file](https://github.com/open-web3-stack/guardian/blob/readme/packages/example-guardian/src/staking.yml) and tasks source code [here](https://github.com/open-web3-stack/guardian/tree/readme/packages/example-guardian/src/staking). It will check staking reward event for a given address on the Kusama network, and send out an email notification if there's an event. Currently reward is given out once a day.
+This example uses the `staking` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/staking.yml) and tasks source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/staking). It will check staking reward event for a given address on the Kusama network, and send out an email notification if there's an event. Currently reward is given out once a day.
 
 The configuration file you can find here:
 [.env.staking](https://github.com/open-web3-stack/guardian/blob/33c399ba3f4d5b3923a2479d2dc8fcee803bf96e/packages/example-guardian/.env.staking)
