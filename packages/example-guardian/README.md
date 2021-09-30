@@ -77,20 +77,20 @@ In this guide, we provide a way how to use them.
 
 
 You can extend the YAML config files and run `Guardian` using option `--config=config.yml`.
-Note: find the update to date public node info [here](https://wiki.acala.network/learn/get-started/public-nodes).
+Note: find the up to date public node info [here](https://wiki.acala.network/learn/get-started/public-nodes).
 
 ## Heroku Deployment 
 
 All presented examples can be automatically deployed to Heroku for use in production. Here you can find an example for Dex Price bot and a way how to modify it with other samples: 
 
-**[Dex Price Heroku Deployment](https://github.com/AcalaNetwork/guardian-bot-heroku-template)**
+**[Guardian Bot Heroku Templatet](https://github.com/AcalaNetwork/guardian-bot-heroku-template)**
 
 ---
 # Bots
 
 ## Periodic Checking balance in Kusama
 
-This example uses the `scheduler` [yaml config file](https://github.com/open-web3-stack/guardian/blob/readme/packages/example-guardian/src/schedule.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/readme/packages/example-guardian/src/schedule). It will periodically (every s blocks) get the balance of a given address on the Kusama network.
+This example uses the `scheduler` [yaml config file](https://github.com/open-web3-stack/guardian/blob/readme/packages/example-guardian/src/schedule.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/schedule). It will periodically (every s blocks) get the balance of a given address on the Kusama network.
 
 The configuration file you can find here:
 [.env.schedule](https://github.com/open-web3-stack/guardian/blob/5b88526b37ffce7ad3e1c570f33e9ce756554112/packages/example-guardian/.env.schedule)
