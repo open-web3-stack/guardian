@@ -90,7 +90,7 @@ All presented examples can be automatically deployed to Heroku for use in produc
 
 ## Periodic Checking balance in Kusama
 
-This example uses the `scheduler` [yaml config file](https://github.com/open-web3-stack/guardian/blob/readme/packages/example-guardian/src/schedule.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/schedule). It will periodically (every s blocks) get the balance of a given address on the Kusama network.
+This example uses the `scheduler` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/schedule.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/schedule). It will periodically (every s blocks) get the balance of a given address on the Kusama network.
 
 The configuration file you can find here:
 [.env.schedule](https://github.com/open-web3-stack/guardian/blob/5b88526b37ffce7ad3e1c570f33e9ce756554112/packages/example-guardian/.env.schedule)
