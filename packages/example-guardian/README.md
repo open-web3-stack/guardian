@@ -163,7 +163,7 @@ yarn prod:staking
 
 ## Collateral Auction Bot for Acala/Karura
 
-This example uses the `collateral auction` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/collateral-auction-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/auction/collateral). It will watch collateral auctions and DEX pools, (DEX is used to liquidate collaterals if the price slippage is acceptable) and bid from the specified account if the price of collater is lower than the price from Price oracle for `MARGIN` coefficient. 
+This example uses the `collateral auction` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/collateral-auction-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/auction). It will watch collateral auctions and DEX pools, (DEX is used to liquidate collaterals if the price slippage is acceptable) and bid from the specified account if the price of collater is lower than the price from Price oracle for `MARGIN` coefficient. 
 
 Configuration file you can find here:
 [.env.auction](https://github.com/open-web3-stack/guardian/blob/d9b5a2a82f84d4a1909f7ef1d4bb868ddb1105fb/packages/example-guardian/.env.auction)
@@ -208,8 +208,6 @@ Run simulation:
 ```shell=
 yarn dev:simulate-liquidate-cdp
 ```
-
-
 
 
 ## Monitoring Loans Bot for Acala/Karura
@@ -266,7 +264,7 @@ yarn dev:dev:simulate-loan
 This example uses the `dex-price guardian` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/dex-price-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/dex-price). It will monitor a specified liquidity pair (`TOKEN_A` and `TOKEN_B`) and perform an action whenever there is a price change for that pair.
 
 Configuration file you can find here:
-[.env.dex-price](https://github.com/open-web3-stack/guardian/blob/33c399ba3f4d5b3923a2479d2dc8fcee803bf96e/packages/example-guardian/.env.dex-price)
+[.env.dex-price](https://github.com/open-web3-stack/guardian/blob/49a25c22765b1a3f83f6991cd831e36c459bde69/packages/example-guardian/.env.dex-price)
 
 It cointains next env variables:
 ```shell=
@@ -346,7 +344,7 @@ This example uses the `laminar margin position` [yaml config file](https://githu
 
 
 Configuration file you can find here:
-[.env.laminar-margin-position](https://github.com/open-web3-stack/guardian/blob/d9b5a2a82f84d4a1909f7ef1d4bb868ddb1105fb/packages/example-guardian/.env.laminar-margin-position)
+[.env.laminar-margin-position](https://github.com/open-web3-stack/guardian/blob/12f276a86e4531c262151aa284e31a7a470aa069/packages/example-guardian/.env.laminar-margin-position)
 
 It cointains next env variables:
 ```shell=
