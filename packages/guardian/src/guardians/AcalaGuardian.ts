@@ -15,14 +15,24 @@ import { StorageType } from '@acala-network/types';
 import { createStorage } from '@open-web3/api-mobx';
 
 const defaultNodeEndpoint = ({ network }: { network: AcalaGuardianConfig['network'] }) => {
-  // TODO: update node endpoints
+  // TODO: keep this up-to-date
   switch (network) {
     case 'dev':
       return 'ws://localhost:9944';
     case 'mandala':
       return 'wss://testnet-node-1.acala.laminar.one/ws';
+    case 'karura':
+      return [
+        'wss://karura-rpc-0.aca-api.network',
+        'wss://karura-rpc-1.aca-api.network',
+        'wss://karura-rpc-2.aca-api.network',
+        'wss://karura-rpc-3.aca-api.network',
+        'wss://karura.polkawallet.io',
+        'wss://karura.api.onfinality.io/public-ws',
+        'wss://pub.elara.patract.io/karura'
+      ];
     case 'mainnet':
-      return 'ws://localhost:9944';
+      throw [];
   }
 };
 
