@@ -32,7 +32,7 @@ const defaultNodeEndpoint = ({ network }: { network: AcalaGuardianConfig['networ
         'wss://pub.elara.patract.io/karura'
       ];
     case 'mainnet':
-      throw [];
+      return [];
   }
 };
 
