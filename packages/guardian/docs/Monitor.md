@@ -14,7 +14,7 @@ acala-guardian: # any name for your guardian
         arguments: # arguments given to the task
           account: ${ADDRESS}
         conditions: # conditions that need to fulfill i.e: free lower than 1 ACA
-          - free: < 1000000000000000000
+          - free: < 1000000000000
         actions:
           - method: script # run a script
             path: ./my_script.py

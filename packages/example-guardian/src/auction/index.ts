@@ -12,6 +12,12 @@ import { setDefaultConfig, logger, tokenPrecision } from '../utils';
 import { calculateBid } from './calculateBid';
 import { ApiManager } from '@open-web3/api';
 
+type Metadata = {
+  network: string;
+  nodeEndpoint: string | string[];
+  action: { margin: number };
+};
+
 const getDexPrice = async (apiManager: ApiManager, stableCoin: any, currencyId: any) => {
   const stableCoinPrecision = await tokenPrecision(apiManager.api, stableCoin.asToken.toString());
 
@@ -35,18 +41,30 @@ const getDexPrice = async (apiManager: ApiManager, stableCoin: any, currencyId: 
 export default async () => {
   setDefaultConfig('collateral-auction-guardian.yml');
 
-  const { nodeEndpoint, address, margin, SURI } = config();
-
-  const auction$ = new Subject<CollateralAuction>();
-  const auctionDealt$ = new Subject<Event>();
-
-  const { apiManager } = await setupAcalaApi(nodeEndpoint);
+  const { address, SURI } = config();
   const { signer } = await setupKeyring(SURI, address);
 
-  const stableCoin = apiManager.api.consts.cdpEngine.getStableCurrencyId;
+  let _apiManager: ApiManager;
+  const getApiManager = async (nodeEndpoint: string | string[]): Promise<ApiManager> => {
+    if (!_apiManager) {
+      const api = await setupAcalaApi(nodeEndpoint);
+      _apiManager = api.apiManager;
+      return _apiManager;
+    }
+    return _apiManager;
+  };
 
-  const onAuction = async (auction: CollateralAuction) => {
-    // current stableCoin balance
+  const auction$ = new Subject<[CollateralAuction, Metadata]>();
+  const auctionDealt$ = new Subject<[Event, Metadata]>();
+
+  const onAuction = async (auction: CollateralAuction, metadata: Metadata) => {
+    const {
+      nodeEndpoint,
+      action: { margin }
+    } = metadata;
+    const apiManager = await getApiManager(nodeEndpoint);
+
+    const stableCoin = apiManager.api.consts.cdpEngine.getStableCurrencyId;
     const balance = await apiManager.api.query.tokens.accounts<OrmlAccountData>(address, stableCoin);
 
     const stableCoinPrecision = await tokenPrecision(apiManager.api, stableCoin.asToken.toString());
@@ -65,26 +83,34 @@ export default async () => {
     await apiManager.signAndSend(tx, { account: signer }).inBlock;
   };
 
-  const onAuctionDealt = async (event: Event) => {
+  const onAuctionDealt = async (event: Event, metadata: Metadata) => {
     const currencyId = event.args['collateral_type'] || event.args['1'];
     const amount = event.args['collateral_amount'] || event.args['2'];
 
+    const { nodeEndpoint } = metadata;
+    const apiManager = await getApiManager(nodeEndpoint);
+
+    const stableCoin = apiManager.api.consts.cdpEngine.getStableCurrencyId;
     const tx = apiManager.api.tx.dex.swapWithExactSupply([currencyId, stableCoin], amount, 0);
     await apiManager.signAndSend(tx, { account: signer }).inBlock;
   };
 
-  auction$.pipe(concatMap(async (auction) => await onAuction(auction).catch((e) => logger.error(e)))).subscribe();
+  auction$
+    .pipe(concatMap(async ([auction, metadata]) => await onAuction(auction, metadata).catch((e) => logger.error(e))))
+    .subscribe();
 
-  auctionDealt$.pipe(concatMap(async (event) => await onAuctionDealt(event).catch((e) => logger.error(e)))).subscribe();
+  auctionDealt$
+    .pipe(concatMap(async ([event, metadata]) => await onAuctionDealt(event, metadata).catch((e) => logger.error(e))))
+    .subscribe();
 
   // register `collateral_auction_created` action to feed `auction$` with data
-  ActionRegistry.register('collateral_auction_created', (_, data: CollateralAuction) => {
-    auction$.next(data);
+  ActionRegistry.register('collateral_auction_created', (data: CollateralAuction, metadata: Metadata) => {
+    auction$.next([data, metadata]);
   });
 
   // register `collateral_auction_dealt` action to feed `auctionDealt$` with data
-  ActionRegistry.register('collateral_auction_dealt', (_, data: Event) => {
-    auctionDealt$.next(data);
+  ActionRegistry.register('collateral_auction_dealt', (data: Event, metadata: Metadata) => {
+    auctionDealt$.next([data, metadata]);
   });
 
   // start guardian

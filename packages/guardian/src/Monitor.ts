@@ -32,7 +32,7 @@ export default class Monitor implements IMonitor {
       this.config.actions.forEach((action) => {
         logger.log(`[${this.name}] called [${action.method}]`);
         // run action
-        ActionRegistry.run(action, data);
+        ActionRegistry.run(action, data, guardian.metadata);
       });
     });
 

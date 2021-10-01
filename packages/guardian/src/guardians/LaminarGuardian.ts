@@ -47,6 +47,9 @@ export default class LaminarGuardian extends BaseSubstrateGuardian<
   }
 
   async setup(config: LaminarGuardianConfig) {
+    const { network, networkType } = config;
+    this._metadata = { ...this._metadata, network, networkType };
+
     const ws = new WsProvider(config.nodeEndpoint);
 
     const laminarApi = new LaminarApi({ provider: ws, types: customTypes });

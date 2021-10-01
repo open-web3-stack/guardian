@@ -16,7 +16,7 @@ const registerEventHandler = () => {
 
   let prevPrice: BigInt | null = null;
 
-  ActionRegistry.register('dexPriceChange', (_args, data: Pool) => {
+  ActionRegistry.register('dexPriceChange', (data: Pool) => {
     const pool: string[] = JSON.parse(data.currencyId).map((token: Token) => token.token);
 
     if (!(pool.includes(tokenA) && pool.includes(tokenB))) {

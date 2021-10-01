@@ -54,6 +54,9 @@ export default class AcalaGuardian extends BaseSubstrateGuardian<
   }
 
   async setup(config: AcalaGuardianConfig) {
+    const { network, networkType } = config;
+    this._metadata = { ...this._metadata, network, networkType };
+
     const ws = new WsProvider(config.nodeEndpoint);
     const apiOptions = options({ provider: ws, types: customTypes });
 

@@ -39,7 +39,7 @@ const sendEmail = async (value: string) => {
 export default async () => {
   setDefaultConfig('staking.yml');
 
-  ActionRegistry.register('stakingReward', (_, data) => {
+  ActionRegistry.register('stakingReward', (data) => {
     const config = getConfig();
     const stash = data.args['stash'] || data.args['0'];
     const amount = data.args['amount'] || data.args['1'];

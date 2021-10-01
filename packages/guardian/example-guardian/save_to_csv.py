@@ -5,7 +5,7 @@ import json
 import csv
 
 data = sys.stdin.readline()
-json = json.loads(data)
+parsed = json.loads(data)
 
 header=['Name', 'From', 'To', 'Amount']
 with open('events.csv', 'a') as file:
@@ -13,7 +13,7 @@ with open('events.csv', 'a') as file:
     if file.tell() == 0:
         writer.writeheader()
 
-    args = json['args']
+    args = parsed['data']['args']
 
     if 'from' in args:
         sender = args['from']
@@ -30,4 +30,4 @@ with open('events.csv', 'a') as file:
     else:
         amount = args['arg3']
 
-    writer.writerow({ 'Name': json['name'], 'From': sender, 'To': receiver, 'Amount': amount })
+    writer.writerow({ 'Name': parsed['data']['name'], 'From': sender, 'To': receiver, 'Amount': amount })

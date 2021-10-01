@@ -13,5 +13,7 @@ guardians:
         conditions:
           - owner: ${ADDRESS}
           - collateralRatio: <= ${COLLATERAL_RATIO}
+          - $and:
+            - collateralRatio: 'ne 0'
         actions:
           - method: liquidate
