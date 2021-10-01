@@ -57,7 +57,7 @@ export interface GuardianConfig {
 
 export interface BaseSubstrateGuardianConfig extends GuardianConfig {
   nodeEndpoint: string | string[];
-  confirmation?: 'finalize' | number;
+  // confirmation?: 'finalize' | number;
 }
 
 export interface LaminarGuardianConfig extends BaseSubstrateGuardianConfig {

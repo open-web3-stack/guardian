@@ -68,7 +68,6 @@ describe('LaminarGuardian', () => {
       networkType: 'laminarChain',
       network: 'dev',
       nodeEndpoint: 'ws://localhost:9944',
-      confirmation: 'finalize',
       monitors: {
         'monitor-liquidityPool': {
           task: 'synthetic.liquidityPool',
