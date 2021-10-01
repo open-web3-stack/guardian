@@ -8,7 +8,6 @@ describe('LaminarGuardian', () => {
       networkType: 'laminarChain',
       network: 'dev',
       nodeEndpoint: 'ws://localhost:9944',
-      confirmation: 'finalize',
       monitors: {
         'margin-monitor': {
           task: 'margin.poolInfo',
@@ -28,7 +27,6 @@ describe('LaminarGuardian', () => {
       networkType: 'laminarChain',
       network: 'dev',
       nodeEndpoint: 'ws://localhost:9944',
-      confirmation: 'finalize',
       monitors: {
         'margin-monitor': {
           task: '', // will throw

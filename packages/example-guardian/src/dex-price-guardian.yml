@@ -4,7 +4,6 @@ guardians:
     networkType: acalaChain
     network: dev
     nodeEndpoint: ${NODE_ENDPOINT}
-    confirmation: finalize
 
     monitors:
       dex-price-monitor:

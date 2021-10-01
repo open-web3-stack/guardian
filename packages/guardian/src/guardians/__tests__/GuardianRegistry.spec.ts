@@ -11,7 +11,6 @@ const laminarConfig: LaminarGuardianConfig = {
   networkType: 'laminarChain',
   network: 'dev',
   nodeEndpoint: 'ws://localhost:9944',
-  confirmation: 'finalize',
   monitors: {
     marginMonitor: {
       task: 'margin.poolInfo',
@@ -25,7 +24,6 @@ const acalaConfig: AcalaGuardianConfig = {
   networkType: 'acalaChain',
   network: 'dev',
   nodeEndpoint: 'ws://localhost:9944',
-  confirmation: 'finalize',
   monitors: {
     events: {
       task: 'system.events',
