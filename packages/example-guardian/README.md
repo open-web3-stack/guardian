@@ -51,26 +51,23 @@ Run the node with:
 cargo run -- --dev --tmp
 ```
 
-### Running Acala local node
+### Running Karura local node
 
 Using `docker`:
 ```shell=
-docker run --rm -p 9944:9944 acala/mandala-node:latest \
+docker run --rm -p 9944:9944 acala/karura-node:latest \
 --dev --ws-external --rpc-methods=unsafe \
 --instant-sealing  -levm=trace --tmp
 ```
 
 To build the project without docker use the guidelines here:
 [**AcalaNetwork/Acala**](https://github.com/AcalaNetwork/Acala)
-Run the node with:
-```
-cargo run -- --dev --tmp
-```
+
 
 ## Simulations  
 
 To help you trigger certain events and to ensure that the bot picks them up we provide sets of emulations:
-- for Acala: https://github.com/AcalaNetwork/e2e
+- for Acala/Karura: https://github.com/AcalaNetwork/e2e
 - for Laminar: https://github.com/laminar-protocol/e2e
 
 In this guide, we provide a way how to use them.
@@ -83,7 +80,7 @@ Note: find the up to date public node info [here](https://wiki.acala.network/lea
 
 All presented examples can be automatically deployed to Heroku for use in production. Here you can find an example for Dex Price bot and a way how to modify it with other samples: 
 
-**[Guardian Bot Heroku Templatet](https://github.com/AcalaNetwork/guardian-bot-heroku-template)**
+**[Guardian Bot Heroku Template](https://github.com/AcalaNetwork/guardian-bot-heroku-template)**
 
 ---
 # Bots
@@ -192,7 +189,7 @@ yarn prod:collateral-auction
 ####  Liquidation Simulation 
 
 
-The liquidation simulation script will work only for your local Acala testnet, you should ensure that it's running.
+The liquidation simulation script will work only for your local **Karura** testnet, you should ensure that it's running.
 
 To use simulation you need to clone the repository and run the simulation script:
 ```shell=
@@ -241,7 +238,7 @@ yarn prod:cdp
 ####  Loan collater ratio drop Simulation 
 
 
-The Loan collater ratio drop simulation script will work only for your local Acala testnet, you should ensure that it's running.
+The Loan collater ratio drop simulation script will work only for your local **Karura** testnet, you should ensure that it's running.
 
 To use simulation you need to clone the repository and run the simulation script:
 ```shell=
