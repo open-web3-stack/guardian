@@ -55,7 +55,7 @@ cargo run -- --dev --tmp
 
 Using `docker`:
 ```shell=
-docker run --rm -p 9944:9944 acala/karura-node:latest \
+docker run --rm -p 9944:9944 acala/karura-node:1.5.0 \
 --dev --ws-external --rpc-methods=unsafe \
 --instant-sealing  -levm=trace --tmp
 ```
