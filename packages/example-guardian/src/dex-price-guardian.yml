@@ -2,8 +2,7 @@ version: '0.1'
 guardians:
   acala-guardian:
     networkType: acalaChain
-    network: dev
-    nodeEndpoint: ${NODE_ENDPOINT}
+    network: ${NETWORK}
 
     monitors:
       dex-price-monitor:

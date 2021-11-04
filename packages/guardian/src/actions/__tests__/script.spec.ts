@@ -14,7 +14,7 @@ describe('script', () => {
   it('runs', () => {
     const execSpy = jest.spyOn(shell, 'exec');
     expect(execSpy).not.toBeCalled();
-    script({ path: 'foo' }, null);
+    script(null, { action: { method: 'script', path: 'foo' }});
     expect(execSpy).toBeCalledTimes(1);
   });
 });

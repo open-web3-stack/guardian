@@ -24,4 +24,12 @@ describe('AcalaGuardian', () => {
     expect(error).toBeUndefined();
     expect(value).toStrictEqual(config);
   });
+
+  it('should have metadata', () => {
+    expect(guardian.metadata).toMatchObject({
+      networkType: 'acalaChain',
+      network: 'dev',
+      nodeEndpoint: 'ws://localhost:9944'
+    });
+  });
 });

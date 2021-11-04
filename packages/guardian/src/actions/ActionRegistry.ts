@@ -9,7 +9,7 @@ import script from './script';
  * @class ActionRegistry
  */
 export class ActionRegistry {
-  private static actions: { [key: string]: Action<any> } = {
+  private static actions: Record<string, Action> = {
     POST,
     script
   };
@@ -19,10 +19,10 @@ export class ActionRegistry {
    *
    * @static
    * @param {string} method
-   * @param {Action<any>} action
+   * @param {Action} action
    * @memberof ActionRegistry
    */
-  public static register(method: string, action: Action<any>) {
+  public static register(method: string, action: Action) {
     if (method.length === 0) {
       throw Error('method is not defined!');
     }
@@ -39,10 +39,10 @@ export class ActionRegistry {
    *
    * @static
    * @param {string} method
-   * @returns {(Action<any> | undefined)}
+   * @returns {(Action | undefined)}
    * @memberof ActionRegistry
    */
-  public static get(method: string): Action<any> | undefined {
+  public static get(method: string): Action | undefined {
     return ActionRegistry.actions[method];
   }
 
@@ -51,10 +51,10 @@ export class ActionRegistry {
    *
    * @static
    * @param {string} method
-   * @returns {Action<any>}
+   * @returns {Action}
    * @memberof ActionRegistry
    */
-  public static getOrThrow(method: string): Action<any> {
+  public static getOrThrow(method: string): Action {
     const instance = ActionRegistry.get(method);
     if (!instance) {
       throw Error(`Action ${method} not found!`);
@@ -70,8 +70,7 @@ export class ActionRegistry {
    * @param {*} data
    * @memberof ActionRegistry
    */
-  public static run(action: { method: string; [key: string]: any }, data: any) {
-    const { method, ...args } = action;
-    ActionRegistry.getOrThrow(method)(args, data);
+  public static run(action: { method: string; [key: string]: any }, data: any, metadata: any) {
+    ActionRegistry.getOrThrow(action.method)(data, { ...metadata, action });
   }
 }

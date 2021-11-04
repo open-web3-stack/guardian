@@ -23,7 +23,7 @@ describe('ActionRegistry', () => {
   it('should run action', () => {
     const requestSpy = jest.spyOn(axios, 'request');
     expect(requestSpy).not.toBeCalled();
-    ActionRegistry.run({ method: 'POST' }, null);
+    ActionRegistry.run({ method: 'POST' }, null, {});
     expect(requestSpy).toBeCalledTimes(1);
   });
 });

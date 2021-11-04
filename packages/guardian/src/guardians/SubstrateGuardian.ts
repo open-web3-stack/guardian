@@ -8,6 +8,8 @@ import { SubstrateGuardianConfig } from '../types';
 
 export default class SubstrateGuardian extends BaseSubstrateGuardian<SubstrateGuardianConfig> {
   async setup(config: SubstrateGuardianConfig) {
+    const { networkType } = config;
+    this._metadata = { ...this._metadata, networkType };
     const provider = new WsProvider(config.nodeEndpoint);
     const apiRx = await firstValueFrom(ApiRx.create({ provider, types: customTypes }));
     return { apiRx };

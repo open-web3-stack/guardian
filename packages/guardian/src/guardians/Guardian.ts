@@ -23,6 +23,9 @@ export default abstract class Guardian<Config extends GuardianConfig = GuardianC
     return TaskClass;
   }
 
+  // Additional data passed to actions
+  protected _metadata = {};
+
   // monitor subscriptions
   private subscriptions: Subscription[] = [];
 
@@ -36,6 +39,9 @@ export default abstract class Guardian<Config extends GuardianConfig = GuardianC
    */
   constructor(public readonly name: string, config: Config) {
     config = this.validateConfig(config);
+
+    const { nodeEndpoint } = config;
+    this._metadata = { nodeEndpoint };
 
     this.monitors = Object.entries(config.monitors).map(([name, monitor]) => {
       const identifier = `${name}.${monitor.task}`;
@@ -104,4 +110,8 @@ export default abstract class Guardian<Config extends GuardianConfig = GuardianC
     this.subscriptions = [];
     logger.log(`[${this.name}] stopped`);
   };
+
+  public get metadata(): any {
+    return this._metadata;
+  }
 }

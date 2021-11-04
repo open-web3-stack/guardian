@@ -1,9 +1,8 @@
 version: '0.1'
 guardians:
-  acala-guardian: # do not change
+  acala-guardian:
     networkType: acalaChain
-    network: mandala
-    nodeEndpoint: ${NODE_ENDPOINT}
+    network: ${NETWORK}
 
     monitors:
       CollateralAuctionDealt:

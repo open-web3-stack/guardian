@@ -1,14 +1,12 @@
 # Actions
 
-The Guardian library has a built-in action method `POST` for doing http calls, and an action method `script` for executing a script from a given path. They are called from an instance of `Monitor` when a task emits an output. You can also easily create and register your own custom actions with very simple functions that take config arguments and a task output. See the example below:
+The Guardian library has a built-in action method `POST` for doing http calls, and an action method `script` for executing a script from a given path. They are called from an instance of `Monitor` when a task emits an output. You can also easily create and register your own custom actions with very simple functions that take task output and metadata. Metadata contains action itself and additional metadata from guardian executing the action. See the example below:
 
 ```typescript
 import { Action } from '@open-web3/guardian/types';
 
-type Args = { foo: string };
-
-const myAction: Action<Args> = (args: Args, data: any) => {
-  const { foo } = args;
+const myAction: Action = (data: any, metadata: any) => {
+  const { foo } = metadata.action as { foo: string };
   // do anything
 };
 ```
@@ -19,10 +17,8 @@ then this action can be registered in your `index.js` file
 import { Action } from '@open-web3/guardian/types';
 import { ActionRegistry } from '@open-web3/guardian';
 
-type Args = { foo: string };
-
-const myAction: Action<Args> = (args: Args, data: any) => {
-  const { foo } = args;
+const myAction: Action = (data: any, metadata: any) => {
+  const { foo } = metadata.action as { foo: string };
   // do anything
 };
 

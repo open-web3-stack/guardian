@@ -8,7 +8,7 @@ describe('POST', () => {
   it('runs', () => {
     const requestSpy = jest.spyOn(axios, 'request');
     expect(requestSpy).not.toBeCalled();
-    POST({ url: 'localhost' }, { foo: 'bar' });
+    POST({ foo: 'bar' }, { action: { method: 'POST', url: 'localhost' } });
     expect(requestSpy).toBeCalledTimes(1);
   });
 });

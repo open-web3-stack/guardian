@@ -26,6 +26,9 @@ export interface IGuardian {
 
   // Stop guardian
   stop(): void;
+
+  // Additional data passed to action
+  metadata: Record<string, unknown>;
 }
 
 export interface IMonitor {
@@ -45,7 +48,7 @@ export interface ITask<P extends Record<string, any>, O> {
   start(guardian: IGuardian): Promise<Observable<O>>;
 }
 
-export type Action<Args> = (args: Args, data: any) => void;
+export type Action = (data: any, metadata: any) => void;
 
 export interface GuardianConfig {
   networkType: string;
