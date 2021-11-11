@@ -1,4 +1,3 @@
-import { CurrencyId } from '@laminar/types/interfaces';
 import PricesTask from '../../PricesTask';
 import { LaminarGuardian } from '../../../../guardians';
 
@@ -8,12 +7,15 @@ describe('PricesTask', () => {
   const guardian = new LaminarGuardian('laminar-guardian', {
     network: 'dev',
     networkType: 'laminarChain',
-    nodeEndpoint: ['wss://testnet-node-1.laminar-chain.laminar.one/ws'],
-    monitors: {},
+    nodeEndpoint: [
+      'wss://testnet-node-1.laminar-chain.laminar.one/ws',
+      'wss://node-6787234140909940736.jm.onfinality.io/ws'
+    ],
+    monitors: {}
   });
 
   it('get oracle value', async (done) => {
-    const task = new PricesTask<CurrencyId>({ key: 'FEUR', period: 1000 });
+    const task = new PricesTask({ key: 'FEUR', period: 1000 });
     const output$ = await task.start(guardian as any);
     output$.subscribe((output) => {
       console.log(output);
@@ -23,7 +25,7 @@ describe('PricesTask', () => {
   });
 
   it('get oracle values [FEUR, FJPY]', async (done) => {
-    const task = new PricesTask<CurrencyId>({ key: ['FEUR', 'FJPY'], period: 1000 });
+    const task = new PricesTask({ key: ['FEUR', 'FJPY'], period: 1000 });
     const output$ = await task.start(guardian as any);
     output$.subscribe((output) => {
       console.log(output);
@@ -33,7 +35,7 @@ describe('PricesTask', () => {
   });
 
   it('get all oracle values', async (done) => {
-    const task = new PricesTask<CurrencyId>({ key: 'all', period: 1000 });
+    const task = new PricesTask({ key: 'all', period: 1000 });
     const output$ = await task.start(guardian as any);
     output$.subscribe((output) => {
       console.log(output);

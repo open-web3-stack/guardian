@@ -8,7 +8,7 @@ describe('StorageTask', () => {
   const config: SubstrateGuardianConfig = {
     networkType: 'substrateChain',
     nodeEndpoint: 'wss://kusama-rpc.polkadot.io/',
-    monitors: {},
+    monitors: {}
   };
 
   const guardian = new SubstrateGuardian('substrate-guardian', config);
@@ -26,7 +26,7 @@ describe('StorageTask', () => {
   it('works with multiple args', async (done) => {
     const task = new StorageTask({
       name: 'system.account',
-      args: ['FcxNWVy5RESDsErjwyZmPCW6Z8Y3fbfLzmou34YZTrbcraL'],
+      args: ['FcxNWVy5RESDsErjwyZmPCW6Z8Y3fbfLzmou34YZTrbcraL']
     });
     const output$ = await task.start(guardian);
     output$.subscribe((output) => {

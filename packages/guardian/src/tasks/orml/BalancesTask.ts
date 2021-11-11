@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import { castArray } from 'lodash';
 import { Observable, from } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
 import { ApiRx } from '@polkadot/api';
@@ -17,14 +18,12 @@ export default class BalancesTask extends Task<{ account: string | string[]; cur
     }).required();
   }
 
-  async start(guardian: BaseSubstrateGuardian) {
+  async start<T extends BaseSubstrateGuardian>(guardian: T) {
     const { apiRx } = await guardian.isReady();
 
     const { account, currencyId } = this.arguments;
 
-    const currencyIds = (Array.isArray(currencyId) ? currencyId : [currencyId]).map((x) =>
-      apiRx.createType('CurrencyId', x)
-    );
+    const currencyIds = castArray(currencyId).map((x) => apiRx.createType('CurrencyId', x));
 
     const pairs = createAccountCurrencyIdPairs(account, currencyIds);
     return from(pairs).pipe(mergeMap(({ account, currencyId }) => this.getBalance(apiRx, account, currencyId)));

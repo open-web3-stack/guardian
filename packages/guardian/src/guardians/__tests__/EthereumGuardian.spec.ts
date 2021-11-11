@@ -5,7 +5,7 @@ const config: EthereumGuardianConfig = {
   networkType: 'ethereum',
   network: 'dev',
   nodeEndpoint: 'http://localhost:8545',
-  monitors: {},
+  monitors: {}
 };
 
 describe('EthereumGuardian', () => {
@@ -26,7 +26,7 @@ describe('EthereumGuardian', () => {
   });
 
   it('should throw', () => {
-    const { error, value } = guardian
+    const { error } = guardian
       .validationSchema()
       .validate({ ...config, network: 'mainnet', nodeEndpoint: undefined }, { allowUnknown: true });
     expect(error).toBeTruthy();

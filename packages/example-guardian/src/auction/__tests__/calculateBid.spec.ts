@@ -4,7 +4,7 @@ describe('calculateBid', () => {
   const price1 = '10000000000000000000000';
   const price2 = '9880300654870267000000';
   it('should calculate bid', async () => {
-    let bid1 = await calculateBid({ initialAmount: 1e8 }, price1, 0.1, 12, 8);
+    const bid1 = await calculateBid({ initialAmount: 1e8 }, price1, 0.1, 12, 8);
     expect(bid1).toBe('9000000000000000');
 
     const bid2 = await calculateBid({ initialAmount: 0.1e8 }, price1, 0.2, 12, 8);

@@ -1,27 +1,27 @@
+import conditionBuilder from '../condition-builder';
+
 const config = [
   {
-    collateralRatio: '< 1.1',
+    collateralRatio: '< 1.1'
   },
   {
     $and: [
       {
         $or: [
           {
-            currencyId: 'FEUR',
+            currencyId: 'FEUR'
           },
           {
-            currencyId: 'FJPY',
-          },
-        ],
+            currencyId: 'FJPY'
+          }
+        ]
       },
       {
-        collateralRatio: '< 120%',
-      },
-    ],
-  },
+        collateralRatio: '< 120%'
+      }
+    ]
+  }
 ];
-
-import conditionBuilder from '../condition-builder';
 
 describe('condition builder', () => {
   it('works', () => {

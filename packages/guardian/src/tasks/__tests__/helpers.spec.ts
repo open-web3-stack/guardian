@@ -6,19 +6,19 @@ describe('helpers', () => {
 
     expect(createAccountCurrencyIdPairs(['alice', 'bob'], 'ausd')).toStrictEqual([
       { account: 'alice', currencyId: 'ausd' },
-      { account: 'bob', currencyId: 'ausd' },
+      { account: 'bob', currencyId: 'ausd' }
     ]);
 
     expect(createAccountCurrencyIdPairs('alice', ['ausd', 'feur'])).toStrictEqual([
       { account: 'alice', currencyId: 'ausd' },
-      { account: 'alice', currencyId: 'feur' },
+      { account: 'alice', currencyId: 'feur' }
     ]);
 
     expect(createAccountCurrencyIdPairs(['alice', 'bob'], ['ausd', 'feur'])).toStrictEqual([
       { account: 'alice', currencyId: 'ausd' },
       { account: 'alice', currencyId: 'feur' },
       { account: 'bob', currencyId: 'ausd' },
-      { account: 'bob', currencyId: 'feur' },
+      { account: 'bob', currencyId: 'feur' }
     ]);
   });
 });

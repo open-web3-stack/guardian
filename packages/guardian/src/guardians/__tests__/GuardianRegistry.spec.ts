@@ -15,9 +15,9 @@ const laminarConfig: LaminarGuardianConfig = {
     marginMonitor: {
       task: 'margin.poolInfo',
       arguments: { poolId: 1 },
-      actions: [{ method: 'POST', url: 'localhost' }],
-    },
-  },
+      actions: [{ method: 'POST', url: 'localhost' }]
+    }
+  }
 };
 
 const acalaConfig: AcalaGuardianConfig = {
@@ -28,9 +28,9 @@ const acalaConfig: AcalaGuardianConfig = {
     events: {
       task: 'system.events',
       arguments: { name: 'balances.Deposit' },
-      actions: [{ method: 'POST', url: 'localhost' }],
-    },
-  },
+      actions: [{ method: 'POST', url: 'localhost' }]
+    }
+  }
 };
 
 const customConfig: GuardianConfig = {
@@ -40,18 +40,18 @@ const customConfig: GuardianConfig = {
     events: {
       task: 'foo.bar',
       arguments: { name: 'helloworld' },
-      actions: [{ method: 'POST', url: 'localhost' }],
-    },
-  },
+      actions: [{ method: 'POST', url: 'localhost' }]
+    }
+  }
 };
 
-class BarTask extends Task<{name: string}, boolean> {
+class BarTask extends Task<{ name: string }, boolean> {
   validationSchema() {
     return Joi.any();
   }
 
   async start(guardian: Guardian) {
-    const {} = await guardian.isReady();
+    await guardian.isReady();
     return new Observable<boolean>();
   }
 }
@@ -60,7 +60,7 @@ class CustomGuardian extends Guardian<BaseSubstrateGuardianConfig> {
   tasks() {
     return {
       'system.event': EventsTask,
-      'foo.bar': BarTask,
+      'foo.bar': BarTask
     };
   }
 

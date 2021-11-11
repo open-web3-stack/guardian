@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import { castArray } from 'lodash';
 import { EthereumApi } from '@laminar/api';
 import { fixed18toString } from '@laminar/api/utils/precision';
 import { from } from 'rxjs';
@@ -96,6 +97,6 @@ export default class SyntheticPoolsTask extends Task<
     if (poolId === 'all') {
       return ethereumApi.synthetic.allPoolIds().pipe(concatAll());
     }
-    return from(Array.isArray(poolId) ? poolId : [poolId]);
+    return from(castArray(poolId));
   }
 }

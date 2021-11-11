@@ -14,10 +14,10 @@ describe('LaminarGuardian', () => {
           arguments: { poolId: 1 },
           actions: [
             { method: 'script', path: path.resolve(__dirname, 'test.sh') },
-            { method: 'POST', url: 'localhost' },
-          ],
-        },
-      },
+            { method: 'POST', url: 'localhost' }
+          ]
+        }
+      }
     };
     expect(new LaminarGuardian('laminar-chain-guardian', config)).toBeInstanceOf(LaminarGuardian);
   });
@@ -33,10 +33,10 @@ describe('LaminarGuardian', () => {
           arguments: { poolId: 1 },
           actions: [
             { method: 'script', path: path.resolve(__dirname, 'test.sh') },
-            { method: 'POST', url: 'localhost' },
-          ],
-        },
-      },
+            { method: 'POST', url: 'localhost' }
+          ]
+        }
+      }
     };
     const guardian = new LaminarGuardian('laminar-chain-guardian', config);
     expect.assertions(1);

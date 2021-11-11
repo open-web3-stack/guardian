@@ -5,7 +5,7 @@ const config: LaminarGuardianConfig = {
   networkType: 'laminarChain',
   network: 'dev',
   nodeEndpoint: 'ws://localhost:9944',
-  monitors: {},
+  monitors: {}
 };
 
 describe('LaminarGuardian', () => {

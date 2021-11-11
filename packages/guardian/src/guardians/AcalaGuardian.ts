@@ -4,15 +4,13 @@ import { firstValueFrom } from 'rxjs';
 import { AcalaGuardianConfig } from '../types';
 import { acalaNetwork } from '../constants';
 import BaseSubstrateGuardian from './BaseSubstrateGuardian';
-import { ApiRx, WsProvider, ApiPromise } from '@polkadot/api';
+import { ApiRx, WsProvider } from '@polkadot/api';
 import { customTypes } from '../customTypes';
 import BalancesTask from '../tasks/orml/BalancesTask';
 import PricesTask from '../tasks/orml/PricesTask';
-import LoansTask from '../tasks/acalaChain/LoansTask';
-import CollateralAuctionsTask from '../tasks/acalaChain/CollateralAuctionsTask';
-import PoolsTask from '../tasks/acalaChain/PoolsTask';
-import { StorageType } from '@acala-network/types';
-import { createStorage } from '@open-web3/api-mobx';
+import LoansTask from '../tasks/acala/LoansTask';
+import CollateralAuctionsTask from '../tasks/acala/CollateralAuctionsTask';
+import PoolsTask from '../tasks/acala/PoolsTask';
 
 const defaultNodeEndpoint = ({ network }: { network: AcalaGuardianConfig['network'] }) => {
   // TODO: keep this up-to-date
@@ -20,7 +18,10 @@ const defaultNodeEndpoint = ({ network }: { network: AcalaGuardianConfig['networ
     case 'dev':
       return 'ws://localhost:9944';
     case 'mandala':
-      return 'wss://testnet-node-1.acala.laminar.one/ws';
+      return [
+        'wss://testnet-node-1.laminar-chain.laminar.one/ws',
+        'wss://node-6787234140909940736.jm.onfinality.io/ws'
+      ];
     case 'karura':
       return [
         'wss://karura-rpc-0.aca-api.network',
@@ -38,7 +39,7 @@ const defaultNodeEndpoint = ({ network }: { network: AcalaGuardianConfig['networ
 
 export default class AcalaGuardian extends BaseSubstrateGuardian<
   AcalaGuardianConfig,
-  { apiRx: ApiRx; storage: StorageType; getTokenPrecision: (token: string) => number | undefined }
+  { apiRx: ApiRx; getTokenPrecision: (token: string) => number | undefined }
 > {
   private readonly tokenDecimals: Record<string, number> = {};
 
@@ -61,12 +62,9 @@ export default class AcalaGuardian extends BaseSubstrateGuardian<
     const apiOptions = options({ provider: ws, types: customTypes });
 
     const apiRx = await firstValueFrom(ApiRx.create(apiOptions));
-    const apiPromise = await ApiPromise.create(apiOptions);
-
-    const storage = createStorage<StorageType>(apiPromise, ws);
 
     // fetch token precision
-    const properties = await apiPromise.rpc.system.properties();
+    const properties = await firstValueFrom(apiRx.rpc.system.properties());
     const tokenSymbol = properties.tokenSymbol.unwrapOrDefault();
     const tokenDecimals = properties.tokenDecimals.unwrapOrDefault();
     if (tokenSymbol.length !== tokenDecimals.length) {
@@ -80,7 +78,7 @@ export default class AcalaGuardian extends BaseSubstrateGuardian<
       return this.tokenDecimals[token.toUpperCase()];
     };
 
-    return { apiRx, storage, getTokenPrecision };
+    return { apiRx, getTokenPrecision };
   }
 
   validationSchema() {

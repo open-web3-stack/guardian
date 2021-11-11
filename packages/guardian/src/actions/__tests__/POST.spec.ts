@@ -1,6 +1,6 @@
-jest.mock('axios');
 import axios from 'axios';
 import POST from '../POST';
+jest.mock('axios');
 
 describe('POST', () => {
   axios.request = jest.fn();

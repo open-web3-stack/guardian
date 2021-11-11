@@ -13,7 +13,7 @@ export default class EventsTask extends Task<{ name: string | string[] }, Event>
     }).required();
   }
 
-  async start(guardian: BaseSubstrateGuardian) {
+  async start<T extends BaseSubstrateGuardian>(guardian: T) {
     const { apiRx } = await guardian.isReady();
 
     const { name } = this.arguments;

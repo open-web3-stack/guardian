@@ -1,9 +1,9 @@
-jest.mock('axios');
 import axios from 'axios';
 
 import { ActionRegistry } from '../ActionRegistry';
 import POST from '../POST';
 import script from '../script';
+jest.mock('axios');
 
 describe('ActionRegistry', () => {
   axios.request = jest.fn();
