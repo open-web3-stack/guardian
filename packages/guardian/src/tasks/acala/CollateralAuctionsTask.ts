@@ -1,8 +1,8 @@
 import Joi from 'joi';
-import { castArray, isEqual } from 'lodash';
+import { castArray } from 'lodash';
+import { drr } from '@polkadot/rpc-core';
 import { combineLatest, of } from 'rxjs';
-import { distinctUntilChanged, mergeMap, map, filter } from 'rxjs/operators';
-
+import { mergeMap, map, filter } from 'rxjs/operators';
 import { CollateralAuction } from '@open-web3/guardian/types';
 import { AcalaGuardian } from '../../guardians';
 import Task from '../Task';
@@ -73,7 +73,7 @@ export default class CollateralAuctionsTask extends Task<
           lastBid: lastBid && lastBid.toString()
         };
       }),
-      distinctUntilChanged((a, b) => isEqual(a, b))
+      drr()
     );
   }
 

@@ -24,7 +24,6 @@ export default class PositionsByTraderTask extends Task<{ account: string | stri
     const getUnrealizedPL = unrealizedPL(apiRx);
 
     return from(accounts).pipe(
-      mergeAll(),
       switchMap((account) => apiRx.query.marginProtocol.positionsByTrader.entries(account)),
       mergeAll(),
       filter(([, value]) => !value.isEmpty),

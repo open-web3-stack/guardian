@@ -53,7 +53,6 @@ export default class TraderInfoTask extends Task<
     const getBalances$ = getBalances(apiRx);
 
     return from(accounts).pipe(
-      mergeAll(),
       switchMap((account) => {
         return getBalances$(account, this.arguments.poolId).pipe(
           mergeMap(([storageKey, balance]) => {
