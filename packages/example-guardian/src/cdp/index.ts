@@ -32,7 +32,7 @@ export default async () => {
   const adjustLoan = async (loan: Loan, metadata: Metadata) => {
     const apiManager = await getApiManager(metadata.nodeEndpoint);
     const currencyId = apiManager.api.createType('CurrencyId', JSON.parse(loan.currencyId));
-    const precision = await tokenPrecision(apiManager.api, (currencyId as any).asToken.toString());
+    const precision = await tokenPrecision(apiManager.api, currencyId.asToken.toString());
 
     const amount = FixedPointNumber.fromInner(loan.collaterals, precision);
     const adjusment = amount.times(FixedPointNumber.fromRational(1, 10)); // +10% collateral

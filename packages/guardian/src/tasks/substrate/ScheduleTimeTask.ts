@@ -16,7 +16,7 @@ export default class ScheduleTimeTask extends Task<{ cronTime: string }, Output>
     }).required();
   }
 
-  async start(guardian: BaseSubstrateGuardian) {
+  async start<T extends BaseSubstrateGuardian>(guardian: T) {
     await guardian.isReady();
 
     const { cronTime } = this.arguments;

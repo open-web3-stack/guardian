@@ -20,7 +20,7 @@ export default class ScheduleBlockNumberTask extends Task<
     }).required();
   }
 
-  async start(guardian: BaseSubstrateGuardian) {
+  async start<T extends BaseSubstrateGuardian>(guardian: T) {
     const { apiRx } = await guardian.isReady();
     const { startNumber, step, finalized } = this.arguments;
 

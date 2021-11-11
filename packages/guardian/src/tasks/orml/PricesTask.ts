@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import { castArray } from 'lodash';
 import { Observable, from } from 'rxjs';
 import { mergeMap, map, filter } from 'rxjs/operators';
 import { Codec, ITuple } from '@polkadot/types/types';
@@ -18,7 +19,7 @@ export default class PricesTask extends Task<{ key: any; period: number }, Price
     }).required();
   }
 
-  async start(guardian: BaseSubstrateGuardian) {
+  async start<T extends BaseSubstrateGuardian>(guardian: T) {
     const { apiRx } = await guardian.isReady();
 
     const { key, period } = this.arguments;
@@ -40,7 +41,7 @@ export default class PricesTask extends Task<{ key: any; period: number }, Price
       );
     }
 
-    const keys = (Array.isArray(key) ? key : [key]).map((x) => apiRx.createType('CurrencyId', x));
+    const keys = castArray(key).map((x) => apiRx.createType('CurrencyId', x));
     return from(keys).pipe(
       mergeMap((key) =>
         from(getOraclePrice(apiRx, period)(key)).pipe(

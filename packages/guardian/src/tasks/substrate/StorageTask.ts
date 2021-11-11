@@ -28,7 +28,7 @@ export default class StorageTask extends Task<{ name: string | string[]; args?: 
     }).required();
   }
 
-  async start(guardian: BaseSubstrateGuardian) {
+  async start<T extends BaseSubstrateGuardian>(guardian: T) {
     const { apiRx } = await guardian.isReady();
 
     const { name, args } = this.arguments;

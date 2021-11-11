@@ -7,6 +7,7 @@
     "baseUrl": ".",
     "noImplicitAny": false,
     "noUnusedLocals": false,
+    "esModuleInterop": true,
     "paths": {
       "@open-web3/guardian": ["packages/guardian/src"],
       "@open-web3/guardian/*": ["packages/guardian/src/*"],

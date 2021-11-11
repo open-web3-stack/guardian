@@ -1,8 +1,4 @@
-jest.mock('axios');
-jest.mock('shelljs');
-
-import './__mocks__/mockLaminarApi';
-import './__mocks__/mockApiPromise';
+import '../tasks/laminar/__tests__/__mocks__/mockPools';
 
 import path from 'path';
 import axios from 'axios';
@@ -10,18 +6,21 @@ import shell from 'shelljs';
 import { LaminarGuardian } from '../guardians';
 import { sleep } from '../utils';
 
+jest.mock('axios');
+jest.mock('shelljs');
+
 describe('LaminarGuardian', () => {
   jest.setTimeout(30_000);
 
-  // @ts-ignore
   axios.request = jest.fn();
 
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   shell.exec = jest.fn(() => ({
     stdin: {
       write: jest.fn(),
-      end: jest.fn(),
-    },
+      end: jest.fn()
+    }
   }));
 
   const axiosSpy = jest.spyOn(axios, 'request');
@@ -41,16 +40,16 @@ describe('LaminarGuardian', () => {
         'monitor-poolInfo': {
           task: 'margin.poolInfo',
           arguments: {
-            poolId: 0,
+            poolId: 0
           },
           actions: [
             {
               method: 'script',
-              path: path.resolve(__dirname, 'test.sh'),
-            },
-          ],
-        },
-      },
+              path: path.resolve(__dirname, 'test.sh')
+            }
+          ]
+        }
+      }
     });
 
     await guardian.start();
@@ -73,21 +72,21 @@ describe('LaminarGuardian', () => {
           task: 'synthetic.liquidityPool',
           arguments: {
             poolId: 0,
-            currencyId: ['FEUR'],
+            currencyId: ['FEUR']
           },
           conditions: [{ liquidity: '>= 1000' }],
           actions: [
             {
               method: 'POST',
-              url: 'http://localhost:8080',
+              url: 'http://localhost:8080'
             },
             {
               method: 'script',
-              path: path.resolve(__dirname, 'test.sh'),
-            },
-          ],
-        },
-      },
+              path: path.resolve(__dirname, 'test.sh')
+            }
+          ]
+        }
+      }
     });
 
     await guardian.start();

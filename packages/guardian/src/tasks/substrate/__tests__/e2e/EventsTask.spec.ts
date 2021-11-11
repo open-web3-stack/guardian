@@ -8,7 +8,7 @@ describe('EventsTask', () => {
   const config: SubstrateGuardianConfig = {
     networkType: 'substrateChain',
     nodeEndpoint: 'wss://kusama-rpc.polkadot.io/',
-    monitors: {},
+    monitors: {}
   };
 
   const guardian = new SubstrateGuardian('substrate-guardian', config);

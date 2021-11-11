@@ -1,5 +1,6 @@
 import Joi from 'joi';
 import { from } from 'rxjs';
+import { castArray } from 'lodash';
 import { mergeMap, map } from 'rxjs/operators';
 import { AccountInfo } from '@polkadot/types/interfaces';
 import Task from '../Task';
@@ -34,13 +35,12 @@ export default class AccountsTask extends Task<{ account: string | string[] }, O
     }).required();
   }
 
-  async start(guardian: BaseSubstrateGuardian) {
+  async start<T extends BaseSubstrateGuardian>(guardian: T) {
     const { apiRx } = await guardian.isReady();
 
     const { account } = this.arguments;
-    const accoutns = Array.isArray(account) ? account : [account];
 
-    return from(accoutns).pipe(
+    return from(castArray(account)).pipe(
       mergeMap((account) => apiRx.query.system.account(account).pipe(map(mapResult(account))))
     );
   }

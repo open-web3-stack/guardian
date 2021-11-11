@@ -1,20 +1,18 @@
 import Joi from 'joi';
-import { LaminarApi } from '@laminar/api';
-import { options } from '@laminar/api/laminar/options';
-import { StorageType } from '@laminar/types';
+import { firstValueFrom } from 'rxjs';
+import { options } from '@laminar/api';
+import { ApiRx } from '@polkadot/api';
 import { WsProvider } from '@polkadot/rpc-provider';
-import { createStorage } from '@open-web3/api-mobx';
-import { ApiPromise, ApiRx } from '@polkadot/api';
 import { LaminarGuardianConfig } from '../types';
 import { laminarNetwork } from '../constants';
 import { customTypes } from '../customTypes';
-import PositionsByTraderTask from '../tasks/laminarChain/PositionsByTraderTask';
-import TraderInfoTask from '../tasks/laminarChain/TraderInfoTask';
+import PositionsByTraderTask from '../tasks/laminar/PositionsByTraderTask';
+import TraderInfoTask from '../tasks/laminar/TraderInfoTask';
 import BaseSubstrateGuardian from './BaseSubstrateGuardian';
 import BalancesTask from '../tasks/orml/BalancesTask';
 import PricesTask from '../tasks/orml/PricesTask';
-import LiquidityPoolTask from '../tasks/laminarChain/LiquidityPoolTask';
-import PoolInfoTask from '../tasks/laminarChain/PoolInfoTask';
+import LiquidityPoolTask from '../tasks/laminar/LiquidityPoolTask';
+import PoolInfoTask from '../tasks/laminar/PoolInfoTask';
 
 const defaultNodeEndpoint = ({ network }: { network: LaminarGuardianConfig['network'] }) => {
   // TODO: update node endpoints
@@ -32,8 +30,10 @@ const defaultNodeEndpoint = ({ network }: { network: LaminarGuardianConfig['netw
 
 export default class LaminarGuardian extends BaseSubstrateGuardian<
   LaminarGuardianConfig,
-  { apiRx: ApiRx; laminarApi: LaminarApi; storage: StorageType }
+  { apiRx: ApiRx; getTokenPrecision: (token: string) => number | undefined; tokens: Record<string, number> }
 > {
+  private readonly tokenDecimals: Record<string, number> = {};
+
   tasks() {
     return {
       ...super.tasks(),
@@ -51,15 +51,26 @@ export default class LaminarGuardian extends BaseSubstrateGuardian<
     this._metadata = { ...this._metadata, network, networkType };
 
     const ws = new WsProvider(config.nodeEndpoint);
-
-    const laminarApi = new LaminarApi({ provider: ws, types: customTypes });
-    await laminarApi.isReady();
-
     const apiOptions = options({ provider: ws, types: customTypes });
-    const apiPromise = await ApiPromise.create(apiOptions);
-    const storage = createStorage<StorageType>(apiPromise, ws);
 
-    return { apiRx: laminarApi.api, laminarApi, storage };
+    const apiRx = await firstValueFrom(ApiRx.create(apiOptions));
+
+    // fetch token precision
+    const properties = await firstValueFrom(apiRx.rpc.system.properties());
+    const tokenSymbol = properties.tokenSymbol.unwrapOrDefault();
+    const tokenDecimals = properties.tokenDecimals.unwrapOrDefault();
+    if (tokenSymbol.length !== tokenDecimals.length) {
+      throw Error(`Token symbols/decimals mismatch ${tokenSymbol} ${tokenDecimals}`);
+    }
+    tokenSymbol.forEach((symbol, index) => {
+      this.tokenDecimals[symbol.toString()] = tokenDecimals[index].toNumber();
+    });
+
+    const getTokenPrecision = (token: string): number | undefined => {
+      return this.tokenDecimals[token.toUpperCase()];
+    };
+
+    return { apiRx, getTokenPrecision, tokens: this.tokenDecimals };
   }
 
   validationSchema() {
