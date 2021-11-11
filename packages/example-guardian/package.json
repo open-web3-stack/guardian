@@ -23,10 +23,10 @@
   },
   "homepage": "https://github.com/open-web3-stack/guardian",
   "dependencies": {
-    "@open-web3/api": "^1.0.2-1",
+    "@open-web3/api": "^1.0.2-2",
     "@open-web3/guardian": "0.4.5-12",
     "@open-web3/guardian-cli": "0.4.5-12",
-    "@open-web3/util": "^1.0.2-1",
+    "@open-web3/util": "^1.0.2-2",
     "@polkadot/api": "^6.5.2",
     "@types/nodemailer": "^6.4.4",
     "dotenv": "^10.0.0",

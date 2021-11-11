@@ -2676,14 +2676,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@open-web3/api@npm:^1.0.2-1":
-  version: 1.0.2-1
-  resolution: "@open-web3/api@npm:1.0.2-1"
+"@open-web3/api@npm:^1.0.2-2":
+  version: 1.0.2-2
+  resolution: "@open-web3/api@npm:1.0.2-2"
   dependencies:
-    "@open-web3/util": 1.0.2-1
+    "@open-web3/util": 1.0.2-2
   peerDependencies:
     "@polkadot/api": ^6.3.1
-  checksum: 9fdbb5b3df0c54fa9041775c04de5811350fa65917bad384bd93918d0a390d0223f2198580e745898eac98d011fd67e5cc2a0279d559a7565530d6eb4d434697
+  checksum: ce5c7b5e66c1945d95472fb63c60f26799372ae05f972cbb7f222cc9b1fed220c9d3ad0aa2680ea217585638901a90feb4a85022326c052371e3301275afbf3f
   languageName: node
   linkType: hard
 
@@ -2785,10 +2785,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@open-web3/example-guardian@workspace:packages/example-guardian"
   dependencies:
-    "@open-web3/api": ^1.0.2-1
+    "@open-web3/api": ^1.0.2-2
     "@open-web3/guardian": 0.4.5-12
     "@open-web3/guardian-cli": 0.4.5-12
-    "@open-web3/util": ^1.0.2-1
+    "@open-web3/util": ^1.0.2-2
     "@polkadot/api": ^6.5.2
     "@types/nodemailer": ^6.4.4
     dotenv: ^10.0.0
@@ -2830,8 +2830,8 @@ __metadata:
     "@acala-network/types": ^3.0.2
     "@laminar/api": ^0.3.2-2
     "@laminar/types": ^0.3.2-2
-    "@open-web3/api": ^1.0.2-1
-    "@open-web3/orml-types": ^1.0.2-1
+    "@open-web3/api": ^1.0.2-2
+    "@open-web3/orml-types": ^1.0.2-2
     "@polkadot/api": ^6.5.2
     "@polkadot/typegen": ^6.5.2
     "@types/big.js": ^6.1.2
@@ -2851,46 +2851,46 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@open-web3/orml-api-derive@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@open-web3/orml-api-derive@npm:1.0.1"
+"@open-web3/orml-api-derive@npm:^1.0.2-2":
+  version: 1.0.2-2
+  resolution: "@open-web3/orml-api-derive@npm:1.0.2-2"
   dependencies:
     memoizee: ^0.4.15
     rxjs: ^7.2.0
   peerDependencies:
     "@polkadot/api": ^6.3.1
-  checksum: cdbd7d98fe4048b5c9e508082db0bfb2d7438aeb02b997d24154bb0450220d0932a0102782c4c570452689113f02b746a7234a6963249d99434cbff28c032fd4
+  checksum: 73d6a73076568317b3e7bfe8e2dde0f2e934964cad57d6a91e12ba851312929f6af1de65545a5320e7f853996f7c53e24e193a73fcec13fc312243eb856938f8
   languageName: node
   linkType: hard
 
-"@open-web3/orml-type-definitions@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@open-web3/orml-type-definitions@npm:1.0.1"
+"@open-web3/orml-type-definitions@npm:^1.0.2-2":
+  version: 1.0.2-2
+  resolution: "@open-web3/orml-type-definitions@npm:1.0.2-2"
   dependencies:
     lodash.merge: ^4.6.2
-  checksum: 3923e41e8d6879aece60e92016bab7243e131f22cd4edb8d043285f98e389cf0e1009c95475d6117b94e9b357b91d1fa9886f32020a42b767f4b0c04097a5269
+  checksum: dcec17e93af5c721bc3157d84359519f8de26b6f6c8c54189b2dccc7a85dff270d2bb139795bc9fda8cc8df72eb5b2d862d8bc295c75bf9f914bdff84a09abbd
   languageName: node
   linkType: hard
 
-"@open-web3/orml-types@npm:^1.0.1":
-  version: 1.0.1
-  resolution: "@open-web3/orml-types@npm:1.0.1"
+"@open-web3/orml-types@npm:^1.0.2-2":
+  version: 1.0.2-2
+  resolution: "@open-web3/orml-types@npm:1.0.2-2"
   dependencies:
-    "@open-web3/orml-type-definitions": 1.0.1
+    "@open-web3/orml-type-definitions": 1.0.2-2
   peerDependencies:
     "@polkadot/api": ^6.3.1
     "@polkadot/typegen": ^6.3.1
-  checksum: a9c7c1350fde3f203df55de73acf080fb27940e106407cfce193b87a4bfb80599b7b0fde918e9c0598ee984958724e82ae513d808b8e02ac4b717a26b552c2a7
+  checksum: 499c12d031659671f112dc6a89da9aec46b770ef3479af766263560c86df4474e388387b8525ef28c79f18db0f882a3c5d2f52b9332d8047696439c6227bb7c1
   languageName: node
   linkType: hard
 
-"@open-web3/util@npm:1.0.2-1, @open-web3/util@npm:^1.0.2-1":
-  version: 1.0.2-1
-  resolution: "@open-web3/util@npm:1.0.2-1"
+"@open-web3/util@npm:1.0.2-2, @open-web3/util@npm:^1.0.2-2":
+  version: 1.0.2-2
+  resolution: "@open-web3/util@npm:1.0.2-2"
   dependencies:
     "@yarnpkg/lockfile": ^1.1.0
     big.js: ^6.1.1
-  checksum: 462baf6724e69d4e3cce8c82999367c3e67c09f66bf3ae1cff750e2af71ee135788f21827845b221b617f29f52cc55bc6b7cc4e1f0284b23da4411aade2d9e99
+  checksum: 306dfa6349db9584aaf5c79ae845a0a9a377b140832d8a40756dc5641f3753240906e0fdd17094ed8eec0c60377fdc2c2285352931d344010e731c481f1c9c4f
   languageName: node
   linkType: hard
 

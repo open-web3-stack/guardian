@@ -12,9 +12,9 @@
     "@polkadot/api": "^6.5.2",
     "@polkadot/types": "^6.5.2",
     "@polkadot/typegen": "^6.5.2",
-    "@open-web3/orml-types": "^1.0.1",
-    "@open-web3/orml-type-definitions": "^1.0.1",
-    "@open-web3/orml-api-derive": "^1.0.1",
+    "@open-web3/orml-types": "^1.0.2-2",
+    "@open-web3/orml-type-definitions": "^1.0.2-2",
+    "@open-web3/orml-api-derive": "^1.0.2-2",
     "rxjs": "^7.3.0"
   },
   "homepage": "https://github.com/open-web3-stack/guardian",
