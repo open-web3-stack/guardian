@@ -1,7 +1,8 @@
 import Big from 'big.js';
 import Joi from 'joi';
-import { of, combineLatest } from 'rxjs';
-import { map, mergeMap, filter, switchMap } from 'rxjs/operators';
+import { castArray } from 'lodash';
+import { of, combineLatest, range } from 'rxjs';
+import { map, mergeMap, filter, switchMap, pairwise, distinctUntilChanged, concatWith } from 'rxjs/operators';
 import {
   SyntheticPoolCurrencyOption,
   SyntheticPosition,
@@ -10,7 +11,6 @@ import {
 } from '@laminar/types/interfaces';
 import { ApiRx } from '@polkadot/api';
 import { Permill } from '@polkadot/types/interfaces';
-
 import { LaminarGuardian } from '@open-web3/guardian/guardians';
 import { toBaseUnit as dollar } from '@open-web3/util';
 import { LiquidityPool } from '../../types';
@@ -18,18 +18,38 @@ import getOraclePrice from './helpers/getOraclePrice';
 import Task from '../Task';
 
 const getSyntheticPools = (apiRx: ApiRx) => (poolId: number | number[] | 'all') => {
+  const upcomingPools$ = apiRx.query.baseLiquidityPoolsForSynthetic.nextPoolId().pipe(
+    pairwise(),
+    filter(([, next]) => !next.isZero()),
+    switchMap(([prev, next]) => range(prev.toNumber(), next.toNumber())),
+    distinctUntilChanged(),
+    mergeMap((poolId) =>
+      combineLatest([
+        of(poolId.toString()),
+        apiRx.query.baseLiquidityPoolsForSynthetic.pools(poolId).pipe(
+          filter((x) => x.isSome),
+          map((x) => x.unwrap())
+        )
+      ])
+    )
+  );
+
   if (poolId === 'all') {
     return apiRx.query.baseLiquidityPoolsForSynthetic.pools.entries().pipe(
       mergeMap((x) => x),
       filter(([, value]) => value.isSome),
-      mergeMap(([key, value]) => {
-        const [poolId] = key.args;
-        return combineLatest([of(poolId.toString()), of(value.unwrap())]);
-      })
+      mergeMap(
+        ([
+          {
+            args: [poolId]
+          },
+          pool
+        ]) => combineLatest([of(poolId.toString()), of(pool.unwrap())])
+      ),
+      concatWith(upcomingPools$)
     );
   } else {
-    const poolIds = typeof poolId === 'number' ? [poolId] : poolId;
-    return of(poolIds).pipe(
+    return of(castArray(poolId)).pipe(
       mergeMap((x) => x),
       switchMap((poolId) =>
         combineLatest([of(poolId.toString()), apiRx.query.baseLiquidityPoolsForSynthetic.pools(poolId)])

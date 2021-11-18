@@ -1,8 +1,7 @@
-import { of } from 'rxjs';
+import { of, NEVER } from 'rxjs';
 import { registry, storageKeyMaker } from '../../../../utils/laminar/testHelpers';
 import { laminarRpc } from '../../../../__tests__/__mocks__/mockApiPromise';
 
-const rawValuesKey = storageKeyMaker('LaminarOracle', 'RawValues');
 const poolsKey = storageKeyMaker('BaseLiquidityPoolsForMargin', 'Pools');
 const poolTradingPairOptionsKey = storageKeyMaker('MarginLiquidityPools', 'PoolTradingPairOptions');
 
@@ -39,7 +38,8 @@ const MockApiRx = of({
       defaultMinLeveragedAmount: () => of(registry.createType('Balance'))
     },
     baseLiquidityPoolsForSynthetic: {
-      pools: () => of(POOL)
+      pools: () => of(POOL),
+      nextPoolId: () => of(1)
     },
     syntheticLiquidityPools: {
       poolCurrencyOptions: () => of(CURRENCY_OPTION)
@@ -55,18 +55,14 @@ const MockApiRx = of({
       ratios: () => of(registry.createType('SyntheticTokensRatio'))
     },
     laminarOracle: {
-      rawValues: {
-        entries: () =>
-          of([
-            [
-              rawValuesKey('5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y', 'FEUR'),
-              registry.createType('Option<TimestampedValueOf>', { value: '1200000000000000000' })
-            ],
-            [
-              rawValuesKey('5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y', 'LAMI'),
-              registry.createType('Option<TimestampedValueOf>', { value: '2000000000000000000' })
-            ]
-          ])
+      values: (token) => {
+        if (token.toString() === 'FEUR') {
+          return of(registry.createType('Option<TimestampedValueOf>', { value: '1200000000000000000' }));
+        }
+        if (token.toString() === 'LAMI') {
+          return of(registry.createType('Option<TimestampedValueOf>', { value: '2000000000000000000' }));
+        }
+        return NEVER;
       }
     }
   },

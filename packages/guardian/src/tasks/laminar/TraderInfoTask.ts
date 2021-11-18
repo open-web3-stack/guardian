@@ -2,7 +2,7 @@ import Joi from 'joi';
 import { castArray } from 'lodash';
 import BN from 'bn.js';
 import { timer, from } from 'rxjs';
-import { switchMap, map, mergeMap, distinctUntilChanged, share, mergeAll } from 'rxjs/operators';
+import { switchMap, map, mergeMap, distinctUntilChanged, share } from 'rxjs/operators';
 import { TraderInfo } from '@laminar/api';
 import { unit } from '@laminar/api/utils';
 import { LaminarGuardian } from '@open-web3/guardian/guardians';

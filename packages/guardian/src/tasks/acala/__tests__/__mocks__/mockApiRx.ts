@@ -3,7 +3,6 @@ import { concatAll, mapTo, share } from 'rxjs/operators';
 import { acalaRpc } from '../../../../__tests__/__mocks__/mockApiPromise';
 import { registry, storageKeyMaker } from '../../../../utils/acala/testHelpers';
 const collateralAuctionsKey = storageKeyMaker('AuctionManager', 'CollateralAuctions');
-const rawValuesKey = storageKeyMaker('AcalaOracle', 'RawValues');
 
 const AUSD = registry.createType('CurrencyId', { Token: 'AUSD' });
 const COLLATERAL_CURRENCY_IDS = registry.createType('Vec<CurrencyId>', [
@@ -48,6 +47,7 @@ const MockApiRx = of({
       }
     },
     auction: {
+      auctionsIndex: () => of(registry.createType('AuctionId', 1)),
       auctions: () => of(AUCTION)
     },
     dex: {
@@ -60,16 +60,8 @@ const MockApiRx = of({
       debitExchangeRate: () => of(EXCHANGE_RATE)
     },
     acalaOracle: {
-      rawValues: {
-        entries: () =>
-          merge([
-            of([[rawValuesKey('t6X8qpY26nsi6WDMkhbyaTz6cLtNBt7xfs4H9k94D3kM1Lm', { token: 'DOT' }), PRICE]]),
-            timer(1000).pipe(
-              mapTo([
-                [rawValuesKey('t6X8qpY26nsi6WDMkhbyaTz6cLtNBt7xfs4H9k94D3kM1Lm', { token: 'DOT' }), PRICE_UPDATED]
-              ])
-            )
-          ]).pipe(concatAll(), share())
+      values: () => {
+        return merge([of(PRICE), timer(1000).pipe(mapTo(PRICE_UPDATED))]).pipe(concatAll(), share());
       }
     }
   },

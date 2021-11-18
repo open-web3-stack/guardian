@@ -1,8 +1,8 @@
 import Joi from 'joi';
 import { castArray } from 'lodash';
 import { drr } from '@polkadot/rpc-core';
-import { combineLatest, of } from 'rxjs';
-import { mergeMap, map, filter } from 'rxjs/operators';
+import { combineLatest, of, range } from 'rxjs';
+import { mergeMap, map, filter, switchMap, pairwise, concatWith, distinctUntilChanged } from 'rxjs/operators';
 import { CollateralAuction } from '@open-web3/guardian/types';
 import { AcalaGuardian } from '../../guardians';
 import Task from '../Task';
@@ -35,6 +35,20 @@ export default class CollateralAuctionsTask extends Task<
     const fulfillAccount = this.fulfillArguments(account);
     const fulfillCurrencyId = this.fulfillArguments(currencyId === 'all' ? whitelist : currencyId);
 
+    const upcomingAuctions$ = apiRx.query.auction.auctionsIndex().pipe(
+      pairwise(),
+      filter(([, next]) => !next.isZero()),
+      switchMap(([prev, next]) => range(prev.toNumber(), next.toNumber())),
+      distinctUntilChanged(),
+      mergeMap((auctionId) => {
+        return combineLatest([
+          of(auctionId),
+          apiRx.query.auctionManager.collateralAuctions(auctionId),
+          apiRx.query.auction.auctions(auctionId)
+        ]);
+      })
+    );
+
     return apiRx.query.auctionManager.collateralAuctions.entries().pipe(
       mergeMap((entry) => entry),
       mergeMap((entry) => {
@@ -42,8 +56,8 @@ export default class CollateralAuctionsTask extends Task<
         const [auctionId] = storageKey.args;
         return combineLatest([of(auctionId), of(maybecollateralAuction), apiRx.query.auction.auctions(auctionId)]);
       }),
-      filter((entry) => {
-        const [, maybecollateralAuction, maybeAuction] = entry;
+      concatWith(upcomingAuctions$),
+      filter(([, maybecollateralAuction, maybeAuction]) => {
         if (maybecollateralAuction.isNone) return false;
         if (maybeAuction.isNone) return false;
 
@@ -53,8 +67,7 @@ export default class CollateralAuctionsTask extends Task<
 
         return true;
       }),
-      map((entry) => {
-        const [auctionId, maybecollateralAuction, maybeAuction] = entry;
+      map(([auctionId, maybecollateralAuction, maybeAuction]) => {
         const collateralAuction = maybecollateralAuction.unwrap();
         const auction = maybeAuction.unwrap();
 
