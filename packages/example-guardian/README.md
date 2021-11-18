@@ -103,10 +103,6 @@ Run in **dev** mode:
 yarn dev:schedule
 ```
 
-Run in **prod** mode:
-```shell=
-yarn prod:schedule
-```
 
 The output should look like this:
 ```
@@ -152,11 +148,6 @@ Run in **dev** mode:
 yarn dev:staking
 ```
 
-Run in **prod** mode:
-```shell=
-yarn prod:staking
-```
-
 
 ## Collateral Auction Bot for Acala/Karura
 
@@ -167,7 +158,7 @@ Configuration file you can find here:
 
 It cointains next env variables:
 ```shell=
-NODE_ENDPOINT=ws://localhost:9944
+NETWORK=dev # or karura
 SURI=//Charlie
 ADDRESS=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y
 MARGIN=0.1
@@ -181,10 +172,6 @@ Run in **dev** mode:
 yarn dev:collateral-auction
 ```
 
-Run in **prod** mode:
-```shell=
-yarn prod:collateral-auction
-```
 
 ####  Liquidation Simulation 
 
@@ -217,7 +204,7 @@ Configuration file you can find here:
 
 It cointains next env variables:
 ```shell=
-NODE_ENDPOINT=ws://localhost:9944
+NETWORK=dev # or karura
 SURI=//Charlie
 ADDRESS=5FLSigC9HGRKVhB9FiEo4Y3koPsNmBmLJbpXg2mp1hXcS59Y
 COLLATERAL_RATIO=1.4
@@ -230,10 +217,6 @@ Run in **dev** mode:
 yarn dev:cdp
 ```
 
-Run in **prod** mode:
-```shell=
-yarn prod:cdp
-```
 
 ####  Loan collater ratio drop Simulation 
 
@@ -265,7 +248,7 @@ Configuration file you can find here:
 
 It cointains next env variables:
 ```shell=
-NODE_ENDPOINT=wss://karura.api.onfinality.io/public-ws
+NETWORK=karura
 TOKEN_A=KUSD
 TOKEN_B=KSM
 ```
@@ -275,10 +258,6 @@ Run in **dev** mode:
 yarn dev:dex-price
 ```
 
-Run in **prod** mode:
-```shell=
-yarn prod:dex-price
-```
 
 ## Synthetic Liquidation Bot for Laminar
 This example uses the `laminar synthetic liquidation` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/laminar-synthetic-liquidation-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/laminar-synthetic-liquidation). It will monitor specified account's (`ADDRESS`) synthetic asset trading positions. If the collateral ratio of the trade drops below a given threshold (`COLLATERAL_RATIO`), it will liquidate the position.
@@ -302,10 +281,6 @@ Run in **dev** mode:
 yarn dev:laminar-synthetic-liquidation
 ```
 
-Run in **prod** mode:
-```shell=
-yarn prod:laminar-synthetic-liquidation
-```
 
 ####  Synthetic pool liquidation Simulation   
 
@@ -359,10 +334,6 @@ Run in **dev** mode:
 yarn dev:laminar-margin-position
 ```
 
-Run in **prod** mode:
-```shell=
-yarn prod:laminar-margin-position
-```
 
 ###  Margin position price drop Simulation  
 

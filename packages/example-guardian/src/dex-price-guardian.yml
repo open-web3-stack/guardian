@@ -9,6 +9,6 @@ guardians:
         task: dex.pools
         arguments: 
             currencyId:
-                - ${TOKEN_A}
+                - token: ${TOKEN}
         actions:
-        - method: "dexPriceChange"
+        - method: dexPriceChange

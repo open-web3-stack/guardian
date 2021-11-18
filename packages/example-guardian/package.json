@@ -30,20 +30,19 @@
     "@polkadot/api": "^6.5.2",
     "@types/nodemailer": "^6.4.4",
     "dotenv": "^10.0.0",
-    "nodemailer": "^6.7.0",
-    "ts-node": "^10.4.0"
+    "nodemailer": "^6.7.0"
   },
   "devDependencies": {
-    "ts-node-dev": "^1.1.8",
+    "ts-node": "^10.4.0",
     "typescript": "^4.4.4"
   },
   "scripts": {
-    "dev:collateral-auction": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/collateral-auction.ts dotenv_config_path=.env.auction",
-    "dev:laminar-synthetic-liquidation": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/laminar-synthetic-liquidation.ts dotenv_config_path=.env.laminar-synthetic-liquidation",
-    "dev:laminar-margin-position": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/laminar-margin-position.ts dotenv_config_path=.env.laminar-margin-position",
-    "dev:cdp": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/cdp.ts dotenv_config_path=.env.cdp",
-    "dev:schedule": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/schedule.ts dotenv_config_path=.env.schedule",
-    "dev:staking": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/staking.ts dotenv_config_path=.env.staking",
-    "dev:dex-price": "tsnd -r dotenv/config --respawn --transpile-only src/scripts/dex-price.ts dotenv_config_path=.env.dex-price"
+    "dev:collateral-auction": "ts-node -r dotenv/config --transpile-only src/scripts/collateral-auction.ts dotenv_config_path=.env.auction",
+    "dev:laminar-synthetic-liquidation": "ts-node -r dotenv/config --transpile-only src/scripts/laminar-synthetic-liquidation.ts dotenv_config_path=.env.laminar-synthetic-liquidation",
+    "dev:laminar-margin-position": "ts-node -r dotenv/config --transpile-only src/scripts/laminar-margin-position.ts dotenv_config_path=.env.laminar-margin-position",
+    "dev:cdp": "ts-node -r dotenv/config --transpile-only src/scripts/cdp.ts dotenv_config_path=.env.cdp",
+    "dev:schedule": "ts-node -r dotenv/config --transpile-only src/scripts/schedule.ts dotenv_config_path=.env.schedule",
+    "dev:staking": "ts-node -r dotenv/config --transpile-only src/scripts/staking.ts dotenv_config_path=.env.staking",
+    "dev:dex-price": "ts-node -r dotenv/config --transpile-only src/scripts/dex-price.ts dotenv_config_path=.env.dex-price"
   }
 }
