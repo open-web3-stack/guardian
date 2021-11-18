@@ -3,7 +3,6 @@ import { ActionRegistry } from '@open-web3/guardian';
 import { setDefaultConfig } from '../utils';
 
 const registerEventHandler = () => {
-
   let prevPrice: BigInt | null = null;
 
   ActionRegistry.register('dexPriceChange', (data: Pool) => {
