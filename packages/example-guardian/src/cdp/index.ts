@@ -46,7 +46,6 @@ export default async () => {
   let ready = true;
 
   ActionRegistry.register('unsafeLoan', (data: Loan, metadata: Metadata) => {
-    console.log(metadata);
     if (!ready) return;
     ready = false;
     adjustLoan(data, metadata)
