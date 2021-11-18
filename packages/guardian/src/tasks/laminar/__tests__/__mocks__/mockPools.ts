@@ -38,7 +38,8 @@ const MockApiRx = of({
       defaultMinLeveragedAmount: () => of(registry.createType('Balance'))
     },
     baseLiquidityPoolsForSynthetic: {
-      pools: () => of(POOL)
+      pools: () => of(POOL),
+      nextPoolId: () => of(1)
     },
     syntheticLiquidityPools: {
       poolCurrencyOptions: () => of(CURRENCY_OPTION)
