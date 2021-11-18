@@ -1,7 +1,6 @@
 version: '0.1'
 guardians:
-  laminar-guardian:
-    networkType: laminarChain
+  - chain: laminar
     network: dev
     nodeEndpoint: ${NODE_ENDPOINT} # or ws://localhost:9944
     monitors:

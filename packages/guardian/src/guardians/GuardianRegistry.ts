@@ -6,7 +6,7 @@ import { GuardianConfig } from '../types';
 import Guardian from './Guardian';
 
 export interface GuardianConstructor {
-  new (name: string, config: GuardianConfig): Guardian;
+  new (config: GuardianConfig): Guardian;
 }
 
 /**
@@ -18,59 +18,61 @@ export interface GuardianConstructor {
 export default class GuardianRegistry {
   private static guardians = {
     ethereum: EthereumGuardian,
-    laminarChain: LaminarGuardian,
-    acalaChain: AcalaGuardian,
-    substrateChain: SubstrateGuardian
+    laminar: LaminarGuardian,
+    acala: AcalaGuardian,
+    substrate: SubstrateGuardian
   };
+
+  public static registred() {
+    return Object.keys(GuardianRegistry.guardians);
+  }
 
   /**
    * Register a guardian class
    *
    * @static
-   * @param {string} networkType
+   * @param {string} chain
    * @param {GuardianConstructor} guardian
    * @memberof GuardianRegistry
    */
-  public static register(networkType: string, guardian: GuardianConstructor) {
-    if (networkType.length === 0) {
-      throw Error('networkType is not defined!');
+  public static register(chain: string, guardian: GuardianConstructor) {
+    if (chain.length === 0) {
+      throw Error('chain is not defined!');
     }
 
-    if (GuardianRegistry.get(networkType)) {
-      throw Error(`Guardian [${networkType}] is already registered!`);
+    if (GuardianRegistry.get(chain)) {
+      throw Error(`Guardian [${chain}] is already registered!`);
     }
 
-    GuardianRegistry.guardians[networkType] = guardian;
+    GuardianRegistry.guardians[chain] = guardian;
   }
 
   /**
-   * Get guardian class for networkType
+   * Get guardian class for chain
    *
    * @static
-   * @param {string} networkType
+   * @param {string} chain
    * @returns {(GuardianConstructor | undefined)}
    * @memberof GuardianRegistry
    */
-  public static get(networkType: string): GuardianConstructor | undefined {
-    return GuardianRegistry.guardians[networkType];
+  public static get(chain: string): GuardianConstructor | undefined {
+    return GuardianRegistry.guardians[chain];
   }
 
   /**
    * Create guardian instance
    *
    * @static
-   * @param {string} networkType
-   * @param {string} guardianName
    * @param {GuardianConfig} config
    * @returns {Guardian}
    * @memberof GuardianRegistry
    */
-  public static create(networkType: string, guardianName: string, config: GuardianConfig): Guardian {
-    const GuardianClass = GuardianRegistry.get(networkType);
+  public static create(config: GuardianConfig): Guardian {
+    const GuardianClass = GuardianRegistry.get(config.chain);
     if (!GuardianClass) {
-      throw Error(`Guardian [${networkType}] not found!`);
+      throw Error(`Guardian [${config.chain}] not found!`);
     }
 
-    return new GuardianClass(guardianName, config);
+    return new GuardianClass(config);
   }
 }

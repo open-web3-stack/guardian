@@ -51,7 +51,7 @@ export interface ITask<P extends Record<string, any>, O> {
 export type Action = (data: any, metadata: any) => void;
 
 export interface GuardianConfig {
-  networkType: string;
+  chain: string;
   monitors: {
     [key: string]: MonitorConfig;
   };
@@ -64,21 +64,16 @@ export interface BaseSubstrateGuardianConfig extends GuardianConfig {
 }
 
 export interface LaminarGuardianConfig extends BaseSubstrateGuardianConfig {
-  networkType: 'laminarChain';
   network: typeof laminarNetwork[number];
 }
 
 export interface AcalaGuardianConfig extends BaseSubstrateGuardianConfig {
-  networkType: 'acalaChain';
   network: typeof acalaNetwork[number];
 }
 
-export interface SubstrateGuardianConfig extends BaseSubstrateGuardianConfig {
-  networkType: 'substrateChain';
-}
+export type SubstrateGuardianConfig = BaseSubstrateGuardianConfig;
 
 export interface EthereumGuardianConfig extends GuardianConfig {
-  networkType: 'ethereum';
   nodeEndpoint: string;
   network: typeof ethereumNetwork[number];
 }
@@ -96,12 +91,7 @@ export interface MonitorConfig {
 
 export interface Config {
   version: string;
-  guardians: {
-    [name: string]:
-      | LaminarGuardianConfig
-      | AcalaGuardianConfig
-      | SubstrateGuardianConfig
-      | EthereumGuardianConfig
-      | GuardianConfig;
-  };
+  guardians: [
+    LaminarGuardianConfig | AcalaGuardianConfig | SubstrateGuardianConfig | EthereumGuardianConfig | GuardianConfig
+  ];
 }

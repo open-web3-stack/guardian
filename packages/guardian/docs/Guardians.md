@@ -47,8 +47,7 @@ Your YAML config will then be:
 ```yaml
 version: '0.1'
 guardians:
-  my-first-guardian: # any name
-    networkType: myChain # identifier you registered your guardian
+  - chain: myChain # identifier you registered your guardian
     nodeEndpoint: ${NODE_ENDPOINT} # rest of arguments required to setup your guardian...
 ```
 

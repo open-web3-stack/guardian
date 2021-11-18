@@ -2,23 +2,24 @@ import Joi from 'joi';
 
 const schema = Joi.object({
   version: '0.1',
-  guardians: Joi.object().pattern(
-    Joi.string(),
-    Joi.object({
-      networkType: Joi.string().required(),
-      monitors: Joi.object()
-        .pattern(
-          Joi.string(),
-          Joi.object({
-            task: Joi.string().required(),
-            arguments: Joi.any(),
-            conditions: Joi.any(),
-            actions: Joi.any()
-          })
-        )
-        .required()
-    }).unknown()
-  )
+  guardians: Joi.array()
+    .min(1)
+    .items(
+      Joi.object({
+        chain: Joi.string(),
+        monitors: Joi.object()
+          .pattern(
+            Joi.string(),
+            Joi.object({
+              task: Joi.string().required(),
+              arguments: Joi.any(),
+              conditions: Joi.any(),
+              actions: Joi.any()
+            })
+          )
+          .required()
+      }).unknown()
+    )
 });
 
 export default (config: any): any => {

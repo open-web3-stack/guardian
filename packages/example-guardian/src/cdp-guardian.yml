@@ -1,9 +1,7 @@
 version: '0.1'
 guardians:
-  acala-guardian:
-    networkType: acalaChain
+  - chain: acala
     network: ${NETWORK}
-
     monitors:
       loans-monitor:
         task: honzon.loans

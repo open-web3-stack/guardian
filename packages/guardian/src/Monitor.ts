@@ -10,8 +10,6 @@ export default class Monitor implements IMonitor {
 
   /// listen to output$ and trigger actions
   async start(guardian: IGuardian): Promise<Subscription> {
-    logger.log(`[${this.name}] starting ...`);
-
     const TaskClass = guardian.getTaskOrThrow(this.config.task);
 
     const task = new TaskClass(this.config.arguments);

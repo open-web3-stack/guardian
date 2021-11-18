@@ -55,8 +55,8 @@ export default class AcalaGuardian extends BaseSubstrateGuardian<
   }
 
   async setup(config: AcalaGuardianConfig) {
-    const { network, networkType } = config;
-    this._metadata = { ...this._metadata, network, networkType };
+    const { network } = config;
+    this._metadata = { ...this._metadata, network };
 
     const ws = new WsProvider(config.nodeEndpoint);
     const apiOptions = options({ provider: ws, types: customTypes });
@@ -83,7 +83,7 @@ export default class AcalaGuardian extends BaseSubstrateGuardian<
 
   validationSchema() {
     return Joi.object({
-      networkType: Joi.valid('acalaChain').required(),
+      chain: Joi.valid('acala'),
       network: Joi.valid(...acalaNetwork).required(),
       nodeEndpoint: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).default(defaultNodeEndpoint)
     }).required();

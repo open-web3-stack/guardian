@@ -6,8 +6,8 @@ import PoolInfoTask from '../PoolInfoTask';
 describe('PoolInfoTask', () => {
   jest.setTimeout(30_000);
 
-  const guardian = new LaminarGuardian('laminar-guardian', {
-    networkType: 'laminarChain',
+  const guardian = new LaminarGuardian({
+    chain: 'laminar',
     network: 'dev',
     nodeEndpoint: 'ws://localhost:9944',
     monitors: {}

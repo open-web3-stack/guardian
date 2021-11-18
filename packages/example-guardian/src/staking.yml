@@ -1,7 +1,6 @@
 version: '0.1'
 guardians:
-  substrate-chain:
-    networkType: substrateChain
+  - chain: substrate
     nodeEndpoint: ${NODE_ENDPOINT}
     monitors:
       staking-reward:

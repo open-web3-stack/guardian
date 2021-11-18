@@ -22,9 +22,7 @@ Create a YAML config file.
 ```
 version: "0.1"
 guardians:
-  substrate-chain: # user defined
-
-    networkType: substrateChain
+  - chain: substrate
     nodeEndpoint: wss://kusama-rpc.polkadot.io/
 
     monitors:

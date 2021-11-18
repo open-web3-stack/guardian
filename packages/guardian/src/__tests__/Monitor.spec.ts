@@ -32,8 +32,8 @@ describe('LaminarGuardian', () => {
   });
 
   it('margin poolInfo should work', async (done) => {
-    const guardian = new LaminarGuardian('laminar-guardian', {
-      networkType: 'laminarChain',
+    const guardian = new LaminarGuardian({
+      chain: 'laminar',
       network: 'dev',
       nodeEndpoint: 'ws://localhost:9944',
       monitors: {
@@ -63,8 +63,8 @@ describe('LaminarGuardian', () => {
   });
 
   it('synthetic liquidityPool should work', async (done) => {
-    const guardian = new LaminarGuardian('laminar-guardian', {
-      networkType: 'laminarChain',
+    const guardian = new LaminarGuardian({
+      chain: 'laminar',
       network: 'dev',
       nodeEndpoint: 'ws://localhost:9944',
       monitors: {

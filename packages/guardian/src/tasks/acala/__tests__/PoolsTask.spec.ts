@@ -4,8 +4,8 @@ import PoolsTask from '../PoolsTask';
 import { AcalaGuardian } from '../../../guardians';
 
 describe('PoolsTask', () => {
-  const guardian = new AcalaGuardian('acala-guardian', {
-    networkType: 'acalaChain',
+  const guardian = new AcalaGuardian({
+    chain: 'acala',
     network: 'dev',
     nodeEndpoint: 'ws://localhost:9944',
     monitors: {}

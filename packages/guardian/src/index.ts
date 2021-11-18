@@ -9,10 +9,7 @@ export default async (config: Config) => {
   config = validateConfig(config);
 
   // create guardians
-  const guardians = Object.entries(config.guardians).map(([name, guardianConfig]) => {
-    const { networkType } = guardianConfig;
-    return GuardianRegistry.create(networkType, name, guardianConfig);
-  });
+  const guardians = config.guardians.map((guardianConfig) => GuardianRegistry.create(guardianConfig));
 
   // start monitoring
   await Promise.all(guardians.map((guardian) => guardian.start()));

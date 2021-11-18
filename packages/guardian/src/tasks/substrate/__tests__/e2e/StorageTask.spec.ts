@@ -6,12 +6,12 @@ describe('StorageTask', () => {
   jest.setTimeout(60_000);
 
   const config: SubstrateGuardianConfig = {
-    networkType: 'substrateChain',
+    chain: 'substrate',
     nodeEndpoint: 'wss://kusama-rpc.polkadot.io/',
     monitors: {}
   };
 
-  const guardian = new SubstrateGuardian('substrate-guardian', config);
+  const guardian = new SubstrateGuardian(config);
 
   it('works with single args', async (done) => {
     const task = new StorageTask({ name: 'system.account', args: 'FcxNWVy5RESDsErjwyZmPCW6Z8Y3fbfLzmou34YZTrbcraL' });

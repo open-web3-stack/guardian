@@ -2,14 +2,14 @@ import EthereumGuardian from '../EthereumGuardian';
 import { EthereumGuardianConfig } from '../../types';
 
 const config: EthereumGuardianConfig = {
-  networkType: 'ethereum',
+  chain: 'ethereum',
   network: 'dev',
   nodeEndpoint: 'http://localhost:8545',
   monitors: {}
 };
 
 describe('EthereumGuardian', () => {
-  const guardian = new EthereumGuardian('ethereum', config);
+  const guardian = new EthereumGuardian(config);
 
   it('should work', () => {
     const { error, value } = guardian.validationSchema().validate({ ...config }, { allowUnknown: true });

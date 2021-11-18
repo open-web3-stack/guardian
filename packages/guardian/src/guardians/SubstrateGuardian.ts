@@ -8,8 +8,6 @@ import { SubstrateGuardianConfig } from '../types';
 
 export default class SubstrateGuardian extends BaseSubstrateGuardian<SubstrateGuardianConfig> {
   async setup(config: SubstrateGuardianConfig) {
-    const { networkType } = config;
-    this._metadata = { ...this._metadata, networkType };
     const provider = new WsProvider(config.nodeEndpoint);
     const apiRx = await firstValueFrom(ApiRx.create({ provider, types: customTypes }));
     return { apiRx };
@@ -17,7 +15,7 @@ export default class SubstrateGuardian extends BaseSubstrateGuardian<SubstrateGu
 
   validationSchema() {
     return Joi.object({
-      networkType: Joi.valid('substrateChain').required(),
+      chain: Joi.valid('substrate'),
       nodeEndpoint: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required()
     }).required();
   }
