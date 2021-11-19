@@ -1,3 +1,4 @@
+import { logger } from '../utils';
 import { Action } from '../types';
 import POST from './POST';
 import script from './script';
@@ -70,7 +71,9 @@ export class ActionRegistry {
    * @param {*} data
    * @memberof ActionRegistry
    */
-  public static run(action: { method: string; [key: string]: any }, data: any, metadata: any) {
-    ActionRegistry.getOrThrow(action.method)(data, { ...metadata, action });
+  public static run(action: { method: string; [key: string]: any }, data: any, guardianMetadata: any) {
+    const metadata = { ...guardianMetadata, action };
+    logger.info({ data, metadata });
+    ActionRegistry.getOrThrow(action.method)(data, metadata);
   }
 }

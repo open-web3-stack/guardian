@@ -8,7 +8,7 @@ describe('PoolsTask', () => {
     chain: 'acala',
     network: 'dev',
     nodeEndpoint: 'ws://localhost:9944',
-    monitors: {}
+    monitors: []
   });
 
   const task = new PoolsTask({

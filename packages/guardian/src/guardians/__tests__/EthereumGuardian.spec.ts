@@ -5,7 +5,7 @@ const config: EthereumGuardianConfig = {
   chain: 'ethereum',
   network: 'dev',
   nodeEndpoint: 'http://localhost:8545',
-  monitors: {}
+  monitors: []
 };
 
 describe('EthereumGuardian', () => {

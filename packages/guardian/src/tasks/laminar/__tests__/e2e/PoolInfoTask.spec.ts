@@ -11,7 +11,7 @@ describe('PoolInfoTask', () => {
       'wss://testnet-node-1.laminar-chain.laminar.one/ws',
       'wss://node-6787234140909940736.jm.onfinality.io/ws'
     ],
-    monitors: {}
+    monitors: []
   });
 
   it('works', async (done) => {

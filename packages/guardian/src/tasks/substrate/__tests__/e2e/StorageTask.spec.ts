@@ -8,7 +8,7 @@ describe('StorageTask', () => {
   const config: SubstrateGuardianConfig = {
     chain: 'substrate',
     nodeEndpoint: 'wss://kusama-rpc.polkadot.io/',
-    monitors: {}
+    monitors: []
   };
 
   const guardian = new SubstrateGuardian(config);

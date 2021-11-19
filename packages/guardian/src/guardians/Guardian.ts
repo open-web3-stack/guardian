@@ -46,8 +46,8 @@ export default abstract class Guardian<Config extends GuardianConfig = GuardianC
     const { nodeEndpoint, chain } = config;
     this._metadata = { nodeEndpoint, chain };
 
-    this.monitors = Object.entries(config.monitors).map(([name, monitor]) => {
-      const identifier = `${name}.${monitor.task}`;
+    this.monitors = config.monitors.map((monitor, index) => {
+      const identifier = monitor.id || `${this.chain}.monitor-${index}.${monitor.task}`;
       return new Monitor(identifier, monitor);
     });
 
@@ -95,12 +95,12 @@ export default abstract class Guardian<Config extends GuardianConfig = GuardianC
     // unsubscribe any current subscription
     this.subscriptions.map(({ unsubscribe }) => unsubscribe && unsubscribe());
 
-    logger.log(`[${this.chain}] is starting...`);
+    logger.log(`🤖 [${this.chain}] is starting ...`);
 
     // wait until guardian is ready
     this.subscriptions = await Promise.all(this.monitors.map((monitor) => monitor.start(this)));
 
-    logger.log(`[${this.chain}] is ready!`);
+    logger.log(`🤖 [${this.chain}] is ready 🚀`);
   };
 
   /**

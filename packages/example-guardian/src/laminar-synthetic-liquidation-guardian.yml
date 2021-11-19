@@ -4,8 +4,7 @@ guardians:
     network: dev
     nodeEndpoint: ${NODE_ENDPOINT} # or ws://localhost:9944
     monitors:
-      synthetic-pool:
-        task: synthetic.liquidityPool
+      - task: synthetic.liquidityPool
         arguments:
           poolId: all
           currencyId: all

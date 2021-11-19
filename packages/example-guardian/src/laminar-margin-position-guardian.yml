@@ -4,8 +4,7 @@ guardians:
     network: dev
     nodeEndpoint: ${NODE_ENDPOINT} # or ws://localhost:9944
     monitors:
-      margin-positions:
-        task: margin.positionsByTraders
+      - task: margin.positionsByTraders
         arguments:
           account: ${ADDRESS}
         conditions:

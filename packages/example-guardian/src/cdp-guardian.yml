@@ -3,8 +3,7 @@ guardians:
   - chain: acala
     network: ${NETWORK}
     monitors:
-      loans-monitor:
-        task: honzon.loans
+      - task: honzon.loans
         arguments:
           account: ${ADDRESS}
           currencyId: all

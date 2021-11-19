@@ -8,8 +8,8 @@ describe('LaminarGuardian', () => {
       chain: 'laminar',
       network: 'dev',
       nodeEndpoint: 'ws://localhost:9944',
-      monitors: {
-        'margin-monitor': {
+      monitors: [
+        {
           task: 'margin.poolInfo',
           arguments: { poolId: 1 },
           actions: [
@@ -17,7 +17,7 @@ describe('LaminarGuardian', () => {
             { method: 'POST', url: 'localhost' }
           ]
         }
-      }
+      ]
     };
     expect(new LaminarGuardian(config)).toBeInstanceOf(LaminarGuardian);
   });
@@ -27,8 +27,8 @@ describe('LaminarGuardian', () => {
       chain: 'laminar',
       network: 'dev',
       nodeEndpoint: 'ws://localhost:9944',
-      monitors: {
-        'margin-monitor': {
+      monitors: [
+        {
           task: '', // will throw
           arguments: { poolId: 1 },
           actions: [
@@ -36,7 +36,7 @@ describe('LaminarGuardian', () => {
             { method: 'POST', url: 'localhost' }
           ]
         }
-      }
+      ]
     };
     const guardian = new LaminarGuardian(config);
     expect.assertions(1);

@@ -36,8 +36,8 @@ describe('LaminarGuardian', () => {
       chain: 'laminar',
       network: 'dev',
       nodeEndpoint: 'ws://localhost:9944',
-      monitors: {
-        'monitor-poolInfo': {
+      monitors: [
+        {
           task: 'margin.poolInfo',
           arguments: {
             poolId: 0
@@ -49,7 +49,7 @@ describe('LaminarGuardian', () => {
             }
           ]
         }
-      }
+      ]
     });
 
     await guardian.start();
@@ -67,8 +67,8 @@ describe('LaminarGuardian', () => {
       chain: 'laminar',
       network: 'dev',
       nodeEndpoint: 'ws://localhost:9944',
-      monitors: {
-        'monitor-liquidityPool': {
+      monitors: [
+        {
           task: 'synthetic.liquidityPool',
           arguments: {
             poolId: 0,
@@ -86,7 +86,7 @@ describe('LaminarGuardian', () => {
             }
           ]
         }
-      }
+      ]
     });
 
     await guardian.start();

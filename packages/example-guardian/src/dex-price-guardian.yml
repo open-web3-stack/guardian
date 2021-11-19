@@ -3,8 +3,7 @@ guardians:
   - chain: acala
     network: ${NETWORK}
     monitors:
-      dex-price-monitor:
-        task: dex.pools
+      - task: dex.pools
         arguments: 
             currencyId:
                 - token: ${TOKEN}

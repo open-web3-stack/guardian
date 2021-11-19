@@ -3,8 +3,7 @@ guardians:
   - chain: acala
     network: ${NETWORK}
     monitors:
-      CollateralAuctionDealt:
-        task: system.events
+      - task: system.events
         arguments:
           name:
             - auctionManager.CollateralAuctionDealt
@@ -15,8 +14,7 @@ guardians:
         actions:
           - method: collateral_auction_dealt # do not change
 
-      CollateralAuctionCreated:
-        task: honzon.collateralAuctions
+      - task: honzon.collateralAuctions
         arguments:
           account: all
           currencyId: all

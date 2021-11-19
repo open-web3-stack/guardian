@@ -52,9 +52,7 @@ export type Action = (data: any, metadata: any) => void;
 
 export interface GuardianConfig {
   chain: string;
-  monitors: {
-    [key: string]: MonitorConfig;
-  };
+  monitors: MonitorConfig[];
   [key: string]: any;
 }
 
@@ -83,6 +81,7 @@ export interface ActionConfig {
   [key: string]: any;
 }
 export interface MonitorConfig {
+  id?: string;
   task: string;
   arguments?: any;
   conditions?: any[];

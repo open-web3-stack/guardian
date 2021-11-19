@@ -11,38 +11,38 @@ const laminarConfig: LaminarGuardianConfig = {
   chain: 'laminar',
   network: 'dev',
   nodeEndpoint: 'ws://localhost:9944',
-  monitors: {
-    marginMonitor: {
+  monitors: [
+    {
       task: 'margin.poolInfo',
       arguments: { poolId: 1 },
       actions: [{ method: 'POST', url: 'localhost' }]
     }
-  }
+  ]
 };
 
 const acalaConfig: AcalaGuardianConfig = {
   chain: 'acala',
   network: 'dev',
   nodeEndpoint: 'ws://localhost:9944',
-  monitors: {
-    events: {
+  monitors: [
+    {
       task: 'system.events',
       arguments: { name: 'balances.Deposit' },
       actions: [{ method: 'POST', url: 'localhost' }]
     }
-  }
+  ]
 };
 
 const customConfig: BaseSubstrateGuardianConfig = {
   chain: 'customChain',
   nodeEndpoint: 'ws://localhost:9944',
-  monitors: {
-    events: {
+  monitors: [
+    {
       task: 'foo.bar',
       arguments: { name: 'helloworld' },
       actions: [{ method: 'POST', url: 'localhost' }]
     }
-  }
+  ]
 };
 
 class BarTask extends Task<{ name: string }, boolean> {

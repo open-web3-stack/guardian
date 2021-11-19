@@ -3,8 +3,7 @@ guardians:
   - chain: substrate
     nodeEndpoint: ${NODE_ENDPOINT}
     monitors:
-      staking-reward:
-        task: system.events
+      - task: system.events
         arguments:
           name:
             - staking.Reward

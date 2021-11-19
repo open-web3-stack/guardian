@@ -8,7 +8,7 @@ describe('CollateralAuctionsTask e2e', () => {
     chain: 'acala',
     network: 'dev',
     nodeEndpoint: 'wss://acala-mandala.api.onfinality.io/public-ws',
-    monitors: {}
+    monitors: []
   });
 
   it('works with all', async (done) => {

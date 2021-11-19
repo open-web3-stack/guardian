@@ -11,7 +11,7 @@ describe('BalancesTask with laminarChain', () => {
       'wss://testnet-node-1.laminar-chain.laminar.one/ws',
       'wss://node-6787234140909940736.jm.onfinality.io/ws'
     ],
-    monitors: {}
+    monitors: []
   });
 
   const task = new BalancesTask({
@@ -44,7 +44,7 @@ describe('BalancesTask with acalaChain', () => {
       chain: 'acala',
       network: 'dev',
       nodeEndpoint: ['wss://karura-rpc-0.aca-api.network', 'wss://karura-rpc-1.aca-api.network'],
-      monitors: {}
+      monitors: []
     });
   });
 

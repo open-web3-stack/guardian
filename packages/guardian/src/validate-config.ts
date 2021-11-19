@@ -7,11 +7,12 @@ const schema = Joi.object({
     .items(
       Joi.object({
         chain: Joi.string(),
-        monitors: Joi.object()
-          .pattern(
-            Joi.string(),
+        monitors: Joi.array()
+          .min(1)
+          .items(
             Joi.object({
               task: Joi.string().required(),
+              id: Joi.string(),
               arguments: Joi.any(),
               conditions: Joi.any(),
               actions: Joi.any()
