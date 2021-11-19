@@ -6,11 +6,11 @@ import LiquidityPoolTask from '../LiquidityPoolTask';
 describe('LiquidityPoolTask', () => {
   jest.setTimeout(30_000);
 
-  const guardian = new LaminarGuardian('laminar-guardian', {
-    networkType: 'laminarChain',
+  const guardian = new LaminarGuardian({
+    chain: 'laminar',
     network: 'dev',
     nodeEndpoint: 'ws://localhost:9944',
-    monitors: {}
+    monitors: []
   });
 
   const task = new LiquidityPoolTask({

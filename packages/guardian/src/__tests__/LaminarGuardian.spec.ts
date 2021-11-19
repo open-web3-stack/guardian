@@ -5,11 +5,11 @@ import { LaminarGuardianConfig } from '../types';
 describe('LaminarGuardian', () => {
   it('works', () => {
     const config: LaminarGuardianConfig = {
-      networkType: 'laminarChain',
+      chain: 'laminar',
       network: 'dev',
       nodeEndpoint: 'ws://localhost:9944',
-      monitors: {
-        'margin-monitor': {
+      monitors: [
+        {
           task: 'margin.poolInfo',
           arguments: { poolId: 1 },
           actions: [
@@ -17,18 +17,18 @@ describe('LaminarGuardian', () => {
             { method: 'POST', url: 'localhost' }
           ]
         }
-      }
+      ]
     };
-    expect(new LaminarGuardian('laminar-chain-guardian', config)).toBeInstanceOf(LaminarGuardian);
+    expect(new LaminarGuardian(config)).toBeInstanceOf(LaminarGuardian);
   });
 
   it('throws', async () => {
     const config: LaminarGuardianConfig = {
-      networkType: 'laminarChain',
+      chain: 'laminar',
       network: 'dev',
       nodeEndpoint: 'ws://localhost:9944',
-      monitors: {
-        'margin-monitor': {
+      monitors: [
+        {
           task: '', // will throw
           arguments: { poolId: 1 },
           actions: [
@@ -36,10 +36,10 @@ describe('LaminarGuardian', () => {
             { method: 'POST', url: 'localhost' }
           ]
         }
-      }
+      ]
     };
-    const guardian = new LaminarGuardian('laminar-chain-guardian', config);
+    const guardian = new LaminarGuardian(config);
     expect.assertions(1);
-    await expect(guardian.start()).rejects.toEqual(Error('Guardian [laminar-chain-guardian] cannot find task []'));
+    await expect(guardian.start()).rejects.toEqual(Error('Guardian [laminar] cannot find task []'));
   });
 });

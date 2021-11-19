@@ -7,6 +7,8 @@ import { logger } from '../utils';
 export default abstract class Guardian<Config extends GuardianConfig = GuardianConfig, Props = Record<string, unknown>>
   implements IGuardian
 {
+  public readonly chain: string;
+
   public readonly monitors: IMonitor[] = [];
 
   // config validation schema
@@ -18,7 +20,7 @@ export default abstract class Guardian<Config extends GuardianConfig = GuardianC
   public getTaskOrThrow(task: string): ITaskConstructor {
     const TaskClass = this.tasks()[task];
     if (!TaskClass) {
-      throw new Error(`Guardian [${this.name}] cannot find task [${task}]`);
+      throw new Error(`Guardian [${this.chain}] cannot find task [${task}]`);
     }
     return TaskClass;
   }
@@ -33,18 +35,19 @@ export default abstract class Guardian<Config extends GuardianConfig = GuardianC
 
   /**
    * Creates an instance of Guardian.
-   * @param {string} name
+   * @param {string} chain
    * @param {GuardianConfig} _config
    * @memberof Guardian
    */
-  constructor(public readonly name: string, config: Config) {
+  constructor(config: Config) {
     config = this.validateConfig(config);
+    this.chain = config.chain;
 
-    const { nodeEndpoint } = config;
-    this._metadata = { nodeEndpoint };
+    const { nodeEndpoint, chain } = config;
+    this._metadata = { nodeEndpoint, chain };
 
-    this.monitors = Object.entries(config.monitors).map(([name, monitor]) => {
-      const identifier = `${name}.${monitor.task}`;
+    this.monitors = config.monitors.map((monitor, index) => {
+      const identifier = monitor.id || `${this.chain}.monitor-${index}.${monitor.task}`;
       return new Monitor(identifier, monitor);
     });
 
@@ -92,12 +95,12 @@ export default abstract class Guardian<Config extends GuardianConfig = GuardianC
     // unsubscribe any current subscription
     this.subscriptions.map(({ unsubscribe }) => unsubscribe && unsubscribe());
 
-    logger.log(`[${this.name}] starting...`);
+    logger.log(`🤖 [${this.chain}] is starting ...`);
 
     // wait until guardian is ready
     this.subscriptions = await Promise.all(this.monitors.map((monitor) => monitor.start(this)));
 
-    logger.log(`[${this.name}] is running ...`);
+    logger.log(`🤖 [${this.chain}] is ready 🚀`);
   };
 
   /**
@@ -108,7 +111,7 @@ export default abstract class Guardian<Config extends GuardianConfig = GuardianC
   public readonly stop = () => {
     this.subscriptions.map(({ unsubscribe }) => unsubscribe && unsubscribe());
     this.subscriptions = [];
-    logger.log(`[${this.name}] stopped`);
+    logger.log(`[${this.chain}] stopped`);
   };
 
   public get metadata(): any {

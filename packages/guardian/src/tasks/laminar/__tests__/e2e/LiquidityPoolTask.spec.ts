@@ -6,16 +6,16 @@ describe('LiquidityPoolTask', () => {
   jest.setTimeout(60_000);
 
   const config: LaminarGuardianConfig = {
+    chain: 'laminar',
     network: 'dev',
-    networkType: 'laminarChain',
     nodeEndpoint: [
       'wss://testnet-node-1.laminar-chain.laminar.one/ws',
       'wss://node-6787234140909940736.jm.onfinality.io/ws'
     ],
-    monitors: {}
+    monitors: []
   };
 
-  const guardian = new LaminarGuardian('laminar-guardian', config);
+  const guardian = new LaminarGuardian(config);
 
   it('works with poolId and currencyId', async (done) => {
     const task = new LiquidityPoolTask({

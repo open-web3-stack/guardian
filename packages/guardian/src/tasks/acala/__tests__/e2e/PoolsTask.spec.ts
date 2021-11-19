@@ -4,11 +4,11 @@ import { AcalaGuardian } from '../../../../guardians';
 describe('PoolsTask e2e', () => {
   jest.setTimeout(60_000);
 
-  const guardian = new AcalaGuardian('acala-guardian', {
+  const guardian = new AcalaGuardian({
+    chain: 'acala',
     network: 'dev',
-    networkType: 'acalaChain',
     nodeEndpoint: 'wss://acala-mandala.api.onfinality.io/public-ws',
-    monitors: {}
+    monitors: []
   });
 
   it('works with currencyId', async (done) => {

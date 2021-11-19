@@ -4,14 +4,14 @@ import { AcalaGuardian, LaminarGuardian } from '../../../../guardians';
 describe('BalancesTask with laminarChain', () => {
   jest.setTimeout(60_000);
 
-  const guardian = new LaminarGuardian('laminar-guardian', {
+  const guardian = new LaminarGuardian({
+    chain: 'laminar',
     network: 'dev',
-    networkType: 'laminarChain',
     nodeEndpoint: [
       'wss://testnet-node-1.laminar-chain.laminar.one/ws',
       'wss://node-6787234140909940736.jm.onfinality.io/ws'
     ],
-    monitors: {}
+    monitors: []
   });
 
   const task = new BalancesTask({
@@ -40,16 +40,16 @@ describe('BalancesTask with acalaChain', () => {
 
   let guardian: AcalaGuardian;
   beforeAll(() => {
-    guardian = new AcalaGuardian('acala-guardian', {
+    guardian = new AcalaGuardian({
+      chain: 'acala',
       network: 'dev',
-      networkType: 'acalaChain',
       nodeEndpoint: ['wss://karura-rpc-0.aca-api.network', 'wss://karura-rpc-1.aca-api.network'],
-      monitors: {}
+      monitors: []
     });
   });
 
   it('get acala balance', async (done) => {
-    const stream$ = await task.start(guardian as any);
+    const stream$ = await task.start(guardian);
 
     stream$.subscribe((output) => {
       console.log(output);

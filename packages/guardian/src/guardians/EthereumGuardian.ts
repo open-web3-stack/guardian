@@ -25,15 +25,15 @@ export default class EthereumGuardian extends Guardian<EthereumGuardianConfig, {
   }
 
   setup(config: EthereumGuardianConfig) {
-    const { network, networkType } = config;
-    this._metadata = { ...this._metadata, network, networkType };
+    const { network } = config;
+    this._metadata = { ...this._metadata, network };
     const ethereumApi = new EthereumApi({ provider: new Web3.providers.WebsocketProvider(config.nodeEndpoint) });
     return Promise.resolve({ ethereumApi });
   }
 
   validationSchema() {
     return Joi.object({
-      networkType: Joi.valid('ethereum').required(),
+      chain: Joi.valid('ethereum'),
       network: Joi.valid(...ethereumNetwork).required(),
       nodeEndpoint: Joi.string().default(defaultNodeEndpoint)
     }).required();

@@ -3,46 +3,46 @@ import { ApiRx, WsProvider } from '@polkadot/api';
 import { Observable, firstValueFrom } from 'rxjs';
 import GuardianRegistry from '../GuardianRegistry';
 import { LaminarGuardian, AcalaGuardian, Guardian } from '..';
-import { LaminarGuardianConfig, AcalaGuardianConfig, GuardianConfig, BaseSubstrateGuardianConfig } from '../../types';
+import { LaminarGuardianConfig, AcalaGuardianConfig, BaseSubstrateGuardianConfig } from '../../types';
 import EventsTask from '../../tasks/substrate/EventsTask';
 import Task from '../../tasks/Task';
 
 const laminarConfig: LaminarGuardianConfig = {
-  networkType: 'laminarChain',
+  chain: 'laminar',
   network: 'dev',
   nodeEndpoint: 'ws://localhost:9944',
-  monitors: {
-    marginMonitor: {
+  monitors: [
+    {
       task: 'margin.poolInfo',
       arguments: { poolId: 1 },
       actions: [{ method: 'POST', url: 'localhost' }]
     }
-  }
+  ]
 };
 
 const acalaConfig: AcalaGuardianConfig = {
-  networkType: 'acalaChain',
+  chain: 'acala',
   network: 'dev',
   nodeEndpoint: 'ws://localhost:9944',
-  monitors: {
-    events: {
+  monitors: [
+    {
       task: 'system.events',
       arguments: { name: 'balances.Deposit' },
       actions: [{ method: 'POST', url: 'localhost' }]
     }
-  }
+  ]
 };
 
-const customConfig: GuardianConfig = {
-  networkType: 'customChain',
+const customConfig: BaseSubstrateGuardianConfig = {
+  chain: 'customChain',
   nodeEndpoint: 'ws://localhost:9944',
-  monitors: {
-    events: {
+  monitors: [
+    {
       task: 'foo.bar',
       arguments: { name: 'helloworld' },
       actions: [{ method: 'POST', url: 'localhost' }]
     }
-  }
+  ]
 };
 
 class BarTask extends Task<{ name: string }, boolean> {
@@ -77,9 +77,9 @@ class CustomGuardian extends Guardian<BaseSubstrateGuardianConfig> {
 
 describe('GuardianRegistry', () => {
   it('works with custom Guardian', () => {
-    GuardianRegistry.register('customChain', CustomGuardian);
+    GuardianRegistry.register(customConfig.chain, CustomGuardian);
 
-    const customGuardian = GuardianRegistry.create('customChain', 'custom-guardian', customConfig);
+    const customGuardian = GuardianRegistry.create(customConfig);
 
     expect(customGuardian).toBeInstanceOf(CustomGuardian);
     expect(async () => await customGuardian.start()).not.toThrowError();
@@ -87,8 +87,8 @@ describe('GuardianRegistry', () => {
   });
 
   it('works', () => {
-    const laminarGuardian = GuardianRegistry.create('laminarChain', 'laminar-guardian', laminarConfig);
-    const acalaGuardian = GuardianRegistry.create('acalaChain', 'acala-guardian', acalaConfig);
+    const laminarGuardian = GuardianRegistry.create(laminarConfig);
+    const acalaGuardian = GuardianRegistry.create(acalaConfig);
 
     expect(laminarGuardian).toBeInstanceOf(LaminarGuardian);
     expect(acalaGuardian).toBeInstanceOf(AcalaGuardian);

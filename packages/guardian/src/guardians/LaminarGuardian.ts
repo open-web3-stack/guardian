@@ -47,8 +47,8 @@ export default class LaminarGuardian extends BaseSubstrateGuardian<
   }
 
   async setup(config: LaminarGuardianConfig) {
-    const { network, networkType } = config;
-    this._metadata = { ...this._metadata, network, networkType };
+    const { network } = config;
+    this._metadata = { ...this._metadata, network };
 
     const ws = new WsProvider(config.nodeEndpoint);
     const apiOptions = options({ provider: ws, types: customTypes });
@@ -75,7 +75,7 @@ export default class LaminarGuardian extends BaseSubstrateGuardian<
 
   validationSchema() {
     return Joi.object({
-      networkType: Joi.valid('laminarChain').required(),
+      chain: Joi.valid('laminar'),
       network: Joi.valid(...laminarNetwork).required(),
       nodeEndpoint: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).default(defaultNodeEndpoint)
     }).required();

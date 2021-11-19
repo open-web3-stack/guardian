@@ -1,17 +1,15 @@
 version: '0.1'
 guardians:
-  substrate-chain:
-    networkType: substrateChain
+  - chain: substrate
     nodeEndpoint: ${NODE_ENDPOINT}
     monitors:
-      time-monitor:
-        task: schedule.time
+      - task: schedule.time
         arguments:
           cronTime: '*/1 * * * *'
         actions:
           - method: getBalance
-      blockNumber-monitor:
-        task: schedule.blockNumber
+
+      - task: schedule.blockNumber
         arguments:
           startNumber: 4173499
           step: 2

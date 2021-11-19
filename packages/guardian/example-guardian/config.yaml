@@ -1,12 +1,11 @@
 version: '0.1'
 guardians:
-  substrate-chain:
-    networkType: substrateChain
+  - chain: substrate
     nodeEndpoint:
       - wss://kusama-rpc.polkadot.io/
     monitors:
-      balances-events-monitor:
-        task: system.events
+      - task: system.events
+        id: transfer_event # optional
         arguments:
           name:
             - balances.Transfer

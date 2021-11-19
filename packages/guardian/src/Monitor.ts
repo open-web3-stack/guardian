@@ -10,8 +10,6 @@ export default class Monitor implements IMonitor {
 
   /// listen to output$ and trigger actions
   async start(guardian: IGuardian): Promise<Subscription> {
-    logger.log(`[${this.name}] starting ...`);
-
     const TaskClass = guardian.getTaskOrThrow(this.config.task);
 
     const task = new TaskClass(this.config.arguments);
@@ -23,20 +21,20 @@ export default class Monitor implements IMonitor {
 
     // create filtered output$
     const output$ = rawOutput$.pipe(
+      tap((data) => logger.debug(`🔭 [${this.name}] event:`, data)),
       // apply condition if any
-      filter((result) => (condition ? condition(result) : true)),
-      tap((i) => logger.log(`[${this.name}] output: `, i))
+      filter((result) => (condition ? condition(result) : true))
     );
 
     const subscription = output$.subscribe((data: any) => {
       this.config.actions.forEach((action) => {
-        logger.log(`[${this.name}] called [${action.method}]`);
+        logger.log(`🔭 [${this.name}] called [${action.method}]`);
         // run action
         ActionRegistry.run(action, data, guardian.metadata);
       });
     });
 
-    logger.log(`[${this.name}] is running ...`);
+    logger.log(`🔭 [${this.name}] is running ...`);
 
     return subscription;
   }

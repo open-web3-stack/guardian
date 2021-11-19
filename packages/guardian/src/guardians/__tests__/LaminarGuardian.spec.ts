@@ -2,14 +2,14 @@ import LaminarGuardian from '../LaminarGuardian';
 import { LaminarGuardianConfig } from '../../types';
 
 const config: LaminarGuardianConfig = {
-  networkType: 'laminarChain',
+  chain: 'laminar',
   network: 'dev',
   nodeEndpoint: 'ws://localhost:9944',
-  monitors: {}
+  monitors: []
 };
 
 describe('LaminarGuardian', () => {
-  const guardian = new LaminarGuardian('laminar', config);
+  const guardian = new LaminarGuardian(config);
 
   it('should work', () => {
     const { error, value } = guardian.validationSchema().validate({ ...config }, { allowUnknown: true });

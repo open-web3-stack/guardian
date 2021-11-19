@@ -4,14 +4,14 @@ import { LaminarGuardian } from '../../../../guardians';
 describe('PricesTask', () => {
   jest.setTimeout(30_000);
 
-  const guardian = new LaminarGuardian('laminar-guardian', {
+  const guardian = new LaminarGuardian({
+    chain: 'laminar',
     network: 'dev',
-    networkType: 'laminarChain',
     nodeEndpoint: [
       'wss://testnet-node-1.laminar-chain.laminar.one/ws',
       'wss://node-6787234140909940736.jm.onfinality.io/ws'
     ],
-    monitors: {}
+    monitors: []
   });
 
   it('get oracle value', async (done) => {

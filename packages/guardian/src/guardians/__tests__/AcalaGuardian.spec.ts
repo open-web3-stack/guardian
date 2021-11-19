@@ -2,14 +2,14 @@ import AcalaGuardian from '../AcalaGuardian';
 import { AcalaGuardianConfig } from '../../types';
 
 const config: AcalaGuardianConfig = {
-  networkType: 'acalaChain',
+  chain: 'acala',
   network: 'dev',
   nodeEndpoint: 'ws://localhost:9944',
-  monitors: {}
+  monitors: []
 };
 
 describe('AcalaGuardian', () => {
-  const guardian = new AcalaGuardian('acala', config);
+  const guardian = new AcalaGuardian(config);
 
   it('should work', () => {
     const { error, value } = guardian.validationSchema().validate({ ...config }, { allowUnknown: true });
@@ -27,7 +27,7 @@ describe('AcalaGuardian', () => {
 
   it('should have metadata', () => {
     expect(guardian.metadata).toMatchObject({
-      networkType: 'acalaChain',
+      chain: 'acala',
       network: 'dev',
       nodeEndpoint: 'ws://localhost:9944'
     });
