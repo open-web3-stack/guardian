@@ -151,7 +151,7 @@ yarn dev:staking
 
 ## Collateral Auction Bot for Acala/Karura
 
-This example uses the `collateral auction` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/collateral-auction-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/auction). It will watch collateral auctions and DEX pools, (DEX is used to liquidate collaterals if the price slippage is acceptable) and bid from the specified account if the price of collater is lower than the price from Price oracle for `MARGIN` coefficient. 
+This example uses the `collateral auction` [yaml config file](https://github.com/open-web3-stack/guardian/blob/master/packages/example-guardian/src/collateral-auction-guardian.yml) and task source code [here](https://github.com/open-web3-stack/guardian/tree/master/packages/example-guardian/src/auction). It will watch collateral auctions and DEX pools, (DEX is used to liquidate collaterals if the price slippage is acceptable) and bid from the specified account if the price of collateral is lower than the price from Price oracle for `MARGIN` coefficient. 
 
 Configuration file you can find here:
 [.env.auction](https://github.com/open-web3-stack/guardian/blob/d9b5a2a82f84d4a1909f7ef1d4bb868ddb1105fb/packages/example-guardian/.env.auction)
@@ -218,10 +218,10 @@ yarn dev:cdp
 ```
 
 
-####  Loan collater ratio drop Simulation 
+####  Loan collateral ratio drop Simulation 
 
 
-The Loan collater ratio drop simulation script will work only for your local **Karura** testnet, you should ensure that it's running.
+The Loan collateral ratio drop simulation script will work only for your local **Karura** testnet, you should ensure that it's running.
 
 To use simulation you need to clone the repository and run the simulation script:
 ```shell=
