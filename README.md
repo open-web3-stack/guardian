@@ -4,7 +4,7 @@
 
 The goal of this project is to by mere configuration, we can set up a `Guardian` for a chain of concern, along with a number of tasks for monitoring and execution purposes. A task can be `monitoring margin positions` with conditions (if collateral ratio < 110%) then trigger actions (e.g. post warning message to database service, or execute a script to add position).
 
-`guardian` is a CLI tool & JS library to monitor on chian states and events. When user defined criteria are met, it will execute a script or post a webhook to perform an action. This action can notify users, or initiate/participate in collateral auctions such as send a transaction.
+`guardian` is a CLI tool & JS library to monitor on-chain states and events. When user defined criteria are met, it will execute a script or post a webhook to perform an action. This action can notify users, or initiate/participate in collateral actions such as sending a transaction.
 
 See [#1](https://github.com/open-web3-stack/guardian/issues/1) for spec and example.
 
