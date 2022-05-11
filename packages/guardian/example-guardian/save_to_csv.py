@@ -18,16 +18,16 @@ with open('events.csv', 'a') as file:
     if 'from' in args:
         sender = args['from']
     else:
-        sender = args['arg1']
+        sender = args['0']
 
     if 'to' in args:
         receiver = args['to']
     else:
-        receiver = args['arg2']
+        receiver = args['1']
 
     if 'value' in args:
         amount = args['value']
     else:
-        amount = args['arg3']
+        amount = args['2']
 
     writer.writerow({ 'Name': parsed['data']['name'], 'From': sender, 'To': receiver, 'Amount': amount })
