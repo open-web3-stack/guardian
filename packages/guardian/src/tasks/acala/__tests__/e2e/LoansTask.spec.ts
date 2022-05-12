@@ -1,7 +1,7 @@
 import LoansTask from '../../LoansTask';
 import { AcalaGuardian } from '../../../../guardians';
 
-describe('LoansTaks e2e', () => {
+describe('LoansTask e2e', () => {
   jest.setTimeout(60_000);
 
   const guardian = new AcalaGuardian({
@@ -13,7 +13,7 @@ describe('LoansTaks e2e', () => {
 
   it('works with currencyId', async (done) => {
     const loans = new LoansTask({
-      account: '5H8v7Wyt9tposb2fSp48yqg3BbW2t8bQHyqdk9Lg3thehcCy',
+      account: '5ETxc9CKrdCnxzTCf1JZGz9xur7oMaTv8GwbT2D4NyZK7uZd',
       currencyId: { token: 'DOT' }
     });
 
@@ -28,7 +28,7 @@ describe('LoansTaks e2e', () => {
 
   it('works with all', async (done) => {
     const loans = new LoansTask({
-      account: '5H8v7Wyt9tposb2fSp48yqg3BbW2t8bQHyqdk9Lg3thehcCy',
+      account: '5ETxc9CKrdCnxzTCf1JZGz9xur7oMaTv8GwbT2D4NyZK7uZd',
       currencyId: 'all'
     });
 

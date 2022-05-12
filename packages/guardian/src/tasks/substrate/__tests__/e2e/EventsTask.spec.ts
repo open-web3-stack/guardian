@@ -18,7 +18,7 @@ describe('EventsTask', () => {
     const output$ = await task.start(guardian);
     output$.subscribe((output) => {
       console.log(output);
-      expect(output.args['info']).toBeTruthy();
+      expect(output.args['dispatch_info']).toBeTruthy();
       done();
     });
   });
@@ -28,7 +28,7 @@ describe('EventsTask', () => {
     const output$ = await task.start(guardian);
     output$.subscribe((output) => {
       console.log(output);
-      expect(output.args['info']).toBeTruthy();
+      expect(output.args['dispatch_info']).toBeTruthy();
       done();
     });
   });

@@ -13,7 +13,7 @@ describe('CollateralAuctionsTask', () => {
 
   const task = new CollateralAuctionsTask({
     account: 't6X8qpY26nsi6WDMkhbyaTz6cLtNBt7xfs4H9k94D3kM1Lm',
-    currencyId: 'RENBTC'
+    currencyId: { Token: 'RENBTC' }
   });
 
   it('works with mock', async (done) => {
