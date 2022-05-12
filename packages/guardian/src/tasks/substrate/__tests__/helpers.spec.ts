@@ -2,7 +2,7 @@ import { TypeRegistry } from '@polkadot/types';
 import { getEventParams } from '../../helpers';
 
 describe('substrate helpers', () => {
-  let registry = new TypeRegistry();
+  const registry = new TypeRegistry();
   const event = registry.createType('Event');
   event.set('data', {
     meta: {

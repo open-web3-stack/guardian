@@ -31,7 +31,7 @@ export default class CollateralAuctionsTask extends Task<
     if (currencyId !== 'all') {
       currencies = castArray(currencyId).map((x) => apiRx.createType('CurrencyId', x));
       currencies.forEach((id) => {
-        if (!whitelist.find(x => x.eq(id))) throw Error('Collateral currency id not allowed!');
+        if (!whitelist.find((x) => x.eq(id))) throw Error('Collateral currency id not allowed!');
       });
     } else {
       currencies = whitelist;
@@ -97,13 +97,15 @@ export default class CollateralAuctionsTask extends Task<
   }
 }
 
-const includesArgument = <T extends string | CurrencyId> (source: T | T[]) => (input: T): boolean => {
-  if (source === 'all') {
-    console.log(input);
-    return true;
-  } else if (Array.isArray(source)) {
-    return !!source.find(x => x.toString() === input.toString());
-  } else {
-    return source.toString() === input.toString();
-  }
-}
+const includesArgument =
+  <T extends string | CurrencyId>(source: T | T[]) =>
+  (input: T): boolean => {
+    if (source === 'all') {
+      console.log(input);
+      return true;
+    } else if (Array.isArray(source)) {
+      return !!source.find((x) => x.toString() === input.toString());
+    } else {
+      return source.toString() === input.toString();
+    }
+  };

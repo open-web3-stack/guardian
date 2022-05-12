@@ -82,9 +82,7 @@ export const getOraclePrice =
 
 export const getEventParams = (event: Event): string[] => {
   // try to find fields name if it's struct format
-  const params = event.data.meta.fields
-    ?.map(x => x.name.isSome && x.name.unwrap().toString())
-    .filter(x => !!x);
+  const params = event.data.meta.fields?.map((x) => x.name.isSome && x.name.unwrap().toString()).filter((x) => !!x);
   if (params?.length) {
     return params as string[];
   }
