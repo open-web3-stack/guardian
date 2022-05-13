@@ -39,7 +39,7 @@ export default class LoansTask extends Task<{ account: string | string[]; curren
 
     // ignore non-token collaterals
     // TODO: support any currency
-    currencyIds = currencyIds.filter(x => x.isToken);
+    currencyIds = currencyIds.filter((x) => x.isToken);
 
     // create {account, currencyId} paris
     const pairs = createAccountCurrencyIdPairs<CurrencyId>(account, currencyIds);
