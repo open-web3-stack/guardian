@@ -23,6 +23,7 @@ export default class PoolsTask extends Task<{ currencyId: any }, Pool> {
     const { currencyId } = this.arguments;
 
     const stableCoin = apiRx.consts.cdpEngine.getStableCurrencyId;
+    const nativeCoin = apiRx.consts.currencies.getNativeCurrencyId;
 
     let pairs: TradingPair[];
 
@@ -45,11 +46,17 @@ export default class PoolsTask extends Task<{ currencyId: any }, Pool> {
       pairs = currencies
         .map((x) => apiRx.createType('CurrencyId', x))
         .map((currencyId) => {
-          return currencyId.eq(stableCoin)
+          return currencyId.eq(nativeCoin)
             ? apiRx.createType('TradingPair', [currencyId, stableCoin])
             : apiRx.createType('TradingPair', [stableCoin, currencyId]);
         });
     }
+
+    // ignore non-token currency
+    // TODO: support any currency
+    pairs = pairs.filter(([base, quote]) => {
+      return base.isToken && quote.isToken && !base.eq(quote);
+    });
 
     return from(pairs).pipe(
       mergeMap((pair) =>

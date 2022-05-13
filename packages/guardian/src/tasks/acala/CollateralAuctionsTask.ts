@@ -4,17 +4,18 @@ import { drr } from '@polkadot/rpc-core';
 import { combineLatest, of, range } from 'rxjs';
 import { mergeMap, map, filter, switchMap, pairwise, concatWith, distinctUntilChanged } from 'rxjs/operators';
 import { CollateralAuction } from '@open-web3/guardian/types';
+import { CurrencyId } from '@acala-network/types/interfaces';
 import { AcalaGuardian } from '../../guardians';
 import Task from '../Task';
 
 export default class CollateralAuctionsTask extends Task<
-  { account: string | string[]; currencyId: string | string[] },
+  { account: string | string[]; currencyId: any },
   CollateralAuction
 > {
   validationSchema() {
     return Joi.object({
       account: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required(),
-      currencyId: Joi.alt(Joi.string(), Joi.array().min(1).items(Joi.string())).required()
+      currencyId: Joi.any().required()
     }).required();
   }
 
@@ -23,17 +24,21 @@ export default class CollateralAuctionsTask extends Task<
 
     const { account, currencyId } = this.arguments;
 
-    const whitelist = apiRx.consts.cdpEngine.collateralCurrencyIds.map((x) => x.asToken.toString());
+    let currencies: CurrencyId[] = [];
+    const whitelist = apiRx.consts.cdpEngine.collateralCurrencyIds;
 
     // make sure provided currency id is whitelisted
     if (currencyId !== 'all') {
-      castArray(currencyId).forEach((id) => {
-        if (!whitelist.includes(id)) throw Error('Collateral currency id not allowed!');
+      currencies = castArray(currencyId).map((x) => apiRx.createType('CurrencyId', x));
+      currencies.forEach((id) => {
+        if (!whitelist.find((x) => x.eq(id))) throw Error('Collateral currency id not allowed!');
       });
+    } else {
+      currencies = whitelist;
     }
 
-    const fulfillAccount = this.fulfillArguments(account);
-    const fulfillCurrencyId = this.fulfillArguments(currencyId === 'all' ? whitelist : currencyId);
+    const includesAccount = includesArgument<string>(account);
+    const includesCurrency = includesArgument<CurrencyId>(currencies);
 
     const upcomingAuctions$ = apiRx.query.auction.auctionsIndex().pipe(
       pairwise(),
@@ -62,8 +67,9 @@ export default class CollateralAuctionsTask extends Task<
         if (maybeAuction.isNone) return false;
 
         const { refundRecipient, currencyId } = maybecollateralAuction.unwrap();
-        if (!fulfillAccount(refundRecipient.toString())) return false;
-        if (!fulfillCurrencyId(currencyId.asToken.toString())) return false;
+
+        if (!includesAccount(refundRecipient.toString())) return false;
+        if (!includesCurrency(currencyId)) return false;
 
         return true;
       }),
@@ -89,16 +95,17 @@ export default class CollateralAuctionsTask extends Task<
       drr()
     );
   }
-
-  private fulfillArguments =
-    (source: string | string[]) =>
-    (input: string): boolean => {
-      if (source === 'all') {
-        return true;
-      } else if (typeof source === 'string') {
-        return source === input;
-      } else {
-        return source.includes(input);
-      }
-    };
 }
+
+const includesArgument =
+  <T extends string | CurrencyId>(source: T | T[]) =>
+  (input: T): boolean => {
+    if (source === 'all') {
+      console.log(input);
+      return true;
+    } else if (Array.isArray(source)) {
+      return !!source.find((x) => x.toString() === input.toString());
+    } else {
+      return source.toString() === input.toString();
+    }
+  };

@@ -4,7 +4,9 @@ The `PoolsTask` can be used to monitor one or more liquidity pools for changes. 
 
 ## Arguments
 
-`PoolsTask` takes one argument `currencyId: any` that represents the token in a liquidity pool with `aUSD`. It can either be a single token or a list of token's you would like to monitor. The value `all` cal also be passed to `currencyId` to monitor all of the liquidity pools.
+`PoolsTask` takes one argument `currencyId: { Token: string } | { Token: string }[] | "all"` that represents the token in a liquidity pool with `aUSD`. It can either be a single token or a list of token's you would like to monitor. The value `all` cal also be passed to `currencyId` to monitor all of the liquidity pools.
+
+_NOTE_: currently supports only Currency::Token
 
 for example:
 
@@ -13,8 +15,8 @@ for example:
 task: dex.pools
 arguments:
     currencyId:
-        - DOT
-        - ACA
+        - Token: DOT
+        - Token: ACA
 ...
 ```
 

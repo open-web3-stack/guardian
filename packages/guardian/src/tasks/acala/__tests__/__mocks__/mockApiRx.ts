@@ -5,6 +5,7 @@ import { registry, storageKeyMaker } from '../../../../utils/acala/testHelpers';
 const collateralAuctionsKey = storageKeyMaker('AuctionManager', 'CollateralAuctions');
 
 const AUSD = registry.createType('CurrencyId', { Token: 'AUSD' });
+const ACA = registry.createType('CurrencyId', { Token: 'ACA' });
 const COLLATERAL_CURRENCY_IDS = registry.createType('Vec<CurrencyId>', [
   { token: 'DOT' },
   { token: 'LDOT' },
@@ -35,6 +36,7 @@ const MockApiRx = of({
   ...acalaRpc,
   consts: {
     prices: { stableCurrencyFixedPrice: 1e18 },
+    currencies: { getNativeCurrencyId: ACA },
     cdpEngine: {
       getStableCurrencyId: AUSD,
       collateralCurrencyIds: COLLATERAL_CURRENCY_IDS

@@ -25,8 +25,8 @@ with open('events.csv', 'a') as file:
     else:
         receiver = args['1']
 
-    if 'value' in args:
-        amount = args['value']
+    if 'amount' in args:
+        amount = args['amount']
     else:
         amount = args['2']
 

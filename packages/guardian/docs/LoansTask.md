@@ -10,9 +10,11 @@ The `LoansTask` can be used to monitor one or more accounts for changes in aUSD 
 
     The account address, or a list of account addresses to monitor.
 
-2) `currencyId: any | "all"`
+2) `currencyId: { Token: string } | { Token: string }[] | "all"`
 
     The token or a list of tokens used by the account as collateral for their loans. The argument `all` can also be supplied to monitor all loans on the  given account(s).
+
+    _NOTE_: currently supports only Currency::Token
 
 For example:
 

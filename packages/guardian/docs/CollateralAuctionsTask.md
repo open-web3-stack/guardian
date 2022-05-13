@@ -10,9 +10,9 @@ The `CollateralAuctionsTask` can be used to monitor collateral auctions by accou
 
     The account address or a list of account addresses of refund recipients of the collateral auctions to monitor. The value `all` may be passed to this argument to montor auctions of all refund recipients.
 
-2) `currencyId: string | string[]`
+2) `currencyId: 'all' | CurrencyId | CurrencyId[]`
 
-    The token or a list of tokens of the collateral auction to monitor. The value `all` may be passed to this argument to monitor auctions of all tokens.
+    The currency or a list of currencies of the collateral auction to monitor. The value `all` may be passed to this argument to monitor auctions of all currencies.
 
 For example:
 
@@ -21,7 +21,8 @@ For example:
 task: honzon.collateralAuctions
 arguments: 
     account: 5GrwvaEF5zXb26Fz9rcQpDWS57CtERHpNehXCPcNoHGKutQ
-    currencyId: XBTC
+    currencyId:
+        Token: XBTC
 ...
 ```
 

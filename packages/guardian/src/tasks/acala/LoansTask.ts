@@ -37,6 +37,10 @@ export default class LoansTask extends Task<{ account: string | string[]; curren
       currencyIds = castArray(currencyId).map((x) => apiRx.createType('CurrencyId', x));
     }
 
+    // ignore non-token collaterals
+    // TODO: support any currency
+    currencyIds = currencyIds.filter((x) => x.isToken);
+
     // create {account, currencyId} paris
     const pairs = createAccountCurrencyIdPairs<CurrencyId>(account, currencyIds);
 
