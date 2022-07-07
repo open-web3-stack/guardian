@@ -17,6 +17,7 @@
     "@laminar/api": "^0.3.2-2",
     "@laminar/types": "^0.3.2-2",
     "@open-web3/api": "^0.9.3",
+    "@open-web3/guardian": "0.4.5-17",
     "@open-web3/orml-types": "^0.9.3",
     "@open-web3/util": "^1.1.4",
     "@polkadot/api": "^8.11.3",
