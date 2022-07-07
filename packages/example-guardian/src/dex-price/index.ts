@@ -1,5 +1,4 @@
-import { Pool } from '@open-web3/guardian';
-import { ActionRegistry } from '@open-web3/guardian';
+import { Pool, ActionRegistry } from '@open-web3/guardian';
 import { setDefaultConfig } from '../utils';
 
 const registerEventHandler = () => {

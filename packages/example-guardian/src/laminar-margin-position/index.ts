@@ -1,6 +1,5 @@
-import { Position } from '@open-web3/guardian';
+import { Position, ActionRegistry } from '@open-web3/guardian';
 import { ApiManager } from '@open-web3/api';
-import { ActionRegistry } from '@open-web3/guardian';
 import { setupLaminarApi } from '../setupLaminarApi';
 import setupKeyring from '../setupKeyring';
 import { config } from './config';

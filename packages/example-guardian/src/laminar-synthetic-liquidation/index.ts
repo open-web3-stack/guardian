@@ -1,6 +1,5 @@
-import { LiquidityPool } from '@open-web3/guardian';
+import { LiquidityPool, ActionRegistry } from '@open-web3/guardian';
 import { ApiManager } from '@open-web3/api';
-import { ActionRegistry } from '@open-web3/guardian';
 import { config } from './config';
 import { setupLaminarApi } from '../setupLaminarApi';
 import setupKeyring from '../setupKeyring';
