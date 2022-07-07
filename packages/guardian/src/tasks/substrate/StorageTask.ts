@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import * as Joi from 'joi';
 import { Observable, from } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { get, isArray, isNil } from 'lodash';

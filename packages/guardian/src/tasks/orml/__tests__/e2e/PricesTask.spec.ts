@@ -1,46 +1,53 @@
+import { firstValueFrom } from 'rxjs';
+import { take } from 'rxjs/operators';
+import { AcalaGuardian } from '@open-web3/acala-guardian';
 import PricesTask from '../../PricesTask';
-import { LaminarGuardian } from '../../../../guardians';
 
 describe('PricesTask', () => {
   jest.setTimeout(30_000);
 
-  const guardian = new LaminarGuardian({
-    chain: 'laminar',
-    network: 'dev',
-    nodeEndpoint: [
-      'wss://testnet-node-1.laminar-chain.laminar.one/ws',
-      'wss://node-6787234140909940736.jm.onfinality.io/ws'
-    ],
+  const guardian = new AcalaGuardian({
+    chain: 'acala',
+    network: 'mandala',
     monitors: []
+  } as any);
+
+  afterAll(async () => {
+    await guardian.teardown();
   });
 
-  it('get oracle value', async (done) => {
-    const task = new PricesTask({ key: 'FEUR', period: 1000 });
+  it('get oracle value', async () => {
+    const task = new PricesTask({ key: { token: 'DOT' }, period: 1000 });
     const output$ = await task.start(guardian as any);
-    output$.subscribe((output) => {
-      console.log(output);
-      expect(output).toBeTruthy();
-      done();
+    const output = await firstValueFrom(output$.pipe(take(1)));
+    console.log(output);
+    expect(output).toBeTruthy();
+  });
+
+  it('get stableCoin price', async () => {
+    const task = new PricesTask({ key: { token: 'AUSD' }, period: 1000 });
+    const output$ = await task.start(guardian as any);
+    const output = await firstValueFrom(output$.pipe(take(1)));
+    console.log(output);
+    expect(output).toEqual({
+      key: '{"token":"AUSD"}',
+      value: '1000000000000000000'
     });
   });
 
-  it('get oracle values [FEUR, FJPY]', async (done) => {
-    const task = new PricesTask({ key: ['FEUR', 'FJPY'], period: 1000 });
-    const output$ = await task.start(guardian as any);
-    output$.subscribe((output) => {
-      console.log(output);
-      expect(output).toBeTruthy();
-      done();
-    });
+  it('get oracle values [DOT, ACA]', async () => {
+    const task = new PricesTask({ key: [{ token: 'DOT' }, { token: 'ACA' }], period: 1000 });
+    const output$ = await task.start(guardian);
+    const output = await firstValueFrom(output$.pipe(take(1)));
+    console.log(output);
+    expect(output).toBeTruthy();
   });
 
-  it('get all oracle values', async (done) => {
+  it('get all oracle values', async () => {
     const task = new PricesTask({ key: 'all', period: 1000 });
-    const output$ = await task.start(guardian as any);
-    output$.subscribe((output) => {
-      console.log(output);
-      expect(output).toBeTruthy();
-      done();
-    });
+    const output$ = await task.start(guardian);
+    const output = await firstValueFrom(output$.pipe(take(1)));
+    console.log(output);
+    expect(output).toBeTruthy();
   });
 });

@@ -1,7 +1,7 @@
-import fs from 'fs';
-import yaml from 'js-yaml';
-import template from 'lodash/template';
-import dotenv from 'dotenv';
+import * as fs from 'fs';
+import * as yaml from 'js-yaml';
+import { template } from 'lodash';
+import * as dotenv from 'dotenv';
 
 const regex = /#[^*]*?$/gm;
 

@@ -1,22 +1,26 @@
 {
   "extends": "@open-web3/dev-config/config/tsconfig.json",
-  "exclude": ["build/**/*", "**/build/**/*", "**/__tests__/**/*"],
-  "compilerOptions": {
-    "target": "es2019",
-    "module": "CommonJS",
-    "baseUrl": ".",
-    "noImplicitAny": false,
-    "noUnusedLocals": false,
-    "esModuleInterop": true,
-    "paths": {
-      "@open-web3/guardian": ["packages/guardian/src"],
-      "@open-web3/guardian/*": ["packages/guardian/src/*"],
-      "@open-web3/guardian-cli": ["packages/guardian-cli/src"],
-      "@open-web3/guardian-cli/*": ["packages/guardian-cli/src/*"],
-      "@open-web3/example-guardian": ["packages/example-guardian/src"],
-      "@open-web3/example-guardian/*": ["packages/example-guardian/src/*"]
+  "exclude": [
+    "**/build/**/*",
+    "**/tests/**/*",
+    "**/dist/**/*"
+  ],
+  "include": ["./packages/*"],
+  "references": [
+    {
+      "path": "./packages/guardian",
     },
-    "skipLibCheck": true,
-    "typeRoots": ["./node_modules/@polkadot/ts", "./node_modules/@types"]
-  }
+    {
+      "path": "./packages/acala-guardian",
+    },
+    {
+      "path": "./packages/laminar-guardian",
+    },
+    {
+      "path": "./packages/guardian-cli",
+    },
+    {
+      "path": "./packages/example-guardian",
+    }
+  ]
 }

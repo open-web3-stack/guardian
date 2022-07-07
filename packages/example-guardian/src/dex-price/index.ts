@@ -1,4 +1,4 @@
-import { Pool } from '@open-web3/guardian/types';
+import { Pool } from '@open-web3/guardian';
 import { ActionRegistry } from '@open-web3/guardian';
 import { setDefaultConfig } from '../utils';
 

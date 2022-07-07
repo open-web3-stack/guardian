@@ -1,4 +1,4 @@
-import { Position } from '@open-web3/guardian/types';
+import { Position } from '@open-web3/guardian';
 import { ApiManager } from '@open-web3/api';
 import { ActionRegistry } from '@open-web3/guardian';
 import { setupLaminarApi } from '../setupLaminarApi';

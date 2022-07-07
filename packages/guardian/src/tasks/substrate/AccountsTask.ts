@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import * as Joi from 'joi';
 import { from } from 'rxjs';
 import { castArray } from 'lodash';
 import { mergeMap, map } from 'rxjs/operators';

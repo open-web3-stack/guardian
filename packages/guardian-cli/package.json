@@ -16,9 +16,10 @@
   "homepage": "https://github.com/open-web3-stack/guardian",
   "dependencies": {
     "@open-web3/guardian": "0.4.5-17",
-    "@types/js-yaml": "^4.0.4",
+    "@open-web3/laminar-guardian": "0.4.5-17",
+    "@types/js-yaml": "^4.0.5",
     "js-yaml": "^4.1.0",
-    "yargs": "^17.2.1"
+    "yargs": "^17.5.1"
   },
   "main": "cli.js"
 }

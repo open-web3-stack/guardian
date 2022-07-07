@@ -1,0 +1,35 @@
+{
+  "name": "@open-web3/laminar-guardian",
+  "version": "0.4.5-17",
+  "description": "Web3 Laminar Guardian - a blockchain monitoring and alerting tool",
+  "author": "Laminar Developers <hello@laminar.one>",
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "repository": "https://github.com/open-web3-stack/guardian.git",
+  "bugs": {
+    "url": "https://github.com/open-web3-stack/guardian/issues"
+  },
+  "homepage": "https://github.com/open-web3-stack/guardian",
+  "dependencies": {
+    "@laminar/api": "^0.3.2-2",
+    "@laminar/types": "^0.3.2-2",
+    "@open-web3/api": "^0.9.3",
+    "@open-web3/orml-types": "^0.9.3",
+    "@open-web3/util": "^1.1.4",
+    "@polkadot/api": "^8.11.3",
+    "@polkadot/keyring": "^9.7.2",
+    "@polkadot/types": "^8.11.3",
+    "big.js": "^6.2.0",
+    "joi": "^17.6.0",
+    "lodash": "^4.17.21",
+    "rxjs": "^7.5.5"
+  },
+  "devDependencies": {
+    "@types/big.js": "^6.1.4",
+    "@types/hapi__joi": "^17.1.8",
+    "@types/lodash": "^4.14.182"
+  }
+}

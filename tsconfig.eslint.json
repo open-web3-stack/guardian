@@ -1,4 +1,4 @@
 {
     "compilerOptions": { "strict": true },
-    "include": ["**/*.spec.ts", "**/*.test.ts"]
+    "include": ["**/*.ts", "**/*.spec.ts", "**/*.test.ts", "**/*.config.js"]
 }

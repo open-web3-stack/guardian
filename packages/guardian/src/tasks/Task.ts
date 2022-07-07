@@ -1,8 +1,8 @@
-import Joi from 'joi';
+import * as Joi from 'joi';
 import { Observable } from 'rxjs';
 import { ITask, IGuardian } from '../types';
 
-export default abstract class Task<P extends Record<string, any>, O> implements ITask<P, O> {
+export default abstract class Task<P extends Record<string, unknown>, O> implements ITask<P, O> {
   constructor(private _arguments: P) {
     this.setArguments(_arguments);
   }

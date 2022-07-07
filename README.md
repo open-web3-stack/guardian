@@ -12,7 +12,7 @@ See [#1](https://github.com/open-web3-stack/guardian/issues/1) for spec and exam
 
 ## [Guardian Examples](packages/example-guardian)
 
-## [Documentation](packages/guardian/docs)
+## [Documentation](docs)
 
 ## Web3 Foundation Grant Project
 `Guardian` is part of the bigger `Open-Web3-Stack` initiative, that is currently under a General Grant from Web3 Foundation. See Application details [here](https://github.com/open-web3-stack/General-Grants-Program/blob/master/grants/speculative/open_web3_stack.md). The 1st milestone has been delivered. 

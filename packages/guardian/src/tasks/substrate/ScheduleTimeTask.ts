@@ -1,5 +1,5 @@
 import { CronJob } from 'cron';
-import Joi from 'joi';
+import * as Joi from 'joi';
 import { Observable } from 'rxjs';
 import Task from '../Task';
 import BaseSubstrateGuardian from '../../guardians/BaseSubstrateGuardian';

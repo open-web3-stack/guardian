@@ -1,5 +1,8 @@
-import Joi from 'joi';
+import * as Joi from 'joi';
+import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { Header } from '@polkadot/types/interfaces';
+import { AugmentedRpc } from '@polkadot/api/types';
 import BaseSubstrateGuardian from '../../guardians/BaseSubstrateGuardian';
 import Task from '../Task';
 
@@ -24,7 +27,9 @@ export default class ScheduleBlockNumberTask extends Task<
     const { apiRx } = await guardian.isReady();
     const { startNumber, step, finalized } = this.arguments;
 
-    const newHeads = finalized ? apiRx.rpc.chain.subscribeFinalizedHeads : apiRx.rpc.chain.subscribeNewHeads;
+    const newHeads: AugmentedRpc<() => Observable<Header>> = finalized
+      ? apiRx.rpc['chain']['subscribeFinalizedHeads']
+      : apiRx.rpc['chain']['subscribeNewHeads'];
 
     let firstNumber: number;
 

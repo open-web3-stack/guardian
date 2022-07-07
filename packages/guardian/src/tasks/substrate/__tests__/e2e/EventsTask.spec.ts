@@ -1,5 +1,7 @@
+import { firstValueFrom } from 'rxjs';
+import { take } from 'rxjs/operators';
 import EventsTask from '../../EventsTask';
-import { SubstrateGuardian } from '../../../../guardians';
+import { SubstrateGuardian } from '../../../..';
 import { SubstrateGuardianConfig } from '../../../../types';
 
 describe('EventsTask', () => {
@@ -13,23 +15,23 @@ describe('EventsTask', () => {
 
   const guardian = new SubstrateGuardian(config);
 
-  it('works with single name', async (done) => {
-    const task = new EventsTask({ name: 'system.ExtrinsicSuccess' });
-    const output$ = await task.start(guardian);
-    output$.subscribe((output) => {
-      console.log(output);
-      expect(output.args['dispatch_info']).toBeTruthy();
-      done();
-    });
+  afterAll(async () => {
+    await guardian.teardown();
   });
 
-  it('works with multiple names', async (done) => {
+  it('works with single name', async () => {
+    const task = new EventsTask({ name: 'system.ExtrinsicSuccess' });
+    const output$ = await task.start(guardian);
+    const output = await firstValueFrom(output$.pipe(take(1)));
+    console.log(output);
+    expect(output.args['dispatch_info']).toBeTruthy();
+  });
+
+  it('works with multiple names', async () => {
     const task = new EventsTask({ name: ['system.ExtrinsicSuccess'] });
     const output$ = await task.start(guardian);
-    output$.subscribe((output) => {
-      console.log(output);
-      expect(output.args['dispatch_info']).toBeTruthy();
-      done();
-    });
+    const output = await firstValueFrom(output$.pipe(take(1)));
+    console.log(output);
+    expect(output.args['dispatch_info']).toBeTruthy();
   });
 });

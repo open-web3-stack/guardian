@@ -1,6 +1,8 @@
+import { firstValueFrom } from 'rxjs';
+import { take } from 'rxjs/operators';
 import StorageTask from '../../StorageTask';
 import { SubstrateGuardianConfig } from '../../../../types';
-import { SubstrateGuardian } from '../../../../guardians';
+import { SubstrateGuardian } from '../../../..';
 
 describe('StorageTask', () => {
   jest.setTimeout(60_000);
@@ -13,26 +15,27 @@ describe('StorageTask', () => {
 
   const guardian = new SubstrateGuardian(config);
 
-  it('works with single args', async (done) => {
-    const task = new StorageTask({ name: 'system.account', args: 'FcxNWVy5RESDsErjwyZmPCW6Z8Y3fbfLzmou34YZTrbcraL' });
-    const output$ = await task.start(guardian);
-    output$.subscribe((output) => {
-      console.log(output.value.toString());
-      expect(output.value).toBeTruthy();
-      done();
-    });
+  afterAll(async () => {
+    await guardian.teardown();
   });
 
-  it('works with multiple args', async (done) => {
+  it('works with single args', async () => {
+    const task = new StorageTask({ name: 'system.account', args: 'FcxNWVy5RESDsErjwyZmPCW6Z8Y3fbfLzmou34YZTrbcraL' });
+    const output$ = await task.start(guardian);
+
+    const output = await firstValueFrom(output$.pipe(take(1)));
+    console.log(output.value.toString());
+    expect(output.value).toBeTruthy();
+  });
+
+  it('works with multiple args', async () => {
     const task = new StorageTask({
       name: 'system.account',
       args: ['FcxNWVy5RESDsErjwyZmPCW6Z8Y3fbfLzmou34YZTrbcraL']
     });
     const output$ = await task.start(guardian);
-    output$.subscribe((output) => {
-      console.log(output.value.toString());
-      expect(output.value).toBeTruthy();
-      done();
-    });
+    const output = await firstValueFrom(output$.pipe(take(1)));
+    console.log(output.value.toString());
+    expect(output.value).toBeTruthy();
   });
 });

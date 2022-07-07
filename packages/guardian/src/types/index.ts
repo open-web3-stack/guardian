@@ -1,6 +1,6 @@
-import Joi from 'joi';
+import * as Joi from 'joi';
 import { Observable, Subscription } from 'rxjs';
-import { laminarNetwork, acalaNetwork, ethereumNetwork } from '../constants';
+import { acalaNetwork, ethereumNetwork } from '../constants';
 export * from './output';
 
 export interface IGuardian {
@@ -61,10 +61,6 @@ export interface BaseSubstrateGuardianConfig extends GuardianConfig {
   // confirmation?: 'finalize' | number;
 }
 
-export interface LaminarGuardianConfig extends BaseSubstrateGuardianConfig {
-  network: typeof laminarNetwork[number];
-}
-
 export interface AcalaGuardianConfig extends BaseSubstrateGuardianConfig {
   network: typeof acalaNetwork[number];
 }
@@ -90,7 +86,5 @@ export interface MonitorConfig {
 
 export interface Config {
   version: string;
-  guardians: [
-    LaminarGuardianConfig | AcalaGuardianConfig | SubstrateGuardianConfig | EthereumGuardianConfig | GuardianConfig
-  ];
+  guardians: [AcalaGuardianConfig | SubstrateGuardianConfig | EthereumGuardianConfig | GuardianConfig | any];
 }

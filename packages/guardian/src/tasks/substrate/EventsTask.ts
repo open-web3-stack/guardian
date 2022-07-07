@@ -1,6 +1,8 @@
-import Joi from 'joi';
+import * as Joi from 'joi';
 import { firstValueFrom } from 'rxjs';
 import { mergeMap, filter } from 'rxjs/operators';
+import { EventRecord } from '@polkadot/types/interfaces';
+import { Vec } from '@polkadot/types/codec';
 import BaseSubstrateGuardian from '../../guardians/BaseSubstrateGuardian';
 import Task from '../Task';
 import { Event } from '../../types';
@@ -19,7 +21,9 @@ export default class EventsTask extends Task<{ name: string | string[] }, Event>
     const { name } = this.arguments;
 
     return apiRx.derive.chain.subscribeNewHeads().pipe(
-      mergeMap((header) => Promise.all([header, firstValueFrom(apiRx.query.system.events.at(header.hash))])),
+      mergeMap((header) =>
+        Promise.all([header, firstValueFrom<Vec<EventRecord>>(apiRx.query.system.events.at(header.hash))])
+      ),
       mergeMap(([header, records]) => {
         return records.map(({ phase, event }) => {
           const params = getEventParams(event);

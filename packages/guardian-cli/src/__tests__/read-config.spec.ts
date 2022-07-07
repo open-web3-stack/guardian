@@ -1,4 +1,4 @@
-import path from 'path';
+import * as path from 'path';
 import readConfig from '../read-config';
 
 describe('read-config', () => {

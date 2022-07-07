@@ -1,4 +1,4 @@
-import { LiquidityPool } from '@open-web3/guardian/types';
+import { LiquidityPool } from '@open-web3/guardian';
 import { ApiManager } from '@open-web3/api';
 import { ActionRegistry } from '@open-web3/guardian';
 import { config } from './config';

@@ -1,9 +1,15 @@
+import Guardian from './Guardian';
+import GuardianRegistry from './GuardianRegistry';
+import BaseSubstrateGuardian from './BaseSubstrateGuardian';
+import SubstrateGuardian from './SubstrateGuardian';
 import { Config } from './types';
 import validateConfig from './validate-config';
-import { GuardianRegistry } from './guardians';
 
-export * from './guardians';
 export * from './actions';
+export * from './tasks';
+export * from './types';
+
+export { Guardian, GuardianRegistry, BaseSubstrateGuardian, SubstrateGuardian };
 
 export default async (config: Config) => {
   config = validateConfig(config);
@@ -16,6 +22,6 @@ export default async (config: Config) => {
 
   // unsubscribe method
   return () => {
-    guardians.forEach((guardian) => guardian.stop());
+    guardians.forEach((guardian) => guardian.teardown());
   };
 };

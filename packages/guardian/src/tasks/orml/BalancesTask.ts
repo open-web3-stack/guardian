@@ -1,4 +1,4 @@
-import Joi from 'joi';
+import * as Joi from 'joi';
 import { castArray } from 'lodash';
 import { Observable, from } from 'rxjs';
 import { mergeMap, map } from 'rxjs/operators';
@@ -26,7 +26,7 @@ export default class BalancesTask extends Task<{ account: string | string[]; cur
     const currencyIds = castArray(currencyId).map((x) => apiRx.createType('CurrencyId', x));
 
     const pairs = createAccountCurrencyIdPairs(account, currencyIds);
-    return from(pairs).pipe(mergeMap(({ account, currencyId }) => this.getBalance(apiRx, account, currencyId)));
+    return from(pairs).pipe(mergeMap(({ account, currencyId }) => this.getBalance(apiRx, account, currencyId as any)));
   }
 
   getBalance<CurrencyId extends Codec>(api: ApiRx, account: string, currencyId: CurrencyId): Observable<Balance> {
