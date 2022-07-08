@@ -1,7 +1,12 @@
 #!/usr/bin/env node
 
+import '@open-web3/acala-guardian';
+import '@open-web3/laminar-guardian';
+
 import guardian from '@open-web3/guardian';
 import readConfig from './read-config';
+
+export { readConfig };
 
 const { config: configPath } = require('yargs')
   .scriptName('guardian')
