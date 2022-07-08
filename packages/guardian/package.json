@@ -4,10 +4,7 @@
   "description": "Web3 Guardian - a blockchain monitoring and alerting tool",
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
-  "main": "src/index.ts",
-  "scripts": {
-    "build": "rm -r ./build && tsc --outdir ./build"
-  },
+  "main": "index.js",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
