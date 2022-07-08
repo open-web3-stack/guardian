@@ -3219,7 +3219,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@open-web3/acala-guardian@0.4.5-17, @open-web3/acala-guardian@workspace:packages/acala-guardian":
+"@open-web3/acala-guardian@0.5.0, @open-web3/acala-guardian@workspace:packages/acala-guardian":
   version: 0.0.0-use.local
   resolution: "@open-web3/acala-guardian@workspace:packages/acala-guardian"
   dependencies:
@@ -3228,7 +3228,7 @@ __metadata:
     "@acala-network/sdk-core": ^4.1.5
     "@acala-network/types": ^4.1.5
     "@open-web3/api": ^1.1.4
-    "@open-web3/guardian": 0.4.5-17
+    "@open-web3/guardian": 0.5.0
     "@open-web3/orml-types": ^1.1.4
     "@polkadot/api": ^8.6.2
     "@polkadot/typegen": ^8.6.2
@@ -3397,8 +3397,8 @@ __metadata:
   dependencies:
     "@acala-network/sdk-core": ^4.1.5
     "@open-web3/api": ^1.1.4
-    "@open-web3/guardian": 0.4.5-17
-    "@open-web3/guardian-cli": 0.4.5-17
+    "@open-web3/guardian": 0.5.0
+    "@open-web3/guardian-cli": 0.5.0
     "@open-web3/orml-types": ^1.1.4
     "@open-web3/util": ^1.1.4
     "@polkadot/api": ^8.6.2
@@ -3423,13 +3423,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@open-web3/guardian-cli@0.4.5-17, @open-web3/guardian-cli@workspace:packages/guardian-cli":
+"@open-web3/guardian-cli@0.5.0, @open-web3/guardian-cli@workspace:packages/guardian-cli":
   version: 0.0.0-use.local
   resolution: "@open-web3/guardian-cli@workspace:packages/guardian-cli"
   dependencies:
-    "@open-web3/acala-guardian": 0.4.5-17
-    "@open-web3/guardian": 0.4.5-17
-    "@open-web3/laminar-guardian": 0.4.5-17
+    "@open-web3/acala-guardian": 0.5.0
+    "@open-web3/guardian": 0.5.0
+    "@open-web3/laminar-guardian": 0.5.0
     "@types/js-yaml": ^4.0.5
     js-yaml: ^4.1.0
     yargs: ^17.5.1
@@ -3438,7 +3438,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@open-web3/guardian@0.4.5-17, @open-web3/guardian@workspace:packages/guardian":
+"@open-web3/guardian@0.5.0, @open-web3/guardian@workspace:packages/guardian":
   version: 0.0.0-use.local
   resolution: "@open-web3/guardian@workspace:packages/guardian"
   dependencies:
@@ -3470,14 +3470,14 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@open-web3/laminar-guardian@0.4.5-17, @open-web3/laminar-guardian@workspace:packages/laminar-guardian":
+"@open-web3/laminar-guardian@0.5.0, @open-web3/laminar-guardian@workspace:packages/laminar-guardian":
   version: 0.0.0-use.local
   resolution: "@open-web3/laminar-guardian@workspace:packages/laminar-guardian"
   dependencies:
     "@laminar/api": ^0.3.2-2
     "@laminar/types": ^0.3.2-2
     "@open-web3/api": ^0.9.3
-    "@open-web3/guardian": 0.4.5-17
+    "@open-web3/guardian": 0.5.0
     "@open-web3/orml-types": ^0.9.3
     "@open-web3/util": ^1.1.4
     "@polkadot/api": ^8.11.3

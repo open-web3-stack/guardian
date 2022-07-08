@@ -1,6 +1,6 @@
 {
   "name": "@open-web3/laminar-guardian",
-  "version": "0.4.5-17",
+  "version": "0.5.0",
   "description": "Web3 Laminar Guardian - a blockchain monitoring and alerting tool",
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
@@ -17,7 +17,7 @@
     "@laminar/api": "^0.3.2-2",
     "@laminar/types": "^0.3.2-2",
     "@open-web3/api": "^0.9.3",
-    "@open-web3/guardian": "0.4.5-17",
+    "@open-web3/guardian": "0.5.0",
     "@open-web3/orml-types": "^0.9.3",
     "@open-web3/util": "^1.1.4",
     "@polkadot/api": "^8.11.3",
