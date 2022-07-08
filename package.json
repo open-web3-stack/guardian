@@ -2,10 +2,6 @@
   "name": "guardian-monorepo",
   "version": "0.4.5-17",
   "private": true,
-  "engines": {
-    "yarn": "^2",
-    "node": "^16"
-  },
   "workspaces": [
     "packages/*"
   ],

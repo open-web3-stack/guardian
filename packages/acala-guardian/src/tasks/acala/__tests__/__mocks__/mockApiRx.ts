@@ -1,6 +1,6 @@
 import { of, merge, timer } from 'rxjs';
 import { concatAll, mapTo, share } from 'rxjs/operators';
-import { acalaRpc } from '../../../../__tests__/__mocks__/mockApiPromise';
+import { acalaRpc } from './mockApiPromise';
 import { registry, storageKeyMaker } from '../../../../utils/acala/testHelpers';
 const collateralAuctionsKey = storageKeyMaker('AuctionManager', 'CollateralAuctions');
 

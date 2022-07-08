@@ -1,7 +1,7 @@
 import { of } from 'rxjs';
 import { TypeRegistry } from '@polkadot/types';
 import { types } from '@acala-network/types';
-import { customTypes } from '../../customTypes';
+import { customTypes } from '../../../../customTypes';
 
 const registry = new TypeRegistry();
 registry.register(types);
