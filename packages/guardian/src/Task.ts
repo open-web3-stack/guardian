@@ -1,22 +1,23 @@
 import * as Joi from 'joi';
 import { Observable } from 'rxjs';
-import { ITask, IGuardian } from '../types';
+import { ITask, IGuardian } from './types';
 
 export default abstract class Task<P extends Record<string, unknown>, O> implements ITask<P, O> {
-  constructor(private _arguments: P) {
-    this.setArguments(_arguments);
+  private _params: P = {} as P;
+  constructor(params: P) {
+    this.setParams(params);
   }
 
   public get arguments(): P {
-    return this._arguments;
+    return this._params;
   }
 
-  public setArguments(_arguments: P) {
-    const { error, value } = this.validationSchema().validate(_arguments);
+  private setParams(params: P) {
+    const { error, value } = this.validationSchema().validate(params);
     if (error) {
       throw error;
     }
-    this._arguments = value;
+    this._params = value;
   }
 
   abstract validationSchema(): Joi.Schema;

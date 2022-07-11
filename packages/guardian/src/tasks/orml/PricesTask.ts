@@ -9,7 +9,7 @@ import { TimestampedValue } from '@open-web3/orml-types/interfaces';
 import { getValueFromTimestampValue, observeRPC, getOraclePrice } from '../utils';
 import { RPCRefreshPeriod } from '../../constants';
 import { Price } from '../../types';
-import Task from '../Task';
+import Task from '../../Task';
 import BaseSubstrateGuardian from '../../BaseSubstrateGuardian';
 
 export default class PricesTask extends Task<{ key: any; period: number }, Price> {

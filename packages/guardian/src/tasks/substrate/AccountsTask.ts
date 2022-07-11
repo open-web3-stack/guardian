@@ -3,7 +3,7 @@ import { from } from 'rxjs';
 import { castArray } from 'lodash';
 import { mergeMap, map } from 'rxjs/operators';
 import { AccountInfo } from '@polkadot/types/interfaces';
-import Task from '../Task';
+import Task from '../../Task';
 import BaseSubstrateGuardian from '../../BaseSubstrateGuardian';
 
 type Output = {

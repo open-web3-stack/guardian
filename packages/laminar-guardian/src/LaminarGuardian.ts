@@ -8,7 +8,7 @@ import { laminarNetwork } from './constants';
 import { customTypes } from './customTypes';
 import PositionsByTraderTask from './tasks/PositionsByTraderTask';
 import TraderInfoTask from './tasks/TraderInfoTask';
-import { BaseSubstrateGuardian, BalancesTask, PricesTask } from '@open-web3/guardian';
+import { BaseSubstrateGuardian, BalancesTask, PricesTask, TaskConstructor } from '@open-web3/guardian';
 import LiquidityPoolTask from './tasks/LiquidityPoolTask';
 import PoolInfoTask from './tasks/PoolInfoTask';
 
@@ -41,7 +41,7 @@ export default class LaminarGuardian extends BaseSubstrateGuardian<
       'account.balances': BalancesTask,
       'oracle.prices': PricesTask,
       'synthetic.liquidityPool': LiquidityPoolTask
-    };
+    } as any as Record<string, TaskConstructor>;
   }
 
   async setup(config: LaminarGuardianConfig) {

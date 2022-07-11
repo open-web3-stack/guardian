@@ -13,8 +13,8 @@ export interface GuardianConstructor {
  * @class GuardianRegistry
  */
 export default class GuardianRegistry {
-  private static guardians = {
-    substrate: SubstrateGuardian
+  private static guardians: Record<string, GuardianConstructor> = {
+    substrate: SubstrateGuardian as any as GuardianConstructor
   };
 
   public static registred() {

@@ -3,7 +3,7 @@ import { Observable, from } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { get, isArray, isNil } from 'lodash';
 import { ApiRx } from '@polkadot/api';
-import Task from '../Task';
+import Task from '../../Task';
 import BaseSubstrateGuardian from '../../BaseSubstrateGuardian';
 
 const createCall = (api: ApiRx, name: string, args: any[] = []): Observable<Output> => {

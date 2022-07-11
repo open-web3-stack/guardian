@@ -4,7 +4,7 @@
   "description": "Web3 Guardian CLI - a blockchain monitoring and alerting tool",
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
-  "bin": "cli.js",
+  "bin": "index.js",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
@@ -21,6 +21,5 @@
     "@types/js-yaml": "^4.0.5",
     "js-yaml": "^4.1.0",
     "yargs": "^17.5.1"
-  },
-  "main": "cli.js"
+  }
 }

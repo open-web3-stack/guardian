@@ -1,7 +1,7 @@
 import * as Joi from 'joi';
 import { Observable, Subscription } from 'rxjs';
-import { acalaNetwork, ethereumNetwork } from '../constants';
-export * from './output';
+import { AnyJson } from '@polkadot/types/types';
+import Task from '../Task';
 
 export interface IGuardian {
   // List of monitors
@@ -11,9 +11,9 @@ export interface IGuardian {
   validationSchema(): Joi.Schema;
 
   // List of tasks the guardian can run
-  tasks(): { [key: string]: ITaskConstructor };
+  tasks(): Record<string, TaskConstructor>;
 
-  getTaskOrThrow(task: string): ITaskConstructor;
+  getTaskOrThrow(task: string): TaskConstructor;
 
   // Guardian is ready to run
   isReady(): Promise<any>;
@@ -37,13 +37,12 @@ export interface IMonitor {
   start(guardian: IGuardian): Promise<Subscription>;
 }
 
-export interface ITaskConstructor {
-  new (_arguments: any): ITask<any, any>;
+export interface TaskConstructor<P extends Record<string, unknown> = Record<string, unknown>, O = unknown> {
+  new (params: P): Task<P, O>;
 }
 
-export interface ITask<P extends Record<string, any>, O> {
-  arguments: P;
-  setArguments(args: P): void;
+export interface ITask<P extends Record<string, unknown>, O> {
+  get arguments(): P;
   validationSchema(): Joi.Schema;
   start(guardian: IGuardian): Promise<Observable<O>>;
 }
@@ -61,16 +60,7 @@ export interface BaseSubstrateGuardianConfig extends GuardianConfig {
   // confirmation?: 'finalize' | number;
 }
 
-export interface AcalaGuardianConfig extends BaseSubstrateGuardianConfig {
-  network: typeof acalaNetwork[number];
-}
-
 export type SubstrateGuardianConfig = BaseSubstrateGuardianConfig;
-
-export interface EthereumGuardianConfig extends GuardianConfig {
-  nodeEndpoint: string;
-  network: typeof ethereumNetwork[number];
-}
 
 export interface ActionConfig {
   method: string;
@@ -86,5 +76,27 @@ export interface MonitorConfig {
 
 export interface Config {
   version: string;
-  guardians: [AcalaGuardianConfig | SubstrateGuardianConfig | EthereumGuardianConfig | GuardianConfig | any];
+  guardians: [BaseSubstrateGuardianConfig | GuardianConfig | any];
 }
+
+export type Balance = {
+  account: string;
+  currencyId: string;
+  free: string;
+  // reserved: string;
+  // frozen: string;
+};
+
+export type Price = {
+  key: string;
+  value: string;
+};
+
+export type Event = {
+  blockNumber: number;
+  blockHash: string;
+  phase: AnyJson;
+  index: string;
+  name: string;
+  args: Record<string, any>;
+};

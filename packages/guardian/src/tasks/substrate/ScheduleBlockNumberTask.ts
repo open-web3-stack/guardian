@@ -4,7 +4,7 @@ import { filter, map } from 'rxjs/operators';
 import { Header } from '@polkadot/types/interfaces';
 import { AugmentedRpc } from '@polkadot/api/types';
 import BaseSubstrateGuardian from '../../BaseSubstrateGuardian';
-import Task from '../Task';
+import Task from '../../Task';
 
 export interface Output {
   current: number;

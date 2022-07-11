@@ -1,15 +1,18 @@
 import Guardian from './Guardian';
-import GuardianRegistry from './GuardianRegistry';
-import BaseSubstrateGuardian from './BaseSubstrateGuardian';
-import SubstrateGuardian from './SubstrateGuardian';
+import GuardianRegistry, { GuardianConstructor } from './GuardianRegistry';
+
 import { Config } from './types';
 import validateConfig from './validate-config';
+
+export { default as SubstrateGuardian } from './SubstrateGuardian';
+export { default as BaseSubstrateGuardian } from './BaseSubstrateGuardian';
+export { default as Task } from './Task';
 
 export * from './actions';
 export * from './tasks';
 export * from './types';
 
-export { Guardian, GuardianRegistry, BaseSubstrateGuardian, SubstrateGuardian };
+export { Guardian, GuardianRegistry, GuardianConstructor };
 
 export default async (config: Config) => {
   config = validateConfig(config);

@@ -3409,7 +3409,7 @@ __metadata:
     js-yaml: ^4.1.0
     yargs: ^17.5.1
   bin:
-    guardian-cli: cli.js
+    guardian-cli: index.js
   languageName: unknown
   linkType: soft
 

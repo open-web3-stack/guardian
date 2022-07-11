@@ -3,7 +3,7 @@ import { firstValueFrom } from 'rxjs';
 import { mergeMap, filter } from 'rxjs/operators';
 import { EventRecord } from '@polkadot/types/interfaces';
 import { Vec } from '@polkadot/types/codec';
-import Task from '../Task';
+import Task from '../../Task';
 import { Event } from '../../types';
 import { getEventParams } from '../utils';
 import BaseSubstrateGuardian from '../../BaseSubstrateGuardian';

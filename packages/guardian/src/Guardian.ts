@@ -1,6 +1,6 @@
 import * as Joi from 'joi';
 import { Subscription, AsyncSubject, firstValueFrom } from 'rxjs';
-import { IGuardian, IMonitor, GuardianConfig, ITaskConstructor } from './types';
+import { IGuardian, IMonitor, GuardianConfig, TaskConstructor } from './types';
 import Monitor from './Monitor';
 import { logger } from './utils';
 
@@ -15,9 +15,9 @@ export default abstract class Guardian<Config extends GuardianConfig = GuardianC
   public abstract validationSchema(): Joi.Schema;
 
   // list of tasks the guardian can run
-  public abstract tasks(): { [key: string]: ITaskConstructor };
+  public abstract tasks(): Record<string, TaskConstructor>;
 
-  public getTaskOrThrow(task: string): ITaskConstructor {
+  public getTaskOrThrow(task: string): TaskConstructor {
     const TaskClass = this.tasks()[task];
     if (!TaskClass) {
       throw new Error(`Guardian [${this.chain}] cannot find task [${task}]`);
@@ -80,12 +80,12 @@ export default abstract class Guardian<Config extends GuardianConfig = GuardianC
    * @returns {T}
    * @memberof Guardian
    */
-  private validateConfig<T>(config: T): T {
+  private validateConfig(config: Config): Config {
     const { error, value } = this.validationSchema().validate(config, { allowUnknown: true });
     if (error) {
       throw error;
     }
-    return value;
+    return value as Config;
   }
 
   /**

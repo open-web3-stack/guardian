@@ -7,7 +7,7 @@ import { Codec } from '@polkadot/types/types';
 import { Balance as ORMLBalance } from '@open-web3/orml-types/interfaces';
 import { createAccountCurrencyIdPairs } from '../utils';
 import { Balance } from '../../types';
-import Task from '../Task';
+import Task from '../../Task';
 import BaseSubstrateGuardian from '../../BaseSubstrateGuardian';
 
 export default class BalancesTask extends Task<{ account: string | string[]; currencyId: any }, Balance> {
