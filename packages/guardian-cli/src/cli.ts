@@ -6,8 +6,6 @@ import '@open-web3/laminar-guardian';
 import guardian from '@open-web3/guardian';
 import readConfig from './read-config';
 
-export { readConfig };
-
 const { config: configPath } = require('yargs')
   .scriptName('guardian')
   .usage('$0 [args]')

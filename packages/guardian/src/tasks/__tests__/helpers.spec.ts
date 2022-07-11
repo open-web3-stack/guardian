@@ -1,4 +1,4 @@
-import { createAccountCurrencyIdPairs } from '../helpers';
+import { createAccountCurrencyIdPairs } from '../utils';
 
 describe('helpers', () => {
   it('combination works', () => {

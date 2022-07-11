@@ -1,7 +1,6 @@
-import { of, merge, timer } from 'rxjs';
-import { concatAll, mapTo, share } from 'rxjs/operators';
+import { of } from 'rxjs';
 import { acalaRpc } from './mockApiPromise';
-import { registry, storageKeyMaker } from '../../../../utils/acala/testHelpers';
+import { registry, storageKeyMaker } from '../../../utils/testHelpers';
 const collateralAuctionsKey = storageKeyMaker('AuctionManager', 'CollateralAuctions');
 
 const AUSD = registry.createType('CurrencyId', { Token: 'AUSD' });
@@ -30,7 +29,6 @@ const COLLATERAL_CURRENCY_IDS = registry.createType('Vec<CurrencyId>', [
 const POSITION = registry.createType('Position', { debit: '2500000000000000', collateral: '10000000000' });
 const EXCHANGE_RATE = registry.createType('Option<ExchangeRate>', '100000000000000000');
 const PRICE = registry.createType('Option<TimestampedValueOf>', { value: '300000000000000000000' });
-const PRICE_UPDATED = registry.createType('Option<TimestampedValueOf>', { value: '280000000000000000000' });
 const LP = registry.createType('(Balance, Balance)', ['100000000000000000000', '400000000000000000000']);
 
 const AUCTION = registry.createType('Option<AuctionInfo>', {
@@ -50,6 +48,7 @@ const COLLATERAL_AUCTION = registry.createType('Option<CollateralAuctionItem>', 
 
 const MockApiRx = of({
   ...acalaRpc,
+  registry,
   consts: {
     prices: { stableCurrencyFixedPrice: 1e18 },
     currencies: { getNativeCurrencyId: ACA },
@@ -90,9 +89,7 @@ const MockApiRx = of({
       debitExchangeRate: () => of(EXCHANGE_RATE)
     },
     acalaOracle: {
-      values: () => {
-        return merge([of(PRICE), timer(1000).pipe(mapTo(PRICE_UPDATED))]).pipe(concatAll(), share());
-      }
+      values: () => of(PRICE)
     }
   },
   createType: (type: string, value: any) => registry.createType(type, value)

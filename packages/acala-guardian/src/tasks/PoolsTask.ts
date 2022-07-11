@@ -3,12 +3,15 @@ import { castArray } from 'lodash';
 import { from, firstValueFrom, combineLatest } from 'rxjs';
 import { map, mergeMap, filter } from 'rxjs/operators';
 import { Option } from '@polkadot/types/codec';
-import { AcalaPrimitivesTradingPair } from '@acala-network/types/interfaces/types-lookup';
+import {
+  AcalaPrimitivesCurrencyCurrencyId,
+  AcalaPrimitivesTradingPair
+} from '@acala-network/types/interfaces/types-lookup';
 import { AcalaAssetMetadata } from '@acala-network/types/interfaces';
-import { FixedPointNumber } from '@acala-network/sdk-core';
-import { Pool } from '../../types';
+import { FixedPointNumber, TokenPair } from '@acala-network/sdk-core';
 import { Task } from '@open-web3/guardian';
-import AcalaGuardian from '../../AcalaGuardian';
+import { Pool } from '../types';
+import AcalaGuardian from '../AcalaGuardian';
 
 export default class PoolsTask extends Task<{ currencyId: any }, Pool> {
   validationSchema() {
@@ -23,7 +26,6 @@ export default class PoolsTask extends Task<{ currencyId: any }, Pool> {
     const { currencyId } = this.arguments;
 
     const stableCoin = apiRx.consts.cdpEngine.getStableCurrencyId;
-    const nativeCoin = apiRx.consts.currencies.getNativeCurrencyId;
 
     let pairs: AcalaPrimitivesTradingPair[];
 
@@ -44,12 +46,14 @@ export default class PoolsTask extends Task<{ currencyId: any }, Pool> {
     } else {
       const currencies = castArray(currencyId);
       pairs = currencies
-        .map((x) => apiRx.createType('CurrencyId', x))
-        .map((currencyId) => {
-          return currencyId.eq(nativeCoin)
-            ? apiRx.createType('AcalaPrimitivesTradingPair', [currencyId, stableCoin])
-            : apiRx.createType('AcalaPrimitivesTradingPair', [stableCoin, currencyId]);
-        });
+        .map(
+          (x) =>
+            apiRx.createType<AcalaPrimitivesCurrencyCurrencyId>(
+              'AcalaPrimitivesCurrencyCurrencyId',
+              x
+            ) as AcalaPrimitivesCurrencyCurrencyId
+        )
+        .map((currencyId) => TokenPair.fromCurrencies(stableCoin, currencyId).toTradingPair(apiRx));
     }
 
     return from(pairs).pipe(

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { Header } from '@polkadot/types/interfaces';
 import { AugmentedRpc } from '@polkadot/api/types';
-import BaseSubstrateGuardian from '../../guardians/BaseSubstrateGuardian';
+import BaseSubstrateGuardian from '../../BaseSubstrateGuardian';
 import Task from '../Task';
 
 export interface Output {

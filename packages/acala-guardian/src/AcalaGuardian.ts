@@ -6,10 +6,10 @@ import { acalaNetwork } from './constants';
 import { ApiRx, WsProvider } from '@polkadot/api';
 import { customTypes } from './customTypes';
 import { BalancesTask, BaseSubstrateGuardian, PricesTask } from '@open-web3/guardian';
-import LoansTask from './tasks/acala/LoansTask';
-import CollateralAuctionsTask from './tasks/acala/CollateralAuctionsTask';
-import PoolsTask from './tasks/acala/PoolsTask';
 import { types } from '@acala-network/types';
+import LoansTask from './tasks/LoansTask';
+import CollateralAuctionsTask from './tasks/CollateralAuctionsTask';
+import PoolsTask from './tasks/PoolsTask';
 
 const defaultNodeEndpoint = ({ network }: { network: AcalaGuardianConfig['network'] }) => {
   // TODO: keep this up-to-date

@@ -1,15 +1,15 @@
 import * as Joi from 'joi';
+import Big from 'big.js';
 import { castArray } from 'lodash';
 import { combineLatest, of, from, firstValueFrom } from 'rxjs';
 import { mergeMap, map, filter } from 'rxjs/operators';
 import { Option, Vec } from '@polkadot/types/codec';
 import { CurrencyId, AcalaAssetMetadata, ExchangeRate, Position } from '@acala-network/types/interfaces';
 import { FixedPointNumber } from '@acala-network/sdk-core';
-import { createAccountCurrencyIdPairs } from '../helpers';
-import { Loan } from '../../types';
-import getOraclePrice from './helpers/getOraclePrice';
-import { Task } from '@open-web3/guardian';
-import AcalaGuardian from '../../AcalaGuardian';
+import { Task, utils } from '@open-web3/guardian';
+import { Loan } from '../types';
+import AcalaGuardian from '../AcalaGuardian';
+import { RPCRefreshPeriod } from '../constants';
 
 export default class LoansTask extends Task<{ account: string | string[]; currencyId: any }, Loan> {
   validationSchema() {
@@ -39,9 +39,11 @@ export default class LoansTask extends Task<{ account: string | string[]; curren
     }
 
     // create {account, currencyId} paris
-    const pairs = createAccountCurrencyIdPairs<CurrencyId>(account, currencyIds);
+    const pairs = utils.createAccountCurrencyIdPairs<CurrencyId>(account, currencyIds);
 
-    const oraclePrice = getOraclePrice(apiRx);
+    const oraclePrice = utils.getOraclePrice<CurrencyId>(apiRx, RPCRefreshPeriod, {
+      [stableCoin.toString()]: Big(stableCoinPrice.toString())
+    });
 
     return from(pairs).pipe(
       mergeMap(({ currencyId, account }) =>

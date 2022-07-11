@@ -3,7 +3,7 @@ import { TypeRegistry, Metadata, StorageKey } from '@polkadot/types';
 import { createFunction } from '@polkadot/types/metadata/decorate/storage/createFunction';
 import { types } from '@acala-network/types';
 import metadataLatest from '@acala-network/types/metadata/static-latest';
-import { customTypes } from '../../customTypes';
+import { customTypes } from '../customTypes';
 
 const registry = new TypeRegistry();
 registry.register(types);

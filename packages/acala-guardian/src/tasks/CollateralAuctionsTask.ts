@@ -5,8 +5,8 @@ import { combineLatest, of, range, firstValueFrom } from 'rxjs';
 import { mergeMap, map, filter, switchMap, pairwise, concatWith, distinctUntilChanged } from 'rxjs/operators';
 import { AcalaPrimitivesCurrencyCurrencyId } from '@acala-network/types/interfaces/types-lookup';
 import { Task } from '@open-web3/guardian';
-import { CollateralAuction } from '../../types';
-import AcalaGuardian from '../../AcalaGuardian';
+import { CollateralAuction } from '../types';
+import AcalaGuardian from '../AcalaGuardian';
 
 export default class CollateralAuctionsTask extends Task<
   { account: string | string[]; currencyId: any },

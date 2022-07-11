@@ -1,10 +1,10 @@
 import './__mocks__/mockApiRx';
 import { firstValueFrom } from 'rxjs';
 import { take } from 'rxjs/operators';
-import PoolsTask from '../PoolsTask';
-import AcalaGuardian from '../../../AcalaGuardian';
+import LoansTask from '../LoansTask';
+import AcalaGuardian from '../../AcalaGuardian';
 
-describe('PoolsTask', () => {
+describe('LoansTask', () => {
   const guardian = new AcalaGuardian({
     chain: 'acala',
     network: 'dev',
@@ -16,7 +16,8 @@ describe('PoolsTask', () => {
     await guardian.teardown();
   });
 
-  const task = new PoolsTask({
+  const task = new LoansTask({
+    account: 't6X8qpY26nsi6WDMkhbyaTz6cLtNBt7xfs4H9k94D3kM1Lm',
     currencyId: { token: 'DOT' }
   });
 
@@ -24,10 +25,12 @@ describe('PoolsTask', () => {
     const output$ = await task.start(guardian);
     const output = await firstValueFrom(output$.pipe(take(1)));
     expect(output).toStrictEqual({
-      currencyId: '[{"token":"AUSD"},{"token":"DOT"}]',
-      price: '2500000000000000',
-      baseLiquidity: '100000000000000000000',
-      otherLiquidity: '400000000000000000000'
+      account: 't6X8qpY26nsi6WDMkhbyaTz6cLtNBt7xfs4H9k94D3kM1Lm',
+      currencyId: '{"token":"DOT"}',
+      debits: '2500000000000000',
+      debitsUSD: '250000000000000',
+      collaterals: '10000000000',
+      collateralRatio: '1.2'
     });
   });
 });

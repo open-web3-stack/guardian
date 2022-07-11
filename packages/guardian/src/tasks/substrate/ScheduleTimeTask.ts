@@ -2,7 +2,7 @@ import { CronJob } from 'cron';
 import * as Joi from 'joi';
 import { Observable } from 'rxjs';
 import Task from '../Task';
-import BaseSubstrateGuardian from '../../guardians/BaseSubstrateGuardian';
+import BaseSubstrateGuardian from '../../BaseSubstrateGuardian';
 
 export interface Output {
   current: number;

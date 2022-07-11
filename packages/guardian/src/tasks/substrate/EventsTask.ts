@@ -3,10 +3,10 @@ import { firstValueFrom } from 'rxjs';
 import { mergeMap, filter } from 'rxjs/operators';
 import { EventRecord } from '@polkadot/types/interfaces';
 import { Vec } from '@polkadot/types/codec';
-import BaseSubstrateGuardian from '../../guardians/BaseSubstrateGuardian';
 import Task from '../Task';
 import { Event } from '../../types';
-import { getEventParams } from '../helpers';
+import { getEventParams } from '../utils';
+import BaseSubstrateGuardian from '../../BaseSubstrateGuardian';
 
 export default class EventsTask extends Task<{ name: string | string[] }, Event> {
   validationSchema() {

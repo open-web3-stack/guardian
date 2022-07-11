@@ -3,7 +3,7 @@ import { firstValueFrom } from 'rxjs';
 import { take } from 'rxjs/operators';
 
 import CollateralAuctionsTask from '../CollateralAuctionsTask';
-import AcalaGuardian from '../../../AcalaGuardian';
+import AcalaGuardian from '../../AcalaGuardian';
 
 describe('CollateralAuctionsTask', () => {
   const guardian = new AcalaGuardian({

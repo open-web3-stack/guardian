@@ -4,7 +4,7 @@ import { map, mergeMap } from 'rxjs/operators';
 import { get, isArray, isNil } from 'lodash';
 import { ApiRx } from '@polkadot/api';
 import Task from '../Task';
-import BaseSubstrateGuardian from '../../guardians/BaseSubstrateGuardian';
+import BaseSubstrateGuardian from '../../BaseSubstrateGuardian';
 
 const createCall = (api: ApiRx, name: string, args: any[] = []): Observable<Output> => {
   const method = get(api.query, name);

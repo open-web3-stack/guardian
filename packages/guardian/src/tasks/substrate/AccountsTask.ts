@@ -4,7 +4,7 @@ import { castArray } from 'lodash';
 import { mergeMap, map } from 'rxjs/operators';
 import { AccountInfo } from '@polkadot/types/interfaces';
 import Task from '../Task';
-import BaseSubstrateGuardian from '../../guardians/BaseSubstrateGuardian';
+import BaseSubstrateGuardian from '../../BaseSubstrateGuardian';
 
 type Output = {
   account: string;

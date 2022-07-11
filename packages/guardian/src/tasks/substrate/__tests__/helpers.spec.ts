@@ -1,6 +1,6 @@
 import { TypeRegistry } from '@polkadot/types';
 import { Event } from '@polkadot/types/interfaces';
-import { getEventParams } from '../../helpers';
+import { getEventParams } from '../../utils';
 
 describe('substrate helpers', () => {
   const registry = new TypeRegistry();

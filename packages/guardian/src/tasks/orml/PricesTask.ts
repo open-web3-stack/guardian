@@ -6,11 +6,11 @@ import { mergeMap, map, filter } from 'rxjs/operators';
 import { Codec, ITuple } from '@polkadot/types/types';
 import { Option, Vec } from '@polkadot/types/codec';
 import { TimestampedValue } from '@open-web3/orml-types/interfaces';
-import { getValueFromTimestampValue, observeRPC, getOraclePrice } from '../helpers';
+import { getValueFromTimestampValue, observeRPC, getOraclePrice } from '../utils';
 import { RPCRefreshPeriod } from '../../constants';
 import { Price } from '../../types';
 import Task from '../Task';
-import { BaseSubstrateGuardian } from '../../guardians';
+import BaseSubstrateGuardian from '../../BaseSubstrateGuardian';
 
 export default class PricesTask extends Task<{ key: any; period: number }, Price> {
   validationSchema() {
