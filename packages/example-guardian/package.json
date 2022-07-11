@@ -24,21 +24,21 @@
   "homepage": "https://github.com/open-web3-stack/guardian",
   "dependencies": {
     "@acala-network/sdk-core": "^4.1.5",
-    "@open-web3/api": "^1.1.4",
+    "@open-web3/api": "^2.0.1",
     "@open-web3/guardian": "0.5.0",
     "@open-web3/guardian-cli": "0.5.0",
-    "@open-web3/orml-types": "^1.1.4",
-    "@open-web3/util": "^1.1.4",
-    "@polkadot/api": "^8.6.2",
+    "@open-web3/orml-types": "^2.0.1",
+    "@open-web3/util": "^2.0.1",
+    "@polkadot/api": "^8.12.2",
     "@types/nodemailer": "^6.4.4",
-    "big.js": "^6.2.0",
+    "big.js": "^6.2.1",
     "dotenv": "^16.0.1",
     "joi": "^17.6.0",
     "nodemailer": "^6.7.7",
     "rxjs": "^7.5.5"
   },
   "devDependencies": {
-    "@types/big.js": "^6.1.4",
+    "@types/big.js": "^6.1.5",
     "@types/hapi__joi": "^17.1.8",
     "ts-node": "^10.8.2",
     "typescript": "^4.7.4"
