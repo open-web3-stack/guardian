@@ -28,7 +28,7 @@ const defaultNodeEndpoint = ({ network }: { network: LaminarGuardianConfig['netw
 
 export default class LaminarGuardian extends BaseSubstrateGuardian<
   LaminarGuardianConfig,
-  { apiRx: ApiRx; getTokenPrecision: (token: string) => number | undefined; tokens: Record<string, number> }
+  { apiRx: ApiRx; tokens: Record<string, number> }
 > {
   private readonly tokenDecimals: Record<string, number> = {};
 
@@ -60,14 +60,10 @@ export default class LaminarGuardian extends BaseSubstrateGuardian<
       throw Error(`Token symbols/decimals mismatch ${tokenSymbol} ${tokenDecimals}`);
     }
     tokenSymbol.forEach((symbol, index) => {
-      this.tokenDecimals[symbol.toString()] = tokenDecimals[index].toNumber();
+      this.tokenDecimals[symbol.toString()] = tokenDecimals[index].toBn().toNumber();
     });
 
-    const getTokenPrecision = (token: string): number | undefined => {
-      return this.tokenDecimals[token.toUpperCase()];
-    };
-
-    return { apiRx, getTokenPrecision, tokens: this.tokenDecimals };
+    return { apiRx, tokens: this.tokenDecimals };
   }
 
   validationSchema() {

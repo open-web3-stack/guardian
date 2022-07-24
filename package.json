@@ -5,10 +5,6 @@
   "workspaces": [
     "packages/*"
   ],
-  "resolutions": {
-    "wasm-crypto": "6.2.2",
-    "rxjs": "^7.3.0"
-  },
   "homepage": "https://github.com/open-web3-stack/guardian",
   "scripts": {
     "build": "polkadot-dev-build-ts && (cd packages/example-guardian && cp src/*.yml build)",
@@ -16,8 +12,8 @@
     "lint": "polkadot-dev-run-lint",
     "clean": "polkadot-dev-clean-build",
     "postinstall": "polkadot-dev-yarn-only",
-    "test": "yarn test:e2e --testPathIgnorePatterns e2e --silent",
-    "test:e2e": "polkadot-dev-run-test --runInBand --verbose"
+    "test": "yarn test:e2e --testPathIgnorePatterns e2e",
+    "test:e2e": "polkadot-dev-run-test --runInBand --silent"
   },
   "devDependencies": {
     "@babel/core": "^7.18.6",

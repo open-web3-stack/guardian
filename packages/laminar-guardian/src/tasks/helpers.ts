@@ -3,7 +3,7 @@ import { AugmentedRpc } from '@polkadot/api/types';
 import { Observable, timer } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 
-export /**
+/**
  * Create pair combination of account and currencyId
  * e.g.
  *  account: ['alice', 'bob'] & currencyId: 'AUSD' will return
@@ -24,7 +24,7 @@ export /**
  * @param {(string | string[])} currencyId
  * @returns {{ account: string; currencyId: string }[]}
  */
-const createAccountCurrencyIdPairs = <CurrencyId>(
+export const createAccountCurrencyIdPairs = <CurrencyId>(
   account: string | string[],
   currencyId: CurrencyId | CurrencyId[]
 ): { account: string; currencyId: CurrencyId }[] => {

@@ -42,8 +42,8 @@ export default class CollateralAuctionsTask extends Task<
 
     const upcomingAuctions$ = apiRx.query.auction.auctionsIndex().pipe(
       pairwise(),
-      filter(([, next]) => !next.isZero()),
-      switchMap(([prev, next]) => range(prev.toNumber(), next.toNumber())),
+      filter(([, next]) => !next.toBn().isZero()),
+      switchMap(([prev, next]) => range(prev.toBn().toNumber(), next.toBn().toNumber())),
       distinctUntilChanged(),
       mergeMap((auctionId) => {
         return combineLatest([

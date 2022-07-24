@@ -22,8 +22,8 @@ import { RPCRefreshPeriod } from '../constants';
 const getSyntheticPools = (apiRx: ApiRx) => (poolId: number | number[] | 'all') => {
   const upcomingPools$ = apiRx.query.baseLiquidityPoolsForSynthetic.nextPoolId<LiquidityPoolId>().pipe(
     pairwise(),
-    filter(([, next]) => !next.isZero()),
-    switchMap(([prev, next]) => range(prev.toNumber(), next.toNumber())),
+    filter(([, next]) => !next.toBn().isZero()),
+    switchMap(([prev, next]) => range(prev.toBn().toNumber(), next.toBn().toNumber())),
     distinctUntilChanged(),
     mergeMap((poolId) =>
       combineLatest([

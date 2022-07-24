@@ -16,6 +16,7 @@
   "dependencies": {
     "@acala-network/api": "^4.1.5",
     "@acala-network/app-util": "^4.1.5",
+    "@acala-network/e2e": "^0.2.1",
     "@acala-network/sdk-core": "^4.1.5",
     "@acala-network/types": "^4.1.5",
     "@open-web3/guardian": "0.5.0",

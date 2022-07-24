@@ -1,4 +1,4 @@
-import { CollateralAuction } from '@open-web3/guardian';
+import { CollateralAuction } from '@open-web3/acala-guardian';
 import { FixedPointNumber } from '@acala-network/sdk-core';
 
 export const calculateBid = async (

@@ -1,4 +1,5 @@
-import { Loan, ActionRegistry } from '@open-web3/guardian';
+import { ActionRegistry } from '@open-web3/guardian';
+import { Loan } from '@open-web3/acala-guardian';
 import { ApiManager } from '@open-web3/api';
 import { FixedPointNumber } from '@acala-network/sdk-core';
 import { config } from './config';

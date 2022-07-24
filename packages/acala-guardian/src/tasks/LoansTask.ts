@@ -4,7 +4,7 @@ import { castArray } from 'lodash';
 import { combineLatest, of, from, firstValueFrom } from 'rxjs';
 import { mergeMap, map, filter } from 'rxjs/operators';
 import { Option, Vec } from '@polkadot/types/codec';
-import { CurrencyId, AcalaAssetMetadata, ExchangeRate, Position } from '@acala-network/types/interfaces';
+import { CurrencyId, ExchangeRate, Position } from '@acala-network/types/interfaces';
 import { FixedPointNumber } from '@acala-network/sdk-core';
 import { Task, utils } from '@open-web3/guardian';
 import { Loan } from '../types';
@@ -59,22 +59,18 @@ export default class LoansTask extends Task<{ account: string | string[]; curren
               of(position),
               of(exchangeRate),
               oraclePrice(currencyId),
-              apiRx.query.assetRegistry.assetMetadatas<Option<AcalaAssetMetadata>>({
-                NativeAssetId: stableCoin.toJSON()
-              }),
-              apiRx.query.assetRegistry.assetMetadatas<Option<AcalaAssetMetadata>>({
-                NativeAssetId: currencyId.toJSON()
-              })
+              apiRx.query.assetRegistry.assetMetadatas({ NativeAssetId: stableCoin.toJSON() }),
+              apiRx.query.assetRegistry.assetMetadatas({ NativeAssetId: currencyId.toJSON() })
             ]);
           }),
           filter(([position, exchangeRate, collateralPrice, stableCoinMeta, collateralMeta]) => {
             if (stableCoinMeta.isNone) return false;
             if (collateralMeta.isNone) return false;
-            const stableCoinPrecision = stableCoinMeta.unwrap().decimals.toNumber();
-            const collateralPrecision = collateralMeta.unwrap().decimals.toNumber();
+            const stableCoinPrecision = stableCoinMeta.unwrap().decimals.toBn().toNumber();
+            const collateralPrecision = collateralMeta.unwrap().decimals.toBn().toNumber();
 
             const collateral = FixedPointNumber.fromInner(position.collateral.toString(), collateralPrecision);
-            const collateralUSD = FixedPointNumber.fromInner(collateralPrice).times(collateral);
+            const collateralUSD = FixedPointNumber.fromInner(collateralPrice.toFixed(0)).times(collateral);
 
             const debit = FixedPointNumber.fromInner(position.debit.toString(), stableCoinPrecision);
             if (debit.isZero()) return false;
@@ -90,11 +86,11 @@ export default class LoansTask extends Task<{ account: string | string[]; curren
             return true;
           }),
           map(([position, exchangeRate, collateralPrice, stableCoinMeta, collateralMeta]) => {
-            const stableCoinPrecision = stableCoinMeta.unwrap().decimals.toNumber();
-            const collateralPrecision = collateralMeta.unwrap().decimals.toNumber();
+            const stableCoinPrecision = stableCoinMeta.unwrap().decimals.toBn().toNumber();
+            const collateralPrecision = collateralMeta.unwrap().decimals.toBn().toNumber();
 
             const collateral = FixedPointNumber.fromInner(position.collateral.toString(), collateralPrecision);
-            const collateralUSD = FixedPointNumber.fromInner(collateralPrice).times(collateral);
+            const collateralUSD = FixedPointNumber.fromInner(collateralPrice.toFixed(0)).times(collateral);
 
             const debit = FixedPointNumber.fromInner(position.debit.toString(), stableCoinPrecision);
 

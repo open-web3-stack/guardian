@@ -8,11 +8,11 @@ import BaseSubstrateGuardian from '../../BaseSubstrateGuardian';
 
 type Output = {
   account: string;
-  nonce: number;
-  free: number;
-  reserved: number;
-  misFrozen: number;
-  feeFroze: number;
+  nonce: string;
+  free: string;
+  reserved: string;
+  misFrozen: string;
+  feeFroze: string;
 };
 
 const mapResult =
@@ -20,11 +20,11 @@ const mapResult =
   (info: AccountInfo): Output => {
     return {
       account: account,
-      nonce: info.nonce.toNumber(),
-      free: info.data.free.toNumber(),
-      reserved: info.data.reserved.toNumber(),
-      misFrozen: info.data.miscFrozen.toNumber(),
-      feeFroze: info.data.feeFrozen.toNumber()
+      nonce: info.nonce.toBn().toString(),
+      free: info.data.free.toBn().toString(),
+      reserved: info.data.reserved.toBn().toString(),
+      misFrozen: info.data.miscFrozen.toBn().toString(),
+      feeFroze: info.data.feeFrozen.toBn().toString()
     };
   };
 

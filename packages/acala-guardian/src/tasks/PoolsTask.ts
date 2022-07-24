@@ -2,12 +2,10 @@ import * as Joi from 'joi';
 import { castArray } from 'lodash';
 import { from, firstValueFrom, combineLatest } from 'rxjs';
 import { map, mergeMap, filter } from 'rxjs/operators';
-import { Option } from '@polkadot/types/codec';
 import {
   AcalaPrimitivesCurrencyCurrencyId,
   AcalaPrimitivesTradingPair
 } from '@acala-network/types/interfaces/types-lookup';
-import { AcalaAssetMetadata } from '@acala-network/types/interfaces';
 import { FixedPointNumber, TokenPair } from '@acala-network/sdk-core';
 import { Task } from '@open-web3/guardian';
 import { Pool } from '../types';
@@ -33,26 +31,21 @@ export default class PoolsTask extends Task<{ currencyId: any }, Pool> {
       const tradingPair = await firstValueFrom(apiRx.query.dex.liquidityPool.entries());
 
       pairs = tradingPair
-        .map(([key, value]) => {
+        .filter(([, value]) => {
           const [balance1, balance2] = value;
-
-          if (balance1 && balance2) {
-            return key.args[0];
-          }
-
-          return undefined;
+          return balance1 && balance2;
         })
-        .filter((p): p is AcalaPrimitivesTradingPair => p !== undefined);
+        .map(
+          ([
+            {
+              args: [key]
+            }
+          ]) => key
+        );
     } else {
       const currencies = castArray(currencyId);
       pairs = currencies
-        .map(
-          (x) =>
-            apiRx.createType<AcalaPrimitivesCurrencyCurrencyId>(
-              'AcalaPrimitivesCurrencyCurrencyId',
-              x
-            ) as AcalaPrimitivesCurrencyCurrencyId
-        )
+        .map((x) => apiRx.createType<AcalaPrimitivesCurrencyCurrencyId>('AcalaPrimitivesCurrencyCurrencyId', x))
         .map((currencyId) => TokenPair.fromCurrencies(stableCoin, currencyId).toTradingPair(apiRx));
     }
 
@@ -61,17 +54,13 @@ export default class PoolsTask extends Task<{ currencyId: any }, Pool> {
         const [baseCurrency, otherCurrency] = pair;
         return combineLatest([
           apiRx.query.dex.liquidityPool(pair),
-          apiRx.query.assetRegistry.assetMetadatas<Option<AcalaAssetMetadata>>({
-            NativeAssetId: baseCurrency.toJSON()
-          }),
-          apiRx.query.assetRegistry.assetMetadatas<Option<AcalaAssetMetadata>>({
-            NativeAssetId: otherCurrency.toJSON()
-          })
+          apiRx.query.assetRegistry.assetMetadatas({ NativeAssetId: baseCurrency.toJSON() }),
+          apiRx.query.assetRegistry.assetMetadatas({ NativeAssetId: otherCurrency.toJSON() })
         ]).pipe(
           filter(([, baseMeta, otherMeta]) => baseMeta.isSome && otherMeta.isSome),
           map(([[base, other], baseMeta, otherMeta]) => {
-            const basePrecision = baseMeta.unwrap().decimals.toNumber();
-            const otherPrecision = otherMeta.unwrap().decimals.toNumber();
+            const basePrecision = baseMeta.unwrap().decimals.toBn().toNumber();
+            const otherPrecision = otherMeta.unwrap().decimals.toBn().toNumber();
             const _base = FixedPointNumber.fromInner(base.toString(), basePrecision);
             const _other = FixedPointNumber.fromInner(other.toString(), otherPrecision);
             const price = baseCurrency.eq(stableCoin) ? _base.div(_other) : _other.div(_base);

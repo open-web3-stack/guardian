@@ -1,7 +1,8 @@
 import Big from 'big.js';
 import { Subject } from 'rxjs';
 import { concatMap } from 'rxjs/operators';
-import { ActionRegistry, CollateralAuction, Event } from '@open-web3/guardian';
+import { ActionRegistry, Event } from '@open-web3/guardian';
+import { CollateralAuction } from '@open-web3/acala-guardian';
 import { FixedPointNumber } from '@acala-network/sdk-core';
 import { OrmlAccountData, Balance } from '@open-web3/orml-types/interfaces';
 import config from './config';

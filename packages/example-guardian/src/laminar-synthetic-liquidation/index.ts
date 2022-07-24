@@ -1,4 +1,5 @@
-import { LiquidityPool, ActionRegistry } from '@open-web3/guardian';
+import { ActionRegistry } from '@open-web3/guardian';
+import { LiquidityPool } from '@open-web3/laminar-guardian';
 import { ApiManager } from '@open-web3/api';
 import { config } from './config';
 import { setupLaminarApi } from '../setupLaminarApi';
