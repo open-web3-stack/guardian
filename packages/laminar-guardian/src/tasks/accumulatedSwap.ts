@@ -1,11 +1,11 @@
 import Big from 'big.js';
 import { map, share } from 'rxjs/operators';
 import { ApiRx } from '@polkadot/api';
-import { MarginPosition } from '@laminar/types/interfaces';
+import { MarginPosition, SwapRate } from '@laminar/types/interfaces';
 
 export default (apiRx: ApiRx) => (position: MarginPosition) => {
   const { poolId, pair, leverage, openAccumulatedSwapRate } = position;
-  return apiRx.query.marginLiquidityPools.accumulatedSwapRates(poolId, pair).pipe(
+  return apiRx.query.marginLiquidityPools.accumulatedSwapRates<SwapRate>(poolId, pair).pipe(
     map((accumulatedSwapRates) => {
       const { long, short } = accumulatedSwapRates;
       const currentSwap = leverage.toString().startsWith('Long') ? Big(long.toString()) : Big(short.toString());

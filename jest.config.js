@@ -1,4 +1,6 @@
+const config = require('@polkadot/dev/config/jest.cjs');
 module.exports = {
+  ...config,
   moduleNameMapper: {
     '@open-web3/guardian(.*)$': '<rootDir>/packages/guardian/src/$1',
     '@open-web3/acala-guardian(.*)$': '<rootDir>/packages/acala-guardian/src/$1',
@@ -15,5 +17,6 @@ module.exports = {
     '<rootDir>/packages/guardian-cli/build',
     '<rootDir>/packages/example-guardian/build'
   ],
-  transformIgnorePatterns: ['/node_modules/(?!@polkadot|@acala-network|@laminar||@babel/runtime/helpers/esm/)']
+  transformIgnorePatterns: ['/node_modules/(?!@polkadot|@acala-network|@laminar|get-port|@babel/runtime/helpers/esm/)'],
+  testTimeout: 30000
 };

@@ -15,9 +15,9 @@
   "homepage": "https://github.com/open-web3-stack/guardian",
   "dependencies": {
     "@laminar/api": "^0.3.2-2",
-    "@laminar/types": "^0.3.2-2",
     "@open-web3/guardian": "0.5.0",
     "@open-web3/util": "^2.0.1",
+    "@polkadot/types": "^4.5.1",
     "big.js": "^6.2.1",
     "joi": "^17.6.0",
     "lodash": "^4.17.21",

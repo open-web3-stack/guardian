@@ -1,0 +1,21 @@
+{
+    "extends": "../../tsconfig.base.json",
+    "compilerOptions": {
+      "baseUrl": "..",
+      "outDir": "./build",
+      "rootDir": "./src",
+      "emitDeclarationOnly": false,
+      "noEmit": true
+    },
+    "include": [
+      "**/checkTypes.manual.ts",
+      "**/*.spec.ts",
+      "**/test/**/*"
+    ],
+    "references": [
+      { "path": "../guardian/tsconfig.build.json" },
+      { "path": "../guardian-cli/tsconfig.build.json" },
+      { "path": "../acala-guardian/tsconfig.build.json" },
+      { "path": "../laminar-guardian/tsconfig.build.json" }
+    ]
+  }

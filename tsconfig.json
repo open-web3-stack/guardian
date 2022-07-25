@@ -1,26 +1,13 @@
 {
-  "extends": "@open-web3/dev-config/config/tsconfig.json",
-  "exclude": [
-    "**/build/**/*",
-    "**/tests/**/*",
-    "**/dist/**/*"
-  ],
-  "include": ["./packages/*"],
-  "references": [
-    {
-      "path": "./packages/guardian",
+    "extends": "./tsconfig.base.json",
+    "compilerOptions": {
+        "baseUrl": "./packages",
+        "composite": false
     },
-    {
-      "path": "./packages/acala-guardian",
-    },
-    {
-      "path": "./packages/laminar-guardian",
-    },
-    {
-      "path": "./packages/guardian-cli",
-    },
-    {
-      "path": "./packages/example-guardian",
-    }
-  ]
+    "include": [
+        "packages/**/src/**/*"
+    ],
+    "exclude": [
+       "**/node_modules/**/*"
+    ]
 }

@@ -17,7 +17,7 @@ describe('getOraclePrice', () => {
   });
 
   it('should get the price', async () => {
-    const apiRx = await firstValueFrom(ApiRx.create(options({ provider: ws })));
+    const apiRx = await firstValueFrom(ApiRx.create(options({ provider: ws }) as any));
     const oraclePrice = utils.getOraclePrice(apiRx, RPCRefreshPeriod, { AUSD: Big(1e18) });
     const FEUR = apiRx.createType('CurrencyId', 'FEUR');
     const output = await firstValueFrom(oraclePrice(FEUR).pipe(take(1)));

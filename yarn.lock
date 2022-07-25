@@ -2879,9 +2879,9 @@ __metadata:
   resolution: "@open-web3/laminar-guardian@workspace:packages/laminar-guardian"
   dependencies:
     "@laminar/api": ^0.3.2-2
-    "@laminar/types": ^0.3.2-2
     "@open-web3/guardian": 0.5.0
     "@open-web3/util": ^2.0.1
+    "@polkadot/types": ^4.5.1
     "@types/big.js": ^6.1.5
     "@types/hapi__joi": ^17.1.8
     "@types/lodash": ^4.14.182
@@ -3452,7 +3452,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/types@npm:4.17.1":
+"@polkadot/types@npm:4.17.1, @polkadot/types@npm:^4.5.1":
   version: 4.17.1
   resolution: "@polkadot/types@npm:4.17.1"
   dependencies:

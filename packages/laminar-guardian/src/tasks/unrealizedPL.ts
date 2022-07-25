@@ -2,7 +2,7 @@ import Big from 'big.js';
 import { Observable, combineLatest } from 'rxjs';
 import { map, combineLatestWith } from 'rxjs/operators';
 import { ApiRx } from '@polkadot/api';
-import { MarginPosition, LiquidityPoolId, TradingPair } from '@laminar/types/interfaces';
+import { MarginPosition, LiquidityPoolId, TradingPair, MarginPoolTradingPairOption } from '@laminar/types/interfaces';
 import { utils } from '@open-web3/guardian';
 import { RPCRefreshPeriod } from '../constants';
 
@@ -13,7 +13,7 @@ export default (apiRx: ApiRx) => {
 
   return (position: MarginPosition) => {
     const getAskSpread$ = (poolId: LiquidityPoolId, pair: TradingPair) => {
-      return apiRx.query.marginLiquidityPools.poolTradingPairOptions(poolId, pair).pipe(
+      return apiRx.query.marginLiquidityPools.poolTradingPairOptions<MarginPoolTradingPairOption>(poolId, pair).pipe(
         map((options) => {
           const { askSpread } = options;
           return askSpread.isEmpty ? Big(0) : Big(askSpread.toString());
@@ -22,7 +22,7 @@ export default (apiRx: ApiRx) => {
     };
 
     const getBidSpread$ = (poolId: LiquidityPoolId, pair: TradingPair) => {
-      return apiRx.query.marginLiquidityPools.poolTradingPairOptions(poolId, pair).pipe(
+      return apiRx.query.marginLiquidityPools.poolTradingPairOptions<MarginPoolTradingPairOption>(poolId, pair).pipe(
         map((options) => {
           const { bidSpread } = options;
           return bidSpread.isEmpty ? Big(0) : Big(bidSpread.toString());
@@ -31,7 +31,7 @@ export default (apiRx: ApiRx) => {
     };
 
     const getPrice$ = (pair: TradingPair) =>
-      combineLatest([oraclePrice$(pair.base), oraclePrice$(pair.quote)]).pipe(
+      combineLatest([oraclePrice$(pair.base as any), oraclePrice$(pair.quote as any)]).pipe(
         map(([base, quote]) => Big(base).div(quote))
       );
 
@@ -55,8 +55,8 @@ export default (apiRx: ApiRx) => {
     } else {
       currentPrice$ = getBidPrice$(poolId, pair);
     }
-    const ausdPair = apiRx.createType<TradingPair>('TradingPair', { base: pair.quote.toString(), quote: 'AUSD' });
-    const AUSDPrice$ = getPrice$(ausdPair);
+    const ausdPair = apiRx.createType('TradingPair', { base: pair.quote.toString(), quote: 'AUSD' });
+    const AUSDPrice$ = getPrice$(ausdPair as any);
 
     return currentPrice$.pipe(
       map((current) => current.sub(openPrice)),

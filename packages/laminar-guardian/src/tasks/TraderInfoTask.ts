@@ -1,7 +1,7 @@
-import * as Joi from 'joi';
+import Joi from 'joi';
 import { castArray } from 'lodash';
 import BN from 'bn.js';
-import { timer, from } from 'rxjs';
+import { Observable, timer, from } from 'rxjs';
 import { switchMap, map, mergeMap, distinctUntilChanged, share } from 'rxjs/operators';
 import { TraderInfo } from '@laminar/api';
 import { unit } from '@laminar/api/utils';
@@ -9,15 +9,15 @@ import { Task } from '@open-web3/guardian';
 import { RPCRefreshPeriod } from '../constants';
 import { ApiRx } from '@polkadot/api';
 import { AccountId } from '@open-web3/orml-types/interfaces';
-import { LiquidityPoolId } from '@laminar/types/interfaces';
+import { LiquidityPoolId, MarginTraderState, FixedI128 } from '@laminar/types/interfaces';
 import LaminarGuardian from '../LaminarGuardian';
 
 const getBalances = (apiRx: ApiRx) => (account: string, poolId: number | number[] | 'all') => {
-  return apiRx.query.marginProtocol.balances.entries(account).pipe(
+  return apiRx.query.marginProtocol.balances.entries<FixedI128>(account).pipe(
     mergeMap((entries) =>
       entries.filter(([storageKey]) => {
         if (poolId === 'all') return true;
-        const [, id] = storageKey.args;
+        const [, id] = storageKey.args as [any, LiquidityPoolId];
         return castArray(poolId).includes(id.toNumber());
       })
     )
@@ -27,10 +27,10 @@ const getBalances = (apiRx: ApiRx) => (account: string, poolId: number | number[
 const getTraderState = (apiRx: ApiRx, account: AccountId, poolId: LiquidityPoolId, period: number) => {
   const liquidityPoolId = apiRx.createType('LiquidityPoolId', poolId);
   return timer(0, period).pipe(
-    switchMap(() => apiRx.rpc.margin.traderState(account, liquidityPoolId)),
+    switchMap(() => (apiRx.rpc as any).margin.traderState(account, liquidityPoolId)),
     distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
     share()
-  );
+  ) as any as Observable<MarginTraderState>;
 };
 
 export default class TraderInfoTask extends Task<
@@ -57,7 +57,7 @@ export default class TraderInfoTask extends Task<
         return getBalances$(account, this.arguments.poolId).pipe(
           mergeMap(([storageKey, balance]) => {
             const [account, poolId] = storageKey.args;
-            return getTraderState(apiRx, account, poolId, this.arguments.period).pipe(
+            return getTraderState(apiRx, account as AccountId, poolId as any, this.arguments.period).pipe(
               map(
                 ({
                   equity,

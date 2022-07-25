@@ -1,22 +1,33 @@
 import { castArray } from 'lodash';
-import * as Joi from 'joi';
+import Joi from 'joi';
 import BN from 'bn.js';
 import { timer, combineLatest, shareReplay, Observable } from 'rxjs';
 import { switchMap, distinctUntilChanged, filter, combineLatestAll, map, mergeMap } from 'rxjs/operators';
 import { ApiRx } from '@polkadot/api';
+import { Option } from '@polkadot/types';
 import { MarginPoolInfo, TraderPairOptions } from '@laminar/api';
-import { LiquidityPoolId } from '@laminar/types/interfaces';
+import {
+  Pool,
+  LiquidityPoolId,
+  TradingPair,
+  MarginPoolTradingPairOption,
+  MarginTradingPairOption,
+  MarginPoolOption,
+  Balance,
+  FixedU128,
+  MarginPoolState
+} from '@laminar/types/interfaces';
 import { Task } from '@open-web3/guardian';
 import { RPCRefreshPeriod } from '../constants';
 import LaminarGuardian from '../LaminarGuardian';
 
 const setup = async (apiRx: ApiRx, tokens: string[]) => {
   const getPools = (poolId: number | number[] | 'all') => {
-    return apiRx.query.baseLiquidityPoolsForMargin.pools.entries().pipe(
+    return apiRx.query.baseLiquidityPoolsForMargin.pools.entries<Option<Pool>>().pipe(
       mergeMap((entries) => {
         return entries.filter(([storageKey]) => {
           if (poolId === 'all') return true;
-          const [id] = storageKey.args;
+          const [id] = storageKey.args as any as [LiquidityPoolId];
           return castArray(poolId).includes(id.toNumber());
         });
       })
@@ -24,19 +35,19 @@ const setup = async (apiRx: ApiRx, tokens: string[]) => {
   };
 
   const getTradingPairOptions = (poolId: LiquidityPoolId, getPairId: Function): Observable<TraderPairOptions[]> => {
-    return apiRx.query.marginLiquidityPools.poolTradingPairOptions.entries(poolId).pipe(
+    return apiRx.query.marginLiquidityPools.poolTradingPairOptions.entries<MarginPoolTradingPairOption>(poolId).pipe(
       mergeMap((x) => x),
       map(([storageKey, options]) => {
-        const [, tradingPair] = storageKey.args;
-        return apiRx.query.marginLiquidityPools.tradingPairOptions(tradingPair).pipe(
+        const [, tradingPair] = storageKey.args as [any, TradingPair];
+        return apiRx.query.marginLiquidityPools.tradingPairOptions<MarginTradingPairOption>(tradingPair).pipe(
           map((tradingPairOptions) => {
             const maxSpread = tradingPairOptions.maxSpread;
             let askSpread = options.askSpread.unwrapOrDefault();
             let bidSpread = options.bidSpread.unwrapOrDefault();
 
             if (maxSpread.isSome) {
-              askSpread = apiRx.createType('FixedU128', BN.max(maxSpread.unwrap(), askSpread));
-              bidSpread = apiRx.createType('FixedU128', BN.max(maxSpread.unwrap(), bidSpread));
+              askSpread = apiRx.createType('FixedU128', BN.max(maxSpread.unwrap(), askSpread)) as any as FixedU128;
+              bidSpread = apiRx.createType('FixedU128', BN.max(maxSpread.unwrap(), bidSpread)) as any as FixedU128;
             }
 
             return {
@@ -67,11 +78,11 @@ const setup = async (apiRx: ApiRx, tokens: string[]) => {
 
 const getPoolState = (apiRx: ApiRx, poolId: LiquidityPoolId, period: number) => {
   const stream$ = timer(0, period).pipe(
-    switchMap(() => apiRx.rpc.margin.poolState(poolId)),
+    switchMap(() => (apiRx.rpc as any).margin.poolState(poolId)),
     distinctUntilChanged((a, b) => JSON.stringify(a) === JSON.stringify(b)),
     shareReplay({ refCount: true, bufferSize: 1 })
   );
-  return stream$;
+  return stream$ as Observable<MarginPoolState>;
 };
 
 export default class PoolInfoTask extends Task<{ poolId: number | number[] | 'all'; period: number }, MarginPoolInfo> {
@@ -89,14 +100,14 @@ export default class PoolInfoTask extends Task<{ poolId: number | number[] | 'al
     return getPools(this.arguments.poolId).pipe(
       filter(([, maybePool]) => maybePool.isSome),
       mergeMap(([storageKey, maybePool]) => {
-        const [poolId] = storageKey.args;
+        const [poolId] = storageKey.args as any as [LiquidityPoolId];
         const pool = maybePool.unwrapOrDefault();
-        return combineLatest(
-          apiRx.query.marginLiquidityPools.poolOptions(poolId),
-          apiRx.query.marginLiquidityPools.defaultMinLeveragedAmount(),
+        return combineLatest([
+          apiRx.query.marginLiquidityPools.poolOptions<MarginPoolOption>(poolId),
+          apiRx.query.marginLiquidityPools.defaultMinLeveragedAmount<Balance>(),
           getTradingPairOptions(poolId, getPairId),
           getPoolState(apiRx, poolId, this.arguments.period)
-        ).pipe(
+        ]).pipe(
           map(([options, defaultMinLeveragedAmount, tradingPairOptions, poolState]) => {
             const minLeveragedAmount = BN.max(options.minLeveragedAmount, defaultMinLeveragedAmount);
             return {

@@ -29,7 +29,7 @@ export default class EventsTask extends Task<{ name: string | string[] }, Event>
           const params = getEventParams(event);
           const { index, section, method, data } = event;
           const name = `${section}.${method}`;
-          const args = {};
+          const args: Record<any, any> = {};
           data.forEach((value, index) => {
             const key = params[index] || index.toString();
             args[key] = value.toJSON();

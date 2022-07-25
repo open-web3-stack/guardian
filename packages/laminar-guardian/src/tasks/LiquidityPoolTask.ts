@@ -1,17 +1,17 @@
-import '@laminar/api';
 import Big from 'big.js';
 import * as Joi from 'joi';
 import { castArray } from 'lodash';
-import { of, combineLatest, range } from 'rxjs';
-import { map, mergeMap, filter, switchMap, pairwise, distinctUntilChanged, concatWith } from 'rxjs/operators';
+import { of, combineLatest, range, pairwise } from 'rxjs';
+import { map, mergeMap, filter, switchMap, distinctUntilChanged, concatWith } from 'rxjs/operators';
 import {
   SyntheticPoolCurrencyOption,
   SyntheticPosition,
   SyntheticTokensRatio,
-  CurrencyId,
-  LiquidityPoolId
+  LiquidityPoolId,
+  Pool
 } from '@laminar/types/interfaces';
 import { ApiRx } from '@polkadot/api';
+import { Option } from '@polkadot/types';
 import { Permill } from '@polkadot/types/interfaces';
 import { Task, utils } from '@open-web3/guardian';
 import { toBaseUnit as dollar } from '@open-web3/util';
@@ -28,7 +28,7 @@ const getSyntheticPools = (apiRx: ApiRx) => (poolId: number | number[] | 'all') 
     mergeMap((poolId) =>
       combineLatest([
         of(poolId.toString()),
-        apiRx.query.baseLiquidityPoolsForSynthetic.pools(poolId).pipe(
+        apiRx.query.baseLiquidityPoolsForSynthetic.pools<Option<Pool>>(poolId).pipe(
           filter((x) => x.isSome),
           map((x) => x.unwrap())
         )
@@ -37,7 +37,7 @@ const getSyntheticPools = (apiRx: ApiRx) => (poolId: number | number[] | 'all') 
   );
 
   if (poolId === 'all') {
-    return apiRx.query.baseLiquidityPoolsForSynthetic.pools.entries().pipe(
+    return apiRx.query.baseLiquidityPoolsForSynthetic.pools.entries<Option<Pool>>().pipe(
       mergeMap((x) => x),
       filter(([, value]) => value.isSome),
       mergeMap(
@@ -54,7 +54,7 @@ const getSyntheticPools = (apiRx: ApiRx) => (poolId: number | number[] | 'all') 
     return of(castArray(poolId)).pipe(
       mergeMap((x) => x),
       switchMap((poolId) =>
-        combineLatest([of(poolId.toString()), apiRx.query.baseLiquidityPoolsForSynthetic.pools(poolId)])
+        combineLatest([of(poolId.toString()), apiRx.query.baseLiquidityPoolsForSynthetic.pools<Option<Pool>>(poolId)])
       ),
       filter(([, pool]) => pool.isSome),
       mergeMap(([poolId, value]) => combineLatest([of(poolId), of(value.unwrap())]))
@@ -80,7 +80,10 @@ const getPoolCurrencyOptions =
     return of(currencyIds).pipe(
       mergeMap((x) => x),
       mergeMap((currency) =>
-        combineLatest([of(currency), apiRx.query.syntheticLiquidityPools.poolCurrencyOptions(poolId, currency)])
+        combineLatest([
+          of(currency),
+          apiRx.query.syntheticLiquidityPools.poolCurrencyOptions<SyntheticPoolCurrencyOption>(poolId, currency)
+        ])
       )
     );
   };
@@ -114,25 +117,22 @@ export default class LiquidityPoolTask extends Task<
         return getOptions(poolId, currencyId).pipe(
           mergeMap(([currency, option]) =>
             combineLatest([
-              apiRx.query.syntheticTokens.positions(poolId, currency).pipe(
+              apiRx.query.syntheticTokens.positions<SyntheticPosition>(poolId, currency).pipe(
                 filter((position) => {
-                  return !(position as SyntheticPosition).synthetic.isZero();
+                  return !position.synthetic.isZero();
                 })
               ),
-              apiRx.query.syntheticTokens.ratios(currency),
-              oraclePrice(apiRx.createType<CurrencyId>('CurrencyId', currency))
+              apiRx.query.syntheticTokens.ratios<SyntheticTokensRatio>(currency),
+              oraclePrice(apiRx.createType('CurrencyId', currency))
             ]).pipe(
               map(([position, ratio, price]) => {
-                const { askSpread, bidSpread, additionalCollateralRatio, syntheticEnabled } =
-                  option as SyntheticPoolCurrencyOption;
+                const { askSpread, bidSpread, additionalCollateralRatio, syntheticEnabled } = option;
 
                 // unwrap liquidation or default 0.05%
-                const liquidation = (ratio as SyntheticTokensRatio).liquidation.isSome
-                  ? toFixed128((ratio as SyntheticTokensRatio).liquidation.unwrap())
-                  : dollar(0.05);
+                const liquidation = ratio.liquidation.isSome ? toFixed128(ratio.liquidation.unwrap()) : dollar(0.05);
 
-                const synthetic = (position as SyntheticPosition).synthetic.toString();
-                const collateral = (position as SyntheticPosition).collateral.toString();
+                const synthetic = position.synthetic.toString();
+                const collateral = position.collateral.toString();
 
                 // syntheticValue = price * synthetic / 1e18
                 const syntheticValue = Big(price).mul(synthetic).div(dollar(1));

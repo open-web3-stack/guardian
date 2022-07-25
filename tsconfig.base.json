@@ -1,0 +1,19 @@
+{
+  "extends": "@open-web3/dev-config/config/tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "paths": {
+      "@open-web3/guardian": ["guardian/src"],
+      "@open-web3/guardian/*": ["guardian/src/*"],
+      "@open-web3/guardian-cli": ["guardian-cli/src"],
+      "@open-web3/guardian-cli/*": ["guardian-cli/src/*"],
+      "@open-web3/acala-guardian": ["acala-guardian/src"],
+      "@open-web3/acala-guardian/*": ["acala-guardian/src/*"],
+      "@open-web3/laminar-guardian": ["laminar-guardian/src"],
+      "@open-web3/laminar-guardian/*": ["laminar-guardian/src/*"],
+      "@open-web3/example-guardian": ["example-guardian/src"],
+      "@open-web3/example-guardian/*": ["example-guardian/src/*"]
+    },
+    "skipLibCheck": true
+  },
+}

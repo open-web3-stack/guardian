@@ -3,6 +3,8 @@ import { castArray } from 'lodash';
 import { of, from, combineLatest } from 'rxjs';
 import { switchMap, mergeAll, map, filter, mergeMap } from 'rxjs/operators';
 import { Task } from '@open-web3/guardian';
+import { Option } from '@polkadot/types';
+import { MarginPosition, PositionId } from '@laminar/types/interfaces';
 import { Position } from '../types';
 import unrealizedPL from './unrealizedPL';
 import accumulatedSwap from './accumulatedSwap';
@@ -27,9 +29,9 @@ export default class PositionsByTraderTask extends Task<{ account: string | stri
       switchMap((account) => apiRx.query.marginProtocol.positionsByTrader.entries(account)),
       mergeAll(),
       filter(([, value]) => !value.isEmpty),
-      mergeMap(([storageKey]) => {
-        const positionId = storageKey.args[1][1];
-        return apiRx.query.marginProtocol.positions(positionId).pipe(
+      mergeMap(([{ args }]) => {
+        const positionId: PositionId = args as any[1][1];
+        return apiRx.query.marginProtocol.positions<Option<MarginPosition>>(positionId).pipe(
           filter((x) => x.isSome),
           map((x) => x.unwrap()),
           mergeMap((position) => combineLatest([of(position), getSwap(position), getUnrealizedPL(position)])),

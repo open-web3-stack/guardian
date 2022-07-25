@@ -5,7 +5,7 @@ import { AcalaGuardianConfig } from './types';
 import { acalaNetwork } from './constants';
 import { ApiRx, WsProvider } from '@polkadot/api';
 import { customTypes } from './customTypes';
-import { BalancesTask, BaseSubstrateGuardian, PricesTask } from '@open-web3/guardian';
+import { BalancesTask, BaseSubstrateGuardian, PricesTask, TaskConstructor } from '@open-web3/guardian';
 import { types } from '@acala-network/types';
 import LoansTask from './tasks/LoansTask';
 import CollateralAuctionsTask from './tasks/CollateralAuctionsTask';
@@ -44,11 +44,11 @@ export default class AcalaGuardian extends BaseSubstrateGuardian<AcalaGuardianCo
   tasks() {
     return {
       ...super.tasks(),
-      'account.balances': BalancesTask,
-      'oracle.prices': PricesTask,
-      'honzon.loans': LoansTask,
-      'honzon.collateralAuctions': CollateralAuctionsTask,
-      'dex.pools': PoolsTask
+      'account.balances': BalancesTask as any as TaskConstructor,
+      'oracle.prices': PricesTask as any as TaskConstructor,
+      'honzon.loans': LoansTask as any as TaskConstructor,
+      'honzon.collateralAuctions': CollateralAuctionsTask as any as TaskConstructor,
+      'dex.pools': PoolsTask as any as TaskConstructor
     };
   }
 
