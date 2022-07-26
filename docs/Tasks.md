@@ -16,10 +16,8 @@ The task's job is to listen to a single or mulitiple data sources and combine th
 
 ### Acala
 - [CollateralAuctionsTask](CollateralAuctionsTask.md)
-- [DebitAuctionsTask](DebitAuctionsTask.md)
 - [LoansTask](LoansTask.md)
 - [PoolsTask](PoolsTask.md)
-- [SurplusAuctionsTask](SurplusAuctionsTask.md)
 
 ## Laminar
 - [LiquidityPoolTask](LiquidityPoolTask.md)
@@ -33,11 +31,11 @@ An example task might be [system.accounts](../src/tasks/substrate/AccountsTask.t
 ```typescript
 {
   "account": string;
-  "nonce": number;
-  "free": number;
-  "reserved": number;
-  "misFrozen": number;
-  "feeFroze": number;
+  "nonce": string;
+  "free": string;
+  "reserved": string;
+  "misFrozen": string;
+  "feeFroze": string;
 }
 ```
 

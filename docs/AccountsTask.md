@@ -23,10 +23,10 @@ The output for this task will be in the following format:
 ```typescript
 {
   "account": string;
-  "nonce": number;
-  "free": number;
-  "reserved": number;
-  "misFrozen": number;
-  "feeFroze": number;
+  "nonce": string;
+  "free": string;
+  "reserved": string;
+  "misFrozen": string;
+  "feeFroze": string;
 }
 ```

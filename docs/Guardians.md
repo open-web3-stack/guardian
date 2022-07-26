@@ -36,7 +36,7 @@ then in your `index.js` file you can register your guardian:
 import { GuardianRegistry } from '@open-web3/guardian';
 import MyGuardian from './MyGuardian.js';
 
-GuardianRegistry.register('myChain', MyGuardian);
+GuardianRegistry.register('myGuardian', MyGuardian);
 
 // start guardian
 require('@open-web3/guardian-cli');
@@ -47,7 +47,7 @@ Your YAML config will then be:
 ```yaml
 version: '0.1'
 guardians:
-  - chain: myChain # identifier you registered your guardian
+  - chain: myGuardian # identifier you registered your guardian
     nodeEndpoint: ${NODE_ENDPOINT} # rest of arguments required to setup your guardian...
 ```
 

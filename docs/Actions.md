@@ -14,8 +14,7 @@ const myAction: Action = (data: any, metadata: any) => {
 then this action can be registered in your `index.js` file
 
 ```typescript
-import { Action } from '@open-web3/guardian';
-import { ActionRegistry } from '@open-web3/guardian';
+import { Action, ActionRegistry } from '@open-web3/guardian';
 
 const myAction: Action = (data: any, metadata: any) => {
   const { foo } = metadata.action as { foo: string };
