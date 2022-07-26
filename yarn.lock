@@ -2803,13 +2803,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@open-web3/example-guardian@workspace:packages/example-guardian"
   dependencies:
-    "@acala-network/sdk-core": ^4.1.5
     "@open-web3/api": ^2.0.1
     "@open-web3/guardian": 0.5.0
     "@open-web3/guardian-cli": 0.5.0
-    "@open-web3/orml-types": ^2.0.1
     "@open-web3/util": ^2.0.1
-    "@polkadot/api": ^8.12.2
     "@types/big.js": ^6.1.5
     "@types/hapi__joi": ^17.1.8
     "@types/nodemailer": ^6.4.4
@@ -8692,7 +8689,6 @@ __metadata:
     "@types/jest": ^28.1.4
     "@types/node": ^18.0.3
     jest: ^28.1.2
-    ts-node: ^10.8.2
     typescript: ^4.7.4
   languageName: unknown
   linkType: soft
