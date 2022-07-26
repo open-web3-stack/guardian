@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "composite": true
+  },
+  "files": [],
+  "references": [
+    {
+      "path": "./packages/guardian/tsconfig.build.json",
+    },
+    {
+      "path": "./packages/acala-guardian/tsconfig.build.json",
+    },
+    {
+      "path": "./packages/laminar-guardian/tsconfig.build.json",
+    },
+    {
+      "path": "./packages/guardian-cli/tsconfig.build.json",
+    },
+    {
+      "path": "./packages/example-guardian/tsconfig.build.json",
+    }
+  ]
+}

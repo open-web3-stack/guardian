@@ -1,10 +1,12 @@
-import Joi from 'joi';
+import * as Joi from 'joi';
 import { firstValueFrom } from 'rxjs';
 import { mergeMap, filter } from 'rxjs/operators';
-import BaseSubstrateGuardian from '../../guardians/BaseSubstrateGuardian';
-import Task from '../Task';
+import { EventRecord } from '@polkadot/types/interfaces';
+import { Vec } from '@polkadot/types/codec';
+import Task from '../../Task';
 import { Event } from '../../types';
-import { getEventParams } from '../helpers';
+import { getEventParams } from '../utils';
+import BaseSubstrateGuardian from '../../BaseSubstrateGuardian';
 
 export default class EventsTask extends Task<{ name: string | string[] }, Event> {
   validationSchema() {
@@ -19,13 +21,15 @@ export default class EventsTask extends Task<{ name: string | string[] }, Event>
     const { name } = this.arguments;
 
     return apiRx.derive.chain.subscribeNewHeads().pipe(
-      mergeMap((header) => Promise.all([header, firstValueFrom(apiRx.query.system.events.at(header.hash))])),
+      mergeMap((header) =>
+        Promise.all([header, firstValueFrom<Vec<EventRecord>>(apiRx.query.system.events.at(header.hash))])
+      ),
       mergeMap(([header, records]) => {
         return records.map(({ phase, event }) => {
           const params = getEventParams(event);
           const { index, section, method, data } = event;
           const name = `${section}.${method}`;
-          const args = {};
+          const args: Record<any, any> = {};
           data.forEach((value, index) => {
             const key = params[index] || index.toString();
             args[key] = value.toJSON();

@@ -1,15 +1,16 @@
-import Joi from 'joi';
+import * as Joi from 'joi';
+import Big from 'big.js';
 import { castArray } from 'lodash';
 import { Observable, from } from 'rxjs';
 import { mergeMap, map, filter } from 'rxjs/operators';
 import { Codec, ITuple } from '@polkadot/types/types';
 import { Option, Vec } from '@polkadot/types/codec';
 import { TimestampedValue } from '@open-web3/orml-types/interfaces';
-import { getValueFromTimestampValue, observeRPC, getOraclePrice } from '../helpers';
-import BaseSubstrateGuardian from '../../guardians/BaseSubstrateGuardian';
+import { getValueFromTimestampValue, observeRPC, getOraclePrice } from '../utils';
 import { RPCRefreshPeriod } from '../../constants';
 import { Price } from '../../types';
-import Task from '../Task';
+import Task from '../../Task';
+import BaseSubstrateGuardian from '../../BaseSubstrateGuardian';
 
 export default class PricesTask extends Task<{ key: any; period: number }, Price> {
   validationSchema() {
@@ -25,7 +26,7 @@ export default class PricesTask extends Task<{ key: any; period: number }, Price
     const { key, period } = this.arguments;
     if (key === 'all') {
       return observeRPC<Vec<ITuple<[Codec, Option<TimestampedValue>]>>>(
-        apiRx.rpc.oracle.getAllValues,
+        apiRx.rpc['oracle']['getAllValues'],
         ['Aggregated'],
         period
       ).pipe(
@@ -42,9 +43,14 @@ export default class PricesTask extends Task<{ key: any; period: number }, Price
     }
 
     const keys = castArray(key).map((x) => apiRx.createType('CurrencyId', x));
+
+    const fixedPrices = {
+      [apiRx.consts.prices.getStableCurrencyId.toString()]: Big(apiRx.consts.prices.stableCurrencyFixedPrice.toString())
+    };
+
     return from(keys).pipe(
       mergeMap((key) =>
-        from(getOraclePrice(apiRx, period)(key)).pipe(
+        from(getOraclePrice(apiRx, period, fixedPrices)(key as any)).pipe(
           map((price) => ({ key: key.toString(), value: price.toFixed(0) }))
         )
       ),

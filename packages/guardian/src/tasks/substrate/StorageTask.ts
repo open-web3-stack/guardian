@@ -1,10 +1,10 @@
-import Joi from 'joi';
+import * as Joi from 'joi';
 import { Observable, from } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { get, isArray, isNil } from 'lodash';
 import { ApiRx } from '@polkadot/api';
-import Task from '../Task';
-import BaseSubstrateGuardian from '../../guardians/BaseSubstrateGuardian';
+import Task from '../../Task';
+import BaseSubstrateGuardian from '../../BaseSubstrateGuardian';
 
 const createCall = (api: ApiRx, name: string, args: any[] = []): Observable<Output> => {
   const method = get(api.query, name);

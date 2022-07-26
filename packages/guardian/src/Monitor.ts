@@ -17,13 +17,13 @@ export default class Monitor implements IMonitor {
     // create raw output$
     const rawOutput$ = await task.start(guardian);
 
-    const condition = this.config.conditions && conditionBuilder(this.config.conditions);
+    const condition = this.config.conditions ? conditionBuilder(this.config.conditions) : (d: any) => d;
 
     // create filtered output$
     const output$ = rawOutput$.pipe(
       tap((data) => logger.debug(`🔭 [${this.name}] event:`, data)),
       // apply condition if any
-      filter((result) => (condition ? condition(result) : true))
+      filter(condition)
     );
 
     const subscription = output$.subscribe((data: any) => {

@@ -1,9 +1,10 @@
 import { TypeRegistry } from '@polkadot/types';
-import { getEventParams } from '../../helpers';
+import { Event } from '@polkadot/types/interfaces';
+import { getEventParams } from '../../utils';
 
 describe('substrate helpers', () => {
   const registry = new TypeRegistry();
-  const event = registry.createType('Event');
+  const event = registry.createType<Event>('Event');
   event.set('data', {
     meta: {
       docs: ['hello world', 'Transfer amount. \\[sender, receiver, amount\\]']

@@ -1,22 +1,10 @@
 {
+  "name": "guardian-monorepo",
   "version": "0.4.5-17",
   "private": true,
-  "engines": {
-    "yarn": "^1.10.1"
-  },
   "workspaces": [
     "packages/*"
   ],
-  "resolutions": {
-    "typescript": "^4.3.5",
-    "@polkadot/api": "^6.5.2",
-    "@polkadot/types": "^6.5.2",
-    "@polkadot/typegen": "^6.5.2",
-    "@open-web3/orml-types": "^1.0.2-2",
-    "@open-web3/orml-type-definitions": "^1.0.2-2",
-    "@open-web3/orml-api-derive": "^1.0.2-2",
-    "rxjs": "^7.3.0"
-  },
   "homepage": "https://github.com/open-web3-stack/guardian",
   "scripts": {
     "build": "polkadot-dev-build-ts && (cd packages/example-guardian && cp src/*.yml build)",
@@ -24,18 +12,18 @@
     "lint": "polkadot-dev-run-lint",
     "clean": "polkadot-dev-clean-build",
     "postinstall": "polkadot-dev-yarn-only",
-    "test": "yarn test:e2e --testPathIgnorePatterns e2e --silent",
-    "test:e2e": "polkadot-dev-run-test --runInBand --verbose"
+    "test": "yarn test:e2e --testPathIgnorePatterns e2e",
+    "test:e2e": "polkadot-dev-run-test --runInBand --silent"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.0",
-    "@babel/register": "^7.16.0",
-    "@babel/runtime": "^7.16.3",
-    "@open-web3/dev-config": "^0.1.13",
-    "@types/jest": "^27.0.2",
-    "@types/node": "^16.11.7",
-    "jest": "^27.3.1",
-    "ts-node": "^10.4.0",
-    "typescript": "^4.3.5"
-  }
+    "@babel/core": "^7.18.6",
+    "@babel/register": "^7.18.6",
+    "@babel/runtime": "^7.18.6",
+    "@open-web3/dev-config": "^0.2.3",
+    "@types/jest": "^28.1.4",
+    "@types/node": "^18.0.3",
+    "jest": "^28.1.2",
+    "typescript": "^4.7.4"
+  },
+  "packageManager": "yarn@3.2.1"
 }

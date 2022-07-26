@@ -1,9 +1,9 @@
-import shell from 'shelljs';
+import { exec } from 'shelljs';
 import { Action } from '../types';
 
 const script: Action = (data: any, metadata: any) => {
   const { path } = metadata.action as { path: string };
-  const child = shell.exec(path, { async: true });
+  const child = exec(path, { async: true });
   child.stdin?.write(JSON.stringify({ data, metadata }));
   child.stdin?.end();
 };

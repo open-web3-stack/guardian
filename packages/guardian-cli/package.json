@@ -1,10 +1,10 @@
 {
   "name": "@open-web3/guardian-cli",
-  "version": "0.4.5-17",
+  "version": "0.5.0",
   "description": "Web3 Guardian CLI - a blockchain monitoring and alerting tool",
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
-  "bin": "cli.js",
+  "bin": "index.js",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
@@ -15,10 +15,11 @@
   },
   "homepage": "https://github.com/open-web3-stack/guardian",
   "dependencies": {
-    "@open-web3/guardian": "0.4.5-17",
-    "@types/js-yaml": "^4.0.4",
+    "@open-web3/acala-guardian": "0.5.0",
+    "@open-web3/guardian": "0.5.0",
+    "@open-web3/laminar-guardian": "0.5.0",
+    "@types/js-yaml": "^4.0.5",
     "js-yaml": "^4.1.0",
-    "yargs": "^17.2.1"
-  },
-  "main": "cli.js"
+    "yargs": "^17.5.1"
+  }
 }

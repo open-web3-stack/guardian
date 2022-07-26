@@ -1,6 +1,6 @@
 {
   "name": "@open-web3/guardian",
-  "version": "0.4.5-17",
+  "version": "0.5.0",
   "description": "Web3 Guardian - a blockchain monitoring and alerting tool",
   "author": "Laminar Developers <hello@laminar.one>",
   "license": "Apache-2.0",
@@ -14,31 +14,28 @@
   },
   "homepage": "https://github.com/open-web3-stack/guardian",
   "dependencies": {
-    "@acala-network/api": "^3.0.2",
-    "@acala-network/app-util": "^3.0.2",
-    "@acala-network/sdk-core": "^3.0.2",
-    "@acala-network/types": "^3.0.2",
-    "@laminar/api": "^0.3.2-2",
-    "@laminar/types": "^0.3.2-2",
-    "@open-web3/api": "^1.0.2-2",
-    "@open-web3/orml-types": "^1.0.2-2",
-    "@polkadot/api": "^6.5.2",
-    "@polkadot/typegen": "^6.5.2",
-    "@types/cron": "^1.7.3",
-    "axios": "^0.24.0",
-    "big.js": "^6.1.1",
-    "cron": "^1.8.2",
-    "dotenv": "^10.0.0",
+    "@open-web3/api": "^2.0.1",
+    "@open-web3/orml-types": "^2.0.1",
+    "@polkadot/api": "^8.12.2",
+    "@polkadot/typegen": "^8.12.2",
+    "@polkadot/types": "^8.12.2",
+    "@types/cron": "^2.0.0",
+    "axios": "^0.27.2",
+    "big.js": "^6.2.1",
+    "cron": "^2.0.0",
+    "dotenv": "^16.0.1",
     "fs": "^0.0.1-security",
-    "joi": "^17.4.2",
+    "joi": "^17.6.0",
     "lodash": "^4.17.21",
-    "shelljs": "^0.8.5"
+    "rxjs": "^7.5.5",
+    "shelljs": "^0.8.5",
+    "typescript": "^4.7.4"
   },
   "devDependencies": {
-    "@types/big.js": "^6.1.2",
-    "@types/hapi__joi": "^17.1.7",
-    "@types/jest": "^27.0.2",
-    "@types/lodash": "^4.14.176",
-    "@types/shelljs": "^0.8.9"
+    "@types/big.js": "^6.1.5",
+    "@types/hapi__joi": "^17.1.8",
+    "@types/jest": "^28.1.4",
+    "@types/lodash": "^4.14.182",
+    "@types/shelljs": "^0.8.11"
   }
 }

@@ -10,7 +10,7 @@ export const setupLaminarApi = async (nodeEndpoint: string | string[]) => {
       types: {
         AccountInfo: 'AccountInfoWithRefCount'
       }
-    })
+    }) as any
   );
 
   return { apiManager };
