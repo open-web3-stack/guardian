@@ -1,6 +1,6 @@
 {
   "name": "guardian-monorepo",
-  "version": "0.5.1",
+  "version": "0.5.2-0",
   "private": true,
   "workspaces": [
     "packages/*"
@@ -25,5 +25,6 @@
     "jest": "^28.1.2",
     "typescript": "^4.7.4"
   },
-  "packageManager": "yarn@3.2.1"
+  "packageManager": "yarn@3.2.1",
+  "stableVersion": "0.5.1"
 }
