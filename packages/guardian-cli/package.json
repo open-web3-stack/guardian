@@ -15,7 +15,7 @@
   },
   "homepage": "https://github.com/open-web3-stack/guardian",
   "dependencies": {
-    "@open-web3/acala-guardian": "0.5.2-0",
+    "@open-web3/acala-guardian": "0.5.1",
     "@open-web3/guardian": "0.5.2-0",
     "@open-web3/laminar-guardian": "0.5.2-0",
     "@types/js-yaml": "^4.0.5",
